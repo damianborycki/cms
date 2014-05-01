@@ -1,6 +1,6 @@
 package com.portal.service;
 
-import com.portal.model.User;
+import com.portal.entity.User;
 
 public interface UserService {
 	

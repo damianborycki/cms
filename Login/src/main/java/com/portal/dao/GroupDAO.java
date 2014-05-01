@@ -1,9 +1,9 @@
 package com.portal.dao;
 
-import com.portal.model.Group;
+import com.portal.entity.Group;
 
 public interface GroupDAO {
 	
-	public Group getGroup(int id);
+	public Group getGroup(Long id);
 
 }

@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
-import com.portal.model.Group;
+import com.portal.entity.Group;
 
 
 @Repository
@@ -19,7 +19,7 @@ public class GroupDAOImpl implements GroupDAO {
 		return sessionFactory.getCurrentSession();
 	}
 
-	public Group getGroup(int id) {
+	public Group getGroup(Long id) {
 		Group group = (Group) getCurrentSession().load(Group.class, id);
 		return group;
 	}

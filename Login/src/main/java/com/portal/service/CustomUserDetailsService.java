@@ -26,7 +26,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 	public UserDetails loadUserByUsername(String login)
 			throws UsernameNotFoundException {
 		
-		com.portal.model.User domainUser = userDAO.getUser(login);
+		com.portal.entity.User domainUser = userDAO.getUser(login);
 		
 		boolean enabled = true;
 		boolean accountNonExpired = true;
@@ -44,12 +44,12 @@ public class CustomUserDetailsService implements UserDetailsService {
 		);
 	}
 	
-	public Collection<? extends GrantedAuthority> getAuthorities(Integer role) {
+	public Collection<? extends GrantedAuthority> getAuthorities(Long role) {
 		List<GrantedAuthority> authList = getGrantedAuthorities(getRoles(role));
 		return authList;
 	}
 	
-	public List<String> getRoles(Integer group_id) {
+	public List<String> getRoles(Long group_id) {
 
 		List<String> roles = new ArrayList<String>();
 

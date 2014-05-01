@@ -1,6 +1,6 @@
 package com.portal.dao;
 
-import com.portal.model.User;
+import com.portal.entity.User;
 
 public interface UserDAO {
 	

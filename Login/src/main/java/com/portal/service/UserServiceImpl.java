@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.portal.dao.UserDAO;
-import com.portal.model.User;
+import com.portal.entity.User;
 
 @Service
 @Transactional

@@ -1,12 +1,3 @@
--- phpMyAdmin SQL Dump
--- version 4.0.4
--- http://www.phpmyadmin.net
---
--- Host: localhost
--- Czas wygenerowania: 29 Kwi 2014, 10:46
--- Wersja serwera: 5.6.12-log
--- Wersja PHP: 5.4.12
-
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
@@ -29,19 +20,21 @@ USE `portal_db`;
 --
 
 CREATE TABLE IF NOT EXISTS `groups` (
-  `id` int(6) NOT NULL AUTO_INCREMENT,
-  `name` varchar(20) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) NOT NULL,
+  `description` varchar(600) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
 
 --
 -- Zrzut danych tabeli `groups`
 --
 
-INSERT INTO `groups` (`id`, `name`) VALUES
-(1, 'admin'),
-(2, 'moderator'),
-(3, 'user');
+INSERT INTO `groups` (`id`, `name`, `description`) VALUES
+(1, 'admin', 'Administrator'),
+(2, 'moderator', 'Moderator tre?ci zamieszczanych w serwisie'),
+(3, 'user', 'U?ytkownik serwisu');
 
 -- --------------------------------------------------------
 
@@ -50,22 +43,33 @@ INSERT INTO `groups` (`id`, `name`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `users` (
-  `id` int(6) NOT NULL AUTO_INCREMENT,
-  `login` varchar(20) NOT NULL,
-  `password` varchar(20) NOT NULL,
-  `group` int(11) NOT NULL,
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `login` varchar(45) NOT NULL,
+  `password` varchar(45) NOT NULL,
+  `email` varchar(120) NOT NULL,
+  `name` varchar(120) DEFAULT '',
+  `surname` varchar(120) DEFAULT '',
+  `city` varchar(120) DEFAULT '',
+  `registration_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `last_login_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `gender` varchar(120) DEFAULT '',
+  `group` bigint(20) NOT NULL,
+  `avatar` bigint(20) DEFAULT NULL,
+  `info` varchar(200) DEFAULT '',
   PRIMARY KEY (`id`),
-  KEY `group_id` (`group`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+  UNIQUE KEY `id_UNIQUE` (`id`),
+  UNIQUE KEY `login_UNIQUE` (`login`),
+  KEY `group` (`group`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
 
 --
 -- Zrzut danych tabeli `users`
 --
 
-INSERT INTO `users` (`id`, `login`, `password`, `group`) VALUES
-(1, 'moder', '111111', 2),
-(2, 'adm', '222222', 1),
-(3, 'user', '123456', 3);
+INSERT INTO `users` (`id`, `login`, `password`, `email`, `name`, `surname`, `city`, `registration_date`, `last_login_date`, `gender`, `group`, `avatar`, `info`) VALUES
+(1, 'admin', '123456', '', '', '', '', '2014-05-01 10:27:47', '0000-00-00 00:00:00', '', 1, NULL, ''),
+(2, 'mod', '123456', '', '', '', '', '2014-05-01 11:49:17', '0000-00-00 00:00:00', '', 2, NULL, ''),
+(3, 'user', '123456', '', '', '', '', '2014-05-01 11:49:17', '0000-00-00 00:00:00', '', 3, NULL, '');
 
 --
 -- Ograniczenia dla zrzutów tabel
