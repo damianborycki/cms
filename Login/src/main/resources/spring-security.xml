@@ -12,19 +12,17 @@
 		<intercept-url pattern="/admin" access="ROLE_ADMIN" />
 		<intercept-url pattern="/user" access="ROLE_USER" />
 		
-		<form-login login-page="/login" 
-			default-target-url="/success-login"
-			authentication-failure-url="/error-login" />
+		<intercept-url pattern="/user-page" access="ROLE_USER" />
+		<intercept-url pattern="/login-rest"/>
+			
 		<logout logout-success-url="/index" />
 		
 	</http>
 	
-	<authentication-manager>
+	<authentication-manager alias="authManager">
 		<authentication-provider user-service-ref="customUserDetailsService">
 			<password-encoder hash="plaintext" />
 		</authentication-provider>
 	</authentication-manager>
-	
-	
 	
 </beans:beans>
