@@ -33,5 +33,9 @@ public class UserDAOImpl implements UserDAO {
 		else
 			return null;	
 	}
+	
+	public void addUser(User user) {
+		
+	}
 
 }

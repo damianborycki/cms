@@ -16,6 +16,39 @@ USE `portal_db`;
 -- --------------------------------------------------------
 
 --
+-- Struktura tabeli dla tabeli `comments`
+--
+
+CREATE TABLE IF NOT EXISTS `comments` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `user` bigint(20) NOT NULL,
+  `content` varchar(600) NOT NULL,
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `state` bigint(20) NOT NULL,
+  `parent` bigint(20) NOT NULL,
+  `number_of_responses` bigint(20) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`),
+  UNIQUE KEY `user_UNIQUE` (`user`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `comment_state`
+--
+
+CREATE TABLE IF NOT EXISTS `comment_state` (
+  `id` bigint(20) NOT NULL,
+  `name` varchar(45) NOT NULL,
+  `description` varchar(600) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Struktura tabeli dla tabeli `groups`
 --
 
@@ -51,7 +84,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `surname` varchar(120) DEFAULT '',
   `city` varchar(120) DEFAULT '',
   `registration_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `last_login_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `last_login_date` timestamp NULL DEFAULT '0000-00-00 00:00:00',
   `gender` varchar(120) DEFAULT '',
   `group` bigint(20) NOT NULL,
   `avatar` bigint(20) DEFAULT NULL,

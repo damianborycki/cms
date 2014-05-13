@@ -8,14 +8,15 @@
     
 	<http auto-config="true">
 	
-		<intercept-url pattern="/moderation" access="ROLE_MODERATOR" />
+		<!-- <intercept-url pattern="/moderation" access="ROLE_MODERATOR" />
 		<intercept-url pattern="/admin" access="ROLE_ADMIN" />
-		<intercept-url pattern="/user" access="ROLE_USER" />
+		<intercept-url pattern="/user" access="ROLE_USER" />-->
 		
 		<intercept-url pattern="/user-page" access="ROLE_USER" />
-		<intercept-url pattern="/login-rest"/>
+		
+		<!-- <intercept-url pattern="/login-rest"/>
 			
-		<logout logout-success-url="/index" />
+		<logout logout-success-url="/index" />-->
 		
 	</http>
 	
