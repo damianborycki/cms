@@ -15,6 +15,32 @@ USE `portal_db`;
 
 -- --------------------------------------------------------
 
+
+--
+-- Table structure for table `gallery`
+--
+
+DROP TABLE IF EXISTS `gallery`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `gallery` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `description` varchar(255) DEFAULT NULL,
+  `add_datetime` datetime NOT NULL,
+  `add_usr` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `gallery`
+--
+
+LOCK TABLES `gallery` WRITE;
+/*!40000 ALTER TABLE `gallery` DISABLE KEYS */;
+/*!40000 ALTER TABLE `gallery` ENABLE KEYS */;
+UNLOCK TABLES;
+
 --
 -- Struktura tabeli dla tabeli `comments`
 --
@@ -70,6 +96,40 @@ INSERT INTO `groups` (`id`, `name`, `description`) VALUES
 (3, 'user', 'U?ytkownik serwisu');
 
 -- --------------------------------------------------------
+
+--
+-- Table structure for table `image`
+--
+
+DROP TABLE IF EXISTS `image`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `image` (
+  `id` varchar(255) NOT NULL,
+  `description` text,
+  `author` varchar(100) DEFAULT NULL,
+  `add_datetime` datetime DEFAULT NULL,
+  `add_usr` bigint(20) DEFAULT NULL,
+  `app_datetime` datetime NOT NULL,
+  `app_usr` bigint(20) DEFAULT NULL,
+  `type` varchar(10) NOT NULL,
+  `width` bigint(20) NOT NULL,
+  `height` bigint(20) NOT NULL,
+  `link` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `image`
+--
+
+LOCK TABLES `image` WRITE;
+/*!40000 ALTER TABLE `image` DISABLE KEYS */;
+/*!40000 ALTER TABLE `image` ENABLE KEYS */;
+UNLOCK TABLES;
+
 
 --
 -- Struktura tabeli dla tabeli `users`
