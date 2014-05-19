@@ -14,6 +14,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.IOException;
+import magick.*;
 
 @Controller
 public class ImageController {
@@ -52,18 +53,21 @@ public class ImageController {
             {
                 outputStream.write(bytes, 0, read);  
             }
+
+            outputStream.close();
+
+            MagickImage magicImage = new MagickImage (new ImageInfo (imagePath));
+            image.setWidth(Long.valueOf(magicImage.getDimension().width));
+            image.setHeight(Long.valueOf(magicImage.getDimension().height));
         }
-        catch(IOException e)
+        catch(Exception e)
         {
-            // what should I do here?
+            return "/home";
         }
 
         image.setAdd_usr(add_urs);
         image.setAuthor(author);
         image.setType("jpg");
-
-        image.setWidth(Long.valueOf(123)); // TODO get widht and height from image
-        image.setHeight(Long.valueOf(123));
 
         imageDAO.addImage(image);
 
