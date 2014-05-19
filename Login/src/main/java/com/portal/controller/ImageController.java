@@ -15,22 +15,27 @@ public class ImageController {
 
     @Autowired
     ImageDAO imageDAO;
-  //  GalleryDAO galleryDAO;
 
-    @RequestMapping(value="/addImage", method=RequestMethod.POST)
-    public String addImage(@RequestParam("firstname") String firstname, @RequestParam("lastname") String lastname, Model model) {
-        Image i = new Image();
+    @RequestMapping(value="/image", method=RequestMethod.POST)
+    public String addImage(@RequestParam("imageData") String imageData,
+                           @RequestParam("description") String description,
+                           @RequestParam("author") String author,
+                           //@RequestParam("tags") Tag tags,
+                           @RequestParam("add_usr") Long add_urs,
+                           Model model) {
+        Image image = new Image();
 
-        i.setAdd_usr(Long.valueOf(123));
-        i.setType(firstname);
-        i.setWidth(Long.valueOf(123));
-        i.setHeight(Long.valueOf(123));
-        i.setLink(lastname);
+        // TODO save image do HDD
+        image.setAdd_usr(add_urs);
+        image.setAuthor(author);
+        image.setType("jpg");
 
-        imageDAO.addImage(i);
+        image.setWidth(Long.valueOf(123)); // TODO get widht and height from image
+        image.setHeight(Long.valueOf(123));
 
-     /*   Gallery g = new Gallery();
-        galleryDAO.addGallery(g);*/
+        image.setLink("link/to/image");
+
+        imageDAO.addImage(image);
 
         return "/home";
     }
