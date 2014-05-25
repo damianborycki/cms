@@ -17,11 +17,8 @@ public class LinkNavigation {
 	}
 	
 	@RequestMapping(value="/user-page", method=RequestMethod.GET)
-	public @ResponseBody String userPage(HttpServletResponse response) {
+	public @ResponseBody void userPage(HttpServletResponse response) {
 		
-		response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-		
-		return "User page";
+		response.setStatus(HttpServletResponse.SC_NO_CONTENT);
 	}
-
 }

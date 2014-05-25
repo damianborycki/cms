@@ -1,8 +1,12 @@
 package com.portal.init;
 
+import java.io.IOException;
 import java.util.Properties;
 
 import javax.annotation.Resource;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
 import org.springframework.context.annotation.Bean;
@@ -15,11 +19,10 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate4.HibernateTransactionManager;
 import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
+
 
 @Configuration
 @EnableWebMvc
@@ -84,5 +87,6 @@ public class WebAppConfig {
 		resolver.setViewClass(JstlView.class);
 		return resolver;
 	}
+	
 	
 }

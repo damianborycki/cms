@@ -6,19 +6,10 @@
     http://www.springframework.org/schema/security
     http://www.springframework.org/schema/security/spring-security-3.2.xsd">
     
-	<http auto-config="true">
-	
-		<!-- <intercept-url pattern="/moderation" access="ROLE_MODERATOR" />
-		<intercept-url pattern="/admin" access="ROLE_ADMIN" />
-		<intercept-url pattern="/user" access="ROLE_USER" />-->
-		
-		<intercept-url pattern="/user-page" access="ROLE_USER" />
-		
-		<!-- <intercept-url pattern="/login-rest"/>
-			
-		<logout logout-success-url="/index" />-->
-		
+	<http entry-point-ref="authEntryPoint">
+		<intercept-url pattern="/user-page" access="ROLE_USER" />	
 	</http>
+
 	
 	<authentication-manager alias="authManager">
 		<authentication-provider user-service-ref="customUserDetailsService">

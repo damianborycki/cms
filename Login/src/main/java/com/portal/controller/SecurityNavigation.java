@@ -1,20 +1,17 @@
 package com.portal.controller;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import org.springframework.security.authentication.AuthenticationManager;
@@ -71,11 +68,7 @@ public class SecurityNavigation {
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void deleteSession(HttpServletRequest request) {
 		
-		try {
-			request.logout();
-		} catch (ServletException e) {
-			e.printStackTrace();	
-		}
+		SecurityContextHolder.getContext().setAuthentication(null);
 		
 	}
 
