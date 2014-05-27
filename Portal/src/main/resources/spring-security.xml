@@ -9,6 +9,7 @@
 	<http entry-point-ref="authEntryPoint">
 		<intercept-url pattern="/user-page" access="ROLE_USER" />
 		<intercept-url pattern="/user/{login}" access="ROLE_ADMIN" />	
+		<intercept-url pattern="/setUserGroup/{login}" access="ROLE_ADMIN" />	
 	</http>
 
 	<authentication-manager alias="authManager">

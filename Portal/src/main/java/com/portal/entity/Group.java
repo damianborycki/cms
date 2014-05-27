@@ -1,15 +1,24 @@
 package com.portal.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Column;
 import javax.persistence.*;
 
+import org.codehaus.jackson.annotate.JsonCreator;
+import org.codehaus.jackson.annotate.JsonProperty;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+
 @Entity
+@JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
 @Table(name="groups")
 public class Group {
+	
+	@JsonCreator
+	public Group(@JsonProperty("group_id") Long id) {
+		this.id = id;
+	}
+	
+	public Group() {
+		
+	}
 	
 	@Id
 	@Column(name = "id", unique = true, nullable = false)
