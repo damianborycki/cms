@@ -1,0 +1,21 @@
+﻿
+        <ul class="row ">
+          <h1 class="art-tytul"> Artykuły </h1>
+            <li class="list-group-item list1" ng-repeat="zajawka in getListOfArticles(3)">
+              <div class="row">
+              <a href="#article">
+                <div class="col-md-2">
+                  <img src="{{getImage(zajawka.image, 150, 150)}}" class="img-responsive">
+                </div>
+                <div class="col-md-6">
+                  <h4 class="artykuly-art-tytul">{{zajawka.title}}</h4> 
+                  <div class="caption">
+                    <p class="artykuly-art-opis">{{zajawka.description}}</p>
+                  </div>
+                  <p class="artykuly-art-data">Data publikacji: {{zajawka.publication_date}}</br>Ilość komentarzy: {{zajawka.commntCount}}</p>
+                </div>
+              </a>
+              </div>
+			  <hr ng-hide="$last">
+            </li>
+          </ul>

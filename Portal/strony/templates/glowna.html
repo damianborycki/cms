@@ -1,0 +1,77 @@
+			<div class="row">
+				<div class="col-md-8">
+			  <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+				<div class="carousel-inner">
+				  <div class="item" ng-class="{active : $first}" ng-repeat="zajawka in getListOfArticles(3)">
+					<a href="#article">
+						<img src="{{getImage(zajawka.image, 560, 300)}}">
+						<div class="carousel-caption">
+						  <h2>{{zajawka.title}}</h2>
+						  <p>{{zajawka.description}}</p>
+						</div>
+					</a>
+				  </div>
+				</div><a class="left carousel-control" href="#carousel-example-generic" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a>
+				<a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
+				  <span class="glyphicon glyphicon-chevron-right"></span>
+				  </a>
+			  </div>
+			  </div>
+			  <div class="col-md-4">
+				  <ul class="list-group">
+					<li class="list-group-item" ng-repeat="zajawka in getListOfArticles(5)">
+					  <a href="#article">
+						<h4>{{zajawka.title}}</h4> 
+					  </a>
+					</li>
+				  </ul>
+			  </div>
+		  </div>
+          <div class="row">
+			<h1> Kategoria </h1>
+            <div class="col-md-4"  ng-repeat="zajawka in getListOfArticles(3)">
+				<a href="#article">
+                <img src="{{getImage(zajawka.image, 300, 200)}}" class="img-responsive">
+               <div class="bg-title"> <h4>{{zajawka.title}}</h4> </div>
+                <div class="caption">
+                  <p class="text-justify">{{zajawka.description}}</p>
+                </div>
+              </a>
+			  </div>
+          </div>
+          <div class="row">
+			<h1> Kategoria </h1>
+            <div class="col-md-4"  ng-repeat="zajawka in getListOfArticles(3)">
+				<a href="#article">
+                <img src="{{getImage(zajawka.image, 300, 200)}}" class="img-responsive">
+                 <div class="bg-title"> <h4>{{zajawka.title}}</h4> </div>
+                <div class="caption">
+                  <p class="text-justify">{{zajawka.description}}</p>
+                </div>
+              </a>
+			  </div>
+          </div>
+          <div class="row">
+			<h1> Kategoria </h1>
+            <div class="col-md-4"  ng-repeat="zajawka in getListOfArticles(3)">
+				<a href="#article">
+                <img src="{{getImage(zajawka.image, 300, 200)}}" class="img-responsive">
+                 <div class="bg-title"> <h4>{{zajawka.title}}</h4> </div>
+                <div class="caption">
+                  <p class="text-justify">{{zajawka.description}}</p>
+                </div>
+              </a>
+			  </div>
+          </div>
+          <div class="row">
+			<h1> Kategoria </h1>
+            <div class="col-md-4"  ng-repeat="zajawka in getListOfArticles(3)">
+				<a href="#article">
+                <img src="{{getImage(zajawka.image, 300, 200)}}" class="img-responsive">
+                 <div class="bg-title"> <h4>{{zajawka.title}}</h4> </div>
+                <div class="caption">
+                  <p class="text-justify">{{zajawka.description}}</p>
+                </div>
+              </a>
+			  </div>
+          </div>
