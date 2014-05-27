@@ -9,6 +9,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 
+import com.portal.entity.Group;
 import com.portal.entity.User;
 
 @Repository
@@ -22,16 +23,35 @@ public class UserDAOImpl implements UserDAO {
 	}
 
 	public User getUser(String login) {
-		List<User> userList = new ArrayList<User>();
+		List<User> users = new ArrayList<User>();
 		Query query = openSession().createQuery("from User u where u.login = :login");
 		query.setParameter("login", login);
 
-		userList = query.list();
+		users = query.list();
 		
-		if (userList.size() > 0)
-			return userList.get(0);
+		if (users != null && users.size() > 0)
+			return users.get(0);
 		else
 			return null;	
+	}
+	
+	public void setUserGroup(String login, Long groupId) {
+		
+		Query groupQuery = openSession().createQuery("from Group g where g.id = :groupId");
+		groupQuery.setParameter("groupId", groupId);
+		
+		List<Group> groups = groupQuery.list();
+		
+		if (groups != null && groups.size() > 0) {
+			
+			Group groupToSet = groups.get(0);
+			
+			Query query = openSession().createQuery("update User u set u.group = :groupToSet where u.login = :login");
+			query.setParameter("login", login);
+			query.setParameter("groupToSet", groupToSet);
+			query.executeUpdate();
+		}
+
 	}
 	
 	public void addUser(User user) {

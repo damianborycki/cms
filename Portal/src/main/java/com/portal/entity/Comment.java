@@ -1,7 +1,5 @@
 package com.portal.entity;
 
-//import com.sun.istack.internal.Nullable;
-
 import javax.persistence.*;
 //import javax.validation.constraints.NotNull;
 import java.util.Date;
@@ -11,7 +9,7 @@ import java.util.Date;
  * Created by Mateusz on 23.03.14.
  */
 @Entity
-@Table(name = "komentarze")
+@Table(name = "comments")
 public class Comment {
 
     @Column(name = "id", unique = true)
@@ -19,33 +17,26 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-//    @NotNull
     @OneToOne
     @JoinColumn(name = "user", nullable = false)
     private User user;
 
-//    @NotNull
     @Column(name = "content", nullable = false)
     private String content;
 
-//    @NotNull
     @Column(name = "date", nullable = false)
     private Date date;
 
-//    @NotNull
     @OneToOne
     @JoinColumn(name = "state", nullable = false)
     private CommentState state;
 
-//    @Nullable
     @Column(name = "parent", nullable = true)
     private Long parent;
 
-//    @NotNull
     @Column(name = "number_of_responses", nullable = false)
     private Long responsesNumber = Long.valueOf(0);
     
-
 
     public Long getId() {
         return id;
@@ -83,7 +74,7 @@ public class Comment {
         return state;
     }
 
-    public void setStan(CommentState stan) {
+    public void setStan(CommentState state) {
         this.state = state;
     }
 

@@ -57,7 +57,7 @@ public class User {
     private String gender;
 	
 	@OneToOne(cascade=CascadeType.ALL)
-	@JoinColumn(name = "group", nullable = false)
+	@JoinColumn(name = "\"group\"", nullable = false)
 	private Group group;
 	
     @Column(name = "avatar", nullable = true)
