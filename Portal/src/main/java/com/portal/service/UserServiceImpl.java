@@ -15,7 +15,8 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	private UserDAO userDAO;
-
+	
+	@Override
 	public User getUser(String login) {
 		return userDAO.getUser(login);
 	}

@@ -4,11 +4,13 @@ import javax.persistence.*;
 
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonProperty;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import java.sql.Date;
 //import java.time.LocalDateTime;
 
 @Entity
+@JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
 @Table(name="users")
 public class User {
 	
