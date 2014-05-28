@@ -1,17 +1,12 @@
 package com.portal.controller;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.portal.dao.UserDAO;
@@ -51,16 +46,28 @@ public class UserController {
 	
 	//Testowy
 	@RequestMapping(value="/getCurrentUserLogin", method=RequestMethod.GET)
-	public @ResponseBody User userPage(HttpServletResponse response) {
+	public @ResponseBody User userPage(HttpServletResponse response, HttpServletRequest request) {
 		
-		org.springframework.security.core.userdetails.User user = 
-		(org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		try {
 		
-		User systemUser = new User(user.getUsername(), null);
-		systemUser.setDateOfRegistration(null);
+			org.springframework.security.core.userdetails.User user = 
+			(org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			
+			User systemUser = new User(user.getUsername(), null);
+			systemUser.setDateOfRegistration(null);
+			
+			response.setStatus(HttpServletResponse.SC_OK);
 		
-		return systemUser;
+			return systemUser;
+		
+		} catch(Exception e) {
+			
+			System.out.println(e.getMessage());
+			
+			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+			
+			return null;
+		}
 	}
-	
 	
 }

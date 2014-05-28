@@ -79,4 +79,8 @@ public class WebAppConfig {
 		return resolver;
 	}
 	
+	@Bean
+	public CorsFilter corsFilter() {
+		return new CorsFilter();
+	}
 }
