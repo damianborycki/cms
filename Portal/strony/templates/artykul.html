@@ -1,0 +1,94 @@
+
+			<div class="row">
+          <div class="well list1">
+            <h1 class="art-tytul">{{artykuly[0].title}} </h1>
+			<p class="art-data">{{artykuly[0].publication_date}}</p>
+            <div class="col-md-7">
+				<img src="{{getImage(artykuly[0].image, 450, 300)}}" class="img-responsive">
+            </div>
+            <div class="col-md-5">
+				<p class="art-opis"> {{artykuly[0].description}}</p>
+            </div>
+            <p class="art-tresc">
+              {{artykuly[0].content}}
+            </p>
+			<p class="art-tagi">{{artykuly[0].views}} {{artykuly[0].tag}} {{artykuly[0].rank}} {{artykuly[0].commntCount}}</p>
+			<br><br>
+          </div>
+          </div>
+      
+		 <div class="row">
+          <div class="column">
+            <textarea class="span6" rows="9" placeholder="Napisz komentarz..." required="" 
+			style="margin: 0px; height: 180px; width: 100%; resize:vertical;"></textarea>
+            <a class="btn1 btn-lg btn-primary">KOMENTUJ</a>
+			
+          </div>
+		  
+		   <h3 class="c1">Komentarze</h3>
+          <ul class="list-group ">
+            <li class="list-group-item koment" ng-repeat="komentarz in komentarze">
+              <div class="row ">
+                <div class="col-md-2">
+				<a href="#userPage/{{komentarz.userId}}">
+                  <img src="http://placehold.it/100x100" class="img-responsive">
+                  <h3> {{komentarz.userId}}</h3>
+				  </a>
+				  <p> {{komentarz.date}} {{komentarz.time}}</p> 
+                </div>
+                <div class="col-md-10">
+                  <p class="text-justify">{{komentarz.content}}</p>
+                </div>
+				<div class="col-md-10 text-right">
+					 <a class="przycisk" ng-if="komentarz.nr_of_replies>0" ng-click="click(komentarz.commentId)" >Pokaz odpowiedzi</a>
+					 <div ng-show="showButton(komentarz.commentId)">
+						<ul class="list-group">
+							<li class="list-group-item " ng-repeat="odpowiedzi in komentarze">
+							  <div class="row">
+								<div class="col-md-3 text-left">
+								<a href="#userPage/{{odpowiedzi.userId}}">
+								  <img src="http://placehold.it/100x100" class="img-responsive">
+								  <h3> {{odpowiedzi.userId}}</h3>
+								</a>
+								  <p> {{odpowiedzi.date}} {{odpowiedzi.time}}</p> 
+								</div>
+								<div class="col-md-9">
+								  <p class="text-justify">{{odpowiedzi.content}}</p>
+								</div>
+							</div>
+						</li>
+						</ul>
+					 </div>
+					<div class="przycisk" ng-click="clickComment(komentarz.commentId)">Odpowiedz</div>
+					<div ng-show="showCommentButton(komentarz.commentId)">
+					 <div class="row">
+						<div class="column">
+						<textarea class="span6" rows="9" placeholder="Napisz komentarz..." required="" 
+						style="margin: 0px; height: 180px; width: 100%; resize:vertical;"></textarea>
+						<div class="btn"><a class=" btn2 btn btn-lg btn-primary przycisk">DODAJ</a></div>
+						</div>
+						
+					 </div>
+					</div>
+				</div>
+			</div>
+		</li>
+		</ul>
+		</div>
+	  
+	 <div class="row list1 row1">
+		  <div class="col-md-12 text-center">
+			<h3 contenteditable="true" class="podobne">Podobne artykuly</h3>
+		  </div>
+		</div>
+		<div class="row">
+		  <div class="col-md-4 "  ng-repeat="artykul in artykuly">
+		  <a href="#article">
+			<div class="list1">
+			 <img src="{{getImage(artykul.image, 300, 200)}}" class="img-responsive">
+			  <h2 class="podobne-tytul">{{artykul.title}}</h2>
+			  <p class="podobne-opis">{{artykul.description}}</p>
+			</div>
+		   </a>
+		  </div>
+		</div>

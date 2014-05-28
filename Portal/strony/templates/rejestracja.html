@@ -1,0 +1,90 @@
+﻿
+<div class="row">
+		<div class="panel panel-success">
+          <div class="navbar2">
+			<div>
+            <h3 class="rejestracja-tytul">Zarejestruj się</h3>
+			</div>
+			<div class="green"></div>
+          </div>
+          <div class="panel-body">
+          <form class="form-horizontal" role="form">
+            <div class="form-group">
+              <label for="inputLogin3" class="col-sm-2 control-label">Login*</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" id="inputLogin3" ng-model="user.login" required placeholder="Podaj login">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="inputEmail3" class="col-sm-2 control-label">Email*</label>
+              <div class="col-sm-10">
+                <input type="email" class="form-control" id="inputEmail3" ng-model="user.email" required placeholder="Podaj email">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="inputPassword3" class="col-sm-2 control-label">Hasło*</label>
+              <div class="col-sm-10">
+                <input type="password" class="form-control" id="inputPassword3" ng-model="user.password" required placeholder="Podaj hasło">
+              </div>
+			  <span class="error" data-ng-show="user.password.length < 6  && user.password.length > 0">
+			  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			  Minimum 6 znaków jest wymagane.</span>
+            </div>
+			
+	      <div class="form-group">
+              <label for="inputPassword3sec" class="col-sm-2 control-label">Hasło*</label>
+              <div class="col-sm-10">
+                <input type="password" class="form-control" id="inputPassword3sec" ng-model="user.password1" required placeholder="Ponów hasło">
+              </div>
+			  <span class="error" data-ng-show="(user.password && user.password1) && (user.password != user.password1)">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Hasła nie zgadzają się!</span>
+            </div>
+			
+
+            <div class="form-group">
+              <label for="inputFirstName3" class="col-sm-2 control-label">Imię</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" id="inputFirstName3" ng-model="user.firstName" placeholder="Podaj imię">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="inputSurname3" class="col-sm-2 control-label">Nazwisko</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" id="inputSurname3" ng-model="user.surname" placeholder="Podaj nazwisko">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="inputGender3" class="col-sm-2 control-label">Płeć</label>
+              <div class="col-sm-10">
+
+
+
+                <select class="form-control" ng-model="user.gender">
+                  <option value="woman">kobieta</option>
+                  <option value="man">mężczyzna</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="inputCity3" class="col-sm-2 control-label">Miasto</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" id="inputCity3" ng-model="user.city" placeholder="Podaj miasto">
+              </div>
+            </div>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* - pola obowiązkowe
+            <br>
+            <br>
+            <div class="form-group">
+              <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-default" ng-disabled="user.login == '' || user.email == '' || user.password.length < 6 || user.password != user.password1">Zarejestruj konto</button>
+              </div>
+            </div>
+          </form>
+		</div>
+	</div>
+</div>

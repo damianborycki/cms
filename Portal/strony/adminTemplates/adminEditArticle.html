@@ -1,0 +1,66 @@
+﻿
+		<div class="row">
+			<input ng-model="newArticle.title" placeholder="Tytuł">
+			<textarea style="margin: 0px; height: 40px; width: 100%; resize:vertical;" ng-model="newArticle.description" placeholder="Opis"></textarea>
+			
+                <textarea ckeditor="editorOptions" name="editor" ng-model="newArticle.content" placeholder="Treść"></textarea>
+
+			
+			<span class="form-help">{{newArticle.content.length}} znaków</span>
+			<form name="timepickerForm" class="form-inline" role="form">
+			<div class="form-group">
+				Data publikacji:
+				<div class="form-group">
+				  <input size="10" class="form-control" ng-model="newArticle.publication_date" data-autoclose="1" placeholder="Date" data-date-format="yyyy-MM-dd" bs-datepicker type="text">
+				</div>
+				<div class="form-group">
+				  <input size="8" class="form-control" ng-model="newArticle.publication_date" data-autoclose="1" placeholder="Time" data-time-format="HH:mm:ss" bs-timepicker type="text">
+				</div>
+				
+				<div>
+				Tagi:
+					 <table>
+					 <th class="col-md-1"><a class="btn btn-primary" ng-click="invertSelection()">Odwróć</a></th>
+					 <th class="col-md-2">Nazwa</th>
+					 <th class="col-md-6">Opis</th>
+					<tr ng-repeat="tag in getListOfTags(4) | filter:{type: orderProp}" ng-class="['odd', 'even'][$index %2]">
+					<td class="col-md-1">  <input type="checkbox" value="{{tag.id}}" ng-checked="selection.indexOf(tag.id) > -1" ng-click="toggleSelection(tag.id)"> </td>
+					<td class="col-md-2">{{tag.name}}</td>
+					<td class="col-md-6">{{tag.description}}</td>
+					</tr>
+					</table>
+				</div>
+
+				<div>
+				
+				Kategoria:
+				<select ng-model="newArticle.category">
+				<option ng-selected="{{'null' == newArticle.rank}}" value="null">null</option>
+				<option ng-selected="{{tagType.id == newArticle.rank}}" ng-repeat="tagType in getlistOfCategories()" value="{{tagType.id}}">{{tagType.name}}</option>
+				</select>
+				</div>
+			</div>
+</form>
+		<a type="button" class="btn btn-primary" href="adminArticles.html">Zamknij</a>
+		<a type="button" class="btn btn-success" ng-show="newArticle.id == -1">Dodaj</a>
+		<a type="button" class="btn btn-success" ng-show="newArticle.id > -1">Zapisz zmiany</a>
+		</div>
+		<div class="row">
+			<h1>Podgląd</h1>
+			<div class="col-md-9">
+				<div class="well">
+					<h1>{{newArticle.title}} </h1>
+					<p>{{newArticle.publication_date.yyyymmddhhmmss()}}</p>
+					<div class="col-md-7">
+						<img src="{{getImage(artykuly[0].image, 450, 300)}}" class="img-responsive">
+					</div>
+					<div class="col-md-5">
+						<p> {{newArticle.description}}</p>
+					</div>
+					<p ng-bind-html="newArticle.content | unsafe">
+					</p>
+					</br>
+					<p>{{newArticle.views}} {{newArticle.tag}} {{newArticle.rank}} {{newArticle.commntCount}}</p>
+				</div>
+			</div>
+		</div>

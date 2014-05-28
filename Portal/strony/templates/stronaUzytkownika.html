@@ -1,0 +1,57 @@
+﻿		  
+		  <div class="page-header" style="background-color: #C0C0C0" >
+              <h1>&nbsp;Użytkownik:&nbsp;<b class="nazwa_uzytk">{{user.login}}</b>
+              </h1>
+            </div>
+		
+	  <div class="row">
+              <div class="col-md-3">&nbsp;<img src="{{getImage(user.avatar, 150, 150)}}" class="img-responsive"/> <br>
+			   <a class="btn btn-lg btn-primary" > Zmień avatar</a>
+			  </div>
+			     <div class="tytul1" style="text-align: center; font-size: 20px;"><br>Opis użytkownika</div><br>
+              <div class="col-md-9">Płeć:&nbsp;{{user.gender}}&nbsp;&nbsp;|&nbsp;&nbsp;Wiek:&nbsp;{{user.age}}&nbsp;&nbsp;|&nbsp;&nbsp;Info:&nbsp;{{user.info}}<br><br>
+			  
+			  <div class="przycisk1" style="text-align:right">
+			  <a class="btn btn-lg btn-primary"  ng-click="click()"> Zmień opis</a>
+			  <div ng-show="showEditDesc">
+					 <div class="row">
+						<div class="column">
+						<textarea class="span6" rows="9" placeholder="Napisz opis..." required="" ng-model="user.info"
+						style="margin: 0px; height: 180px; width: 100%; resize:vertical;"></textarea>
+						<a class="btn btn-lg btn-primary" ng-click="click()"> Zapisz</a>
+						</div>
+					 </div>
+					</div>
+              </div>
+			  </div>
+			</div>
+			
+		  <!--<img src="{{getImage(user.avatar, 150, 150)}}" class="img-responsive">
+		  
+		  Płeć:&nbsp;{{user.gender}}&nbsp;&nbsp;|&nbsp;&nbsp;Wiek:&nbsp;{{user.age}}&nbsp;&nbsp;|&nbsp;&nbsp;Info:&nbsp;{{user.info}}-->
+        
+		<div class="tytul2" style="text-align: left; font-size: 30px;">Komentarze użytkownika</div><br>
+		
+<ul class="list-group">
+            <li class="list-group-item" ng-repeat="komentarz in getListOfCommentsMadeByUser(0,3)">
+              <div class="row">
+                <div class="col-md-2">
+                  <img src="http://placehold.it/100x100" class="img-responsive">
+				  <h3>  <div class="komentarz_login">{{komentarz.login}}</div></h3>
+                  <!--<h3 contenteditable="true"> {{komentarz.userId}}</h3>-->
+				  <p> {{komentarz.date}} {{komentarz.time}}</p> 
+                </div>
+                <div class="col-md-10">
+                  <p class="text-justify commentText" ng-class="{show: show && komentarz.content.length > 100}">{{komentarz.content}}</p>
+					<a ng-click="show = true" ng-hide="show || komentarz.content.length <= 100">Pokaż całość</a>
+					<a ng-click="show = false" ng-show="show && komentarz.content.length > 100">Ukryj</a>
+                </div>
+				<div class="col-md-10 text-right">
+					 <a class="btn btn-lg btn-primary" > Pokaż całość</a>
+					 
+					<a class="btn btn-lg btn-primary" href="#article">Pokaż artykuł</a>
+					
+				</div>
+			</div>
+		</li>
+</ul>		
