@@ -1,16 +1,16 @@
-package com.portal.dao;
+package com.portal.dao.implementation;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import com.portal.dao.interfaces.ImageDAO;
+import com.portal.entity.Image;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
-import com.portal.entity.Image;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Repository
 public class ImageDAOImpl implements ImageDAO {

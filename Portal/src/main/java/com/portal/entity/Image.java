@@ -1,13 +1,13 @@
 package com.portal.entity;
 
-import org.hibernate.ejb.criteria.expression.function.AggregationFunction;
 
-import javax.persistence.*;
-
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.sql.Date;
-import java.util.List;
 //import java.time.LocalDateTime;
 
 @Entity

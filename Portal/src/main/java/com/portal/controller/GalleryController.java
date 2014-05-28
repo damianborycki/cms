@@ -1,6 +1,6 @@
 package com.portal.controller;
 
-import com.portal.dao.GalleryDAO;
+import com.portal.dao.interfaces.GalleryDAO;
 import com.portal.entity.Gallery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

@@ -1,8 +1,10 @@
-package com.portal.dao;
+package com.portal.dao.implementation;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
+import com.portal.dao.interfaces.UserDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -53,9 +55,48 @@ public class UserDAOImpl implements UserDAO {
 		}
 
 	}
-	
-	public void addUser(User user) {
-		
+
+    @Override
+    public List<User> findAll() { //TODO mocked
+        User example = new User();
+        example.setLogin("jan123");
+        example.setName("Jan");
+        example.setSurname("Kowalski");
+        example.setPassword("qwerty");
+        example.setCity("Warszawa");
+        Calendar c = Calendar.getInstance();
+        c.set(2012, 3, 12);
+        example.setDateOfRegistration(c.getTime());
+        c.set(2013, 3, 12);
+        example.setDateOfLastLogIn(c.getTime());
+        example.setId(0l);
+        example.setEmail("jan123@example.com");
+
+        User example1 = new User();
+        example1.setLogin("nok123");
+        example1.setName("Jan");
+        example1.setSurname("Nowak");
+        example1.setPassword("haslo");
+        example1.setCity("Kraków");
+        c.set(2012, 4, 15);
+        example.setDateOfRegistration(c.getTime());
+        c.set(2013, 5, 14);
+        example.setDateOfLastLogIn(c.getTime());
+        example.setId(1l);
+        example.setEmail("nok123@example.com");
+        List<User> l = new ArrayList<User>(2);
+        l.add(0,example);
+        l.add(1,example1);
+        return l;
+    }
+
+    @Override
+    public void deleteUser(User user) {
+        //TODO
+    }
+
+    public void addUser(User user) {
+        //TODO
 	}
 
 }

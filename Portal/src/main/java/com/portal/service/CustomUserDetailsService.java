@@ -14,14 +14,14 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.portal.dao.UserDAO;
+import com.portal.dao.interfaces.UserDAO;
 
 @Service
 @Transactional(readOnly=true)
 public class CustomUserDetailsService implements UserDetailsService {
 	
 	@Autowired
-	private UserDAO userDAO;	
+	private UserDAO userDAO;
 
 	public UserDetails loadUserByUsername(String login)
 			throws UsernameNotFoundException {

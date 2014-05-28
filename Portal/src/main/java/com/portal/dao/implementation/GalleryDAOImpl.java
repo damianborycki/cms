@@ -1,8 +1,9 @@
-package com.portal.dao;
+package com.portal.dao.implementation;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import com.portal.dao.interfaces.GalleryDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.hibernate.Query;
 import org.hibernate.Session;

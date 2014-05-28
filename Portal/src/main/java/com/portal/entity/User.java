@@ -1,13 +1,13 @@
 package com.portal.entity;
 
-import javax.persistence.*;
-
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
-import java.sql.Date;
-//import java.time.LocalDateTime;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.util.Date;
 
 @Entity
 @JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
@@ -20,44 +20,55 @@ public class User {
 		this.password = password;
 	}
 	
-	public User() {
-		
-	}
+	public User() {}
 	
 	@Id
+    @NotNull
 	@Column(name = "id", unique = true, nullable = false)
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	
+
+    @NotNull
     @Column(name = "login", unique = true, nullable = false, length = 45)
-	private String login;
-	
+	@Size(max = 45)
+    private String login;
+
+    @NotNull
     @Column(name = "password", nullable = false, length = 45)
-	private String password;
-    
+	@Size(max = 45)
+    private String password;
+
+    @NotNull
     @Column(name = "email", nullable = false, length = 120)
+    @Size(max = 120)
     private String email;
-    
+
+
     @Column(name = "name", nullable = true, length = 120)
+    @Size(max = 120)
     private String name;
     
     @Column(name = "surname", nullable = true, length = 120)
+    @Size(max = 120)
     private String surname;
     
     @Column(name = "city", nullable = true, length = 120)
+    @Size(max = 120)
     private String city;
-    
+
+    @NotNull
 	@Column(name = "registration_date", nullable = false)
     private Date dateOfRegistration = new Date(System.currentTimeMillis());
 
     @Column(name = "last_login_date", nullable = true)
-    private java.sql.Date dateOfLastLogIn;
+    private Date dateOfLastLogIn;
 
     @Column(name = "gender", nullable = true, length = 120)
     private String gender;
-	
+
+    @NotNull
 	@OneToOne(cascade=CascadeType.ALL)
-	@JoinColumn(name = "\"group\"", nullable = false)
+	@JoinColumn(name = "group", nullable = false)
 	private Group group;
 	
     @Column(name = "avatar", nullable = true)

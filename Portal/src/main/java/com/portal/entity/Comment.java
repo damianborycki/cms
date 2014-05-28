@@ -1,7 +1,7 @@
 package com.portal.entity;
 
 import javax.persistence.*;
-//import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 
@@ -17,16 +17,20 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @NotNull
     @OneToOne
     @JoinColumn(name = "user", nullable = false)
     private User user;
 
+    @NotNull
     @Column(name = "content", nullable = false)
     private String content;
 
+    @NotNull
     @Column(name = "date", nullable = false)
     private Date date;
 
+    @NotNull
     @OneToOne
     @JoinColumn(name = "state", nullable = false)
     private CommentState state;
@@ -34,6 +38,7 @@ public class Comment {
     @Column(name = "parent", nullable = true)
     private Long parent;
 
+    @NotNull
     @Column(name = "number_of_responses", nullable = false)
     private Long responsesNumber = Long.valueOf(0);
     

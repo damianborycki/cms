@@ -1,4 +1,4 @@
-package com.portal.dao;
+package com.portal.dao.interfaces;
 
 import com.portal.entity.Image;
 

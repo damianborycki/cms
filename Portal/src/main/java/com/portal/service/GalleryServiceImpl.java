@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.portal.dao.GalleryDAO;
+import com.portal.dao.interfaces.GalleryDAO;
 import com.portal.entity.Gallery;
 
 @Service

@@ -1,6 +1,6 @@
 package com.portal.controller;
 
-import com.portal.dao.ImageDAO;
+import com.portal.dao.interfaces.ImageDAO;
 import com.portal.entity.Image;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,7 +13,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.IOException;
+
 import magick.*;
 
 @Controller

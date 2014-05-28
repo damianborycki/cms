@@ -9,7 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.portal.dao.UserDAO;
+import com.portal.dao.interfaces.UserDAO;
 import com.portal.entity.Group;
 import com.portal.entity.User;
 
