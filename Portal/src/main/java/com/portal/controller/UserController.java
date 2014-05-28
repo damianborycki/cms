@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,6 +35,7 @@ public class UserController {
 		User user = userDAO.getUser(login);
 		user.setId(null);
 		user.setPassword(null);
+		user.getGroup().setId(null);
 		
 		return user;
 	}
@@ -48,10 +50,16 @@ public class UserController {
 	}
 	
 	//Testowy
-	@RequestMapping(value="/user-page", method=RequestMethod.GET)
-	public @ResponseBody void userPage(HttpServletResponse response) {
+	@RequestMapping(value="/getCurrentUserLogin", method=RequestMethod.GET)
+	public @ResponseBody User userPage(HttpServletResponse response) {
 		
-		response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+		org.springframework.security.core.userdetails.User user = 
+		(org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		
+		User systemUser = new User(user.getUsername(), null);
+		systemUser.setDateOfRegistration(null);
+		
+		return systemUser;
 	}
 	
 	

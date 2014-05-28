@@ -7,14 +7,14 @@
     http://www.springframework.org/schema/security/spring-security-3.2.xsd">
     
 	<http entry-point-ref="authEntryPoint">
-		<intercept-url pattern="/user-page" access="ROLE_USER" />
+		<intercept-url pattern="/getCurrentUserLogin" access="ROLE_USER" />
 		<intercept-url pattern="/user/{login}" access="ROLE_ADMIN" />	
 		<intercept-url pattern="/setUserGroup/{login}" access="ROLE_ADMIN" />	
 	</http>
 
 	<authentication-manager alias="authManager">
 		<authentication-provider user-service-ref="customUserDetailsService">
-			<password-encoder hash="plaintext" />
+			<password-encoder hash="md5" />
 		</authentication-provider>
 	</authentication-manager>
 	
