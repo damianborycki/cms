@@ -38,6 +38,17 @@ public class UserController {
 		return user;
 	}
 	
+	@RequestMapping(value="/userProfile/{login}", method=RequestMethod.GET)
+	public @ResponseBody User getUserProfile(@PathVariable("login") String login, HttpServletResponse response) {
+		
+		User user = userDAO.getUser(login);
+		user.setId(null);
+		user.setPassword(null);
+		user.setGroup(null);
+		
+		return user;
+	}
+	
 	@RequestMapping(value="/setUserGroup/{login}", method=RequestMethod.POST)
 	public void setUserGroup(@PathVariable("login") String login, @RequestBody Group group, HttpServletResponse response) {
 		
