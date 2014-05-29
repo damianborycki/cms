@@ -1,10 +1,10 @@
 <!doctype html>
 <html ng-app="studentInfoApp">
 <head>
-<script src="angular/angular.js"></script></script>
-<script src="angular/angular-sanitize.js"></script></script>
-<script src="angular/angular-animate.js"></script></script>
-<script src="angular/angular-route.js"></script></script>
+<script src="angular/angular.js"></script>
+<script src="angular/angular-sanitize.js"></script>
+<script src="angular/angular-animate.js"></script>
+<script src="angular/angular-route.js"></script>
 <script src="angularstrap/angular-strap.min.js"></script>
 <script src="angularstrap/angular-strap.tpl.min.js"></script>
 <script src="jQuerry/jquery-1.11.0.min.js"></script>
@@ -31,7 +31,7 @@ app.config(['$routeProvider',
         controller: 'ListaArtykolowControler'
       }).
       when('/main', {
-        templateUrl: 'templates/glowna.html',
+        templateUrl: 'templates/glowna.htm',
         controller: 'GlownaController'
       }).
       when('/userPage/:userId', {
@@ -174,8 +174,8 @@ app.controller('ArticleController', function($scope) {
    time: "14.15",
    nr_of_replies : 4
    }];
-   
-   showRepliesToComment = 0;
+
+   var showRepliesToComment = 0;
 
    $scope.click = function(commentId){
    if (showRepliesToComment == commentId)
@@ -191,7 +191,7 @@ app.controller('ArticleController', function($scope) {
      return showRepliesToComment == commentId;
    }
    
-   showComment = 0;
+   var showComment = 0;
 
    $scope.clickComment = function(commentId){
 	if (showComment == commentId)
@@ -328,7 +328,7 @@ $scope.user =
         </div>
       </div>
       <div class="col-md-2">
-        <a href="#register">Za³ó¿ konto</a>
+        <a href="#register">Zaï¿½ï¿½ konto</a>
       </div>
       <div class="col-md-2">
         <div class='dropdown'>
@@ -344,7 +344,7 @@ $scope.user =
                   <input class="form-control" placeholder="" type="text">
                 </div>
                 <div class="form-group">
-                  <label for="exampleInputPassword1">Has³o</label>
+                  <label for="exampleInputPassword1">Hasï¿½o</label>
                   <input class="form-control" id="exampleInputPassword1" placeholder="Password"
                   type="password">
                 </div>
@@ -389,7 +389,7 @@ $scope.user =
                 <li><a href="#articleList">Contacts13</a>
                 </li>
                 <li><a class="dropdown-toggle" data-toggle="dropdown">
-                    Wiêcej <i class="glyphicon glyphicon-chevron-down"></i>
+                    Wiï¿½cej <i class="glyphicon glyphicon-chevron-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-right" id="collapsed"></ul>
                 </li>
@@ -417,7 +417,7 @@ $scope.user =
               </a>
             </li>
           </ul>
-          <h2 class="center1">Wa¿ne</h2>
+          <h2 class="center1">Waï¿½ne</h2>
           <ul class="list-group">
             <li class="list-group-item list1" ng-repeat="zajawka in getListOfArticles(3)">
               <a href="#article">
@@ -435,6 +435,8 @@ $scope.user =
       <a href='#'> O stronie </a> | <a href='#'> Kontakt </a> | <a href='#'> Regulamin </a>
       </div>
 </div>
- 
+</div>
+</div>
+
 </body>
 </html>

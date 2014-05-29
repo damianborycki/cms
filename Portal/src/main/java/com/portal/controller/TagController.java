@@ -23,13 +23,13 @@ public class TagController {
     @Autowired
     public TagDAOI tagDAO;
 
-    @RequestMapping(value="tag/{id}", method= RequestMethod.GET)
+    @RequestMapping(value="/tag/{id}", method= RequestMethod.GET)
     @ResponseBody
     public Tag get(@PathVariable Long id){
         return tagDAO.get(id);
     }
 
-    @RequestMapping(value="tag", method= RequestMethod.GET)
+    @RequestMapping(value="/tag", method= RequestMethod.GET)
     @ResponseBody
     public List<Tag> getAll(){
         return tagDAO.findAll();

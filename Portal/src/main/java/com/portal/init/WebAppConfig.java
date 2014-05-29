@@ -80,11 +80,11 @@ public class WebAppConfig {
 	public UrlBasedViewResolver setupViewResolver() {
 		UrlBasedViewResolver resolver = new UrlBasedViewResolver();
 		resolver.setPrefix("/WEB-INF/pages/");
-		resolver.setSuffix(".jsp");
+		resolver.setSuffix(".html");
 		resolver.setViewClass(JstlView.class);
 		return resolver;
 	}
-	
+
 	@Bean
 	public CorsFilter corsFilter() {
 		return new CorsFilter();
