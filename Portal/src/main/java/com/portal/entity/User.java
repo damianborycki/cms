@@ -68,7 +68,7 @@ public class User {
 
     @NotNull
 	@OneToOne(cascade=CascadeType.ALL)
-	@JoinColumn(name = "group", nullable = false)
+	@JoinColumn(name = "user_group", nullable = false)
 	private Group group;
 	
     @Column(name = "avatar", nullable = true)

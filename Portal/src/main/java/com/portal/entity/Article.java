@@ -19,7 +19,7 @@ import java.util.List;
 @Table(name = "articles")
 public class Article {
     
-    @Column(name = "id" , unique = true)
+    @Column(name = "id" , unique = true, columnDefinition="bigint")
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -86,7 +86,7 @@ public class Article {
     private Long image;
     
     @NotNull
-    @Column(name = "views", columnDefinition="default 0")
+    @Column(name = "views", columnDefinition="bigint default 0")
     private Long views;
 
     public Long getId() {
