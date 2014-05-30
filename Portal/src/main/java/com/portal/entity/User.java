@@ -180,5 +180,13 @@ public class User {
     public void setInfo(String info) {
         this.info = info;
     }
+    
+    public String toString() {
+    	return "Login: " + this.login + "\n" +  
+    			"Password: " + this.password + "\n" + 
+    			"Email: " + this.email + "\n" + 
+    			"Gender " + this.gender + "\n" + 
+    			"City: " + this.city;
+    }
 
 }

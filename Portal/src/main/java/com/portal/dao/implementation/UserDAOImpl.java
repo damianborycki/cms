@@ -2,6 +2,7 @@ package com.portal.dao.implementation;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import com.portal.dao.interfaces.UserDAOI;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.springframework.stereotype.Repository;
 
 import com.portal.entity.Group;
@@ -57,6 +59,51 @@ public class UserDAOImpl implements UserDAOI {
 			query.executeUpdate();
 		}
 
+	}
+	
+	public void setUserData(User user) {
+		
+		Session session = openSession();
+		
+		Query query = openSession().createQuery("from User u where u.login = :login");
+		query.setParameter("login", user.getLogin());
+		
+		List<User> users = query.list();
+		
+		if (users != null && users.size() > 0) {
+		
+			User tempUser = (User) users.get(0);
+	
+			User userToUpdate = (User) session.load(User.class, tempUser.getId());
+			
+			Transaction transaction = session.beginTransaction();
+			
+			userToUpdate.setEmail(user.getEmail() != null ? user.getEmail() : tempUser.getEmail());
+			userToUpdate.setPassword(user.getPassword() != null ? user.getPassword() : tempUser.getPassword());
+			userToUpdate.setCity(user.getCity() != null ? user.getCity() : tempUser.getCity());
+			userToUpdate.setGender(user.getGender() != null ? user.getGender() : tempUser.getGender());
+			userToUpdate.setGender(user.getInfo() != null ? user.getInfo() : tempUser.getInfo());
+			userToUpdate.setName(user.getName() != null ? user.getName() : tempUser.getName());
+			userToUpdate.setSurname(user.getSurname() != null ? user.getSurname() : tempUser.getSurname());
+				
+			userToUpdate.setDateOfLastLogIn(tempUser.getDateOfLastLogIn());
+			userToUpdate.setGroup(tempUser.getGroup());
+			userToUpdate.setDateOfRegistration(tempUser.getDateOfRegistration());
+
+			try {
+				session.merge(userToUpdate);
+				
+			} catch (Exception e) {
+				System.out.println(e.getMessage());
+				
+			} finally {
+				transaction.commit();
+				
+			}
+		}
+		
+		if (session != null)
+			session.close();
 	}
 
     @Override
