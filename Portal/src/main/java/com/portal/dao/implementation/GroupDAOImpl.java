@@ -1,6 +1,6 @@
 package com.portal.dao.implementation;
 
-import com.portal.dao.interfaces.GroupDAO;
+import com.portal.dao.interfaces.GroupDAOI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -14,7 +14,7 @@ import java.util.List;
 
 
 @Repository
-public class GroupDAOImpl implements GroupDAO {
+public class GroupDAOImpl implements GroupDAOI {
 	
 	@Autowired
 	private SessionFactory sessionFactory;

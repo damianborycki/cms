@@ -1,6 +1,6 @@
 package com.portal.controller;
 
-import com.portal.dao.interfaces.GroupDAO;
+import com.portal.dao.interfaces.GroupDAOI;
 import com.portal.entity.Group;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,7 +17,7 @@ import java.util.List;
 public class GroupController {
 
     @Autowired
-    private GroupDAO groupDAO;
+    private GroupDAOI groupDAO;
 
     @RequestMapping(value = "group", method = RequestMethod.GET)
     @ResponseBody

@@ -1,6 +1,6 @@
 package com.portal.controller;
 
-import com.portal.dao.interfaces.GalleryDAO;
+import com.portal.dao.interfaces.GalleryDAOI;
 import com.portal.entity.Gallery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,7 +16,7 @@ import java.sql.Date;
 public class GalleryController {
 
     @Autowired
-    GalleryDAO galleryDAO;
+    GalleryDAOI galleryDAO;
     //  GalleryDAO galleryDAO;
 
     @RequestMapping(value="/addGallery", method=RequestMethod.POST)

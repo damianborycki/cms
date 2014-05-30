@@ -3,7 +3,7 @@ package com.portal.dao.implementation;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.portal.dao.interfaces.GalleryDAO;
+import com.portal.dao.interfaces.GalleryDAOI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -14,7 +14,7 @@ import com.portal.entity.Gallery;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
-public class GalleryDAOImpl implements GalleryDAO {
+public class GalleryDAOImpl implements GalleryDAOI {
 
     @Autowired
     private SessionFactory sessionFactory;

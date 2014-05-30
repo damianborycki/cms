@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import com.portal.dao.interfaces.UserDAO;
+import com.portal.dao.interfaces.UserDAOI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -15,7 +15,7 @@ import com.portal.entity.Group;
 import com.portal.entity.User;
 
 @Repository
-public class UserDAOImpl implements UserDAO {
+public class UserDAOImpl implements UserDAOI {
 	
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -23,6 +23,8 @@ public class UserDAOImpl implements UserDAO {
 	private Session openSession() {	
 		return sessionFactory.openSession();
 	}
+	
+	
 
 	public User getUser(String login) {
 		List<User> users = new ArrayList<User>();
@@ -35,6 +37,7 @@ public class UserDAOImpl implements UserDAO {
 			return users.get(0);
 		else
 			return null;	
+		
 	}
 	
 	public void setUserGroup(String login, Long groupId) {

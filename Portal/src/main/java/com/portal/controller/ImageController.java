@@ -1,6 +1,6 @@
 package com.portal.controller;
 
-import com.portal.dao.interfaces.ImageDAO;
+import com.portal.dao.interfaces.ImageDAOI;
 import com.portal.entity.Image;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,7 +20,7 @@ import magick.*;
 public class ImageController {
 
     @Autowired
-    ImageDAO imageDAO;
+    ImageDAOI imageDAO;
 
     @RequestMapping(value="/image", method=RequestMethod.POST)
     public String addImage(@RequestParam("imageData") MultipartFile imageData,

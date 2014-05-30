@@ -1,6 +1,6 @@
 package com.portal.controller;
 
-import com.portal.dao.interfaces.UserDAO;
+import com.portal.dao.interfaces.UserDAOI;
 import com.portal.entity.Group;
 import com.portal.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 public class UserController {
 	
 	@Autowired
-	private UserDAO userDAO;
+	private UserDAOI userDAO;
 	
 	@RequestMapping(value={"/", "/index", "/home"}, method=RequestMethod.GET)
 	public String homePage() {

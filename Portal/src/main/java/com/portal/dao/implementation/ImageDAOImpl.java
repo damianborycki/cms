@@ -1,6 +1,6 @@
 package com.portal.dao.implementation;
 
-import com.portal.dao.interfaces.ImageDAO;
+import com.portal.dao.interfaces.ImageDAOI;
 import com.portal.entity.Image;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class ImageDAOImpl implements ImageDAO {
+public class ImageDAOImpl implements ImageDAOI {
 
     @Autowired
     private SessionFactory sessionFactory;

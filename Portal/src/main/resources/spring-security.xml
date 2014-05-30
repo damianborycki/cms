@@ -11,7 +11,7 @@
 		<intercept-url pattern="/getCurrentUserLogin" access="ROLE_USER" />
 		<intercept-url pattern="/user/{login}" access="ROLE_ADMIN" />	
 		<intercept-url pattern="/setUserGroup/{login}" access="ROLE_ADMIN" />	
-		<intercept-url pattern="/userProfile/{logine}" access="ROLE_USER" />
+		<intercept-url pattern="/userProfile/{login}" access="ROLE_USER" />
 		
 		<custom-filter ref="corsFilter" after="PRE_AUTH_FILTER" />
 		
