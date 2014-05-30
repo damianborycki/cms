@@ -94,8 +94,13 @@ public class UserDAOImpl implements UserDAOI {
     }
 
     @Override
-    public void deleteUser(User user) {
-        //TODO
+    public void deleteUser(String login) {
+        
+    	Query query = openSession().createQuery("delete User u where u.login = :login");
+		query.setParameter("login", login);
+		
+		query.executeUpdate();
+		
     }
 
     public void addUser(User user) {

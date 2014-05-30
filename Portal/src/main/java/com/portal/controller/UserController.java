@@ -84,4 +84,18 @@ public class UserController {
 		}
 	}
 	
+	@RequestMapping(value="/user/{login}", method=RequestMethod.DELETE)
+	public void deleteData(@PathVariable("login") String login, HttpServletResponse response) {
+		
+		try {
+			userDAO.deleteUser(login);
+			
+			response.setStatus(HttpServletResponse.SC_OK);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			
+			response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+		}
+	}
+	
 }

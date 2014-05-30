@@ -14,6 +14,6 @@ public interface UserDAOI {
 
     public List<User> findAll();
 
-    public void deleteUser(User user);
+    public void deleteUser(String login);
 
 }
