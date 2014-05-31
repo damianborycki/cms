@@ -8,7 +8,7 @@ public interface UserDAOI {
 
     public User getUser(String login);
 
-    public void addUser(User user);
+    public User addUser(User user);
 
     public void setUserGroup(String login, Long groupId);
     

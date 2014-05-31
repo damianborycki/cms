@@ -4,6 +4,7 @@ import com.portal.dao.interfaces.UserDAOI;
 import com.portal.entity.Group;
 import com.portal.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -97,5 +98,19 @@ public class UserController {
 			response.setStatus(HttpServletResponse.SC_NO_CONTENT);
 		}
 	}
+	
+    @RequestMapping(value="/user", method=RequestMethod.POST)
+    public void createUser(@RequestBody User user, HttpServletResponse response){
+    	
+        try{
+            response.setStatus(HttpServletResponse.SC_CREATED);     
+            userDAO.addUser(user);
+            
+        } catch(Exception e){
+            System.out.println(e.getMessage());         
+            response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+        }
+            
+    }
 	
 }

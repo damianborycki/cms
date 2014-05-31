@@ -7,6 +7,7 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
 import java.util.Date;
 
 @Entity
@@ -14,16 +15,34 @@ import java.util.Date;
 @Table(name="users")
 public class User {
 	
-	@JsonCreator
-	public User(@JsonProperty("login") String login, @JsonProperty("password") String password) {
+	public User(String login, String password) {
 		this.login = login;
 		this.password = password;
 	}
 	
+	@JsonCreator
+    public User(@JsonProperty("login") String login, 
+    			@JsonProperty("password") String password,
+    			@JsonProperty("email") String email, 
+    			@JsonProperty("firstname") String name, 
+    			@JsonProperty("lastname") String surname, 
+    			@JsonProperty("city") String city, 
+    			@JsonProperty("gender") String gender) {
+		
+        this.login = login;
+        this.password = password;
+        this.email = email;
+        this.name = name;
+        this.surname = surname;
+        this.city = city;
+        this.gender = gender;   
+        
+    }
+	
 	public User() {}
 	
 	@Id
-    @NotNull
+    //@NotNull
 	@Column(name = "id", unique = true, nullable = false)
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;

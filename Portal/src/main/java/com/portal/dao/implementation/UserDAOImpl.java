@@ -1,5 +1,8 @@
 package com.portal.dao.implementation;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -82,7 +85,7 @@ public class UserDAOImpl implements UserDAOI {
 			userToUpdate.setPassword(user.getPassword() != null ? user.getPassword() : tempUser.getPassword());
 			userToUpdate.setCity(user.getCity() != null ? user.getCity() : tempUser.getCity());
 			userToUpdate.setGender(user.getGender() != null ? user.getGender() : tempUser.getGender());
-			userToUpdate.setGender(user.getInfo() != null ? user.getInfo() : tempUser.getInfo());
+			userToUpdate.setInfo(user.getInfo() != null ? user.getInfo() : tempUser.getInfo());
 			userToUpdate.setName(user.getName() != null ? user.getName() : tempUser.getName());
 			userToUpdate.setSurname(user.getSurname() != null ? user.getSurname() : tempUser.getSurname());
 				
@@ -150,8 +153,54 @@ public class UserDAOImpl implements UserDAOI {
 		
     }
 
-    public void addUser(User user) {
-        //TODO
-	}
+    public User addUser(User user) {
+    	
+        Session session = openSession();        
+             
+        user.setDateOfLastLogIn(null);
+        user.setAvatar(null);
+        user.setInfo(null);
+        
+        Group userGroup = (Group) session.load(Group.class, 3l);
+        user.setGroup(userGroup);   
+        
+        MessageDigest messageDigest;
+        String hashedPass = "";
+        
+		try {
+			messageDigest = MessageDigest.getInstance("MD5");
+			messageDigest.update(user.getPassword().getBytes(), 0, user.getPassword().length());  
+	        hashedPass = new BigInteger(1, messageDigest.digest()).toString(16);  
+	        
+	        if (hashedPass.length() < 32) {
+	           hashedPass = "0" + hashedPass; 
+	        }
+	        
+	        user.setPassword(hashedPass);
+	        
+		} catch (NoSuchAlgorithmException e1) {
+			e1.printStackTrace();
+		}  
+
+        User userToReturn = null;
+        
+        Transaction transaction = session.beginTransaction();
+        
+        try {
+        	userToReturn = (User) session.load(User.class, session.save(user));
+            
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            
+        } finally {
+            transaction.commit();
+            
+        }
+        
+        if (session != null)
+            session.close();
+        
+        return userToReturn;
+    }
 
 }
