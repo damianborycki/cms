@@ -13,6 +13,8 @@ public interface UserDAOI {
     public void setUserGroup(String login, Long groupId);
     
     public void setUserData(User user);
+    
+    public User getLoggedUser();
 
     public List<User> findAll();
     

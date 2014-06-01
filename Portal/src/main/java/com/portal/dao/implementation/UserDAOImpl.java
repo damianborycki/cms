@@ -10,6 +10,8 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
 import com.portal.dao.interfaces.UserDAOI;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Repository;
 
 import com.portal.entity.Group;
@@ -110,6 +113,26 @@ public class UserDAOImpl implements UserDAOI {
 		
 		if (session != null)
 			session.close();
+	}
+	
+	public User getLoggedUser() {
+		
+		try {
+			
+			org.springframework.security.core.userdetails.User user = 
+			(org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			
+			User systemUser = new User(user.getUsername(), null);
+			systemUser.setDateOfRegistration(null);
+		
+			return systemUser;
+		
+		} catch(Exception e) {
+			
+			System.out.println(e.getMessage());
+			
+			return null;
+		}
 	}
 
     @Override
