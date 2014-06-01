@@ -11,7 +11,8 @@
 <script src="bootstrap/bootstrap.js"></script>
 <script src="js/collapseMe.js"></script>
 <script src="ckeditor/ckeditor.js"></script>
-        <script src="ckeditor/ng-ckeditor.js"></script>
+<script src="ckeditor/ng-ckeditor.js"></script>
+<script src="js/adminREST.js"></script>
 <link href="css/bootstrap.min.css" rel="stylesheet">
 <link href="css/collapsingMenu.css" rel="stylesheet">
 <link href="css/modal.css" rel="stylesheet">
@@ -173,48 +174,19 @@ app.controller('topAndSideContrler', function($scope, $location) {
 });
 
 
-app.controller('TagController', function($scope) { 
-    $scope.gerListOfarticles = function(len)
-  {
-  var arr = [];
-  for (var i=0;i<len;i++)
-  {
-  arr.push({
-     title: "Tytul",
-     description: "Opis",
-     publication_date: "2012-04-23 18:25:43",
-     views:10,
-     image: 1,
-     tag: [1,5,9],
-     rank: 1,  
-     commntCount: 5
-     });
-  }
-
-  return arr;
-}
+app.controller('TagController', function($scope, $http) { 
 
 	$scope.listOfTags = [];
 
-	$scope.getListOfTags = function(len)
+	$scope.getListOfTags = function()
 	{
 	if ($scope.listOfTags.length != 0)
 		return $scope.listOfTags;
 
-	var arr = [];
-	for (var i=0;i<len;i++)
-	{
-	arr.push({
-		id: i,
-		name:  "Kraków",
-		description: "Tag for articles connected with the given name.",
-		type: (i + 1)
-	});
-	}
-
-	$scope.listOfTags = arr;
-	return arr;
+	GetTags($http, $scope);
 };
+
+$scope.getListOfTags();
 
 	$scope.listOfTagsTypes = [];
 

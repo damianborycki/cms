@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html ng-app="studentInfoApp">
 <head>
 <script src="angular/angular.js"></script>
@@ -16,6 +16,7 @@
 <link rel="stylesheet" href="css/styles.css" >
 <script src="js/collapseMe.js"></script>
 <script src="js/mocki.js"></script>
+<script src="js/REST.js"></script>
 <script>
 var app = angular.module('studentInfoApp', ['ngSanitize', 'ngRoute', 'mgcrea.ngStrap']);
 
@@ -34,13 +35,17 @@ app.config(['$routeProvider',
         templateUrl: 'templates/glowna.htm',
         controller: 'GlownaController'
       }).
-      when('/userPage/:userId', {
+      when('/userPage/:userName', {
         templateUrl: 'templates/stronaUzytkownika.html',
         controller: 'StronaUzytkownikaController'
       }).
       when('/register', {
         templateUrl: 'templates/rejestracja.html',
         controller: 'RejestracjaController'
+      }).
+      when('/comments', {
+        templateUrl: 'templates/komentarze.html',
+        controller: 'CommentsController'
       }).
       otherwise({
         redirectTo: '/main'
@@ -56,7 +61,13 @@ app.config(function($dropdownProvider) {
   });
 })
 
-app.controller('topAndSideContrler', function($scope) {
+app.factory("myService", function(){
+
+  return {sharedObject: {data: "" } }
+
+});
+
+app.controller('topAndSideContrler', function($scope, $http, myService) {
 
  $scope.listOfArticles = [];
  
@@ -72,10 +83,37 @@ app.controller('topAndSideContrler', function($scope) {
   
   return $scope.listOfArticles;
 }
+
+$scope.userLoggedIn = false;
+
+$scope.LogIn = function(login, pass)
+{
+	Login(login, pass, $scope, $http);
+}
+
+$scope.LogOut = function()
+{
+	Logout($scope, $http);
+}
   
   $scope.getImage = function(id, width, height){
     return 'http://placehold.it/' + width + 'x' + height;
   };
+  
+  
+  $scope.currentUserName = myService.sharedObject;
+  
+  $scope.GetCurrentUserName = function()
+{
+	GetCurrentUserLogin($scope, $http);
+}
+
+$scope.getUser = function(name)
+{
+	GetUser(name, $scope, $http);
+}
+
+$scope.GetCurrentUserName();
   
 $scope.selectedTag = "";
 $scope.tags = ["Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware","Florida","Georgia","Hawaii","Idaho","Illinois","Indiana","Iowa","Kansas","Kentucky","Louisiana","Maine","Maryland","Massachusetts","Michigan","Minnesota","Mississippi","Missouri","Montana","Nebraska","Nevada","New Hampshire","New Jersey","New Mexico","New York","North Dakota","North Carolina","Ohio","Oklahoma","Oregon","Pennsylvania","Rhode Island","South Carolina","South Dakota","Tennessee","Texas","Utah","Vermont","Virginia","Washington","West Virginia","Wisconsin","Wyoming"];
@@ -230,7 +268,7 @@ app.controller('ListaArtykolowControler', function($scope) {
 
 });
 
-app.controller('StronaUzytkownikaController', function($scope) {
+app.controller('StronaUzytkownikaController', function($scope, $http, $routeParams, myService) {
   
   $scope.user = null;
 
@@ -246,8 +284,20 @@ $scope.getUserById = function(id)
   return $scope.user;
 }
 
+$scope.currentUserName = myService.sharedObject;
+
+$scope.userName = $routeParams.userName;
+
 $scope.getUserById(1);
 
+$scope.searchedUser =null;
+
+$scope.getUser = function(name)
+{
+	GetUser(name, $scope, $http);
+}
+
+$scope.getUser($scope.userName);
 
   
  $scope.listOfArticles = [];
@@ -300,11 +350,127 @@ $scope.user =
 'email': '',
 'password': '',
 'password1': '',
-'firstName': '',
-'surname': '',
+'firstname': '',
+'lastname': '',
 'gender': '',
 'city': ''};
+
+
   
+});
+
+app.controller('CommentsController', function($scope) {
+
+ $scope.listOfArticles = [];
+ 
+    $scope.getListOfArticles = function(len)
+  {
+  
+  if ($scope.listOfArticles.length != 0)
+		return $scope.listOfArticles;
+		
+  var arr = [];
+  for (var i=0;i<len;i++)
+  {
+  arr.push({
+     title: "Tytul",
+     description: "Opis",
+     publication_date: "2012-04-23 18:25:43",
+     views:10,
+     image: 1,
+     tag: [1,5,9],
+     rank: 1,  
+     commntCount: 5
+     });
+  }
+
+  $scope.listOfArticles = arr;
+  
+  return $scope.listOfArticles;
+}
+   
+   $scope.artykuly = 
+   [{
+   title: "Tytul",
+   description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+   content: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\nLorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\nLorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+   publication_date: "2012-04-23 18:25:43",
+   views:10,
+   image: 1,
+   tag: [1,5,9],
+   rank: 1,  
+   commntCount: 5
+   },
+   {
+   title: "Tytul",
+   description: "Opis",
+   publication_date: "2012-04-23 18:25:43",
+   views:10,
+   image: 1,
+   tag: [1,5,9],
+   rank: 1,  
+   commntCount: 5
+   },
+   {
+   title: "Tytul",
+   description: "Opis",
+   publication_date: "2012-04-23 18:25:43",
+   views:10,
+   image: 1,
+   tag: [1,5,9],
+   rank: 1,  
+   commntCount: 5
+   }];
+   
+   $scope.komentarze =
+   [{
+   commentId : 12345,
+   userId : 12345,
+   content : "Sample content",
+   date : "25.04.14",
+   time: "14.15",
+   nr_of_replies : 0
+   },
+   {
+   commentId : 12346,
+   userId : 12346,
+   content : "Sample content234234",
+   date : "25.04.14",
+   time: "14.15",
+   nr_of_replies : 4
+   }];
+   
+   showRepliesToComment = 0;
+
+   $scope.click = function(commentId){
+   if (showRepliesToComment == commentId)
+   {
+     showRepliesToComment = 0;
+	 }
+	 else
+	 {
+		showRepliesToComment = commentId
+	 }
+   }
+   $scope.showButton = function(commentId){
+     return showRepliesToComment == commentId;
+   }
+   
+   showComment = 0;
+
+   $scope.clickComment = function(commentId){
+	if (showComment == commentId)
+	{
+     showComment = 0;
+	 }
+	 else
+	 {
+     showComment = commentId;
+	 }
+   }
+   $scope.showCommentButton = function(commentId){
+     return showComment == commentId;
+   }
 });
 
 </script>
@@ -312,9 +478,8 @@ $scope.user =
 <body>
 
 <div class="bs-docs-section" ng-controller="topAndSideContrler">
-  
     <div class="container">
-
+	
 	 <div class="header">
       <div class="col-md-4">
         <a href="#main"><img src=""></a>
@@ -328,30 +493,35 @@ $scope.user =
         </div>
       </div>
       <div class="col-md-2">
-        <a href="#register">Za�� konto</a>
+        <a href="#register" ng-hide="userLoggedIn">Załóż konto</a>
       </div>
       <div class="col-md-2">
         <div class='dropdown'>
-          <button type='button' class='btn dropdown-toggle' data-toggle='dropdown'>
-            <img src="{{getImage(zajawka.image, 75, 75)}}">
-            <b class='caret'></b>
-          </button>
-          <ul class="dropdown-menu list-unstyled">
-            <li>
-              <form role="form">
-                <div class="form-group">
-                  <label>Login</label>
-                  <input class="form-control" placeholder="" type="text">
-                </div>
-                <div class="form-group">
-                  <label for="exampleInputPassword1">Has�o</label>
-                  <input class="form-control" id="exampleInputPassword1" placeholder="Password"
-                  type="password">
-                </div>
-                <button type="submit" class="btn btn-default">Zaloguj</button>
-              </form>
-            </li>
-          </ul>
+			  <button type='button' class='btn dropdown-toggle' data-toggle='dropdown'>
+				<img src="{{getImage(zajawka.image, 75, 75)}}">
+				<b class='caret'></b>
+			  </button>
+			  <ul class="dropdown-menu list-unstyled" ng-hide="userLoggedIn">
+				<li>
+				  <form role="form">
+					<div class="form-group">
+					  <label>Login</label>
+					  <input class="form-control" placeholder="" type="text" ng-model="login">
+					</div>
+					<div class="form-group">
+					  <label for="exampleInputPassword1">Hasło</label>
+					  <input class="form-control" id="exampleInputPassword1" placeholder="Hasło" type="password" ng-model="pass">
+					</div>
+					<button type="submit" class="btn btn-default" ng-click="LogIn(login, pass)">Zaloguj</button>
+				  </form>
+				</li>
+			  </ul>
+			  <ul class="dropdown-menu list-unstyled" ng-show="userLoggedIn">
+				<li>
+					<a class="btn btn-default" href="#userPage/{{currentUserName.data}}">Konto</a>
+					<a class="btn btn-default" ng-click="LogOut()">Wyloguj</a>
+				</li>
+			  </ul>
         </div>
       </div>
 	  </div>
