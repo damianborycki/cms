@@ -9,6 +9,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -112,5 +114,19 @@ public class UserController {
         }
             
     }
+    
+	@RequestMapping(value = "/user", method = RequestMethod.GET)
+	public @ResponseBody List<User> getAllUsers(@RequestParam("LIMIT") int limit, @RequestParam("PAGE_NO") int pageNo, @RequestParam("sortBy") String sortBy, @RequestParam("sortOrder") String sortOrder, HttpServletResponse response){
+		
+		try{
+            response.setStatus(HttpServletResponse.SC_CREATED);
+			return userDAO.getAllUsers(limit, pageNo, sortBy, sortOrder);
+		} catch (Exception e){
+			System.out.println(e.getMessage());
+			response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+			return null;
+		}
+		
+	}
 	
 }
