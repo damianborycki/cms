@@ -10,9 +10,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile; 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.BufferedWriter;
 import java.io.FileOutputStream;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import javax.servlet.http.HttpServletResponse;
+import org.apache.commons.io.*;
 
 import magick.*;
 
@@ -73,9 +78,36 @@ public class ImageController {
 
         return "/home";
     }
+    
+    @RequestMapping(value="/image", method=RequestMethod.GET)
+    public void getImage(HttpServletResponse response,
+                         @RequestParam("id") String imageId) throws Exception
+    {
+        //File file = new File(getDefaultImageLink() );  // getImagePath(imageId));
+        File file = new File( getImagePath(imageId));
+        FileInputStream is = new FileInputStream(file);
+        IOUtils.copy(is, response.getOutputStream());
+        response.flushBuffer();
+    }
 
     private String getNewImagePath(MultipartFile file)
     {
+        // TODO gdzie zapisywac nowe obrazki ???
         return "example.jpg";
+    }
+
+    private String getDefaultImageLink()
+    {
+        // TODO zrobic defaultowy obrazek
+        return "/home/winiarz/Obrazy/tapeta.jpg";
+    }
+
+    private String getImagePath(String imageId)
+    {
+        Image image = imageDAO.getImage(imageId);
+        if( image == null )
+            return getDefaultImageLink();
+
+        return image.getLink();
     }
 }
