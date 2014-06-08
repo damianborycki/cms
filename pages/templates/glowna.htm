@@ -27,48 +27,12 @@
 				  </ul>
 			  </div>
 		  </div>
-          <div class="row">
-			<h1> Kategoria </h1>
+          <div class="row" ng-repeat="category in mainCategories.data">
+			<h1> {{category.name}} </h1>
             <div class="col-md-4"  ng-repeat="zajawka in getListOfArticles(3)">
 				<a href="#article">
                 <img src="{{getImage(zajawka.image, 300, 200)}}" class="img-responsive">
                <div class="bg-title"> <h4>{{zajawka.title}}</h4> </div>
-                <div class="caption">
-                  <p class="text-justify">{{zajawka.description}}</p>
-                </div>
-              </a>
-			  </div>
-          </div>
-          <div class="row">
-			<h1> Kategoria </h1>
-            <div class="col-md-4"  ng-repeat="zajawka in getListOfArticles(3)">
-				<a href="#article">
-                <img src="{{getImage(zajawka.image, 300, 200)}}" class="img-responsive">
-                 <div class="bg-title"> <h4>{{zajawka.title}}</h4> </div>
-                <div class="caption">
-                  <p class="text-justify">{{zajawka.description}}</p>
-                </div>
-              </a>
-			  </div>
-          </div>
-          <div class="row">
-			<h1> Kategoria </h1>
-            <div class="col-md-4"  ng-repeat="zajawka in getListOfArticles(3)">
-				<a href="#article">
-                <img src="{{getImage(zajawka.image, 300, 200)}}" class="img-responsive">
-                 <div class="bg-title"> <h4>{{zajawka.title}}</h4> </div>
-                <div class="caption">
-                  <p class="text-justify">{{zajawka.description}}</p>
-                </div>
-              </a>
-			  </div>
-          </div>
-          <div class="row">
-			<h1> Kategoria </h1>
-            <div class="col-md-4"  ng-repeat="zajawka in getListOfArticles(3)">
-				<a href="#article">
-                <img src="{{getImage(zajawka.image, 300, 200)}}" class="img-responsive">
-                 <div class="bg-title"> <h4>{{zajawka.title}}</h4> </div>
                 <div class="caption">
                   <p class="text-justify">{{zajawka.description}}</p>
                 </div>

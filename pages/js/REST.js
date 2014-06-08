@@ -44,6 +44,24 @@ function GetCurrentUserLogin($scope, $http){
 	}); 
 };
 
+function GetTags($scope, $http){
+	$http.get('/portal/tag').
+	  success(function(data, status, headers, config) {
+		$scope.tags.data = data;
+	  }).
+	  error(function(data, status, headers, config) {
+	}); 
+};
+
+function GetMainCategories($scope, $http){
+	$http.get('/portal/category').
+	  success(function(data, status, headers, config) {
+		$scope.mainCategories.data = data[0].children;
+	  }).
+	  error(function(data, status, headers, config) {
+	}); 
+};
+
 function GetUser(name, $scope, $http){
 	$http.get('/portal/user/' + name).
 	  success(function(data, status, headers, config) {

@@ -19,16 +19,9 @@
 				
 				<div>
 				Tagi:
-					 <table>
-					 <th class="col-md-1"><a class="btn btn-primary" ng-click="invertSelection()">Odwróć</a></th>
-					 <th class="col-md-2">Nazwa</th>
-					 <th class="col-md-6">Opis</th>
-					<tr ng-repeat="tag in getListOfTags(4) | filter:{type: orderProp}" ng-class="['odd', 'even'][$index %2]">
-					<td class="col-md-1">  <input type="checkbox" value="{{tag.id}}" ng-checked="selection.indexOf(tag.id) > -1" ng-click="toggleSelection(tag.id)"> </td>
-					<td class="col-md-2">{{tag.name}}</td>
-					<td class="col-md-6">{{tag.description}}</td>
-					</tr>
-					</table>
+					 <tags-input ng-model="selectedTags" display-property="name" add-on-enter="false">
+						<auto-complete source="loadTags($query)" max-results-to-show="3"></auto-complete>
+					</tags-input>
 				</div>
 
 				<div>
@@ -60,7 +53,8 @@
 					<p ng-bind-html="newArticle.content | unsafe">
 					</p>
 					</br>
-					<p>{{newArticle.views}} {{newArticle.tag}} {{newArticle.rank}} {{newArticle.commntCount}}</p>
+					<p>Wyświetlenia: {{newArticle.views}} | Ranga: {{newArticle.rank}}</p>
+					<p>Tagi:<a href="#" ng-repeat="tag in selectedTags"> {{tag.name}}</a> </p>
 				</div>
 			</div>
 		</div>

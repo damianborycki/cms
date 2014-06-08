@@ -13,6 +13,8 @@
 <script src="ckeditor/ckeditor.js"></script>
 <script src="ckeditor/ng-ckeditor.js"></script>
 <script src="js/adminREST.js"></script>
+    <script src="tagInput/ng-tags-input.min.js"></script>
+    <link rel="stylesheet" href="tagInput/ng-tags-input.min.css" />
 <link href="css/bootstrap.min.css" rel="stylesheet">
 <link href="css/collapsingMenu.css" rel="stylesheet">
 <link href="css/modal.css" rel="stylesheet">
@@ -104,7 +106,7 @@ function parseDate(input)
 	return new Date(date[0], date[1]-1, date[2], time[0], time[1], time[2]);
 }
    
-var app = angular.module('studentInfoApp', ['ngSanitize', 'ngRoute', 'mgcrea.ngStrap', 'ngCkeditor']);
+var app = angular.module('studentInfoApp', ['ngSanitize', 'ngRoute', 'mgcrea.ngStrap', 'ngCkeditor', 'ngTagsInput']);
 
 app.filter('unsafe', function($sce) {
     return function(val) {
@@ -173,6 +175,14 @@ app.controller('topAndSideContrler', function($scope, $location) {
     }
 });
 
+app.service('tags', function($q) {
+  
+  this.load = function(tags) {
+    var deferred = $q.defer();
+    deferred.resolve(tags);
+    return deferred.promise;
+  };
+});
 
 app.controller('TagController', function($scope, $http) { 
 
@@ -183,7 +193,7 @@ app.controller('TagController', function($scope, $http) {
 	if ($scope.listOfTags.length != 0)
 		return $scope.listOfTags;
 
-	GetTags($http, $scope);
+	GetTags($scope, $http);
 };
 
 $scope.getListOfTags();
@@ -873,29 +883,21 @@ $scope.endDate = new Date();
 
 
 
-app.controller('EditArticleController', function($scope, $routeParams, $sanitize) {  
+app.controller('EditArticleController', function($scope, $routeParams, $sanitize, $http, tags) {  
 	
-		$scope.listOfTags = [];
+  $scope.getTags = function()
+  {
+	GetTags($scope, $http);
+  }
 
-	$scope.getListOfTags = function(len)
-	{
-	if ($scope.listOfTags.length != 0)
-		return $scope.listOfTags;
+$scope.selectedTags = [];
+$scope.listOfTags;
+$scope.getTags();
 
-	var arr = [];
-	for (var i=0;i<len;i++)
-	{
-	arr.push({
-		id: i,
-		name:  "Kraków",
-		description: "Tag for articles connected with the given name.",
-		type: (i + 1)
-	});
-	}
+$scope.loadTags = function(query) {
+    return tags.load($scope.listOfTags);
+  };
 
-	$scope.listOfTags = arr;
-	return arr;
-};
 	$scope.listOfArticles = [];
 
 	$scope.getlistOfArticles  = function(len)

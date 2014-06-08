@@ -12,7 +12,8 @@
             <p class="art-tresc">
               {{artykuly[0].content}}
             </p>
-			<p class="art-tagi">{{artykuly[0].views}} {{artykuly[0].tag}} {{artykuly[0].rank}} {{artykuly[0].commntCount}}</p>
+			<p class="art-tagi">Wyświetlenia: {{artykuly[0].views}} | Ranga: {{artykuly[0].rank}}</p>
+			<p>Tagi:<a href="#articleList?search={{tag}}" ng-repeat="tag in artykuly[0].tag"> {{getTagName(tag)}}</a> </p>
 			<br><br>
           </div>
           </div>
