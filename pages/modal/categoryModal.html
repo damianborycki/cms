@@ -22,7 +22,7 @@
 			<div class="col-md-9">
 				<select ng-model="tagForModal.parent">
 				<option ng-selected="{{'null' == tagForModal.parent}}" value="null">null</option>
-				<option ng-selected="{{tagType.id == tagForModal.parent}}" ng-repeat="tagType in getlistOfCategories()" value="{{tagType.id}}">{{tagType.name}}</option>
+				<option ng-selected="{{tagType.id == tagForModal.parent}}" ng-repeat="tagType in GetFlatCategoriesList()" value="{{tagType.id}}" ng-hide="tagForModal.id == tagType.id">{{tagType.name}}</option>
 				</select>
 			</div>
 		</div>

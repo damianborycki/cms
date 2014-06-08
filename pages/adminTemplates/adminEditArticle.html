@@ -19,7 +19,7 @@
 				
 				<div>
 				Tagi:
-					 <tags-input ng-model="selectedTags" display-property="name" add-on-enter="false">
+					 <tags-input ng-model="selectedTags" display-property="name" add-on-enter="false" placeholder="Dodaj tag">
 						<auto-complete source="loadTags($query)" max-results-to-show="3"></auto-complete>
 					</tags-input>
 				</div>
@@ -28,7 +28,6 @@
 				
 				Kategoria:
 				<select ng-model="newArticle.category">
-				<option ng-selected="{{'null' == newArticle.rank}}" value="null">null</option>
 				<option ng-selected="{{tagType.id == newArticle.rank}}" ng-repeat="tagType in getlistOfCategories()" value="{{tagType.id}}">{{tagType.name}}</option>
 				</select>
 				</div>
@@ -46,6 +45,8 @@
 					<p>{{newArticle.publication_date.yyyymmddhhmmss()}}</p>
 					<div class="col-md-7">
 						<img src="{{getImage(artykuly[0].image, 450, 300)}}" class="img-responsive">
+						<p>Opis opis</p>
+						<p>Autor: </p>
 					</div>
 					<div class="col-md-5">
 						<p> {{newArticle.description}}</p>

@@ -140,6 +140,10 @@ app.config(['$routeProvider',
         templateUrl: 'adminTemplates/adminEditArticle.html',
         controller: 'EditArticleController'
       }).
+      when('/editArticle', {
+        templateUrl: 'adminTemplates/adminEditArticle.html',
+        controller: 'EditArticleController'
+      }).
       when('/articleRank', {
         templateUrl: 'adminTemplates/adminArticleRank.html',
         controller: 'ArticleRankController'
@@ -183,6 +187,9 @@ app.service('tags', function($q) {
     return deferred.promise;
   };
 });
+
+
+
 
 app.controller('TagController', function($scope, $http) { 
 
@@ -350,6 +357,8 @@ $scope.orderProp = '';
   
 });
 
+
+
 app.controller('GroupController', function($scope) {  
 
 	$scope.listOfTagsTypes = [];
@@ -488,28 +497,22 @@ $scope.orderProp = '';
   
 });
 
-app.controller('TagTypeController', function($scope) {  
+
+
+
+app.controller('TagTypeController', function($scope, $http) {  
 
 	$scope.listOfTagsTypes = [];
 
-	$scope.getListOfTagsTypes  = function(len)
+	$scope.getListOfTagsTypes  = function()
 	{
 	if ($scope.listOfTagsTypes.length != 0)
 		return $scope.listOfTagsTypes;
 
-	var arr = [];
-	for (var i=0;i<len;i++)
-	{
-	arr.push({
-		id: (i + 1),
-		name:  "Typ" + i,
-		description: "typ"
-	});
-	}
-
-	$scope.listOfTagsTypes = arr;
-	return arr;
+	GetTagTypes($scope, $http);
 };
+
+$scope.getListOfTagsTypes();
 
 $scope.GetIndexOfTagTypeById=function($id)
 {
@@ -626,7 +629,9 @@ $scope.orderProp = '';
   
 });
 
-app.controller('CategoryController', function($scope) {  
+
+
+app.controller('CategoryController', function($scope, $http) {  
 
 	$scope.listOfCategories = [];
 
@@ -635,37 +640,73 @@ app.controller('CategoryController', function($scope) {
 	if ($scope.listOfCategories.length != 0)
 		return $scope.listOfCategories;
 
-	var arr = [
-{id:1,
- name: 'główna',
- parent: 'null'},
-      {id:2,
-       name: 'PKat',
-       parent:1},
-       {id:3,
-        name: 'PKat2',
-        parent:1},
-              {id:4,
-               name:'PPKat1',
-               parent:2}];
-
-	$scope.listOfCategories = arr;
-	return arr;
+	
+	GetCategories($scope, $http);
 };
+
+$scope.getlistOfCategories();
 
 $scope.getListOfElementsByParent=function(id)
 {
-$scope.getlistOfCategories();
+	$scope.getlistOfCategories();
 	var arr = [];
 	
-	for (var index in $scope.listOfCategories)
+	arr = $scope.getChildrenArrayRecurrency(id, $scope.listOfCategories);
+	return arr;
+}
+
+$scope.getChildrenArrayRecurrency = function(id, arr)
+{
+	for (var index in arr)
 	{
-		if ($scope.listOfCategories[index].parent == id)
+		if (arr[index].id == id)
 		{
-			arr.push($scope.listOfCategories[index]);
+			return arr[index].children;
+		}
+		else if (arr[index].children != null && arr[index].children.length > 0)
+		{
+			var out = $scope.getChildrenArrayRecurrency(id, arr[index].children);
+			
+			if (out != null && out.length > 0)
+				return out;
 		}
 	}
-	return arr;
+	
+	return [];
+}
+
+$scope.flatListOfCategories = [];
+
+$scope.GetFlatCategoriesList=function()
+{
+	if ($scope.flatListOfCategories.length != 0)
+		return $scope.flatListOfCategories;
+	
+	$scope.flatListOfCategories = $scope.getFlatCategoryListRecurrency($scope.listOfCategories);
+	return $scope.flatListOfCategories;
+};
+
+$scope.getFlatCategoryListRecurrency = function(arr)
+{
+	var out = [];
+	for (var index in arr)
+	{
+		out.push(arr[index]);
+		if (arr[index].children != null && arr[index].children.length > 0)
+		{
+			var out2 = $scope.getFlatCategoryListRecurrency(arr[index].children);
+			
+			if (out2 != null && out.length > 0)
+			{
+				for (var index2 in out2)
+				{
+					out.push(out2[index2]);
+				}
+			}
+		}
+	}
+	
+	return out;
 }
 
 $scope.GetIndexOfCategoryById=function($id)
@@ -683,6 +724,34 @@ $scope.GetIndexOfCategoryById=function($id)
 	return -1;
 };
 
+$scope.GetCategoryById = function($id)
+{
+	var out = null;
+	out = $scope.getCategoryRecurrency($id, $scope.listOfCategories);
+	
+	return out;
+};
+
+$scope.getCategoryRecurrency = function(id, arr)
+{
+	for (var index in arr)
+	{
+		if (arr[index].id == id)
+		{
+			return arr[index];
+		}
+		else if (arr[index].children != null && arr[index].children.length > 0)
+		{
+			var out = $scope.getCategoryRecurrency(id, arr[index].children);
+			
+			if (out != null)
+				return out;
+		}
+	}
+	
+	return null;
+}
+
 $scope.remove=function($id){ 
 	var idx = $scope.GetIndexOfCategoryById($id);
 
@@ -694,10 +763,9 @@ $scope.remove=function($id){
 
 $scope.tagForModal = null;
 
-$scope.SetTagForModal=function($id)
+$scope.SetTagForModal = function($id)
 {
-	var idx = $scope.GetIndexOfCategoryById($id);
-	$scope.tagForModal = jQuery.extend(true, {}, $scope.listOfCategories[idx]);
+	$scope.tagForModal = $scope.GetCategoryById($id);
 }
 
 $scope.UpdateTag=function($id)

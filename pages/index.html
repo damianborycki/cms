@@ -562,7 +562,7 @@ app.controller('CommentsController', function($scope) {
       </div>
       <div class="col-md-4 center-block">
         <div class="input-group col-xs-10">
-			<tags-input ng-model="selectedTags" display-property="name" add-on-enter="false">
+			<tags-input ng-model="selectedTags" display-property="name" add-on-enter="false" placeholder="Dodaj tag">
 				<auto-complete source="loadTags($query)" max-results-to-show="3"></auto-complete>
 			</tags-input>
             <span class="input-group-btn">
