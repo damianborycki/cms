@@ -98,8 +98,7 @@ public class ImageController {
 
     private String getDefaultImageLink()
     {
-        // TODO zrobic defaultowy obrazek
-        return "/home/winiarz/Obrazy/tapeta.jpg";
+        return System.getProperty("catalina.base") + "\\webapps\\images\\avatars\\defaultAvatar\\default_avatar.jpg";
     }
 
     private String getImagePath(String imageId)
