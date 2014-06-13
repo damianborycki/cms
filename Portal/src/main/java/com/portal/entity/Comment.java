@@ -36,9 +36,13 @@ public class Comment {
     private CommentState state;
 
     @Column(name = "parent", nullable = true)
-    private Long parent;
-
-    @NotNull
+    private Comment parent;
+    
+    @ManyToOne
+    @Column(name = "article", nullable = true)
+    private Article article;
+    
+	@NotNull
     @Column(name = "number_of_responses", nullable = false)
     private Long responsesNumber = Long.valueOf(0);
     
@@ -83,13 +87,21 @@ public class Comment {
         this.state = state;
     }
 
-    public Long getParent() {
+    public Comment getParent() {
         return parent;
     }
 
-    public void setParent(Long parent) {
+    public void setParent(Comment parent) {
         this.parent = parent;
     }
+    
+    public Article getArticle() {
+		return article;
+	}
+
+	public void setArticle(Article article) {
+		this.article = article;
+	}
 
     public Long getResponsesNumber() {
         return responsesNumber;

@@ -6,7 +6,20 @@ import com.portal.entity.*;
 
 import java.util.*;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+@Repository
 public class ArticleDAOImpl implements ArticleDAOI {
+	
+	@Autowired
+	private SessionFactory sessionFactory;
+	
+	private Session getCurrentSession() {
+		return sessionFactory.getCurrentSession();
+	}
 	
 	private List<Article> test(int num, int pageNum){
 		List<Article> a = new ArrayList<Article>(num);
@@ -38,14 +51,7 @@ public class ArticleDAOImpl implements ArticleDAOI {
 
 	@Override
 	public Article getById(long id) {
-		Article art = new Article();
-		art.setId(id);
-		art.setTitle("Example article nr: " +id);
-		art.setCategory_id(new Category());
-		art.setArticle_owner("Jan Kowalski");
-		art.setContent(id+ " justo datelibero \norci nibh fusce, himenaeos volutpat etiam vehicula. Turpis id hendrerit cursus sit \nelit phasellus netus, sapien velit sit ");
-		art.setDate(Calendar.getInstance().getTime());
-		art.setDescription("Test article nr: " + id);
+		Article art = (Article) getCurrentSession().load(Article.class, id);
 		return art;
 	}
 
@@ -74,7 +80,7 @@ public class ArticleDAOImpl implements ArticleDAOI {
 		
 		art.setDate(Calendar.getInstance().getTime());
 		
-		// TODO save it
+		this.getCurrentSession().save(art);
 	}
 
 	@Override
@@ -100,7 +106,7 @@ public class ArticleDAOImpl implements ArticleDAOI {
 		
 		art.setArticle_owner(article_owner);
 		art.setRank(rank);
-		// TODO save it
+		this.getCurrentSession().merge(art);
 		
 	}
 
