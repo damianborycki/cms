@@ -19,23 +19,15 @@
 				
 				<div>
 				Tagi:
-					 <table>
-					 <th class="col-md-1"><a class="btn btn-primary" ng-click="invertSelection()">Odwróć</a></th>
-					 <th class="col-md-2">Nazwa</th>
-					 <th class="col-md-6">Opis</th>
-					<tr ng-repeat="tag in getListOfTags(4) | filter:{type: orderProp}" ng-class="['odd', 'even'][$index %2]">
-					<td class="col-md-1">  <input type="checkbox" value="{{tag.id}}" ng-checked="selection.indexOf(tag.id) > -1" ng-click="toggleSelection(tag.id)"> </td>
-					<td class="col-md-2">{{tag.name}}</td>
-					<td class="col-md-6">{{tag.description}}</td>
-					</tr>
-					</table>
+					 <tags-input ng-model="selectedTags" display-property="name" add-on-enter="false" placeholder="Dodaj tag">
+						<auto-complete source="loadTags($query)" max-results-to-show="3"></auto-complete>
+					</tags-input>
 				</div>
 
 				<div>
 				
 				Kategoria:
 				<select ng-model="newArticle.category">
-				<option ng-selected="{{'null' == newArticle.rank}}" value="null">null</option>
 				<option ng-selected="{{tagType.id == newArticle.rank}}" ng-repeat="tagType in getlistOfCategories()" value="{{tagType.id}}">{{tagType.name}}</option>
 				</select>
 				</div>
@@ -53,6 +45,8 @@
 					<p>{{newArticle.publication_date.yyyymmddhhmmss()}}</p>
 					<div class="col-md-7">
 						<img src="{{getImage(artykuly[0].image, 450, 300)}}" class="img-responsive">
+						<p>Opis opis</p>
+						<p>Autor: </p>
 					</div>
 					<div class="col-md-5">
 						<p> {{newArticle.description}}</p>
@@ -60,7 +54,8 @@
 					<p ng-bind-html="newArticle.content | unsafe">
 					</p>
 					</br>
-					<p>{{newArticle.views}} {{newArticle.tag}} {{newArticle.rank}} {{newArticle.commntCount}}</p>
+					<p>Wyświetlenia: {{newArticle.views}} | Ranga: {{newArticle.rank}}</p>
+					<p>Tagi:<a href="#" ng-repeat="tag in selectedTags"> {{tag.name}}</a> </p>
 				</div>
 			</div>
 		</div>

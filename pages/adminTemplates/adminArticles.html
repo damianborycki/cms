@@ -1,4 +1,4 @@
-
+ï»¿
       <div class="row btn-d">
 		Szukaj: <input ng-model="query">
 	  <div class="form-group">
@@ -7,25 +7,25 @@
 				<input type="text" ng-model="endDate" data-date-format="yyyy-MM-dd" bs-datepicker>
 			</div>
 			</div>
-			<a class="btn btn-success btnb" href="adminEditArticle.html">Dodaj nowy</a>
+			<a class="btn btn-success btnb" href="#editArticle">Dodaj nowy</a>
 
 	  </div>
       <div class="row row2">
 		 <table>
 		 <th class="col-md-1 col-md"></th>
 		 <th class="col-md-2 col-md">Data publikacji</th>
-		 <th class="col-md-6 col-md">Tytu³</th>
+		 <th class="col-md-6 col-md">TytuÅ‚</th>
 		 <th class="col-md-2 col-md">Akcje</th>
 		<tr ng-repeat="tag in getlistOfArticles(4) | filter:{title: query, publication_date: datepicker.date.yyyymmdd()}" ng-class="['odd', 'even'][$index %2]">
 		<td class="col-md-1">  <input type="checkbox" value="{{tag.id}}" ng-checked="selection.indexOf(tag.id) > -1" ng-click="toggleSelection(tag.id)"> </td>
 		<td class="col-md-2">{{tag.publication_date}}</td>
 		<td class="col-md-6">{{tag.title}}</td>
-		<td class="col-md-2"><a class="btn btn-success btn-p" href="#editArticle/{{tag.id}}"> Edytuj</a><a class="btn btn-danger btn-p" ng-click="remove(tag.id)"> Usuñ</a></td>
+		<td class="col-md-2"><a class="btn btn-success btn-p" href="#editArticle/{{tag.id}}"> Edytuj</a><a class="btn btn-danger btn-p" ng-click="remove(tag.id)"> UsuÅ„</a></td>
 		</tr>
 		</table>
       </div>
       <div class="row btn-d">
-		<a class="btn btn-danger btnb" ng-click="removeSelected()">Usuñ zaznaczone</a>
-		<a class="btn btn-primary btnb" ng-click="invertSelection()">Odwróæ</a>
+		<a class="btn btn-danger btnb" ng-click="removeSelected()">UsuÅ„ zaznaczone</a>
+		<a class="btn btn-primary btnb" ng-click="invertSelection()">OdwrÃ³Ä‡</a>
       </div>
 	  </div>

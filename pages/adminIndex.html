@@ -11,7 +11,10 @@
 <script src="bootstrap/bootstrap.js"></script>
 <script src="js/collapseMe.js"></script>
 <script src="ckeditor/ckeditor.js"></script>
-        <script src="ckeditor/ng-ckeditor.js"></script>
+<script src="ckeditor/ng-ckeditor.js"></script>
+<script src="js/adminREST.js"></script>
+    <script src="tagInput/ng-tags-input.min.js"></script>
+    <link rel="stylesheet" href="tagInput/ng-tags-input.min.css" />
 <link href="css/bootstrap.min.css" rel="stylesheet">
 <link href="css/collapsingMenu.css" rel="stylesheet">
 <link href="css/modal.css" rel="stylesheet">
@@ -103,7 +106,7 @@ function parseDate(input)
 	return new Date(date[0], date[1]-1, date[2], time[0], time[1], time[2]);
 }
    
-var app = angular.module('studentInfoApp', ['ngSanitize', 'ngRoute', 'mgcrea.ngStrap', 'ngCkeditor']);
+var app = angular.module('studentInfoApp', ['ngSanitize', 'ngRoute', 'mgcrea.ngStrap', 'ngCkeditor', 'ngTagsInput']);
 
 app.filter('unsafe', function($sce) {
     return function(val) {
@@ -137,9 +140,25 @@ app.config(['$routeProvider',
         templateUrl: 'adminTemplates/adminEditArticle.html',
         controller: 'EditArticleController'
       }).
+      when('/editArticle', {
+        templateUrl: 'adminTemplates/adminEditArticle.html',
+        controller: 'EditArticleController'
+      }).
       when('/articleRank', {
         templateUrl: 'adminTemplates/adminArticleRank.html',
         controller: 'ArticleRankController'
+      }).
+      when('/image', {
+        templateUrl: 'adminTemplates/image.html',
+        controller: 'ImageController'
+      }).
+      when('/imageModeration', {
+        templateUrl: 'adminTemplates/imageModeration.html',
+        controller: 'ImageModerationController'
+      }).
+      when('/gallery', {
+        templateUrl: 'adminTemplates/gallery.html',
+        controller: 'GalleryController'
       }).
       otherwise({
         redirectTo: '/groups'
@@ -160,49 +179,31 @@ app.controller('topAndSideContrler', function($scope, $location) {
     }
 });
 
+app.service('tags', function($q) {
+  
+  this.load = function(tags) {
+    var deferred = $q.defer();
+    deferred.resolve(tags);
+    return deferred.promise;
+  };
+});
 
-app.controller('TagController', function($scope) { 
-    $scope.gerListOfarticles = function(len)
-  {
-  var arr = [];
-  for (var i=0;i<len;i++)
-  {
-  arr.push({
-     title: "Tytul",
-     description: "Opis",
-     publication_date: "2012-04-23 18:25:43",
-     views:10,
-     image: 1,
-     tag: [1,5,9],
-     rank: 1,  
-     commntCount: 5
-     });
-  }
 
-  return arr;
-}
+
+
+app.controller('TagController', function($scope, $http) { 
 
 	$scope.listOfTags = [];
 
-	$scope.getListOfTags = function(len)
+	$scope.getListOfTags = function()
 	{
 	if ($scope.listOfTags.length != 0)
 		return $scope.listOfTags;
 
-	var arr = [];
-	for (var i=0;i<len;i++)
-	{
-	arr.push({
-		id: i,
-		name:  "Kraków",
-		description: "Tag for articles connected with the given name.",
-		type: (i + 1)
-	});
-	}
-
-	$scope.listOfTags = arr;
-	return arr;
+	GetTags($scope, $http);
 };
+
+$scope.getListOfTags();
 
 	$scope.listOfTagsTypes = [];
 
@@ -356,6 +357,8 @@ $scope.orderProp = '';
   
 });
 
+
+
 app.controller('GroupController', function($scope) {  
 
 	$scope.listOfTagsTypes = [];
@@ -494,28 +497,22 @@ $scope.orderProp = '';
   
 });
 
-app.controller('TagTypeController', function($scope) {  
+
+
+
+app.controller('TagTypeController', function($scope, $http) {  
 
 	$scope.listOfTagsTypes = [];
 
-	$scope.getListOfTagsTypes  = function(len)
+	$scope.getListOfTagsTypes  = function()
 	{
 	if ($scope.listOfTagsTypes.length != 0)
 		return $scope.listOfTagsTypes;
 
-	var arr = [];
-	for (var i=0;i<len;i++)
-	{
-	arr.push({
-		id: (i + 1),
-		name:  "Typ" + i,
-		description: "typ"
-	});
-	}
-
-	$scope.listOfTagsTypes = arr;
-	return arr;
+	GetTagTypes($scope, $http);
 };
+
+$scope.getListOfTagsTypes();
 
 $scope.GetIndexOfTagTypeById=function($id)
 {
@@ -632,7 +629,9 @@ $scope.orderProp = '';
   
 });
 
-app.controller('CategoryController', function($scope) {  
+
+
+app.controller('CategoryController', function($scope, $http) {  
 
 	$scope.listOfCategories = [];
 
@@ -641,37 +640,73 @@ app.controller('CategoryController', function($scope) {
 	if ($scope.listOfCategories.length != 0)
 		return $scope.listOfCategories;
 
-	var arr = [
-{id:1,
- name: 'główna',
- parent: 'null'},
-      {id:2,
-       name: 'PKat',
-       parent:1},
-       {id:3,
-        name: 'PKat2',
-        parent:1},
-              {id:4,
-               name:'PPKat1',
-               parent:2}];
-
-	$scope.listOfCategories = arr;
-	return arr;
+	
+	GetCategories($scope, $http);
 };
+
+$scope.getlistOfCategories();
 
 $scope.getListOfElementsByParent=function(id)
 {
-$scope.getlistOfCategories();
+	$scope.getlistOfCategories();
 	var arr = [];
 	
-	for (var index in $scope.listOfCategories)
+	arr = $scope.getChildrenArrayRecurrency(id, $scope.listOfCategories);
+	return arr;
+}
+
+$scope.getChildrenArrayRecurrency = function(id, arr)
+{
+	for (var index in arr)
 	{
-		if ($scope.listOfCategories[index].parent == id)
+		if (arr[index].id == id)
 		{
-			arr.push($scope.listOfCategories[index]);
+			return arr[index].children;
+		}
+		else if (arr[index].children != null && arr[index].children.length > 0)
+		{
+			var out = $scope.getChildrenArrayRecurrency(id, arr[index].children);
+			
+			if (out != null && out.length > 0)
+				return out;
 		}
 	}
-	return arr;
+	
+	return [];
+}
+
+$scope.flatListOfCategories = [];
+
+$scope.GetFlatCategoriesList=function()
+{
+	if ($scope.flatListOfCategories.length != 0)
+		return $scope.flatListOfCategories;
+	
+	$scope.flatListOfCategories = $scope.getFlatCategoryListRecurrency($scope.listOfCategories);
+	return $scope.flatListOfCategories;
+};
+
+$scope.getFlatCategoryListRecurrency = function(arr)
+{
+	var out = [];
+	for (var index in arr)
+	{
+		out.push(arr[index]);
+		if (arr[index].children != null && arr[index].children.length > 0)
+		{
+			var out2 = $scope.getFlatCategoryListRecurrency(arr[index].children);
+			
+			if (out2 != null && out.length > 0)
+			{
+				for (var index2 in out2)
+				{
+					out.push(out2[index2]);
+				}
+			}
+		}
+	}
+	
+	return out;
 }
 
 $scope.GetIndexOfCategoryById=function($id)
@@ -689,6 +724,34 @@ $scope.GetIndexOfCategoryById=function($id)
 	return -1;
 };
 
+$scope.GetCategoryById = function($id)
+{
+	var out = null;
+	out = $scope.getCategoryRecurrency($id, $scope.listOfCategories);
+	
+	return out;
+};
+
+$scope.getCategoryRecurrency = function(id, arr)
+{
+	for (var index in arr)
+	{
+		if (arr[index].id == id)
+		{
+			return arr[index];
+		}
+		else if (arr[index].children != null && arr[index].children.length > 0)
+		{
+			var out = $scope.getCategoryRecurrency(id, arr[index].children);
+			
+			if (out != null)
+				return out;
+		}
+	}
+	
+	return null;
+}
+
 $scope.remove=function($id){ 
 	var idx = $scope.GetIndexOfCategoryById($id);
 
@@ -700,10 +763,9 @@ $scope.remove=function($id){
 
 $scope.tagForModal = null;
 
-$scope.SetTagForModal=function($id)
+$scope.SetTagForModal = function($id)
 {
-	var idx = $scope.GetIndexOfCategoryById($id);
-	$scope.tagForModal = jQuery.extend(true, {}, $scope.listOfCategories[idx]);
+	$scope.tagForModal = $scope.GetCategoryById($id);
 }
 
 $scope.UpdateTag=function($id)
@@ -889,29 +951,21 @@ $scope.endDate = new Date();
 
 
 
-app.controller('EditArticleController', function($scope, $routeParams, $sanitize) {  
+app.controller('EditArticleController', function($scope, $routeParams, $sanitize, $http, tags) {  
 	
-		$scope.listOfTags = [];
+  $scope.getTags = function()
+  {
+	GetTags($scope, $http);
+  }
 
-	$scope.getListOfTags = function(len)
-	{
-	if ($scope.listOfTags.length != 0)
-		return $scope.listOfTags;
+$scope.selectedTags = [];
+$scope.listOfTags;
+$scope.getTags();
 
-	var arr = [];
-	for (var i=0;i<len;i++)
-	{
-	arr.push({
-		id: i,
-		name:  "Kraków",
-		description: "Tag for articles connected with the given name.",
-		type: (i + 1)
-	});
-	}
+$scope.loadTags = function(query) {
+    return tags.load($scope.listOfTags);
+  };
 
-	$scope.listOfTags = arr;
-	return arr;
-};
 	$scope.listOfArticles = [];
 
 	$scope.getlistOfArticles  = function(len)
@@ -1239,6 +1293,12 @@ $scope.orderProp = '';
                 </li>
                 <li ng-class="{active:isActive('/articleRank')}"><a href="#articleRank">Ranga Artykułu</a>
                 </li>
+                <li ng-class="{active:isActive('/image')}"><a href="#image">Obrazki</a>
+                </li>
+                <li ng-class="{active:isActive('/imageModeration')}"><a href="#imageModeration">Moderacja obrazków</a>
+                </li> 
+                <li ng-class="{active:isActive('/gallery')}"><a href="#gallery">Galerie</a>
+                </li>                
                 <li><a class="dropdown-toggle" data-toggle="dropdown" href="#">
                     Więcej <i class="glyphicon glyphicon-chevron-down"></i>
                     </a>

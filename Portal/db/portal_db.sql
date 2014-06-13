@@ -265,9 +265,15 @@ CREATE TABLE IF NOT EXISTS `users` (
 --
 
 INSERT INTO `users` (`id`, `avatar`, `city`, `last_login_date`, `registration_date`, `email`, `gender`, `info`, `login`, `name`, `password`, `surname`, `user_group`) VALUES
-(1, NULL, NULL, NULL, '0000-00-00 00:00:00', '', NULL, NULL, 'admin', NULL, 'e10adc3949ba59abbe56e057f20f883e', NULL, 1),
-(2, NULL, NULL, NULL, '0000-00-00 00:00:00', '', NULL, NULL, 'mod', NULL, 'e10adc3949ba59abbe56e057f20f883e', NULL, 2),
-(3, NULL, NULL, NULL, '0000-00-00 00:00:00', '', NULL, NULL, 'user', NULL, 'e10adc3949ba59abbe56e057f20f883e', NULL, 3);
+(1, NULL, '', NULL, '0000-00-00 00:00:00', '', '', 'M', 'admin', '', 'e10adc3949ba59abbe56e057f20f883e', '', 1),
+(2, NULL, '', NULL, '0000-00-00 00:00:00', '', '', 'M', 'mod', '', 'e10adc3949ba59abbe56e057f20f883e', '', 2),
+(3, NULL, '', NULL, '0000-00-00 00:00:00', '', '', 'K', 'user', '', 'e10adc3949ba59abbe56e057f20f883e', '', 3),
+(4, NULL, '', '0000-00-00 00:00:00', '2014-06-17 04:24:35', 'test@gmail.com', 'M', NULL, 'testowicz', 'Adam', 'e10adc3949ba59abbe56e057f20f883e', 'Nowak', 3),
+(6, NULL, '', '0000-00-00 00:00:00', '2014-06-03 06:44:32', 'user2@o2.pl', 'K', NULL, 'user2', 'Userowicz', 'e10adc3949ba59abbe56e057f20f883e', 'Obama', 3),
+(7, NULL, '', '0000-00-00 00:00:00', '2014-06-26 00:00:00', 'email@uj.edu.pl', 'M', NULL, 'login', 'Jan', 'e10adc3949ba59abbe56e057f20f883e', 'Nowak', 2),
+(8, NULL, '', '0000-00-00 00:00:00', '2014-05-01 19:40:23', 'mail@uj.edu.pl', 'M', NULL, 'login2', 'Mario', 'e10adc3949ba59abbe56e057f20f883e', 'Bros', 3),
+(9, NULL, '', '2014-06-25 06:29:32', '2014-07-22 20:13:31', 'john@email.com', 'M', NULL, 'johnny', 'John', 'e10adc3949ba59abbe56e057f20f883e', 'Dorian', 3),
+(10, NULL, '', '2014-06-11 13:22:19', '2014-06-03 10:14:33', 'emilia@mail.com', 'K', NULL, 'emilia', 'Emilia', 'e10adc3949ba59abbe56e057f20f883e', 'Terefere', 1);
 
 --
 -- Ograniczenia dla zrzutów tabel

@@ -19,7 +19,7 @@ public class ImageDAOImpl implements ImageDAOI {
     private SessionFactory sessionFactory;
 
     private Session openSession() {
-        return sessionFactory.getCurrentSession();
+        return sessionFactory.openSession();
     }
 
     public Image getImage(String id) {

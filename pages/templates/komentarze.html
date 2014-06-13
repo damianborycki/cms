@@ -1,0 +1,84 @@
+
+        <div class="row">
+		  <div class="column">
+			<p>
+				<h1 class="comment1"> Wszystkie komentarze </h1>
+			</p>
+          </div>
+          <div class="well list1">
+            <h1 class="art-tytul">{{artykuly[0].title}} </h1>
+			<p class="art-data">{{artykuly[0].publication_date}}</p>
+            <div class="col-md-4">
+				<img src="{{getImage(artykuly[0].image, 300, 200)}}" class="img-responsive">
+            </div>
+            <p class="art-tresc">
+              {{artykuly[0].description}}
+            </p>
+			<br><br>
+          </div>
+		</div>
+      
+		 <div class="row">
+          <div class="column">
+            <textarea class="span6" rows="9" placeholder="Napisz komentarz..." required="" 
+			style="margin: 0px; height: 180px; width: 100%; resize:vertical;"></textarea>
+            <a class="btn1 btn-lg btn-primary">KOMENTUJ</a>
+			 <p class="comment2">Komentarze (2)</p>
+          </div>
+		  <div class="column">
+			<p>
+				<h3 class="comment3"> 
+					<a href="#comments">Najnowsze</a> | <a href="#comments">Najstarsze</a> | <a href="#comments">Najczêœciej odpowiadane</a>
+				</h3>
+			</p>
+          </div>
+	
+          <ul class="list-group ">
+            <li class="list-group-item koment" ng-repeat="komentarz in komentarze">
+              <div class="row ">
+                <div class="col-md-2">
+				<a href="#user/{{komentarz.userId}}">
+                  <img src="http://placehold.it/100x100" class="img-responsive">
+                  <h3 contenteditable="true"> {{komentarz.userId}}</h3>
+				  </a>
+				  <p> {{komentarz.date}} {{komentarz.time}}</p> 
+                </div>
+                <div class="col-md-10">
+                  <p class="text-justify">{{komentarz.content}}</p>
+                </div>
+				<div class="col-md-10 text-right">
+					 <a class="przycisk" ng-if="komentarz.nr_of_replies>0" ng-click="click(komentarz.commentId)" >Pokaz odpowiedzi</a>
+					 <div ng-show="showButton(komentarz.commentId)">
+						<ul class="list-group">
+							<li class="list-group-item " ng-repeat="odpowiedzi in komentarze">
+							  <div class="row">
+								<div class="col-md-3 text-left">
+								<a href="#user/{{odpowiedzi.userId}}">
+								  <img src="http://placehold.it/100x100" class="img-responsive">
+								  <h3 contenteditable="true"> {{odpowiedzi.userId}}</h3>
+								  <p> {{odpowiedzi.date}} {{odpowiedzi.time}}</p> 
+								  </a>
+								</div>
+								<div class="col-md-9">
+								  <p class="text-justify">{{odpowiedzi.content}}</p>
+								</div>
+							</div>
+						</li>
+						</ul>
+					 </div>
+					<div class="przycisk" ng-click="clickComment(komentarz.commentId)">Odpowiedz</div>
+					<div ng-show="showCommentButton(komentarz.commentId)">
+					 <div class="row">
+						<div class="column">
+						<textarea class="span6" rows="9" placeholder="Napisz komentarz..." required="" 
+						style="margin: 0px; height: 180px; width: 100%; resize:vertical;"></textarea>
+						<div class="btn"><a class=" btn2 btn btn-lg btn-primary przycisk">DODAJ</a></div>
+						</div>
+						
+					 </div>
+					</div>
+				</div>
+			</div>
+		</li>
+		</ul>
+		</div>

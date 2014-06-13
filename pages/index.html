@@ -1,6 +1,7 @@
-<!doctype html>
+﻿<!doctype html>
 <html ng-app="studentInfoApp">
 <head>
+<title>Student Info</title>
 <script src="angular/angular.js"></script>
 <script src="angular/angular-sanitize.js"></script>
 <script src="angular/angular-animate.js"></script>
@@ -9,6 +10,8 @@
 <script src="angularstrap/angular-strap.tpl.min.js"></script>
 <script src="jQuerry/jquery-1.11.0.min.js"></script>
 <script src="bootstrap/bootstrap.js"></script>
+    <script src="tagInput/ng-tags-input.min.js"></script>
+    <link rel="stylesheet" href="tagInput/ng-tags-input.min.css" />
 <link href="css/bootstrap.min.css" rel="stylesheet">
 <link href="css/collapsingMenu.css" rel="stylesheet">
 <!--<link rel="stylesheet/less" href="css/styles.less" type="text/css" />
@@ -16,8 +19,9 @@
 <link rel="stylesheet" href="css/styles.css" >
 <script src="js/collapseMe.js"></script>
 <script src="js/mocki.js"></script>
+<script src="js/REST.js"></script>
 <script>
-var app = angular.module('studentInfoApp', ['ngSanitize', 'ngRoute', 'mgcrea.ngStrap']);
+var app = angular.module('studentInfoApp', ['ngSanitize', 'ngRoute', 'mgcrea.ngStrap', 'ngTagsInput']);
 
 app.config(['$routeProvider',
   function($routeProvider) {
@@ -34,13 +38,17 @@ app.config(['$routeProvider',
         templateUrl: 'templates/glowna.htm',
         controller: 'GlownaController'
       }).
-      when('/userPage/:userId', {
+      when('/userPage/:userName', {
         templateUrl: 'templates/stronaUzytkownika.html',
         controller: 'StronaUzytkownikaController'
       }).
       when('/register', {
         templateUrl: 'templates/rejestracja.html',
         controller: 'RejestracjaController'
+      }).
+      when('/comments', {
+        templateUrl: 'templates/komentarze.html',
+        controller: 'CommentsController'
       }).
       otherwise({
         redirectTo: '/main'
@@ -56,7 +64,24 @@ app.config(function($dropdownProvider) {
   });
 })
 
-app.controller('topAndSideContrler', function($scope) {
+app.factory("SharedData", function(){
+
+  return {currentUserName: {data: "" },
+			mainCategories: {data: "" },
+			tags: {data: "" }  }
+
+});
+
+app.service('tags', function($q) {
+  
+  this.load = function(tags) {
+    var deferred = $q.defer();
+    deferred.resolve(tags);
+    return deferred.promise;
+  };
+}); 
+
+app.controller('topAndSideContrler', function($scope, $http, SharedData, tags) {
 
  $scope.listOfArticles = [];
  
@@ -72,16 +97,70 @@ app.controller('topAndSideContrler', function($scope) {
   
   return $scope.listOfArticles;
 }
+
+$scope.userLoggedIn = false;
+
+$scope.LogIn = function(login, pass)
+{
+	Login(login, pass, $scope, $http);
+}
+
+$scope.LogOut = function()
+{
+	Logout($scope, $http);
+}
   
   $scope.getImage = function(id, width, height){
     return 'http://placehold.it/' + width + 'x' + height;
   };
   
-$scope.selectedTag = "";
-$scope.tags = ["Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware","Florida","Georgia","Hawaii","Idaho","Illinois","Indiana","Iowa","Kansas","Kentucky","Louisiana","Maine","Maryland","Massachusetts","Michigan","Minnesota","Mississippi","Missouri","Montana","Nebraska","Nevada","New Hampshire","New Jersey","New Mexico","New York","North Dakota","North Carolina","Ohio","Oklahoma","Oregon","Pennsylvania","Rhode Island","South Carolina","South Dakota","Tennessee","Texas","Utah","Vermont","Virginia","Washington","West Virginia","Wisconsin","Wyoming"];
+  
+  $scope.currentUserName = SharedData.currentUserName;
+  
+  $scope.GetCurrentUserName = function()
+{
+	GetCurrentUserLogin($scope, $http);
+}
+
+$scope.getUser = function(name)
+{
+	GetUser(name, $scope, $http);
+}
+
+$scope.GetCurrentUserName();
+  
+  $scope.getTags = function()
+  {
+	GetTags($scope, $http);
+  }
+  
+$scope.selectedTags = [];
+$scope.tags = SharedData.tags;
+$scope.getTags();
+
+$scope.loadTags = function(query) {
+    return tags.load($scope.tags.data);
+  };
+  
+  $scope.getTagString = function() {
+	var out = [];
+	for (i in $scope.selectedTags)
+  {
+	out.push($scope.selectedTags[i].id);
+	}
+	
+	return out.toString();
+  }
+
+  $scope.mainCategories = SharedData.mainCategories;
+  $scope.getMainCategries = function()
+  {
+	GetMainCategories($scope, $http);
+  }
+  $scope.getMainCategries();
 });
 
-app.controller('GlownaController', function($scope) {
+app.controller('GlownaController', function($scope, SharedData) {
 
  $scope.listOfArticles = [];
  
@@ -97,13 +176,20 @@ app.controller('GlownaController', function($scope) {
   
   return $scope.listOfArticles;
 }
+
+
+  $scope.mainCategories = SharedData.mainCategories;
   
   $scope.getImage = function(id, width, height){
     return 'http://placehold.it/' + width + 'x' + height;
   };
 });
 
-app.controller('ArticleController', function($scope) {
+
+
+
+
+app.controller('ArticleController', function($scope, SharedData) {
 
  $scope.getImage = function(id, width, height){
     return 'http://placehold.it/' + width + 'x' + height;
@@ -123,6 +209,18 @@ app.controller('ArticleController', function($scope) {
   
   return $scope.listOfArticles;
 }
+
+$scope.tags = SharedData.tags;
+
+$scope.getTagName = function(id)
+{
+	for (i in $scope.tags.data)
+	{
+		if ($scope.tags.data[i].id == id)
+			return $scope.tags.data[i].name;
+	}
+	return "";
+}
    
    $scope.artykuly = 
    [{
@@ -132,7 +230,7 @@ app.controller('ArticleController', function($scope) {
    publication_date: "2012-04-23 18:25:43",
    views:10,
    image: 1,
-   tag: [1,5,9],
+   tag: [1,0],
    rank: 1,  
    commntCount: 5
    },
@@ -208,7 +306,11 @@ app.controller('ArticleController', function($scope) {
    }
 });
 
-app.controller('ListaArtykolowControler', function($scope) {
+
+
+
+
+app.controller('ListaArtykolowControler', function($scope, $http, $location) {
   
   $scope.getImage = function(id, width, height){
     return 'http://placehold.it/' + width + 'x' + height;
@@ -228,9 +330,22 @@ app.controller('ListaArtykolowControler', function($scope) {
   return $scope.listOfArticles;
 }
 
+$scope.search = $location.search()['search'];
+
+if ($scope.search != null)
+{
+	$scope.search = $scope.search.split(",");
+}
+
+$scope.category = $location.search()['category'];
+
 });
 
-app.controller('StronaUzytkownikaController', function($scope) {
+
+
+
+
+app.controller('StronaUzytkownikaController', function($scope, $http, $routeParams, SharedData) {
   
   $scope.user = null;
 
@@ -246,8 +361,20 @@ $scope.getUserById = function(id)
   return $scope.user;
 }
 
+$scope.currentUserName = SharedData.currentUserName;
+
+$scope.userName = $routeParams.userName;
+
 $scope.getUserById(1);
 
+$scope.searchedUser =null;
+
+$scope.getUser = function(name)
+{
+	GetUser(name, $scope, $http);
+}
+
+$scope.getUser($scope.userName);
 
   
  $scope.listOfArticles = [];
@@ -300,11 +427,127 @@ $scope.user =
 'email': '',
 'password': '',
 'password1': '',
-'firstName': '',
-'surname': '',
+'firstname': '',
+'lastname': '',
 'gender': '',
 'city': ''};
+
+
   
+});
+
+app.controller('CommentsController', function($scope) {
+
+ $scope.listOfArticles = [];
+ 
+    $scope.getListOfArticles = function(len)
+  {
+  
+  if ($scope.listOfArticles.length != 0)
+		return $scope.listOfArticles;
+		
+  var arr = [];
+  for (var i=0;i<len;i++)
+  {
+  arr.push({
+     title: "Tytul",
+     description: "Opis",
+     publication_date: "2012-04-23 18:25:43",
+     views:10,
+     image: 1,
+     tag: [1,5,9],
+     rank: 1,  
+     commntCount: 5
+     });
+  }
+
+  $scope.listOfArticles = arr;
+  
+  return $scope.listOfArticles;
+}
+   
+   $scope.artykuly = 
+   [{
+   title: "Tytul",
+   description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+   content: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\nLorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\nLorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+   publication_date: "2012-04-23 18:25:43",
+   views:10,
+   image: 1,
+   tag: [1,5,9],
+   rank: 1,  
+   commntCount: 5
+   },
+   {
+   title: "Tytul",
+   description: "Opis",
+   publication_date: "2012-04-23 18:25:43",
+   views:10,
+   image: 1,
+   tag: [1,5,9],
+   rank: 1,  
+   commntCount: 5
+   },
+   {
+   title: "Tytul",
+   description: "Opis",
+   publication_date: "2012-04-23 18:25:43",
+   views:10,
+   image: 1,
+   tag: [1,5,9],
+   rank: 1,  
+   commntCount: 5
+   }];
+   
+   $scope.komentarze =
+   [{
+   commentId : 12345,
+   userId : 12345,
+   content : "Sample content",
+   date : "25.04.14",
+   time: "14.15",
+   nr_of_replies : 0
+   },
+   {
+   commentId : 12346,
+   userId : 12346,
+   content : "Sample content234234",
+   date : "25.04.14",
+   time: "14.15",
+   nr_of_replies : 4
+   }];
+   
+   showRepliesToComment = 0;
+
+   $scope.click = function(commentId){
+   if (showRepliesToComment == commentId)
+   {
+     showRepliesToComment = 0;
+	 }
+	 else
+	 {
+		showRepliesToComment = commentId
+	 }
+   }
+   $scope.showButton = function(commentId){
+     return showRepliesToComment == commentId;
+   }
+   
+   showComment = 0;
+
+   $scope.clickComment = function(commentId){
+	if (showComment == commentId)
+	{
+     showComment = 0;
+	 }
+	 else
+	 {
+     showComment = commentId;
+	 }
+   }
+   $scope.showCommentButton = function(commentId){
+     return showComment == commentId;
+   }
 });
 
 </script>
@@ -312,46 +555,51 @@ $scope.user =
 <body>
 
 <div class="bs-docs-section" ng-controller="topAndSideContrler">
-  
     <div class="container">
-
 	 <div class="header">
       <div class="col-md-4">
         <a href="#main"><img src=""></a>
       </div>
       <div class="col-md-4 center-block">
         <div class="input-group col-xs-10">
-            <input type="text" class="form-control" ng-model="selectedTag" ng-options="tag for tag in tags" placeholder="" bs-typeahead type="text" limit="4">
+			<tags-input ng-model="selectedTags" display-property="name" add-on-enter="false" placeholder="Dodaj tag">
+				<auto-complete source="loadTags($query)" max-results-to-show="3"></auto-complete>
+			</tags-input>
             <span class="input-group-btn">
-          <button class="btn btn-primary" type="button" data-trigger="click">Szukaj</button>
+          <a class="btn btn-primary" type="button" href="#articleList?search={{getTagString()}}"ng-disabled="selectedTags.length == 0">Szukaj</a>
           </span>
         </div>
       </div>
       <div class="col-md-2">
-        <a href="#register">Za�� konto</a>
+        <a href="#register" ng-hide="userLoggedIn">Załóż konto</a>
       </div>
       <div class="col-md-2">
         <div class='dropdown'>
-          <button type='button' class='btn dropdown-toggle' data-toggle='dropdown'>
-            <img src="{{getImage(zajawka.image, 75, 75)}}">
-            <b class='caret'></b>
-          </button>
-          <ul class="dropdown-menu list-unstyled">
-            <li>
-              <form role="form">
-                <div class="form-group">
-                  <label>Login</label>
-                  <input class="form-control" placeholder="" type="text">
-                </div>
-                <div class="form-group">
-                  <label for="exampleInputPassword1">Has�o</label>
-                  <input class="form-control" id="exampleInputPassword1" placeholder="Password"
-                  type="password">
-                </div>
-                <button type="submit" class="btn btn-default">Zaloguj</button>
-              </form>
-            </li>
-          </ul>
+			  <button type='button' class='btn dropdown-toggle' data-toggle='dropdown'>
+				<img src="{{getImage(zajawka.image, 75, 75)}}">
+				<b class='caret'></b>
+			  </button>
+			  <ul class="dropdown-menu list-unstyled" ng-hide="userLoggedIn">
+				<li>
+				  <form role="form">
+					<div class="form-group">
+					  <label>Login</label>
+					  <input class="form-control" placeholder="" type="text" ng-model="login">
+					</div>
+					<div class="form-group">
+					  <label for="exampleInputPassword1">Hasło</label>
+					  <input class="form-control" id="exampleInputPassword1" placeholder="Hasło" type="password" ng-model="pass">
+					</div>
+					<button type="submit" class="btn btn-default" ng-click="LogIn(login, pass)">Zaloguj</button>
+				  </form>
+				</li>
+			  </ul>
+			  <ul class="dropdown-menu list-unstyled" ng-show="userLoggedIn">
+				<li>
+					<a class="btn btn-default" href="#userPage/{{currentUserName.data}}">Konto</a>
+					<a class="btn btn-default" ng-click="LogOut()">Wyloguj</a>
+				</li>
+			  </ul>
         </div>
       </div>
 	  </div>
@@ -363,33 +611,10 @@ $scope.user =
            
             <div class="navbar-collapse collapse">
               <ul class="nav navbar-nav nav-collapsing" id="topMenu">
-                <li><a href="#articleList">Home</a>
-                </li>
-                <li><a href="#articleList">Contacts</a>
-                </li>
-                <li><a href="#articleList">Contacts2</a>
-                </li>
-                <li><a href="#articleList">Contacts3</a>
-                </li>
-               
-                <li><a href="#articleList">Contacts6</a>
-                </li>
-                <li><a href="#articleList">Contacts7</a>
-                </li>
-                <li><a href="#articleList">Contacts8</a>
-                </li>
-                <li><a href="#articleList">Contacts9</a>
-                </li>
-                <li><a href="#articleList">Contacts10</a>
-                </li>
-                <li><a href="#articleList">Contacts11</a>
-                </li>
-                <li><a href="#articleList">Contacts12</a>
-                </li>
-                <li><a href="#articleList">Contacts13</a>
+                <li ng_repeat="category in mainCategories.data"><a href="#articleList?category={{category.name}}">{{category.name}}</a>
                 </li>
                 <li><a class="dropdown-toggle" data-toggle="dropdown">
-                    Wi�cej <i class="glyphicon glyphicon-chevron-down"></i>
+                    Więcej <i class="glyphicon glyphicon-chevron-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-right" id="collapsed"></ul>
                 </li>
@@ -417,7 +642,7 @@ $scope.user =
               </a>
             </li>
           </ul>
-          <h2 class="center1">Wa�ne</h2>
+          <h2 class="center1">Ważne</h2>
           <ul class="list-group">
             <li class="list-group-item list1" ng-repeat="zajawka in getListOfArticles(3)">
               <a href="#article">
