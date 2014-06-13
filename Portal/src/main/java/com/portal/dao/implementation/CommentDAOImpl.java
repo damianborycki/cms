@@ -17,6 +17,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -47,18 +48,21 @@ public class CommentDAOImpl implements CommentDAOI {
 			c = this.getById(c.getParent().getId());
 		return c;
 	}
-
-	@Override
-	public List<Comment> get(int limit, int pageNum,
-			String sortby, boolean asc) {
-		Criteria criteria=this.getCurrentSession().createCriteria(Comment.class);
+	private Criteria getCriteria(int limit, int pageNum,
+			String sortby, boolean asc){
+		Criteria criteria=this.getCurrentSession().createCriteria(Comment.class,"c");
 		if(asc)
 			criteria.addOrder(Order.asc(sortby));
 		else
 			criteria.addOrder(Order.desc(sortby));
 		criteria.setFirstResult(pageNum*limit);
 		criteria.setMaxResults(limit);
-		
+		return criteria;
+	}
+	@Override
+	public List<Comment> get(int limit, int pageNum,
+			String sortby, boolean asc) {
+		Criteria criteria= this.getCriteria(limit, pageNum, sortby, asc);
 		return criteria.list();
 	}
 
@@ -87,8 +91,11 @@ public class CommentDAOImpl implements CommentDAOI {
 	@Override
 	public List<Comment> get(long articleId, long thread, int limit,
 			int pageNum, String sortby, boolean asc) {
-		// TODO Auto-generated method stub
-		return new ArrayList<Comment>();
+		Criteria criteria = this.getCriteria(limit, pageNum, sortby, asc);
+		criteria.createAlias("c.article", "a");
+		criteria.setProjection( Projections.distinct( Projections.projectionList()
+	            .add( Projections.property("m.id"), Long.toString(articleId))));
+		return criteria.list();
 	}
 	@Override
 	public List<Comment> getApprovedByUser(long userId) {
@@ -121,6 +128,4 @@ public class CommentDAOImpl implements CommentDAOI {
 		criteria.add(Restrictions.eq("parent", comment));
 		return criteria.list();
 	}
-	
-
 }

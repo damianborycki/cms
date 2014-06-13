@@ -6,8 +6,11 @@ import com.portal.entity.*;
 
 import java.util.*;
 
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -28,25 +31,41 @@ public class ArticleDAOImpl implements ArticleDAOI {
 		}
 		return a;
 	}
+	
+	private Criteria getCriteria(int limit, int pageNum,
+			String sortby, boolean asc){
+		Criteria criteria=this.getCurrentSession().createCriteria(Article.class,"c");
+		if(asc)
+			criteria.addOrder(Order.asc(sortby));
+		else
+			criteria.addOrder(Order.desc(sortby));
+		criteria.setFirstResult(pageNum*limit);
+		criteria.setMaxResults(limit);
+		return criteria;
+	}
+	
 	@Override
-	public List<Article> get(int num, int pageNum, Comparator<Article> cmp,
+	public List<Article> get(int num, int pageNum, String sortBy,
 			boolean ascOrder) {
-		// TODO 
-		return test( num,  pageNum);
+		Criteria c = this.getCriteria(num, pageNum, sortBy, ascOrder);
+		return c.list();
 	}
 
 	@Override
-	public List<Article> get(int num, int pageNum, Comparator<Article> cmp,
+	public List<Article> get(int num, int pageNum, String sortBy,
 			boolean ascOrder, Category category) {
-		// TODO 
-		return test( num,  pageNum);
+		Criteria c = this.getCriteria(num, pageNum, sortBy, ascOrder);
+		c.add(Restrictions.idEq(category));
+		return c.list();
 	}
 
 	@Override
-	public List<Article> get(int num, int pageNum, Comparator<Article> cmp,
+	public List<Article> get(int num, int pageNum, String sortBy,
 			boolean ascOrder, Category category, Tag tag) {
-		// TODO 
-		return test( num,  pageNum);
+		Criteria c = this.getCriteria(num, pageNum, sortBy, ascOrder);
+		c.add(Restrictions.idEq(category));
+		c.add(Restrictions.in("tag", new Tag[]{tag}));
+		return c.list();
 	}
 
 	@Override

@@ -39,7 +39,7 @@ public class Comment {
     private Comment parent;
     
     @ManyToOne
-    @Column(name = "article", nullable = true)
+    @JoinColumn(name = "article_id", nullable = true)
     private Article article;
     
 	@NotNull

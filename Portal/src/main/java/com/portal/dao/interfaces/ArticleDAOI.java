@@ -11,18 +11,18 @@ public interface ArticleDAOI {
 
     List<Article> get(int num,
                       int pageNum,
-                      Comparator<Article> cmp,
+                      String sortBy,
                       boolean ascOrder);
 
     List<Article> get(int num,
                       int pageNum,
-                      Comparator<Article> cmp,
+                      String sortBy,
                       boolean ascOrder,
                       Category category);
 
     List<Article> get(int num,
                       int pageNum,
-                      Comparator<Article> cmp,
+                      String sortBy,
                       boolean ascOrder,
                       Category category,
                       Tag tag);
@@ -55,4 +55,5 @@ public interface ArticleDAOI {
               List<Tag> tags,
               String article_owner,
               ArticleRank rank);
+
 }
