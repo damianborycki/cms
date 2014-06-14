@@ -34,8 +34,9 @@ public class Comment {
     @OneToOne
     @JoinColumn(name = "state", nullable = false)
     private CommentState state;
-
-    @Column(name = "parent", nullable = true)
+    
+    @ManyToOne
+    @JoinColumn(name = "parent_id", nullable = true)
     private Comment parent;
     
     @ManyToOne
