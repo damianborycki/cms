@@ -41,17 +41,19 @@
 			<h1>Podgląd</h1>
 			<div class="col-md-9">
 				<div class="well">
-					<h1>{{newArticle.title}} </h1>
-					<p>{{newArticle.publication_date.yyyymmddhhmmss()}}</p>
+					<h1 class="art-tytul">{{newArticle.title}} </h1>
+					<p class="art-data">{{newArticle.publication_date.yyyymmddhhmmss()}}</p>
 					<div class="col-md-7">
-						<img src="{{getImage(artykuly[0].image, 450, 300)}}" class="img-responsive">
-						<p>Opis opis</p>
-						<p>Autor: </p>
+						<div style="margin-left: -10px; background-color: #FFF; border-radius: 16px; padding: 10px 10px 10px 10px; width: 470px; margin-top: 10px;">
+							<img src="{{getImage(artykuly[0].image, 450, 300)}}" class="img-responsive">
+							<p>Opis opis</p>
+							<p>Autor: </p>
+						</div>
 					</div>
 					<div class="col-md-5">
-						<p> {{newArticle.description}}</p>
+						<p class="art-opis"> {{newArticle.description}}</p>
 					</div>
-					<p ng-bind-html="newArticle.content | unsafe">
+					<p class="art-tresc" ng-bind-html="newArticle.content | unsafe">
 					</p>
 					</br>
 					<p>Wyświetlenia: {{newArticle.views}} | Ranga: {{newArticle.rank}}</p>
