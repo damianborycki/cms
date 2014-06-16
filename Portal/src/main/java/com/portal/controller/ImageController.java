@@ -127,7 +127,7 @@ public class ImageController {
     private String getImagePath(String imageId)
     {
         Image image = imageDAO.getImage(imageId);
-        if( image == null )
+        if( image == null || image.getApp_usr() == null)
             return getDefaultImageLink();
 
         return image.getLink();
@@ -136,7 +136,7 @@ public class ImageController {
     private String getAvatarPath(String imageId)
     {
         Image image = imageDAO.getImage(imageId);
-        if( image == null )
+        if (image == null || image.getApp_usr() == null)
             return getDefaultAvatarLink();
 
         return image.getLink();

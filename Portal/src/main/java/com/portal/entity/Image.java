@@ -117,14 +117,14 @@ public class Image {
     //@Column(name = "tags", nullable = false)
     //private List<Tag> tags;
 
-    @Column(name = "add_datetime")
+    @Column(name = "add_datetime", nullable = false)
     private Date add_datetime = new Date(System.currentTimeMillis());
 
-    @Column(name = "add_usr")
+    @Column(name = "add_usr", nullable = false)
     private Long add_usr;
 
-    @Column(name = "app_datetime", nullable = false)
-    private Date app_datetime = new Date(System.currentTimeMillis());
+    @Column(name = "app_datetime")
+    private Date app_datetime;
 
     @Column(name = "app_usr")
     private Long app_usr;
