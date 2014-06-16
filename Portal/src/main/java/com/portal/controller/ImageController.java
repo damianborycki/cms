@@ -91,6 +91,16 @@ public class ImageController {
         response.flushBuffer();
     }
 
+    @RequestMapping(value="/avatar", method=RequestMethod.GET)
+    public void getAvatar(HttpServletResponse response,
+                         @RequestParam("id") String imageId) throws Exception
+    {
+        File file = new File( getAvatarPath(imageId));
+        FileInputStream is = new FileInputStream(file);
+        IOUtils.copy(is, response.getOutputStream());
+        response.flushBuffer();
+    }
+
     @RequestMapping(value="/unapproved_images", method=RequestMethod.GET)
     @ResponseBody
     public List<Image> getUnapprovedImages()
@@ -106,6 +116,11 @@ public class ImageController {
 
     private String getDefaultImageLink()
     {
+        return System.getProperty("catalina.base") + "\\webapps\\images\\default\\default.jpg";
+    }
+
+    private String getDefaultAvatarLink()
+    {
         return System.getProperty("catalina.base") + "\\webapps\\images\\avatars\\defaultAvatar\\default_avatar.jpg";
     }
 
@@ -114,6 +129,15 @@ public class ImageController {
         Image image = imageDAO.getImage(imageId);
         if( image == null )
             return getDefaultImageLink();
+
+        return image.getLink();
+    }
+
+    private String getAvatarPath(String imageId)
+    {
+        Image image = imageDAO.getImage(imageId);
+        if( image == null )
+            return getDefaultAvatarLink();
 
         return image.getLink();
     }
