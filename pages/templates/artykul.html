@@ -7,7 +7,7 @@
 			<p class="art-data">{{artykuly[0].publication_date}}</p>
             <div class="col-md-7">
 				<div style="margin-left: -10px; background-color: #FFF; border-radius: 16px; padding: 10px 10px 10px 10px; width: 470px; margin-top: 10px;">
-					<img src="{{getImage(artykuly[0].image, 450, 300)}}" class="img-responsive">
+					<img ng-src="{{getImage(artykuly[0].image)}}" class="img-responsive">
 					<p>Opis opis</p>
 					<p>Autor: </p>
 				</div>
@@ -22,7 +22,7 @@
 				<slick arrows="true" dots="true" infinite="true" autoplay="true" autoplaySpeed="300" speed="300" slides-to-show="1" touch-move="false" slides-to-scroll="1" style="width: 490px;">
 					<div ng-repeat="zajawka in getListOfArticles(3)">
 						<div style="margin-left: auto; margin-right: auto; background-color: #FFF; border-radius: 16px; padding: 10px 10px 10px 10px; width: 470px">
-							<img src="{{getImage(1, 450, 300)}}" class="img-responsive">
+							<img ng-src="{{getImage(zajawka.image)}}" class="img-responsive">
 							<p>Opis opis</p>
 							<p>Autor: </p>
 						</div>
@@ -48,7 +48,7 @@
               <div class="row ">
                 <div class="col-md-2">
 				<a href="#userPage/{{komentarz.userId}}">
-                  <img ng-src="http://placehold.it/100x100" class="img-responsive">
+                  <img ng-src="{{getUserAvatar(komentarz.userId)}}" class="img-responsive">
                   <h3> {{komentarz.userId}}</h3>
 				  </a>
 				  <p> {{komentarz.date}} {{komentarz.time}}</p> 
@@ -64,7 +64,7 @@
 							  <div class="row">
 								<div class="col-md-3 text-left">
 								<a href="#userPage/{{odpowiedzi.userId}}">
-								  <img ng-src="http://placehold.it/100x100" class="img-responsive">
+								  <img ng-src="{{getUserAvatar(odpowiedzi.userId)}}" class="img-responsive">
 								  <h3> {{odpowiedzi.userId}}</h3>
 								</a>
 								  <p> {{odpowiedzi.date}} {{odpowiedzi.time}}</p> 

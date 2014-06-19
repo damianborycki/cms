@@ -22,14 +22,15 @@ function Logout($scope, $http){
 };
 
 function Register(login, pass, email, firstname, lastname, city, gender, $scope, $http){
-	$http.post('/portal/login', {login: login, password: pass}).
+	$scope.waitingForResponse = true;
+	$http.post('/portal/user', {login: login, password: pass, email: email, firstname: firstname, city: city, gender: gender}).
 	  success(function(data, status, headers, config) {
-		$scope.userLoggedIn = status == "201";
-		if ($scope.userLoggedIn)
-			$scope.GetCurrentUserName();
+		$scope.Registered = status == "201";
+		$scope.waitingForResponse = false;
 	  }).
 	  error(function(data, status, headers, config) {
-		$scope.userLoggedIn = false;
+		$scope.waitingForResponse = false;
+		$scope.Registered = false;
 	}); 
 };
 

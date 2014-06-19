@@ -168,7 +168,7 @@ $scope.loadTags = function(query) {
 	if ($scope.UserAvatarPath.length != 0)
 		return $scope.UserAvatarPath;
 	
-	$scope.UserAvatarPath = "/portal/image?id=" + id;
+	$scope.UserAvatarPath = "/portal/avatar?id=" + id;
 	return $scope.UserAvatarPath;
   };
   
@@ -207,7 +207,11 @@ app.controller('GlownaController', function($scope, SharedData) {
 app.controller('ArticleController', function($scope, SharedData) {
 
  $scope.getImage = function(id, width, height){
-    return 'http://placehold.it/' + width + 'x' + height;
+    return '/portal/image?id=' + id;
+  };
+  
+$scope.getUserAvatar = function(id){
+	return "/portal/avatar?id=" + id;
   };
   
  $scope.listOfArticles = [];
@@ -273,7 +277,7 @@ $scope.getTagName = function(id)
    $scope.komentarze =
    [{
    commentId : 12345,
-   userId : 12345,
+   userId : 1,
    content : "Sample content",
    date : "25.04.14",
    time: "14.15",
@@ -281,7 +285,7 @@ $scope.getTagName = function(id)
    },
    {
    commentId : 12346,
-   userId : 12346,
+   userId : 2,
    content : "Sample content234234",
    date : "25.04.14",
    time: "14.15",
@@ -435,20 +439,32 @@ $scope.getUser($scope.userName);
   
 });
 
-app.controller('RejestracjaController', function($scope) {
+app.controller('RejestracjaController', function($scope, $http) {
 
-$scope.user = 
-{'login': '',
-'email': '',
-'password': '',
-'password1': '',
-'firstname': '',
-'lastname': '',
-'gender': '',
-'city': ''};
+	$scope.user = 
+	{'login': '',
+	'email': '',
+	'password': '',
+	'password1': '',
+	'firstname': '',
+	'lastname': '',
+	'gender': '',
+	'city': ''};
 
-
+	  $scope.getAddress = function(viewValue) {
+		var params = {address: viewValue, sensor: false};
+		return $http.get('http://maps.googleapis.com/maps/api/geocode/json', {params: params})
+		.then(function(res) {
+		  return res.data.results;
+		});
+	  };
   
+	$scope.register = function()
+	{
+		Register($scope.user.login, $scope.user.password, $scope.user.email, $scope.user.firstname, $scope.user.lastname, $scope.user.city, $scope.user.gender, $scope, $http);
+	}
+	$scope.waitingForResponse = false;
+	$scope.Registered = false;
 });
 
 app.controller('CommentsController', function($scope) {
