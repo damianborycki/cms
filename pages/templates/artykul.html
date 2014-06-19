@@ -1,10 +1,16 @@
 
 			<div class="row">
+			<div style="padding: 10px 5px 0px 15px;"><p><span ng-repeat="tag in artykuly"> <a ng-hide="$last" href="#">{{tag.title}}</a> <span ng-show="$last">{{tag.title}}</span> <span ng-hide="$last"> > </span></span></p></div>
           <div class="well list1">
+			<hr style="margin-top: -10px;"/>
             <h1 class="art-tytul">{{artykuly[0].title}} </h1>
 			<p class="art-data">{{artykuly[0].publication_date}}</p>
             <div class="col-md-7">
-				<img src="{{getImage(artykuly[0].image, 450, 300)}}" class="img-responsive">
+				<div style="margin-left: -10px; background-color: #FFF; border-radius: 16px; padding: 10px 10px 10px 10px; width: 470px; margin-top: 10px;">
+					<img ng-src="{{getImage(artykuly[0].image)}}" class="img-responsive">
+					<p>Opis opis</p>
+					<p>Autor: </p>
+				</div>
             </div>
             <div class="col-md-5">
 				<p class="art-opis"> {{artykuly[0].description}}</p>
@@ -12,8 +18,19 @@
             <p class="art-tresc">
               {{artykuly[0].content}}
             </p>
-			<p class="art-tagi">{{artykuly[0].views}} {{artykuly[0].tag}} {{artykuly[0].rank}} {{artykuly[0].commntCount}}</p>
-			<br><br>
+			<div style="width: 550px; margin-left: auto; margin-right: auto; background-color: rgba(0,0,0,0.1); border-radius: 32px; padding: 20px 30px 10px 30px; margin-top: 20px; margin-bottom: 10px;">
+				<slick arrows="true" dots="true" infinite="true" autoplay="true" autoplaySpeed="300" speed="300" slides-to-show="1" touch-move="false" slides-to-scroll="1" style="width: 490px;">
+					<div ng-repeat="zajawka in getListOfArticles(3)">
+						<div style="margin-left: auto; margin-right: auto; background-color: #FFF; border-radius: 16px; padding: 10px 10px 10px 10px; width: 470px">
+							<img ng-src="{{getImage(zajawka.image)}}" class="img-responsive">
+							<p>Opis opis</p>
+							<p>Autor: </p>
+						</div>
+					</div>
+				</slick>
+			</div>
+			<p class="art-tagi">Wyświetlenia: {{artykuly[0].views}} | Ranga: {{artykuly[0].rank}}</p>
+			<p>Tagi:<a href="#articleList?search={{tag}}" ng-repeat="tag in artykuly[0].tag"> {{getTagName(tag)}}</a> </p>
           </div>
           </div>
       
@@ -31,7 +48,7 @@
               <div class="row ">
                 <div class="col-md-2">
 				<a href="#userPage/{{komentarz.userId}}">
-                  <img src="http://placehold.it/100x100" class="img-responsive">
+                  <img ng-src="{{getUserAvatar(komentarz.userId)}}" class="img-responsive">
                   <h3> {{komentarz.userId}}</h3>
 				  </a>
 				  <p> {{komentarz.date}} {{komentarz.time}}</p> 
@@ -47,7 +64,7 @@
 							  <div class="row">
 								<div class="col-md-3 text-left">
 								<a href="#userPage/{{odpowiedzi.userId}}">
-								  <img src="http://placehold.it/100x100" class="img-responsive">
+								  <img ng-src="{{getUserAvatar(odpowiedzi.userId)}}" class="img-responsive">
 								  <h3> {{odpowiedzi.userId}}</h3>
 								</a>
 								  <p> {{odpowiedzi.date}} {{odpowiedzi.time}}</p> 
@@ -74,6 +91,7 @@
 			</div>
 		</li>
 		</ul>
+            <a class="btn1 btn-lg btn-primary" href="#comments">Pokaż wszystkie komentarze</a>
 		</div>
 	  
 	 <div class="row list1 row1">
@@ -81,11 +99,11 @@
 			<h3 contenteditable="true" class="podobne">Podobne artykuly</h3>
 		  </div>
 		</div>
-		<div class="row">
+		<div class="row" style="padding-top: 10px;">
 		  <div class="col-md-4 "  ng-repeat="artykul in artykuly">
 		  <a href="#article">
 			<div class="list1">
-			 <img src="{{getImage(artykul.image, 300, 200)}}" class="img-responsive">
+			 <img ng-src="{{getImage(artykul.image, 300, 200)}}" class="img-responsive">
 			  <h2 class="podobne-tytul">{{artykul.title}}</h2>
 			  <p class="podobne-opis">{{artykul.description}}</p>
 			</div>

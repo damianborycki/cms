@@ -35,6 +35,16 @@ public class ImageDAOImpl implements ImageDAOI {
             return null;
     }
 
+    public List<Image> getAllUnapproved()
+    {
+        List<Image> imageList = new ArrayList<Image>();
+
+        Query query = openSession().createQuery("from Image i where i.app_usr = :app_usr");
+        query.setParameter("app_usr",null);
+        imageList = query.list();
+        return imageList;
+    }
+
     @Transactional(readOnly=false)
     public void addImage(Image i) {
         Session session = openSession();

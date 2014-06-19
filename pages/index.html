@@ -1,6 +1,7 @@
 ﻿<!doctype html>
 <html ng-app="studentInfoApp">
 <head>
+<title>Student Info</title>
 <script src="angular/angular.js"></script>
 <script src="angular/angular-sanitize.js"></script>
 <script src="angular/angular-animate.js"></script>
@@ -8,17 +9,20 @@
 <script src="angularstrap/angular-strap.min.js"></script>
 <script src="angularstrap/angular-strap.tpl.min.js"></script>
 <script src="jQuerry/jquery-1.11.0.min.js"></script>
+    <script src="slick/slick.min.js"></script>
+    <script src="angular/slick.min.js"></script>
 <script src="bootstrap/bootstrap.js"></script>
+    <script src="tagInput/ng-tags-input.min.js"></script>
+    <link rel="stylesheet" href="tagInput/ng-tags-input.min.css" />
 <link href="css/bootstrap.min.css" rel="stylesheet">
 <link href="css/collapsingMenu.css" rel="stylesheet">
-<!--<link rel="stylesheet/less" href="css/styles.less" type="text/css" />
-<script src="less/less-1.7.0.js" type="text/javascript"></script>-->
+<link href="slick/slick.css" rel="stylesheet">
 <link rel="stylesheet" href="css/styles.css" >
 <script src="js/collapseMe.js"></script>
 <script src="js/mocki.js"></script>
 <script src="js/REST.js"></script>
 <script>
-var app = angular.module('studentInfoApp', ['ngSanitize', 'ngRoute', 'mgcrea.ngStrap']);
+var app = angular.module('studentInfoApp', ['ngSanitize', 'ngRoute', 'mgcrea.ngStrap', 'ngTagsInput', 'slick']);
 
 app.config(['$routeProvider',
   function($routeProvider) {
@@ -61,13 +65,24 @@ app.config(function($dropdownProvider) {
   });
 })
 
-app.factory("myService", function(){
+app.factory("SharedData", function(){
 
-  return {sharedObject: {data: "" } }
+  return {currentUserName: {data: "" },
+			mainCategories: {data: "" },
+			tags: {data: "" }  }
 
 });
 
-app.controller('topAndSideContrler', function($scope, $http, myService) {
+app.service('tags', function($q) {
+  
+  this.load = function(tags) {
+    var deferred = $q.defer();
+    deferred.resolve(tags);
+    return deferred.promise;
+  };
+}); 
+
+app.controller('topAndSideContrler', function($scope, $http, SharedData, tags) {
 
  $scope.listOfArticles = [];
  
@@ -101,7 +116,7 @@ $scope.LogOut = function()
   };
   
   
-  $scope.currentUserName = myService.sharedObject;
+  $scope.currentUserName = SharedData.currentUserName;
   
   $scope.GetCurrentUserName = function()
 {
@@ -115,11 +130,52 @@ $scope.getUser = function(name)
 
 $scope.GetCurrentUserName();
   
-$scope.selectedTag = "";
-$scope.tags = ["Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware","Florida","Georgia","Hawaii","Idaho","Illinois","Indiana","Iowa","Kansas","Kentucky","Louisiana","Maine","Maryland","Massachusetts","Michigan","Minnesota","Mississippi","Missouri","Montana","Nebraska","Nevada","New Hampshire","New Jersey","New Mexico","New York","North Dakota","North Carolina","Ohio","Oklahoma","Oregon","Pennsylvania","Rhode Island","South Carolina","South Dakota","Tennessee","Texas","Utah","Vermont","Virginia","Washington","West Virginia","Wisconsin","Wyoming"];
+  $scope.getTags = function()
+  {
+	GetTags($scope, $http);
+  }
+  
+$scope.selectedTags = [];
+$scope.tags = SharedData.tags;
+$scope.getTags();
+
+$scope.loadTags = function(query) {
+    return tags.load($scope.tags.data);
+  };
+  
+  $scope.getTagString = function() {
+	var out = [];
+	for (i in $scope.selectedTags)
+  {
+	out.push($scope.selectedTags[i].id);
+	}
+	
+	return out.toString();
+  }
+
+  $scope.mainCategories = SharedData.mainCategories;
+  $scope.getMainCategries = function()
+  {
+	GetMainCategories($scope, $http);
+  }
+  $scope.getMainCategries();
+  
+  
+  
+  $scope.UserAvatarPath = "";
+  
+  $scope.getUserAvatar = function(id){
+	if ($scope.UserAvatarPath.length != 0)
+		return $scope.UserAvatarPath;
+	
+	$scope.UserAvatarPath = "/portal/avatar?id=" + id;
+	return $scope.UserAvatarPath;
+  };
+  
+  $scope.getUserAvatar(0);
 });
 
-app.controller('GlownaController', function($scope) {
+app.controller('GlownaController', function($scope, SharedData) {
 
  $scope.listOfArticles = [];
  
@@ -135,16 +191,27 @@ app.controller('GlownaController', function($scope) {
   
   return $scope.listOfArticles;
 }
+
+
+  $scope.mainCategories = SharedData.mainCategories;
   
   $scope.getImage = function(id, width, height){
     return 'http://placehold.it/' + width + 'x' + height;
   };
 });
 
-app.controller('ArticleController', function($scope) {
+
+
+
+
+app.controller('ArticleController', function($scope, SharedData) {
 
  $scope.getImage = function(id, width, height){
-    return 'http://placehold.it/' + width + 'x' + height;
+    return '/portal/image?id=' + id;
+  };
+  
+$scope.getUserAvatar = function(id){
+	return "/portal/avatar?id=" + id;
   };
   
  $scope.listOfArticles = [];
@@ -160,6 +227,18 @@ app.controller('ArticleController', function($scope) {
   $scope.listOfArticles = arr;
   
   return $scope.listOfArticles;
+}
+
+$scope.tags = SharedData.tags;
+
+$scope.getTagName = function(id)
+{
+	for (i in $scope.tags.data)
+	{
+		if ($scope.tags.data[i].id == id)
+			return $scope.tags.data[i].name;
+	}
+	return "";
 }
    
    $scope.artykuly = 
@@ -170,7 +249,7 @@ app.controller('ArticleController', function($scope) {
    publication_date: "2012-04-23 18:25:43",
    views:10,
    image: 1,
-   tag: [1,5,9],
+   tag: [1,0],
    rank: 1,  
    commntCount: 5
    },
@@ -198,7 +277,7 @@ app.controller('ArticleController', function($scope) {
    $scope.komentarze =
    [{
    commentId : 12345,
-   userId : 12345,
+   userId : 1,
    content : "Sample content",
    date : "25.04.14",
    time: "14.15",
@@ -206,7 +285,7 @@ app.controller('ArticleController', function($scope) {
    },
    {
    commentId : 12346,
-   userId : 12346,
+   userId : 2,
    content : "Sample content234234",
    date : "25.04.14",
    time: "14.15",
@@ -246,7 +325,11 @@ app.controller('ArticleController', function($scope) {
    }
 });
 
-app.controller('ListaArtykolowControler', function($scope) {
+
+
+
+
+app.controller('ListaArtykolowControler', function($scope, $http, $location) {
   
   $scope.getImage = function(id, width, height){
     return 'http://placehold.it/' + width + 'x' + height;
@@ -266,9 +349,22 @@ app.controller('ListaArtykolowControler', function($scope) {
   return $scope.listOfArticles;
 }
 
+$scope.search = $location.search()['search'];
+
+if ($scope.search != null)
+{
+	$scope.search = $scope.search.split(",");
+}
+
+$scope.category = $location.search()['category'];
+
 });
 
-app.controller('StronaUzytkownikaController', function($scope, $http, $routeParams, myService) {
+
+
+
+
+app.controller('StronaUzytkownikaController', function($scope, $http, $routeParams, SharedData) {
   
   $scope.user = null;
 
@@ -284,7 +380,7 @@ $scope.getUserById = function(id)
   return $scope.user;
 }
 
-$scope.currentUserName = myService.sharedObject;
+$scope.currentUserName = SharedData.currentUserName;
 
 $scope.userName = $routeParams.userName;
 
@@ -343,20 +439,32 @@ $scope.getUser($scope.userName);
   
 });
 
-app.controller('RejestracjaController', function($scope) {
+app.controller('RejestracjaController', function($scope, $http) {
 
-$scope.user = 
-{'login': '',
-'email': '',
-'password': '',
-'password1': '',
-'firstname': '',
-'lastname': '',
-'gender': '',
-'city': ''};
+	$scope.user = 
+	{'login': '',
+	'email': '',
+	'password': '',
+	'password1': '',
+	'firstname': '',
+	'lastname': '',
+	'gender': '',
+	'city': ''};
 
-
+	  $scope.getAddress = function(viewValue) {
+		var params = {address: viewValue, sensor: false};
+		return $http.get('http://maps.googleapis.com/maps/api/geocode/json', {params: params})
+		.then(function(res) {
+		  return res.data.results;
+		});
+	  };
   
+	$scope.register = function()
+	{
+		Register($scope.user.login, $scope.user.password, $scope.user.email, $scope.user.firstname, $scope.user.lastname, $scope.user.city, $scope.user.gender, $scope, $http);
+	}
+	$scope.waitingForResponse = false;
+	$scope.Registered = false;
 });
 
 app.controller('CommentsController', function($scope) {
@@ -479,16 +587,18 @@ app.controller('CommentsController', function($scope) {
 
 <div class="bs-docs-section" ng-controller="topAndSideContrler">
     <div class="container">
-	
+	<div class="row containerm">
 	 <div class="header">
       <div class="col-md-4">
         <a href="#main"><img src=""></a>
       </div>
       <div class="col-md-4 center-block">
         <div class="input-group col-xs-10">
-            <input type="text" class="form-control" ng-model="selectedTag" ng-options="tag for tag in tags" placeholder="" bs-typeahead type="text" limit="4">
+			<tags-input ng-model="selectedTags" display-property="name" add-on-enter="false" placeholder="Dodaj tag">
+				<auto-complete source="loadTags($query)" max-results-to-show="3"></auto-complete>
+			</tags-input>
             <span class="input-group-btn">
-          <button class="btn btn-primary" type="button" data-trigger="click">Szukaj</button>
+          <a class="btn btn-primary" type="button" href="#articleList?search={{getTagString()}}"ng-disabled="selectedTags.length == 0">Szukaj</a>
           </span>
         </div>
       </div>
@@ -498,7 +608,7 @@ app.controller('CommentsController', function($scope) {
       <div class="col-md-2">
         <div class='dropdown'>
 			  <button type='button' class='btn dropdown-toggle' data-toggle='dropdown'>
-				<img src="{{getImage(zajawka.image, 75, 75)}}">
+				<img ng-src="{{UserAvatarPath}}">
 				<b class='caret'></b>
 			  </button>
 			  <ul class="dropdown-menu list-unstyled" ng-hide="userLoggedIn">
@@ -526,40 +636,17 @@ app.controller('CommentsController', function($scope) {
       </div>
 	  </div>
 	  
-      <div class="row">
+      <div>
 
         <div class="col-md-12">
           <div class="navbar1 navbar-default navbar-inverse">
            
             <div class="navbar-collapse collapse">
               <ul class="nav navbar-nav nav-collapsing" id="topMenu">
-                <li><a href="#articleList">Home</a>
-                </li>
-                <li><a href="#articleList">Contacts</a>
-                </li>
-                <li><a href="#articleList">Contacts2</a>
-                </li>
-                <li><a href="#articleList">Contacts3</a>
-                </li>
-               
-                <li><a href="#articleList">Contacts6</a>
-                </li>
-                <li><a href="#articleList">Contacts7</a>
-                </li>
-                <li><a href="#articleList">Contacts8</a>
-                </li>
-                <li><a href="#articleList">Contacts9</a>
-                </li>
-                <li><a href="#articleList">Contacts10</a>
-                </li>
-                <li><a href="#articleList">Contacts11</a>
-                </li>
-                <li><a href="#articleList">Contacts12</a>
-                </li>
-                <li><a href="#articleList">Contacts13</a>
+                <li ng_repeat="category in mainCategories.data"><a href="#articleList?category={{category.name}}"><b>{{category.name}}</b></a>
                 </li>
                 <li><a class="dropdown-toggle" data-toggle="dropdown">
-                    Wi�cej <i class="glyphicon glyphicon-chevron-down"></i>
+                    Więcej <i class="glyphicon glyphicon-chevron-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-right" id="collapsed"></ul>
                 </li>
@@ -568,35 +655,39 @@ app.controller('CommentsController', function($scope) {
           </div>
 		   <div class="green"></div>
         </div>
+	  </div>
 		
 					
     </div>
-    <div class="containerm">
+    <div>
       <div class="row">
-	  <div class="ng-view col-md-9"></div>
-        <div class="col-md-3">
+		<div class="ng-view col-md-9 containerm">
+		</div>
+        <div class="col-md-3 containerm">
           <h2 class="center1">Popularne</h2>
           <ul class="list-group">
             <li class="list-group-item list1" ng-repeat="zajawka in getListOfArticles(3)">
               <a href="#article">
-                <img src="{{getImage(artykul.image, 300, 200)}}" class="img-responsive">
+                <img ng-src="{{getImage(artykul.image, 300, 200)}}" class="img-responsive">
                 <h4 class="zajawka-title">{{zajawka.title}}</h4> 
                 <div class="caption">
                   <p class="zajawka-text-justify">{{zajawka.description}}</p>
                 </div>
               </a>
+			  <hr ng-hide="$last">
             </li>
           </ul>
-          <h2 class="center1">Wa�ne</h2>
+          <h2 class="center1">Ważne</h2>
           <ul class="list-group">
             <li class="list-group-item list1" ng-repeat="zajawka in getListOfArticles(3)">
               <a href="#article">
-                <img src="{{getImage(artykul.image, 300, 200)}}" class="img-responsive">
+                <img ng-src="{{getImage(artykul.image, 300, 200)}}" class="img-responsive">
                 <h4 class="zajawka-title">{{zajawka.title}}</h4> 
                 <div class="caption">
                   <p class="zajawka-text-justify">{{zajawka.description}}</p>
                 </div>
               </a>
+			  <hr ng-hide="$last">
             </li>
           </ul>
         </div>
@@ -604,7 +695,6 @@ app.controller('CommentsController', function($scope) {
       <div class="foot">
       <a href='#'> O stronie </a> | <a href='#'> Kontakt </a> | <a href='#'> Regulamin </a>
       </div>
-</div>
 </div>
 </div>
 

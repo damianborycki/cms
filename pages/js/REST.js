@@ -22,14 +22,15 @@ function Logout($scope, $http){
 };
 
 function Register(login, pass, email, firstname, lastname, city, gender, $scope, $http){
-	$http.post('/portal/login', {login: login, password: pass}).
+	$scope.waitingForResponse = true;
+	$http.post('/portal/user', {login: login, password: pass, email: email, firstname: firstname, city: city, gender: gender}).
 	  success(function(data, status, headers, config) {
-		$scope.userLoggedIn = status == "201";
-		if ($scope.userLoggedIn)
-			$scope.GetCurrentUserName();
+		$scope.Registered = status == "201";
+		$scope.waitingForResponse = false;
 	  }).
 	  error(function(data, status, headers, config) {
-		$scope.userLoggedIn = false;
+		$scope.waitingForResponse = false;
+		$scope.Registered = false;
 	}); 
 };
 
@@ -41,6 +42,24 @@ function GetCurrentUserLogin($scope, $http){
 	  }).
 	  error(function(data, status, headers, config) {
 		$scope.userLoggedIn = false;
+	}); 
+};
+
+function GetTags($scope, $http){
+	$http.get('/portal/tag').
+	  success(function(data, status, headers, config) {
+		$scope.tags.data = data;
+	  }).
+	  error(function(data, status, headers, config) {
+	}); 
+};
+
+function GetMainCategories($scope, $http){
+	$http.get('/portal/category').
+	  success(function(data, status, headers, config) {
+		$scope.mainCategories.data = data[0].children;
+	  }).
+	  error(function(data, status, headers, config) {
 	}); 
 };
 

@@ -1,15 +1,15 @@
 package com.portal.dao.implementation;
 
 import com.portal.dao.interfaces.GroupDAOI;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 import com.portal.entity.Group;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -30,25 +30,25 @@ public class GroupDAOImpl implements GroupDAOI {
 
     @Override
     public List<Group> findAll() {
-        // TODO
-        return new ArrayList<Group>();
+		Query query = getCurrentSession().createQuery("from Group");
+		return query.list();
     }
 
     @Override
     public void add(Group group) {
-        // TODO save it
+    	getCurrentSession().persist(group);
     }
 
     @Override
     public void edit(Group group, String name, String description) {
         group.setName(name);
         group.setDescription(description);
-        // TODO save it
+        getCurrentSession().merge(group);
     }
 
     @Override
     public void delete(Group group) {
-        //TODO
+    	getCurrentSession().delete(group);
     }
 
 }

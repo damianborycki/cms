@@ -34,11 +34,16 @@ public class Comment {
     @OneToOne
     @JoinColumn(name = "state", nullable = false)
     private CommentState state;
-
-    @Column(name = "parent", nullable = true)
-    private Long parent;
-
-    @NotNull
+    
+    @ManyToOne
+    @JoinColumn(name = "parent_id", nullable = true)
+    private Comment parent;
+    
+    @ManyToOne
+    @JoinColumn(name = "article_id", nullable = true)
+    private Article article;
+    
+	@NotNull
     @Column(name = "number_of_responses", nullable = false)
     private Long responsesNumber = Long.valueOf(0);
     
@@ -83,13 +88,21 @@ public class Comment {
         this.state = state;
     }
 
-    public Long getParent() {
+    public Comment getParent() {
         return parent;
     }
 
-    public void setParent(Long parent) {
+    public void setParent(Comment parent) {
         this.parent = parent;
     }
+    
+    public Article getArticle() {
+		return article;
+	}
+
+	public void setArticle(Article article) {
+		this.article = article;
+	}
 
     public Long getResponsesNumber() {
         return responsesNumber;

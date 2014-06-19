@@ -1,9 +1,8 @@
 ﻿
       <div class="row btn-d">
 		Rodzaj:
-		<select ng-model="orderProp">
-		<option value="!!">Wszystkie</option>
-		<option value="!!">null</option>
+		<select ng-init="orderProp = '!'" ng-model="orderProp">
+		<option value="!" selected>Wszystkie</option>
 		<option ng-repeat="tagType in getListOfTagsTypes(4)" value="{{tagType.id}}">{{tagType.name}}</option>
 		</select>
 		<button class="btn btn-success btnb" data-animation="am-fade-and-scale" data-template="modal/tagModalAdd.html" bs-modal="modal" ng-click="CreateNewTag()">Dodaj nowy</button>
@@ -29,4 +28,3 @@
 		<a class="btn btn-danger btnb" ng-click="removeSelected()">Usuń zaznaczone</a>
 		<a class="btn btn-primary btnb" ng-click="invertSelection()">Odwróć</a>
       </div>
-	  {{listOfTags}}

@@ -11,17 +11,17 @@ public interface CommentDAOI {
 
     public Comment getById(long id);
 
-    public List<Comment> get(int limit, int pageNum, Comparator<Comment> sortby, boolean asc);
+    public List<Comment> get(int limit, int pageNum, String sortby, boolean asc);
 
-    public List<Comment> get(long user_id, int limit, int pageNum, Comparator<Comment> sortby, boolean asc);
+    public List<Comment> get(long user_id, int limit, int pageNum, String sortby, boolean asc);
 
-    public List<Comment> get(long articleId, long thread, int limit, int pageNum, Comparator<Comment> sortby, boolean asc);
+    public List<Comment> get(long articleId, long thread, int limit, int pageNum, String sortby, boolean asc);
 
     public List<Comment> getApprovedByUser(long userId);
 
     public void add(long userId, String content, Long parent, long articleId);
 
-    public void delete(long comment_id);
+    public void deleteCascade(long comment_id);
 
     public List<Comment> children(Comment comment);
 }

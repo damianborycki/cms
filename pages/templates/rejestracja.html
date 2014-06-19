@@ -1,5 +1,7 @@
 ﻿
 <div class="row">
+		{{waitingForResponse}}
+		{{Registered}}
 		<div class="panel panel-success">
           <div class="navbar2">
 			<div>
@@ -28,8 +30,7 @@
                 <input type="password" class="form-control" id="inputPassword3" ng-model="user.password" required placeholder="Podaj hasło">
               </div>
 			  <span class="error" data-ng-show="user.password.length < 6  && user.password.length > 0">
-			  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			  
 			  Minimum 6 znaków jest wymagane.</span>
             </div>
 			
@@ -38,8 +39,7 @@
               <div class="col-sm-10">
                 <input type="password" class="form-control" id="inputPassword3sec" ng-model="user.password1" required placeholder="Ponów hasło">
               </div>
-			  <span class="error" data-ng-show="(user.password && user.password1) && (user.password != user.password1)">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Hasła nie zgadzają się!</span>
+			  <span class="error" data-ng-show="(user.password && user.password1) && (user.password != user.password1)">Hasła nie zgadzają się!</span>
             </div>
 			
 
@@ -64,8 +64,8 @@
 
 
                 <select class="form-control" ng-model="user.gender">
-                  <option value="woman">kobieta</option>
-                  <option value="man">mężczyzna</option>
+                  <option value="K">kobieta</option>
+                  <option value="M">mężczyzna</option>
                 </select>
               </div>
             </div>
@@ -73,15 +73,15 @@
             <div class="form-group">
               <label for="inputCity3" class="col-sm-2 control-label">Miasto</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control" id="inputCity3" ng-model="user.city" placeholder="Podaj miasto">
+                <input type="text" class="form-control" id="inputCity3" ng-model="user.city" ng-options="address.address_components[0].short_name as address.address_components[0].short_name for address in getAddress($viewValue)" bs-typeahead placeholder="Podaj miasto">
               </div>
             </div>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* - pola obowiązkowe
+            * - pola obowiązkowe
             <br>
             <br>
             <div class="form-group">
               <div class="col-sm-offset-2 col-sm-10">
-                <button type="submit" class="btn btn-default" ng-disabled="user.login == '' || user.email == '' || user.password.length < 6 || user.password != user.password1">Zarejestruj konto</button>
+                <button type="submit" class="btn btn-default" ng-disabled="user.login == '' || user.email == '' || user.password.length < 6 || user.password != user.password1" ng-click="register()">Zarejestruj konto</button>
               </div>
             </div>
           </form>

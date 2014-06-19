@@ -74,11 +74,7 @@ public class Article {
     @JoinColumn(name = "rank")
     private ArticleRank rank;
     
-    @ManyToMany(cascade = {CascadeType.ALL})
-    @JoinTable(name="comment_list", 
-                joinColumns={@JoinColumn(name="user_id")}, 
-                inverseJoinColumns={@JoinColumn(name="id")})
-    @Column(name = "comments", nullable = true)
+    @OneToMany(mappedBy="article")
     private List <Comment> comments;
     
     @NotNull
