@@ -19,6 +19,8 @@ public interface UserDAOI {
     public List<User> findAll();
     
     public List<User> getAllUsers(int limit, int pageNo, String sortBy, String sortOrder);
+    
+    public int totalUsers();
 
     public void deleteUser(String login);
 
