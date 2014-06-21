@@ -143,4 +143,19 @@ public class CommentDAOImpl implements CommentDAOI {
 		criteria.add(Restrictions.eq("parent", comment));
 		return criteria.list();
 	}
+	
+	@Override
+	public void setStates(List<Comment> comments) {
+		
+		for(Comment c : comments) {
+			
+			System.out.println(c.getId() + " " + c.getState().getId());
+			
+			Query query = openSession().createQuery("update Comment c set c.state = :state where c.id = :id");
+			query.setParameter("id", c.getId());
+			query.setParameter("state", c.getState());
+			
+			query.executeUpdate();
+		}
+	}
 }

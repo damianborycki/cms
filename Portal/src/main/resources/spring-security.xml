@@ -12,7 +12,8 @@
 		<intercept-url pattern="/user/{login}" access="ROLE_ADMIN" method="GET"/>	
 		<intercept-url pattern="/setUserGroup/{login}" access="ROLE_ADMIN" method="PATCH"/>	
 		<intercept-url pattern="/userProfile/{login}" access="ROLE_USER" method="GET" />
-		<intercept-url pattern="/user" method="POST" />
+		
+		<intercept-url pattern="/setCommentStatus" method="PATCH" access="ROLE_MODERATOR"/>
 		
 		<intercept-url pattern="/comment" access="ROLE_USER" method="POST"/>
 		
