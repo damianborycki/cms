@@ -131,6 +131,18 @@ public class UserController {
             
     }
     
+    @RequestMapping(value = "/totalUsers", method = RequestMethod.GET)
+    public @ResponseBody int totalUsers(HttpServletResponse response){    	
+    	try {
+    		response.setStatus(HttpServletResponse.SC_CREATED);
+    		return userDAO.totalUsers();
+    	} catch (Exception e){
+    		System.out.println(e.getMessage());;
+    		response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+    		return 0;
+    	}
+    }
+    
 	@RequestMapping(value = "/user", method = RequestMethod.GET)
 	public @ResponseBody List<User> getAllUsers(@RequestParam("LIMIT") int limit, @RequestParam("PAGE_NO") int pageNo, @RequestParam("sortBy") String sortBy, @RequestParam("sortOrder") String sortOrder, HttpServletResponse response){
 		

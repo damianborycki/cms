@@ -291,4 +291,9 @@ public class UserDAOImpl implements UserDAOI {
 		else
 			return null;
     }
+    
+    public int totalUsers(){ 
+    	Query query = openSession().createQuery("from User");		
+		return query.list().size();
+    }
 }
