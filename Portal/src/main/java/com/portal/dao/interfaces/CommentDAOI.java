@@ -26,4 +26,6 @@ public interface CommentDAOI {
     public List<Comment> children(Comment comment);
     
     public void setStates(List<Comment> comments);
+    
+    public void delete(List<Comment> comments);
 }

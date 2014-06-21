@@ -137,9 +137,30 @@ public class CommentDAOImpl implements CommentDAOI {
 		}
 		this.getCurrentSession().delete(c);
 	}
+	
+	@Override
+	public void delete(List<Comment> comments) {
+		
+		for (Comment c : comments) {
+			
+			List<Comment> children = children(c);
+			
+			for (Comment child : children) {
+				Query deleteChild = openSession().createQuery("delete Comment c where c.id = :id");
+				deleteChild.setParameter("id", child.getId());
+				deleteChild.executeUpdate();
+			}
+			
+			Query deleteComment = openSession().createQuery("delete Comment c where c.id = :id");
+			deleteComment.setParameter("id", c.getId());
+			deleteComment.executeUpdate();
+		}
+		
+	}
+	
 	@Override
 	public List<Comment> children(Comment comment) {
-		Criteria criteria=this.getCurrentSession().createCriteria(Comment.class);
+		Criteria criteria = openSession().createCriteria(Comment.class);
 		criteria.add(Restrictions.eq("parent", comment));
 		return criteria.list();
 	}
@@ -147,10 +168,7 @@ public class CommentDAOImpl implements CommentDAOI {
 	@Override
 	public void setStates(List<Comment> comments) {
 		
-		for(Comment c : comments) {
-			
-			System.out.println(c.getId() + " " + c.getState().getId());
-			
+		for(Comment c : comments) {		
 			Query query = openSession().createQuery("update Comment c set c.state = :state where c.id = :id");
 			query.setParameter("id", c.getId());
 			query.setParameter("state", c.getState());
@@ -158,4 +176,5 @@ public class CommentDAOImpl implements CommentDAOI {
 			query.executeUpdate();
 		}
 	}
+	
 }

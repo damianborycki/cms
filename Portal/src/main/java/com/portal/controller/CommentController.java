@@ -39,4 +39,12 @@ public class CommentController {
 		response.setStatus(HttpServletResponse.SC_OK);
 	}
 	
+	@RequestMapping(value="/comment", method=RequestMethod.DELETE)
+	public void deleteComments(@RequestBody List<Comment> comments, HttpServletResponse response) {
+		
+		commentDAO.delete(comments);
+		
+		response.setStatus(HttpServletResponse.SC_OK);
+	}
+	
 }
