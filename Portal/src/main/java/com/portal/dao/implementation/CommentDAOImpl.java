@@ -6,6 +6,7 @@ import com.portal.dao.interfaces.CommentDAOI;
 import com.portal.dao.interfaces.UserDAOI;
 import com.portal.entity.Article;
 import com.portal.entity.Comment;
+import com.portal.entity.CommentState;
 import com.portal.entity.User;
 
 import java.lang.reflect.Field;
@@ -38,9 +39,13 @@ public class CommentDAOImpl implements CommentDAOI {
 		return sessionFactory.getCurrentSession();
 	}
 	
+	private Session openSession() {	
+		return sessionFactory.openSession();
+	}
+	
 	@Override
 	public Comment getById(long id) {
-		return (Comment) this.getCurrentSession().load(Comment.class, id);
+		return (Comment) openSession().load(Comment.class, id);
 	}
 	Comment root(Comment comment){
 		Comment c = comment;
@@ -106,13 +111,23 @@ public class CommentDAOImpl implements CommentDAOI {
 	@Override
 	public void add(long userId, String content, Long parent, long articleId) {
 		Comment comment = new Comment();
-		User u = (User) this.getCurrentSession().load(User.class, userId);
+		User u = (User) openSession().load(User.class, userId);
 		comment.setUser(u);
-		Comment p = this.getById(parent);
-		comment.setParent(p);
-		Article a = (Article) this.getCurrentSession().load(Article.class, articleId);
+		try {
+			Comment p = this.getById(parent);
+			comment.setParent(p);
+		} catch (NullPointerException e) {
+			System.out.println(e.getMessage());
+		}
+		Article a = (Article) openSession().load(Article.class, articleId);
 		comment.setArticle(a);
-		this.getCurrentSession().save(comment);
+		
+		comment.setContent(content);
+		CommentState cs = (CommentState) openSession().load(CommentState.class, 1l);
+		comment.setState(cs);
+		comment.setDate(new Date());
+		
+		openSession().save(comment);
 	}
 	@Override
 	public void deleteCascade(long comment_id) {

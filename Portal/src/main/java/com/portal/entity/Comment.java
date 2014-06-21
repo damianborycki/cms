@@ -2,6 +2,10 @@ package com.portal.entity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+
+import org.codehaus.jackson.annotate.JsonProperty;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+
 import java.util.Date;
 
 
@@ -9,8 +13,31 @@ import java.util.Date;
  * Created by Mateusz on 23.03.14.
  */
 @Entity
+@JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
 @Table(name = "comments")
 public class Comment {
+	
+	public Comment(@JsonProperty("userId") long userId, 
+				   @JsonProperty("content") String content, 
+				   @JsonProperty("parent") Long parent, 
+				   @JsonProperty("articleId") long articleId) {
+		
+		User u = new User();
+		u.setId(userId);
+		this.user = u;
+		
+		this.content = content;
+		
+		Comment c = new Comment();
+		c.setId(parent);
+		this.parent = c;
+		
+		Article a = new Article();
+		a.setId(articleId);
+		this.article = a;
+	}
+	
+	public Comment() { }
 
     @Column(name = "id", unique = true)
     @Id
@@ -80,11 +107,11 @@ public class Comment {
         this.date = date;
     }
 
-    public CommentState getStan() {
+    public CommentState getState() {
         return state;
     }
 
-    public void setStan(CommentState state) {
+    public void setState(CommentState state) {
         this.state = state;
     }
 
@@ -110,5 +137,16 @@ public class Comment {
 
     public void setResponsesNumber(Long responsesNumber) {
         this.responsesNumber = responsesNumber;
+    }
+    
+    public String toString() {
+    	return "id: " + this.id + "\n" +
+    			"user: " + this.user + "\n" +
+    			"content" + this.content + "\n" +
+    			"date: " + this.date + "\n" + 
+    			"state" + this.state + "\n" + 
+    			"parent" + this.parent + "\n" + 
+    			"article" + this.article + "\n" +
+    			"responses nr:" + this.responsesNumber;			
     }
 }

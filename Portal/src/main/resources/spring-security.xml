@@ -14,6 +14,8 @@
 		<intercept-url pattern="/userProfile/{login}" access="ROLE_USER" method="GET" />
 		<intercept-url pattern="/user" method="POST" />
 		
+		<intercept-url pattern="/comment" access="ROLE_USER" method="POST"/>
+		
 		<custom-filter ref="corsFilter" after="PRE_AUTH_FILTER" />
 		
 	</http>
