@@ -1,12 +1,3 @@
--- phpMyAdmin SQL Dump
--- version 4.1.14
--- http://www.phpmyadmin.net
---
--- Host: 127.0.0.1
--- Generation Time: 30 Maj 2014, 12:39
--- Server version: 5.6.17
--- PHP Version: 5.5.12
-
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
@@ -19,8 +10,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `portal_db`
 --
-CREATE DATABASE IF NOT EXISTS `portal_db` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
-USE `portal_db`;
 
 -- --------------------------------------------------------
 
@@ -28,7 +17,6 @@ USE `portal_db`;
 -- Struktura tabeli dla tabeli `articles`
 --
 
-DROP TABLE IF EXISTS `articles`;
 CREATE TABLE IF NOT EXISTS `articles` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `article_owner` varchar(255) DEFAULT NULL,
@@ -49,7 +37,7 @@ CREATE TABLE IF NOT EXISTS `articles` (
   KEY `FKB6C0D23DE128050` (`category_id`),
   KEY `FKB6C0D23DFECE0F58` (`rank`),
   KEY `FKB6C0D23D148209EC` (`user`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
 
 -- --------------------------------------------------------
 
@@ -57,7 +45,6 @@ CREATE TABLE IF NOT EXISTS `articles` (
 -- Struktura tabeli dla tabeli `article_rank`
 --
 
-DROP TABLE IF EXISTS `article_rank`;
 CREATE TABLE IF NOT EXISTS `article_rank` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `description` varchar(255) DEFAULT NULL,
@@ -66,7 +53,7 @@ CREATE TABLE IF NOT EXISTS `article_rank` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`),
   UNIQUE KEY `weight` (`weight`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
 
 -- --------------------------------------------------------
 
@@ -74,7 +61,6 @@ CREATE TABLE IF NOT EXISTS `article_rank` (
 -- Struktura tabeli dla tabeli `categories`
 --
 
-DROP TABLE IF EXISTS `categories`;
 CREATE TABLE IF NOT EXISTS `categories` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `description` varchar(255) DEFAULT NULL,
@@ -83,7 +69,7 @@ CREATE TABLE IF NOT EXISTS `categories` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`),
   KEY `FK4D47461C7714DCFE` (`parent`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
 
 -- --------------------------------------------------------
 
@@ -91,34 +77,22 @@ CREATE TABLE IF NOT EXISTS `categories` (
 -- Struktura tabeli dla tabeli `comments`
 --
 
-DROP TABLE IF EXISTS `comments`;
 CREATE TABLE IF NOT EXISTS `comments` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `content` varchar(255) NOT NULL,
   `date` datetime NOT NULL,
-  `parent` bigint(20) DEFAULT NULL,
   `number_of_responses` bigint(20) NOT NULL,
+  `article_id` bigint(20) DEFAULT NULL,
+  `parent_id` bigint(20) DEFAULT NULL,
   `state` bigint(20) NOT NULL,
   `user` bigint(20) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`),
+  KEY `FKDC17DDF4787B6BE4` (`article_id`),
+  KEY `FKDC17DDF44E5A4519` (`parent_id`),
   KEY `FKDC17DDF4220D4A59` (`state`),
   KEY `FKDC17DDF4148209EC` (`user`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
--- Struktura tabeli dla tabeli `comment_list`
---
-
-DROP TABLE IF EXISTS `comment_list`;
-CREATE TABLE IF NOT EXISTS `comment_list` (
-  `user_id` bigint(20) NOT NULL,
-  `id` bigint(20) NOT NULL,
-  KEY `FK2F689E7E65E160EF` (`user_id`),
-  KEY `FK2F689E7ED2F3A164` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
 
 -- --------------------------------------------------------
 
@@ -126,14 +100,13 @@ CREATE TABLE IF NOT EXISTS `comment_list` (
 -- Struktura tabeli dla tabeli `comment_state`
 --
 
-DROP TABLE IF EXISTS `comment_state`;
 CREATE TABLE IF NOT EXISTS `comment_state` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `description` varchar(600) DEFAULT NULL,
   `name` varchar(45) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
 
 -- --------------------------------------------------------
 
@@ -141,7 +114,6 @@ CREATE TABLE IF NOT EXISTS `comment_state` (
 -- Struktura tabeli dla tabeli `gallery`
 --
 
-DROP TABLE IF EXISTS `gallery`;
 CREATE TABLE IF NOT EXISTS `gallery` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `add_datetime` date NOT NULL,
@@ -157,23 +129,13 @@ CREATE TABLE IF NOT EXISTS `gallery` (
 -- Struktura tabeli dla tabeli `groups`
 --
 
-DROP TABLE IF EXISTS `groups`;
 CREATE TABLE IF NOT EXISTS `groups` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `description` varchar(600) CHARACTER SET latin1 DEFAULT NULL,
-  `name` varchar(45) CHARACTER SET latin1 NOT NULL,
+  `description` varchar(600) DEFAULT NULL,
+  `name` varchar(45) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_polish_ci AUTO_INCREMENT=5 ;
-
---
--- Zrzut danych tabeli `groups`
---
-
-INSERT INTO `groups` (`id`, `description`, `name`) VALUES
-(1, 'Administrator serwisu', 'admin'),
-(2, 'Moderator serwisu', 'moderator'),
-(3, 'U?ytkownik serwisu', 'user');
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
 
 -- --------------------------------------------------------
 
@@ -181,12 +143,11 @@ INSERT INTO `groups` (`id`, `description`, `name`) VALUES
 -- Struktura tabeli dla tabeli `image`
 --
 
-DROP TABLE IF EXISTS `image`;
 CREATE TABLE IF NOT EXISTS `image` (
   `id` varchar(255) NOT NULL,
-  `add_datetime` date DEFAULT NULL,
-  `add_usr` bigint(20) DEFAULT NULL,
-  `app_datetime` date NOT NULL,
+  `add_datetime` date NOT NULL,
+  `add_usr` bigint(20) NOT NULL,
+  `app_datetime` date DEFAULT NULL,
   `app_usr` bigint(20) DEFAULT NULL,
   `author` varchar(100) DEFAULT NULL,
   `description` varchar(255) DEFAULT NULL,
@@ -204,7 +165,6 @@ CREATE TABLE IF NOT EXISTS `image` (
 -- Struktura tabeli dla tabeli `tag`
 --
 
-DROP TABLE IF EXISTS `tag`;
 CREATE TABLE IF NOT EXISTS `tag` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `description` varchar(255) DEFAULT NULL,
@@ -223,7 +183,6 @@ CREATE TABLE IF NOT EXISTS `tag` (
 -- Struktura tabeli dla tabeli `tag_type`
 --
 
-DROP TABLE IF EXISTS `tag_type`;
 CREATE TABLE IF NOT EXISTS `tag_type` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `description` varchar(255) DEFAULT NULL,
@@ -239,7 +198,6 @@ CREATE TABLE IF NOT EXISTS `tag_type` (
 -- Struktura tabeli dla tabeli `users`
 --
 
-DROP TABLE IF EXISTS `users`;
 CREATE TABLE IF NOT EXISTS `users` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `avatar` bigint(20) DEFAULT NULL,
@@ -258,22 +216,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   UNIQUE KEY `id` (`id`),
   UNIQUE KEY `login` (`login`),
   KEY `FK6A68E08E6FC0FF4` (`user_group`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
-
---
--- Zrzut danych tabeli `users`
---
-
-INSERT INTO `users` (`id`, `avatar`, `city`, `last_login_date`, `registration_date`, `email`, `gender`, `info`, `login`, `name`, `password`, `surname`, `user_group`) VALUES
-(1, NULL, '', NULL, '0000-00-00 00:00:00', '', '', 'M', 'admin', '', 'e10adc3949ba59abbe56e057f20f883e', '', 1),
-(2, NULL, '', NULL, '0000-00-00 00:00:00', '', '', 'M', 'mod', '', 'e10adc3949ba59abbe56e057f20f883e', '', 2),
-(3, NULL, '', NULL, '0000-00-00 00:00:00', '', '', 'K', 'user', '', 'e10adc3949ba59abbe56e057f20f883e', '', 3),
-(4, NULL, '', '0000-00-00 00:00:00', '2014-06-17 04:24:35', 'test@gmail.com', 'M', NULL, 'testowicz', 'Adam', 'e10adc3949ba59abbe56e057f20f883e', 'Nowak', 3),
-(6, NULL, '', '0000-00-00 00:00:00', '2014-06-03 06:44:32', 'user2@o2.pl', 'K', NULL, 'user2', 'Userowicz', 'e10adc3949ba59abbe56e057f20f883e', 'Obama', 3),
-(7, NULL, '', '0000-00-00 00:00:00', '2014-06-26 00:00:00', 'email@uj.edu.pl', 'M', NULL, 'login', 'Jan', 'e10adc3949ba59abbe56e057f20f883e', 'Nowak', 2),
-(8, NULL, '', '0000-00-00 00:00:00', '2014-05-01 19:40:23', 'mail@uj.edu.pl', 'M', NULL, 'login2', 'Mario', 'e10adc3949ba59abbe56e057f20f883e', 'Bros', 3),
-(9, NULL, '', '2014-06-25 06:29:32', '2014-07-22 20:13:31', 'john@email.com', 'M', NULL, 'johnny', 'John', 'e10adc3949ba59abbe56e057f20f883e', 'Dorian', 3),
-(10, NULL, '', '2014-06-11 13:22:19', '2014-06-03 10:14:33', 'emilia@mail.com', 'K', NULL, 'emilia', 'Emilia', 'e10adc3949ba59abbe56e057f20f883e', 'Terefere', 1);
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=11 ;
 
 --
 -- Ograniczenia dla zrzutów tabel
@@ -298,14 +241,9 @@ ALTER TABLE `categories`
 --
 ALTER TABLE `comments`
   ADD CONSTRAINT `FKDC17DDF4148209EC` FOREIGN KEY (`user`) REFERENCES `users` (`id`),
-  ADD CONSTRAINT `FKDC17DDF4220D4A59` FOREIGN KEY (`state`) REFERENCES `comment_state` (`id`);
-
---
--- Ograniczenia dla tabeli `comment_list`
---
-ALTER TABLE `comment_list`
-  ADD CONSTRAINT `FK2F689E7ED2F3A164` FOREIGN KEY (`id`) REFERENCES `comments` (`id`),
-  ADD CONSTRAINT `FK2F689E7E65E160EF` FOREIGN KEY (`user_id`) REFERENCES `articles` (`id`);
+  ADD CONSTRAINT `FKDC17DDF4220D4A59` FOREIGN KEY (`state`) REFERENCES `comment_state` (`id`),
+  ADD CONSTRAINT `FKDC17DDF44E5A4519` FOREIGN KEY (`parent_id`) REFERENCES `comments` (`id`),
+  ADD CONSTRAINT `FKDC17DDF4787B6BE4` FOREIGN KEY (`article_id`) REFERENCES `articles` (`id`);
 
 --
 -- Ograniczenia dla tabeli `tag`
