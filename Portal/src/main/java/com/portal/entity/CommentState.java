@@ -4,12 +4,24 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.codehaus.jackson.annotate.JsonCreator;
+import org.codehaus.jackson.annotate.JsonProperty;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+
 /**
  * Created by Mateusz on 2014-05-11.
  */
 @Entity
+@JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
 @Table(name = "comment_state")
 public class CommentState {
+	
+	@JsonCreator
+	public CommentState(@JsonProperty("id") long id) {
+		this.id = id;
+	}
+	
+	public CommentState() { }
 
     @Id
     @NotNull

@@ -24,4 +24,6 @@ public interface CommentDAOI {
     public void deleteCascade(long comment_id);
 
     public List<Comment> children(Comment comment);
+    
+    public void setStates(List<Comment> comments);
 }

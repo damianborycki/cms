@@ -3,6 +3,7 @@ package com.portal.entity;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
+import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
@@ -17,7 +18,10 @@ import java.util.Date;
 @Table(name = "comments")
 public class Comment {
 	
-	public Comment(@JsonProperty("userId") long userId, 
+	@JsonCreator
+	public Comment(@JsonProperty("id") long id,
+				   @JsonProperty("state") CommentState state,
+				   @JsonProperty("userId") long userId, 
 				   @JsonProperty("content") String content, 
 				   @JsonProperty("parent") Long parent, 
 				   @JsonProperty("articleId") long articleId) {
@@ -35,6 +39,9 @@ public class Comment {
 		Article a = new Article();
 		a.setId(articleId);
 		this.article = a;
+		
+		this.id = id;
+		this.state = state;
 	}
 	
 	public Comment() { }
@@ -142,11 +149,11 @@ public class Comment {
     public String toString() {
     	return "id: " + this.id + "\n" +
     			"user: " + this.user + "\n" +
-    			"content" + this.content + "\n" +
+    			"content: " + this.content + "\n" +
     			"date: " + this.date + "\n" + 
-    			"state" + this.state + "\n" + 
-    			"parent" + this.parent + "\n" + 
-    			"article" + this.article + "\n" +
-    			"responses nr:" + this.responsesNumber;			
+    			"state: " + this.state + "\n" + 
+    			"parent: " + this.parent + "\n" + 
+    			"article: " + this.article + "\n" +
+    			"responses nr: " + this.responsesNumber;			
     }
 }
