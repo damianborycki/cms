@@ -331,5 +331,120 @@ public class CommentDAOImpl implements CommentDAOI {
         }        
         return comments;   
 	}
+
+	@Override
+	public List<Comment> getAllComments(long status, int limit, int pageNo,	String sortOrder) {
+		
+		List<Comment> comments = new ArrayList<Comment>();		
+		Criteria criteria = openSession().createCriteria(Comment.class);			
+			criteria.add(Restrictions.eq("state.id", status));
+			criteria.setFirstResult(limit*(pageNo-1));
+			criteria.setMaxResults(limit);
+			if(sortOrder.equals("DESC")){
+				criteria.addOrder(Order.desc("id"));	
+			} else {
+				criteria.addOrder(Order.asc("id"));
+			}
+			
+		List<Comment> coms = criteria.list();
+		
+        for(Comment c : coms) {
+
+        	Comment com = new Comment();
+            
+            User user = new User();
+            user.setId(c.getUser().getId());
+            user.setDateOfRegistration(null);
+            
+            CommentState state = new CommentState();
+            state.setId(c.getState().getId());
+            
+            Article article = new Article();
+            article.setId(c.getArticle().getId());
+            
+            Comment parent = new Comment();
+            try{            	
+                parent.setId(c.getParent().getId());
+            } catch (Exception e){
+            	parent.setId(0L);
+            }
+            
+            com.setId(c.getId());
+            com.setUser(user);
+            com.setContent(c.getContent());
+            com.setDate(c.getDate());
+            com.setResponsesNumber(c.getResponsesNumber());           
+            com.setArticle(article);            
+            com.setParent(parent);
+            com.setState(state);            
+            
+            comments.add(com);
+        }        
+        
+        return comments;	
+	}
+
+	@Override
+	public List<Comment> getAllComments(int limit, int pageNo, String sortOrder) {
+		
+		List<Comment> comments = new ArrayList<Comment>();		
+		Criteria criteria = openSession().createCriteria(Comment.class);			
+			criteria.setFirstResult(limit*(pageNo-1));
+			criteria.setMaxResults(limit);
+			if(sortOrder.equals("DESC")){
+				criteria.addOrder(Order.desc("id"));	
+			} else {
+				criteria.addOrder(Order.asc("id"));
+			}
+			
+		List<Comment> coms = criteria.list();
+		
+        for(Comment c : coms) {
+
+        	Comment com = new Comment();
+            
+            User user = new User();
+            user.setId(c.getUser().getId());
+            user.setDateOfRegistration(null);
+            
+            CommentState state = new CommentState();
+            state.setId(c.getState().getId());
+            
+            Article article = new Article();
+            article.setId(c.getArticle().getId());
+            
+            Comment parent = new Comment();
+            try{            	
+                parent.setId(c.getParent().getId());
+            } catch (Exception e){
+            	parent.setId(0L);
+            }
+            
+            com.setId(c.getId());
+            com.setUser(user);
+            com.setContent(c.getContent());
+            com.setDate(c.getDate());
+            com.setResponsesNumber(c.getResponsesNumber());           
+            com.setArticle(article);            
+            com.setParent(parent);
+            com.setState(state);            
+            
+            comments.add(com);
+        }        
+        
+        return comments;	
+	}
+
+	@Override
+	public long getTotalComments(long status) {
+		
+		List<Comment> comments = new ArrayList<Comment>();		
+		Criteria criteria = openSession().createCriteria(Comment.class);
+		if(status != 0){
+			criteria.add(Restrictions.eq("state.id", status));	
+		}
+			
+		return criteria.list().size();
+	}
 	
 }

@@ -75,5 +75,26 @@ public class CommentController {
 		
 		return commentDAO.getById(commentId);
 	}
+	
+	@RequestMapping(value="/comment", method=RequestMethod.GET)
+	public @ResponseBody List<Comment> getAllComments(@RequestParam("status") long status, 
+			@RequestParam("limit") int limit, 
+			@RequestParam("pageNo") int pageNo,			
+			@RequestParam("sortOrder") String sortOrder,
+			HttpServletResponse response){
+		
+		if(status == 0){
+			return commentDAO.getAllComments(limit, pageNo, sortOrder);
+		} else {
+			return commentDAO.getAllComments(status, limit, pageNo, sortOrder);	
+		}				
+	}
 
+	
+	@RequestMapping(value="/totalComments", method=RequestMethod.GET)
+	public @ResponseBody long totalComments(@RequestParam("status") long status,	
+			HttpServletResponse response){
+		
+		return commentDAO.getTotalComments(status);							
+	}
 }
