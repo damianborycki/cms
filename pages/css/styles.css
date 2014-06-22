@@ -80,6 +80,7 @@ font-size:12pt;
   border-style: solid;
   border-width: 2px;
   border-color: white;
+  border-radius: 16px;
 }
 .navbar1 {
   color: #ffffff;
@@ -98,6 +99,14 @@ margin-top: 15px;
 .list1{
 border: none;
 box-shadow: none;
+}
+.list-group-item:first-child{
+border-top-right-radius: 16px;
+border-top-left-radius: 16px;
+}
+.list-group-item:last-child{
+border-bottom-right-radius: 16px;
+border-bottom-left-radius: 16px;
 }
 .row1{
 background-color: white;

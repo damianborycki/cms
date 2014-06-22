@@ -72,3 +72,13 @@ function GetUser(name, $scope, $http){
 
 	}); 
 };
+
+function GetUserComments(userId, page, limit, $scope, $http){
+	$http.get('/portal/userComments/' + userId + '?LIMIT=' + limit + '&PAGE_NO=' + page + '&sortOrder=DESC').
+	  success(function(data, status, headers, config) {
+		$scope.userComments = data;
+	  }).
+	  error(function(data, status, headers, config) {
+
+	}); 
+};
