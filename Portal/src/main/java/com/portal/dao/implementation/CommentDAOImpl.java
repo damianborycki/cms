@@ -45,7 +45,35 @@ public class CommentDAOImpl implements CommentDAOI {
 	
 	@Override
 	public Comment getById(long id) {
-		return (Comment) openSession().load(Comment.class, id);
+		Comment c = (Comment) openSession().load(Comment.class, id);
+		
+		Comment comToReturn = new Comment();
+		comToReturn.setId(c.getId());
+		comToReturn.setContent(c.getContent());
+		comToReturn.setDate(c.getDate());
+		comToReturn.setResponsesNumber(c.getResponsesNumber());
+		
+		CommentState cs = new CommentState();
+		cs.setId(c.getId());
+		
+		Article a = new Article();
+		a.setId(c.getArticle().getId());
+		
+		User u = new User();
+		u.setId(c.getUser().getId());
+		u.setDateOfRegistration(null);
+		
+		if (c.getParent() != null) {
+			Comment parent = new Comment();
+			parent.setId(c.getParent().getId());
+			comToReturn.setParent(parent);
+		}
+		
+		comToReturn.setState(cs);
+		comToReturn.setArticle(a);
+		comToReturn.setUser(u);
+		
+		return comToReturn;
 	}
 	Comment root(Comment comment){
 		Comment c = comment;

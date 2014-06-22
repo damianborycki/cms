@@ -15,6 +15,7 @@
 		
 		<intercept-url pattern="/setCommentStatus" method="PATCH" access="ROLE_MODERATOR"/>
 		
+		<intercept-url pattern="/comment/{commentId}" access="ROLE_MODERATOR" method="GET"/>
 		<intercept-url pattern="/comment" access="ROLE_USER" method="POST"/>
 		<intercept-url pattern="/comment" access="ROLE_MODERATOR" method="DELETE"/>
 		<intercept-url pattern="/userComments/{userID}" access="ROLE_MODERATOR" method="GET"/>

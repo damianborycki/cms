@@ -67,5 +67,13 @@ public class CommentController {
 		
 		return commentDAO.getArticleComments(articleID, limit, pageNO, sortOrder);
 	}
+	
+	@RequestMapping(value="/comment/{commentId}", method=RequestMethod.GET)
+	public @ResponseBody Comment getComment(@PathVariable("commentId") long commentId, HttpServletResponse response) {
+		
+		response.setStatus(HttpServletResponse.SC_OK);
+		
+		return commentDAO.getById(commentId);
+	}
 
 }
