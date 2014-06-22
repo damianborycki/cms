@@ -1,6 +1,8 @@
 ﻿
-        <ul class="row ">
+		<div class="row containerm">
           <h1 class="art-tytul"> Artykuły </h1>
+		  <div class="column" style="margin: 16px 5px 5px 5px;">
+        <ul class="list-group">
             <li class="list-group-item list1" ng-repeat="zajawka in getListOfArticles(3)">
               <div class="row">
               <a href="#article">
@@ -19,3 +21,5 @@
 			  <hr ng-hide="$last">
             </li>
           </ul>
+		  </div>
+		  </div>

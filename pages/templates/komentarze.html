@@ -1,5 +1,5 @@
-
-        <div class="row">
+﻿
+        <div class="row containerm">
 		  <div class="column">
 			<p>
 				<h1 class="comment1"> Wszystkie komentarze </h1>
@@ -18,8 +18,8 @@
           </div>
 		</div>
       
-		 <div class="row">
-          <div class="column">
+		 <div class="row containerm">
+          <div class="column" style="margin: 16px 5px 5px 5px;">
             <textarea class="span6" rows="9" placeholder="Napisz komentarz..." required="" 
 			style="margin: 0px; height: 180px; width: 100%; resize:vertical;"></textarea>
             <a class="btn1 btn-lg btn-primary">KOMENTUJ</a>
@@ -28,18 +28,20 @@
 		  <div class="column">
 			<p>
 				<h3 class="comment3"> 
-					<a href="#comments">Najnowsze</a> | <a href="#comments">Najstarsze</a> | <a href="#comments">Najcz�ciej odpowiadane</a>
+					<a href="#comments">Najnowsze</a> | <a href="#comments">Najstarsze</a> | <a href="#comments">Najczęściej odpowiadane</a>
 				</h3>
 			</p>
           </div>
 	
+		  <div class="column" style="margin: 16px 5px 5px 5px;">
           <ul class="list-group ">
-            <li class="list-group-item koment" ng-repeat="komentarz in komentarze">
+				<div paging page="page" page-size="pageLength" total="total" show-prev-next="true" adjacent="1"></div>	
+            <li class="list-group-item list1" ng-repeat="komentarz in komentarze">
               <div class="row ">
                 <div class="col-md-2">
-				<a href="#user/{{komentarz.userId}}">
-                  <img src="http://placehold.it/100x100" class="img-responsive">
-                  <h3 contenteditable="true"> {{komentarz.userId}}</h3>
+				<a href="#userPage/{{komentarz.userId}}">
+                  <img ng-src="{{getUserAvatar(komentarz.userId)}}" class="img-responsive">
+                  <h3> {{komentarz.userId}}</h3>
 				  </a>
 				  <p> {{komentarz.date}} {{komentarz.time}}</p> 
                 </div>
@@ -47,38 +49,42 @@
                   <p class="text-justify">{{komentarz.content}}</p>
                 </div>
 				<div class="col-md-10 text-right">
-					 <a class="przycisk" ng-if="komentarz.nr_of_replies>0" ng-click="click(komentarz.commentId)" >Pokaz odpowiedzi</a>
+					 <a class="btn btn-success btn-p" ng-if="komentarz.nr_of_replies>0" ng-click="click(komentarz.commentId)" >Pokaż odpowiedzi</a>
 					 <div ng-show="showButton(komentarz.commentId)">
+						<div class="containerm" style="margin-left: auto; margin-right: auto; border-radius: 32px; padding: 10px 10px 5px 10px; margin-top: 10px; margin-bottom: 10px;">
 						<ul class="list-group">
-							<li class="list-group-item " ng-repeat="odpowiedzi in komentarze">
+							<li class="list-group-item list1" ng-repeat="odpowiedzi in komentarze">
 							  <div class="row">
 								<div class="col-md-3 text-left">
-								<a href="#user/{{odpowiedzi.userId}}">
-								  <img src="http://placehold.it/100x100" class="img-responsive">
-								  <h3 contenteditable="true"> {{odpowiedzi.userId}}</h3>
+								<a href="#userPage/{{odpowiedzi.userId}}">
+								  <img ng-src="{{getUserAvatar(odpowiedzi.userId)}}" class="img-responsive">
+								  <h3> {{odpowiedzi.userId}}</h3>
+								</a>
 								  <p> {{odpowiedzi.date}} {{odpowiedzi.time}}</p> 
-								  </a>
 								</div>
 								<div class="col-md-9">
 								  <p class="text-justify">{{odpowiedzi.content}}</p>
 								</div>
 							</div>
+							<hr style="margin: 5px 5px 5px 5px;" ng-hide="$last">
 						</li>
 						</ul>
+						</div>
 					 </div>
-					<div class="przycisk" ng-click="clickComment(komentarz.commentId)">Odpowiedz</div>
+					<div class="btn btn-success btn-p" ng-click="clickComment(komentarz.commentId)">Odpowiedz</div>
 					<div ng-show="showCommentButton(komentarz.commentId)">
 					 <div class="row">
 						<div class="column">
 						<textarea class="span6" rows="9" placeholder="Napisz komentarz..." required="" 
 						style="margin: 0px; height: 180px; width: 100%; resize:vertical;"></textarea>
-						<div class="btn"><a class=" btn2 btn btn-lg btn-primary przycisk">DODAJ</a></div>
+						<a class="btn btn-success btn-p">DODAJ</a>
 						</div>
-						
 					 </div>
 					</div>
 				</div>
 			</div>
+			<hr style="margin: 5px 5px 5px 5px;" ng-hide="$last">
 		</li>
 		</ul>
+		</div>
 		</div>

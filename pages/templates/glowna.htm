@@ -1,4 +1,4 @@
-			<div class="row">
+			<div class="row containerm">
 				<div class="col-md-8">
 				<slick arrows="false" dots="true" infinite="true" autoplay="true" autoplaySpeed="300" speed="2000" slides-to-show="1" touch-move="false" slides-to-scroll="1">
 					<div ng-repeat="zajawka in getListOfArticles(3)">
@@ -13,17 +13,18 @@
 				</slick>
 			  </div>
 			  <div class="col-md-4">
-				  <ul class="list-group">
-					<li class="list-group-item" ng-repeat="zajawka in getListOfArticles(3)">
+				  <ul class="list-group" style="margin-top: 5px">
+					<li class="list-group-item list1" style="padding-top: 1px; padding-bottom: 1px;" ng-repeat="zajawka in getListOfArticles(3)">
 					  <a href="#article">
 						<h4>{{zajawka.title}}</h4> 
 					  </a>
+						<hr style="margin: 5px 5px 5px 5px;" ng-hide="$last">
 					</li>
 				  </ul>
 			  </div>
 		  </div>
-          <div class="row" ng-repeat="category in mainCategories.data">
-			<h1> {{category.name}} </h1>
+          <div class="row containerm" ng-repeat="category in mainCategories.data">
+			<h1 style="margin-left: 20px;"> {{category.name}} </h1>
             <div class="col-md-4"  ng-repeat="zajawka in getListOfArticles(3)">
 				<a href="#article">
                 <img ng-src="{{getImage(zajawka.image, 300, 200)}}" class="img-responsive">

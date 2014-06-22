@@ -11,6 +11,7 @@
 <script src="jQuerry/jquery-1.11.0.min.js"></script>
     <script src="slick/slick.min.js"></script>
     <script src="angular/slick.min.js"></script>
+    <script src="angular/paging.js"></script>
 <script src="bootstrap/bootstrap.js"></script>
     <script src="tagInput/ng-tags-input.min.js"></script>
     <link rel="stylesheet" href="tagInput/ng-tags-input.min.css" />
@@ -22,7 +23,20 @@
 <script src="js/mocki.js"></script>
 <script src="js/REST.js"></script>
 <script>
-var app = angular.module('studentInfoApp', ['ngSanitize', 'ngRoute', 'mgcrea.ngStrap', 'ngTagsInput', 'slick']);
+Date.prototype.yyyymmddhhmmss = function() {         
+                                
+        var yyyy = this.getFullYear().toString();                                    
+        var mm = (this.getMonth()+1).toString(); // getMonth() is zero-based         
+        var dd  = this.getDate().toString();   
+		
+        var hh = this.getHours().toString();                                  
+        var min = this.getMinutes().toString();
+        var ss  = this.getSeconds().toString();          
+                            
+        return yyyy + '-' + (mm[1]?mm:"0"+mm[0]) + '-' + (dd[1]?dd:"0"+dd[0]) + ' ' + (hh[1]?hh:"0"+hh[0]) + ':' + (min[1]?min:"0"+min[0]) + ':' + (ss[1]?ss:"0"+ss[0]);
+   };
+   
+var app = angular.module('studentInfoApp', ['ngSanitize', 'ngRoute', 'mgcrea.ngStrap', 'ngTagsInput', 'slick', 'paging']);
 
 app.config(['$routeProvider',
   function($routeProvider) {
@@ -395,6 +409,20 @@ $scope.getUser = function(name)
 
 $scope.getUser($scope.userName);
 
+
+$scope.userComments = null;
+
+$scope.commentsPage = 1;
+$scope.commentsLimit = 20;
+$scope.total = 30;
+
+$scope.getUserComments = function(userId)
+{
+	GetUserComments(userId, $scope.commentsPage, $scope.commentsLimit, $scope, $http);
+}
+
+$scope.getUserComments(1);
+
   
  $scope.listOfArticles = [];
  
@@ -436,7 +464,10 @@ $scope.getUser($scope.userName);
    $scope.showEditDesc = !$scope.showEditDesc;
    }
    
-  
+  $scope.milisecToDate = function(miliseconds)
+  {
+	return new Date(miliseconds).yyyymmddhhmmss();
+  }
 });
 
 app.controller('RejestracjaController', function($scope, $http) {
@@ -579,6 +610,10 @@ app.controller('CommentsController', function($scope) {
    $scope.showCommentButton = function(commentId){
      return showComment == commentId;
    }
+   
+   $scope.page = 1;
+   $scope.pageLength = 3;
+   $scope.total = 40;
 });
 
 </script>
@@ -588,7 +623,7 @@ app.controller('CommentsController', function($scope) {
 <div class="bs-docs-section" ng-controller="topAndSideContrler">
     <div class="container">
 	<div class="row containerm">
-	 <div class="header">
+	 <div class="header" style="margin-top: 10px;">
       <div class="col-md-4">
         <a href="#main"><img src=""></a>
       </div>
@@ -659,11 +694,14 @@ app.controller('CommentsController', function($scope) {
 		
 					
     </div>
-    <div>
       <div class="row">
-		<div class="ng-view col-md-9 containerm">
+		<div class="col-md-9">
+		<div class="ng-view">
 		</div>
-        <div class="col-md-3 containerm">
+		</div>
+        <div class="col-md-3">
+		<div class="row containerm">
+		<div class="col-md-12" style="color: #000">
           <h2 class="center1">Popularne</h2>
           <ul class="list-group">
             <li class="list-group-item list1" ng-repeat="zajawka in getListOfArticles(3)">
@@ -674,7 +712,7 @@ app.controller('CommentsController', function($scope) {
                   <p class="zajawka-text-justify">{{zajawka.description}}</p>
                 </div>
               </a>
-			  <hr ng-hide="$last">
+			  <hr style="margin: 5px 5px 5px 5px;" ng-hide="$last">
             </li>
           </ul>
           <h2 class="center1">Ważne</h2>
@@ -692,10 +730,11 @@ app.controller('CommentsController', function($scope) {
           </ul>
         </div>
       </div>
+      </div>
+      </div>
       <div class="foot">
       <a href='#'> O stronie </a> | <a href='#'> Kontakt </a> | <a href='#'> Regulamin </a>
       </div>
-</div>
 </div>
 
 </body>
