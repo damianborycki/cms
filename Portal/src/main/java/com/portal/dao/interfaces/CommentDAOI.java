@@ -31,11 +31,14 @@ public interface CommentDAOI {
     
     public List<Comment> getUserComments(long userID, int limit, int pageNO, String sortOrder);
     
+    public List<Comment> getUserComments(long userID, long status, int limit, int pageNo, String sortOrder);
+    
     public List<Comment> getArticleComments(long articleID, int limit, int pageNO, String sortOrder);
     
     public List<Comment> getAllComments(long status, int limit, int pageNo, String sortOrder);
     
     public List<Comment> getAllComments(int limit, int pageNo, String sortOrder);
     
-    public long getTotalComments(long status);
+    public long getTotalComments(long status);   
+    
 }

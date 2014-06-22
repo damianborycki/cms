@@ -60,8 +60,8 @@ public class CommentController {
 	
 	@RequestMapping(value="/articleComments/{articleId}", method=RequestMethod.GET)
 	public @ResponseBody List<Comment> articleComments(@PathVariable("articleId") long articleID,
-			@RequestParam("LIMIT") int limit,
-			@RequestParam("PAGE_NO") int pageNO,
+			@RequestParam("limit") int limit,
+			@RequestParam("pageNo") int pageNO,
 			@RequestParam("sortOrder") String sortOrder,
 			HttpServletResponse response){
 		
@@ -96,5 +96,16 @@ public class CommentController {
 			HttpServletResponse response){
 		
 		return commentDAO.getTotalComments(status);							
+	}
+	
+	@RequestMapping(value="/comments/{userID}", method=RequestMethod.GET)
+	public @ResponseBody List<Comment> getUserComments(@PathVariable("userID") long userID,
+			@RequestParam("status") long status, 
+			@RequestParam("limit") int limit, 
+			@RequestParam("pageNo") int pageNo,			
+			@RequestParam("sortOrder") String sortOrder,
+			HttpServletResponse response){
+		 	
+		return commentDAO.getUserComments(userID, status, limit, pageNo, sortOrder);
 	}
 }

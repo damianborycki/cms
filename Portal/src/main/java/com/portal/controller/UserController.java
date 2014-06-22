@@ -144,7 +144,11 @@ public class UserController {
     }
     
 	@RequestMapping(value = "/user", method = RequestMethod.GET)
-	public @ResponseBody List<User> getAllUsers(@RequestParam("LIMIT") int limit, @RequestParam("PAGE_NO") int pageNo, @RequestParam("sortBy") String sortBy, @RequestParam("sortOrder") String sortOrder, HttpServletResponse response){
+	public @ResponseBody List<User> getAllUsers(@RequestParam("limit") int limit, 
+			@RequestParam("pageNo") int pageNo, 
+			@RequestParam("sortBy") String sortBy, 
+			@RequestParam("sortOrder") String sortOrder, 
+			HttpServletResponse response){
 		
 		try{
             response.setStatus(HttpServletResponse.SC_CREATED);

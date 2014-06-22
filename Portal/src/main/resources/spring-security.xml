@@ -18,7 +18,7 @@
 		<intercept-url pattern="/comment/{commentId}" access="ROLE_MODERATOR" method="GET"/>
 		<intercept-url pattern="/comment" access="ROLE_USER" method="POST"/>
 		<intercept-url pattern="/comment" access="ROLE_MODERATOR" method="DELETE"/>
-		<intercept-url pattern="/userComments/{userID}" access="ROLE_MODERATOR" method="GET"/>
+		<intercept-url pattern="/comments/{userID}" access="ROLE_MODERATOR" method="GET"/>
 		
 		<custom-filter ref="corsFilter" after="PRE_AUTH_FILTER" />
 		
