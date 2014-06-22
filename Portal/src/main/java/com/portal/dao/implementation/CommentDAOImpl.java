@@ -113,12 +113,31 @@ public class CommentDAOImpl implements CommentDAOI {
 		Comment comment = new Comment();
 		User u = (User) openSession().load(User.class, userId);
 		comment.setUser(u);
-		try {
-			Comment p = this.getById(parent);
+		
+		System.out.println(parent);
+		
+		if (parent != null) {
+			
+			Comment p = (Comment) openSession().load(Comment.class, parent);
 			comment.setParent(p);
-		} catch (NullPointerException e) {
-			System.out.println(e.getMessage());
+
+			Query incrResponses = openSession().createQuery("update Comment c set c.responsesNumber = :resp where c.id = :id");
+			incrResponses.setParameter("resp", p.getResponsesNumber()+1);
+			incrResponses.setParameter("id", parent);
+			incrResponses.executeUpdate();
+			
+			comment.setResponsesNumber(p.getResponsesNumber()+1);
+			
+			List<Comment> children = children(p);
+			
+			for (Comment child : children) {
+				Query incrResponses2 = openSession().createQuery("update Comment c set c.responsesNumber = :resp where c.id = :id");
+				incrResponses2.setParameter("resp", child.getResponsesNumber()+1);
+				incrResponses2.setParameter("id", child.getId());
+				incrResponses2.executeUpdate();
+			}
 		}
+		
 		Article a = (Article) openSession().load(Article.class, articleId);
 		comment.setArticle(a);
 		
@@ -202,12 +221,12 @@ public class CommentDAOImpl implements CommentDAOI {
             User user = new User();
             user.setId(c.getUser().getId());
             
-            CommentState state = new CommentState();
-            state.setId(c.getState().getId());
+            //CommentState state = new CommentState();
+            //state.setId(c.getState().getId());
             
             Article article = new Article();
             article.setId(c.getArticle().getId());
-            article.setContent(c.getArticle().getContent());
+            //article.setContent(c.getArticle().getContent());
             
             Comment parent = new Comment();
             
@@ -224,7 +243,7 @@ public class CommentDAOImpl implements CommentDAOI {
             com.setResponsesNumber(c.getResponsesNumber());           
             com.setArticle(article);            
             com.setParent(parent);
-            com.setState(state);            
+            //com.setState(state);            
             
             comments.add(com);
         }
@@ -256,13 +275,13 @@ public class CommentDAOImpl implements CommentDAOI {
             
             User user = new User();
             user.setId(c.getUser().getId());
+            user.setDateOfRegistration(null);
             
-            CommentState state = new CommentState();
-            state.setId(c.getState().getId());
+            //CommentState state = new CommentState();
+            //state.setId(c.getState().getId());
             
             Article article = new Article();
             article.setId(c.getArticle().getId());
-            article.setContent(c.getArticle().getContent());
             
             Comment parent = new Comment();
             try{            	
@@ -278,7 +297,7 @@ public class CommentDAOImpl implements CommentDAOI {
             com.setResponsesNumber(c.getResponsesNumber());           
             com.setArticle(article);            
             com.setParent(parent);
-            com.setState(state);            
+            com.setState(null);            
             
             comments.add(com);
         }        

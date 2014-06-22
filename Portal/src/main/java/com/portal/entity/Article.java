@@ -8,6 +8,9 @@ package com.portal.entity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+
 import java.util.Date;
 import java.util.List;
 
@@ -16,6 +19,7 @@ import java.util.List;
  * @author Michal
  */
 @Entity
+@JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
 @Table(name = "articles")
 public class Article {
     
