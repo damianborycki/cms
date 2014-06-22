@@ -47,4 +47,26 @@ public class CommentController {
 		response.setStatus(HttpServletResponse.SC_OK);
 	}
 	
+	@RequestMapping(value="/userComments", method=RequestMethod.GET)	
+	public @ResponseBody List<Comment> usersComments(@RequestParam("userID") long userID,
+			@RequestParam("LIMIT") int limit, 
+			@RequestParam("PAGE_NO") int pageNO,
+			@RequestParam("sortOrder") String sortOrder,
+			HttpServletResponse response){
+		
+		return commentDAO.getUserComments(userID, limit, pageNO, sortOrder);
+	}
+	
+	@RequestMapping(value="/articleComments", method=RequestMethod.GET)
+	public @ResponseBody List<Comment> articleComments(@RequestParam("articleID") long articleID,
+			@RequestParam("LIMIT") int limit,
+			@RequestParam("PAGE_NO") int pageNO,
+			@RequestParam("sortOrder") String sortOrder,
+			HttpServletResponse response){
+		
+		return commentDAO.getArticleComments(articleID, limit, pageNO, sortOrder);
+	}
+	
+	
+	
 }

@@ -28,4 +28,8 @@ public interface CommentDAOI {
     public void setStates(List<Comment> comments);
     
     public void delete(List<Comment> comments);
+    
+    public List<Comment> getUserComments(long userID, int limit, int pageNO, String sortOrder);
+    
+    public List<Comment> getArticleComments(long articleID, int limit, int pageNO, String sortOrder);
 }
