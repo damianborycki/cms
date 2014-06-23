@@ -33,6 +33,7 @@
 	  <div class="col-md-12" style="color: #000">
 		<div class="tytul2" style="text-align: left; font-size: 30px;">Komentarze użytkownika</div><br>
 		
+				<div paging page="commentsPage" page-size="commentsLimit" total="total" show-prev-next="true" adjacent="1" paging-action="ChangePage(page)"></div>	
 <ul class="list-group">
             <li class="list-group-item list1" ng-repeat="komentarz in userComments">
               <div class="row">
@@ -54,5 +55,6 @@
 			<hr style="margin: 5px 5px 5px 5px;" ng-hide="$last">
 		</li>
 	</ul>		
+				<div paging page="commentsPage" page-size="commentsLimit" total="total" show-prev-next="true" adjacent="1" paging-action="ChangePage(page)"></div>	
 </div>
 </div>

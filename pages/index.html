@@ -218,7 +218,7 @@ app.controller('GlownaController', function($scope, SharedData) {
 
 
 
-app.controller('ArticleController', function($scope, SharedData) {
+app.controller('ArticleController', function($scope, $http, SharedData) {
 
  $scope.getImage = function(id, width, height){
     return '/portal/image?id=' + id;
@@ -254,9 +254,23 @@ $scope.getTagName = function(id)
 	}
 	return "";
 }
+
+$scope.article = {
+   id: 1,
+   title: "Tytul",
+   description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+   content: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\nLorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+   publication_date: "2012-04-23 18:25:43",
+   views:10,
+   image: 1,
+   tag: [1,0],
+   rank: 1,  
+   commntCount: 5
+   };
    
    $scope.artykuly = 
    [{
+   id: 1,
    title: "Tytul",
    description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
    content: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\nLorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
@@ -337,6 +351,24 @@ $scope.getTagName = function(id)
    $scope.showCommentButton = function(commentId){
      return showComment == commentId;
    }
+   
+	$scope.articleComments = null;
+
+	$scope.commentsPage = 1;
+	$scope.commentsLimit = 20;
+	$scope.total = 30;
+
+	$scope.getArticleComments = function(articleId)
+	{
+		GetArticleComments(articleId, $scope.commentsPage, $scope.commentsLimit, $scope, $http);
+	}
+
+	$scope.getArticleComments($scope.article.id);
+	
+  $scope.milisecToDate = function(miliseconds)
+  {
+	return new Date(miliseconds).yyyymmddhhmmss();
+  }
 });
 
 
@@ -423,6 +455,11 @@ $scope.getUserComments = function(userId)
 
 $scope.getUserComments(1);
 
+	$scope.ChangePage = function(page)
+	{
+		$scope.commentsPage = page;
+		$scope.getUserComments(1);
+	}
   
  $scope.listOfArticles = [];
  
@@ -451,9 +488,6 @@ $scope.getUserComments(1);
   return arr;
 }
 
-
-
-  
   $scope.getImage = function(id, width, height){
     return 'http://placehold.it/' + width + 'x' + height;
   };
@@ -498,38 +532,13 @@ app.controller('RejestracjaController', function($scope, $http) {
 	$scope.Registered = false;
 });
 
-app.controller('CommentsController', function($scope) {
 
- $scope.listOfArticles = [];
- 
-    $scope.getListOfArticles = function(len)
-  {
-  
-  if ($scope.listOfArticles.length != 0)
-		return $scope.listOfArticles;
-		
-  var arr = [];
-  for (var i=0;i<len;i++)
-  {
-  arr.push({
-     title: "Tytul",
-     description: "Opis",
-     publication_date: "2012-04-23 18:25:43",
-     views:10,
-     image: 1,
-     tag: [1,5,9],
-     rank: 1,  
-     commntCount: 5
-     });
-  }
 
-  $scope.listOfArticles = arr;
-  
-  return $scope.listOfArticles;
-}
+
+app.controller('CommentsController', function($scope, $http) {
    
-   $scope.artykuly = 
-   [{
+   $scope.article = {
+   id: 1,
    title: "Tytul",
    description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
    content: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\nLorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\nLorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
@@ -539,45 +548,7 @@ app.controller('CommentsController', function($scope) {
    tag: [1,5,9],
    rank: 1,  
    commntCount: 5
-   },
-   {
-   title: "Tytul",
-   description: "Opis",
-   publication_date: "2012-04-23 18:25:43",
-   views:10,
-   image: 1,
-   tag: [1,5,9],
-   rank: 1,  
-   commntCount: 5
-   },
-   {
-   title: "Tytul",
-   description: "Opis",
-   publication_date: "2012-04-23 18:25:43",
-   views:10,
-   image: 1,
-   tag: [1,5,9],
-   rank: 1,  
-   commntCount: 5
-   }];
-   
-   $scope.komentarze =
-   [{
-   commentId : 12345,
-   userId : 12345,
-   content : "Sample content",
-   date : "25.04.14",
-   time: "14.15",
-   nr_of_replies : 0
-   },
-   {
-   commentId : 12346,
-   userId : 12346,
-   content : "Sample content234234",
-   date : "25.04.14",
-   time: "14.15",
-   nr_of_replies : 4
-   }];
+   };
    
    showRepliesToComment = 0;
 
@@ -611,9 +582,29 @@ app.controller('CommentsController', function($scope) {
      return showComment == commentId;
    }
    
-   $scope.page = 1;
-   $scope.pageLength = 3;
-   $scope.total = 40;
+	$scope.articleComments = null;
+
+	$scope.commentsPage = 1;
+	$scope.commentsLimit = 20;
+	$scope.total = 30;
+
+	$scope.getArticleComments = function(articleId)
+	{
+		GetArticleComments(articleId, $scope.commentsPage, $scope.commentsLimit, $scope, $http);
+	}
+
+	$scope.getArticleComments($scope.article.id);
+	
+	$scope.ChangePage = function(page)
+	{
+		$scope.commentsPage = page;
+		$scope.getArticleComments($scope.article.id);
+	}
+	
+  $scope.milisecToDate = function(miliseconds)
+  {
+	return new Date(miliseconds).yyyymmddhhmmss();
+  }
 });
 
 </script>

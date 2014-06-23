@@ -6,13 +6,13 @@
 			</p>
           </div>
           <div class="well list1">
-            <h1 class="art-tytul">{{artykuly[0].title}} </h1>
-			<p class="art-data">{{artykuly[0].publication_date}}</p>
+            <h1 class="art-tytul">{{article.title}} </h1>
+			<p class="art-data">{{article.publication_date}}</p>
             <div class="col-md-4">
-				<img src="{{getImage(artykuly[0].image, 300, 200)}}" class="img-responsive">
+				<img src="{{getImage(article.image, 300, 200)}}" class="img-responsive">
             </div>
             <p class="art-tresc">
-              {{artykuly[0].description}}
+              {{article.description}}
             </p>
 			<br><br>
           </div>
@@ -34,33 +34,33 @@
           </div>
 	
 		  <div class="column" style="margin: 16px 5px 5px 5px;">
-          <ul class="list-group ">
-				<div paging page="page" page-size="pageLength" total="total" show-prev-next="true" adjacent="1"></div>	
-            <li class="list-group-item list1" ng-repeat="komentarz in komentarze">
+				<div paging page="commentsPage" page-size="commentsLimit" total="total" show-prev-next="true" adjacent="1" paging-action="ChangePage(page)"></div>
+          <ul class="list-group ">	
+            <li class="list-group-item list1" ng-repeat="komentarz in articleComments">
               <div class="row ">
                 <div class="col-md-2">
-				<a href="#userPage/{{komentarz.userId}}">
-                  <img ng-src="{{getUserAvatar(komentarz.userId)}}" class="img-responsive">
-                  <h3> {{komentarz.userId}}</h3>
+				<a href="#userPage/{{komentarz.user.id}}">
+                  <img ng-src="{{getUserAvatar(komentarz.user.id)}}" class="img-responsive">
+                  <h3> {{komentarz.user.id}}</h3>
 				  </a>
-				  <p> {{komentarz.date}} {{komentarz.time}}</p> 
+				  <p> {{milisecToDate(komentarz.date)}}</p> 
                 </div>
                 <div class="col-md-10">
                   <p class="text-justify">{{komentarz.content}}</p>
                 </div>
 				<div class="col-md-10 text-right">
-					 <a class="btn btn-success btn-p" ng-if="komentarz.nr_of_replies>0" ng-click="click(komentarz.commentId)" >Pokaż odpowiedzi</a>
+					 <a class="btn btn-success btn-p" ng-if="komentarz.replies.length>0" ng-click="click(komentarz.commentId)" >Pokaz odpowiedzi ({{komentarz.replies.length}})</a>
 					 <div ng-show="showButton(komentarz.commentId)">
 						<div class="containerm" style="margin-left: auto; margin-right: auto; border-radius: 32px; padding: 10px 10px 5px 10px; margin-top: 10px; margin-bottom: 10px;">
 						<ul class="list-group">
-							<li class="list-group-item list1" ng-repeat="odpowiedzi in komentarze">
+							<li class="list-group-item list1" ng-repeat="odpowiedzi in komentarz.replies">
 							  <div class="row">
 								<div class="col-md-3 text-left">
-								<a href="#userPage/{{odpowiedzi.userId}}">
-								  <img ng-src="{{getUserAvatar(odpowiedzi.userId)}}" class="img-responsive">
-								  <h3> {{odpowiedzi.userId}}</h3>
+								<a href="#userPage/{{odpowiedzi.user.id}}">
+								  <img ng-src="{{getUserAvatar(odpowiedzi.user.id)}}" class="img-responsive">
+								  <h3> {{odpowiedzi.user.id}}</h3>
 								</a>
-								  <p> {{odpowiedzi.date}} {{odpowiedzi.time}}</p> 
+								  <p> {{milisecToDate(odpowiedzi.date)}}</p> 
 								</div>
 								<div class="col-md-9">
 								  <p class="text-justify">{{odpowiedzi.content}}</p>
@@ -86,5 +86,6 @@
 			<hr style="margin: 5px 5px 5px 5px;" ng-hide="$last">
 		</li>
 		</ul>
+				<div paging page="commentsPage" page-size="commentsLimit" total="total" show-prev-next="true" adjacent="1" paging-action="ChangePage(page)"></div>	
 		</div>
 		</div>
