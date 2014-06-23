@@ -3,6 +3,7 @@ package com.portal.controller;
 import com.portal.dao.interfaces.CommentDAOI;
 import com.portal.dao.interfaces.UserDAOI;
 import com.portal.entity.Comment;
+import com.portal.init.ParentComment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -59,7 +60,7 @@ public class CommentController {
 	}
 	
 	@RequestMapping(value="/articleComments/{articleId}", method=RequestMethod.GET)
-	public @ResponseBody List<Comment> articleComments(@PathVariable("articleId") long articleID,
+	public @ResponseBody List<ParentComment> articleComments(@PathVariable("articleId") long articleID,
 			@RequestParam("limit") int limit,
 			@RequestParam("pageNo") int pageNO,
 			@RequestParam("sortOrder") String sortOrder,
@@ -77,7 +78,7 @@ public class CommentController {
 	}
 	
 	@RequestMapping(value="/comment", method=RequestMethod.GET)
-	public @ResponseBody List<Comment> getAllComments(@RequestParam("status") long status, 
+	public @ResponseBody List<ParentComment> getAllComments(@RequestParam("status") long status, 
 			@RequestParam("limit") int limit, 
 			@RequestParam("pageNo") int pageNo,			
 			@RequestParam("sortOrder") String sortOrder,
