@@ -18,7 +18,19 @@ public interface ArticleDAOI {
                       int pageNum,
                       String sortBy,
                       boolean ascOrder,
+                      ArticleRank articleRank);
+
+    List<Article> get(int num,
+                      int pageNum,
+                      String sortBy,
+                      boolean ascOrder,
                       Category category);
+
+    List<Article> get(int num,
+                      int pageNum,
+                      String sortBy,
+                      boolean ascOrder,
+                      Tag tag);
 
     List<Article> get(int num,
                       int pageNum,

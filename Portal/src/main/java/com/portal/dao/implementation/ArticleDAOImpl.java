@@ -51,7 +51,14 @@ public class ArticleDAOImpl implements ArticleDAOI {
 		return c.list();
 	}
 
-	@Override
+    @Override
+    public List<Article> get(int num, int pageNum, String sortBy, boolean ascOrder, ArticleRank articleRank) {
+        Criteria c = this.getCriteria(num, pageNum, sortBy, ascOrder);
+        c.add(Restrictions.in("rank", new ArticleRank[]{articleRank}));
+        return c.list();
+    }
+
+    @Override
 	public List<Article> get(int num, int pageNum, String sortBy,
 			boolean ascOrder, Category category) {
 		Criteria c = this.getCriteria(num, pageNum, sortBy, ascOrder);
@@ -59,7 +66,14 @@ public class ArticleDAOImpl implements ArticleDAOI {
 		return c.list();
 	}
 
-	@Override
+    @Override
+    public List<Article> get(int num, int pageNum, String sortBy, boolean ascOrder, Tag tag) {
+        Criteria c = this.getCriteria(num, pageNum, sortBy, ascOrder);
+        c.add(Restrictions.in("tag", new Tag[]{tag}));
+        return c.list();
+    }
+
+    @Override
 	public List<Article> get(int num, int pageNum, String sortBy,
 			boolean ascOrder, Category category, Tag tag) {
 		Criteria c = this.getCriteria(num, pageNum, sortBy, ascOrder);
