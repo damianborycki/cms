@@ -104,8 +104,8 @@ public class ArticleController {
         return articleDAO.get(limit, pageNO, sortBy, sortOrder, category, tag);
     }
 
-    @RequestMapping(value="/articlesByTagAndCategory", method=RequestMethod.GET)
-    public @ResponseBody List<Article> getArticlesByTagAndCategory(@RequestParam("limit") int limit,
+    @RequestMapping(value="/articlesByRank", method=RequestMethod.GET)
+    public @ResponseBody List<Article> getArticlesByRank(@RequestParam("limit") int limit,
                                                                    @RequestParam("pageNo") int pageNO,
                                                                    @RequestParam("sortBy") String sortBy,
                                                                    @RequestParam("sortOrder") Boolean sortOrder,
