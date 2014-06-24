@@ -23,7 +23,11 @@ public class ArticleDAOImpl implements ArticleDAOI {
 	private Session getCurrentSession() {
 		return sessionFactory.getCurrentSession();
 	}
-	
+
+    private Session openSession() {
+        return sessionFactory.openSession();
+    }
+
 	private List<Article> test(int num, int pageNum){
 		List<Article> a = new ArrayList<Article>(num);
 		for(int i = 0; i < num; ++i){
@@ -34,7 +38,7 @@ public class ArticleDAOImpl implements ArticleDAOI {
 	
 	private Criteria getCriteria(int limit, int pageNum,
 			String sortby, boolean asc){
-		Criteria criteria=this.getCurrentSession().createCriteria(Article.class,"c");
+		Criteria criteria=this.openSession().createCriteria(Article.class,"c");
 		if(asc)
 			criteria.addOrder(Order.asc(sortby));
 		else
@@ -43,8 +47,13 @@ public class ArticleDAOImpl implements ArticleDAOI {
 		criteria.setMaxResults(limit);
 		return criteria;
 	}
-	
-	@Override
+
+    @Override
+    public List<Article> getAll() {
+        return openSession().createQuery("FROM Article").list();
+    }
+
+    @Override
 	public List<Article> get(int num, int pageNum, String sortBy,
 			boolean ascOrder) {
 		Criteria c = this.getCriteria(num, pageNum, sortBy, ascOrder);
@@ -84,7 +93,7 @@ public class ArticleDAOImpl implements ArticleDAOI {
 
 	@Override
 	public Article getById(long id) {
-		Article art = (Article) getCurrentSession().load(Article.class, id);
+		Article art = (Article) openSession().load(Article.class, id);
 		return art;
 	}
 
@@ -113,7 +122,7 @@ public class ArticleDAOImpl implements ArticleDAOI {
 		
 		art.setDate(Calendar.getInstance().getTime());
 		
-		this.getCurrentSession().save(art);
+		this.openSession().save(art);
 	}
 
 	@Override
@@ -139,7 +148,7 @@ public class ArticleDAOImpl implements ArticleDAOI {
 		
 		art.setArticle_owner(article_owner);
 		art.setRank(rank);
-		this.getCurrentSession().merge(art);
+		this.openSession().merge(art);
 		
 	}
 

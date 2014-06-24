@@ -57,14 +57,9 @@ public class ArticleController {
     }
 
     @RequestMapping(value="/articles", method=RequestMethod.GET)
-    public @ResponseBody List<Article> getArticles(@RequestParam("limit") int limit,
-                                                   @RequestParam("pageNo") int pageNO,
-                                                   @RequestParam("sortBy") String sortBy,
-                                                   @RequestParam("sortOrder") Boolean sortOrder,
-                                                   HttpServletResponse response){
+    public @ResponseBody List<Article> getArticles(HttpServletResponse response) {
         response.setStatus(HttpServletResponse.SC_OK);
-
-        return articleDAO.get(limit, pageNO, sortBy, sortOrder);
+        return articleDAO.getAll();
     }
 
     @RequestMapping(value="/articlesByTag", method=RequestMethod.GET)

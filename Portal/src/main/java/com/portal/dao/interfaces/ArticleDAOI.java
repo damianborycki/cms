@@ -9,6 +9,8 @@ import java.util.List;
 
 public interface ArticleDAOI {
 
+    List<Article> getAll();
+
     List<Article> get(int num,
                       int pageNum,
                       String sortBy,
