@@ -2,9 +2,9 @@ package com.portal.dao.interfaces;
 
 
 import com.portal.entity.Comment;
-import com.portal.init.ParentComment;
+import com.portal.init.ClassParentComment;
+import com.portal.init.ClassComment;
 
-import java.util.Comparator;
 import java.util.List;
 
 public interface CommentDAOI {
@@ -30,15 +30,15 @@ public interface CommentDAOI {
     
     public void delete(List<Comment> comments);
     
-    public List<Comment> getUserComments(long userID, int limit, int pageNO, String sortOrder);
+    public ClassComment getUserComments(long userID, int limit, int pageNO, String sortOrder);
     
-    public List<Comment> getUserComments(long userID, long status, int limit, int pageNo, String sortOrder);
+    public ClassComment getUserComments(long userID, long status, int limit, int pageNo, String sortOrder);
     
-    public List<ParentComment> getArticleComments(long articleID, int limit, int pageNO, String sortOrder);
+    public ClassParentComment getArticleComments(long articleID, int limit, int pageNO, String sortOrder);
     
-    public List<ParentComment> getAllComments(long status, int limit, int pageNo, String sortOrder);
+    public ClassParentComment getAllComments(long status, int limit, int pageNo, String sortOrder);
     
-    public List<ParentComment> getAllComments(int limit, int pageNo, String sortOrder);
+    public ClassParentComment getAllComments(int limit, int pageNo, String sortOrder);
     
     public long getTotalComments(long status);   
     

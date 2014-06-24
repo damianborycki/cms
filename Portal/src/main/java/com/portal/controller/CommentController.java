@@ -3,7 +3,9 @@ package com.portal.controller;
 import com.portal.dao.interfaces.CommentDAOI;
 import com.portal.dao.interfaces.UserDAOI;
 import com.portal.entity.Comment;
-import com.portal.init.ParentComment;
+import com.portal.init.ClassComment;
+import com.portal.init.ClassParentComment;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -49,9 +51,9 @@ public class CommentController {
 	}
 	
 	@RequestMapping(value="/userComments/{userId}", method=RequestMethod.GET)	
-	public @ResponseBody List<Comment> usersComments(@PathVariable("userId") long userID,
-			@RequestParam("LIMIT") int limit, 
-			@RequestParam("PAGE_NO") int pageNO,
+	public @ResponseBody ClassComment usersComments(@PathVariable("userId") long userID,
+			@RequestParam("limit") int limit, 
+			@RequestParam("pageNo") int pageNO,
 			@RequestParam("sortOrder") String sortOrder,
 			HttpServletResponse response){
 		response.setStatus(HttpServletResponse.SC_OK);
@@ -60,7 +62,7 @@ public class CommentController {
 	}
 	
 	@RequestMapping(value="/articleComments/{articleId}", method=RequestMethod.GET)
-	public @ResponseBody List<ParentComment> articleComments(@PathVariable("articleId") long articleID,
+	public @ResponseBody ClassParentComment articleComments(@PathVariable("articleId") long articleID,
 			@RequestParam("limit") int limit,
 			@RequestParam("pageNo") int pageNO,
 			@RequestParam("sortOrder") String sortOrder,
@@ -78,7 +80,7 @@ public class CommentController {
 	}
 	
 	@RequestMapping(value="/comment", method=RequestMethod.GET)
-	public @ResponseBody List<ParentComment> getAllComments(@RequestParam("status") long status, 
+	public @ResponseBody ClassParentComment getAllComments(@RequestParam("status") long status, 
 			@RequestParam("limit") int limit, 
 			@RequestParam("pageNo") int pageNo,			
 			@RequestParam("sortOrder") String sortOrder,
@@ -100,7 +102,7 @@ public class CommentController {
 	}
 	
 	@RequestMapping(value="/comments/{userID}", method=RequestMethod.GET)
-	public @ResponseBody List<Comment> getUserComments(@PathVariable("userID") long userID,
+	public @ResponseBody ClassComment getUserComments(@PathVariable("userID") long userID,
 			@RequestParam("status") long status, 
 			@RequestParam("limit") int limit, 
 			@RequestParam("pageNo") int pageNo,			

@@ -13,6 +13,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
 import com.portal.dao.interfaces.UserDAOI;
+import com.portal.init.ClassUser;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.hibernate.Query;
@@ -230,7 +231,7 @@ public class UserDAOImpl implements UserDAOI {
     }
 	
 
-    public List<User> getAllUsers(int limit, int pageNo, final String sortBy, final String sortOrder){ 
+    public ClassUser getAllUsers(int limit, int pageNo, final String sortBy, final String sortOrder){ 
     	
     	List<User> users = new ArrayList<User>();
 		List<User> returnUsers = new ArrayList<User>();
@@ -285,11 +286,10 @@ public class UserDAOImpl implements UserDAOI {
 		for( User rU : returnUsers ){
 			rU.setPassword(null);
 		}
-		
-		if (returnUsers != null && returnUsers.size() > 0)
-			return returnUsers;
-		else
-			return null;
+		ClassUser classUser = new ClassUser();
+		classUser.setUsers(returnUsers);
+		classUser.setSize(users.size());
+		return classUser;
     }
     
     public int totalUsers(){ 

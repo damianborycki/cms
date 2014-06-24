@@ -3,6 +3,8 @@ package com.portal.controller;
 import com.portal.dao.interfaces.UserDAOI;
 import com.portal.entity.Group;
 import com.portal.entity.User;
+import com.portal.init.ClassUser;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -144,7 +147,7 @@ public class UserController {
     }
     
 	@RequestMapping(value = "/user", method = RequestMethod.GET)
-	public @ResponseBody List<User> getAllUsers(@RequestParam("limit") int limit, 
+	public @ResponseBody ClassUser getAllUsers(@RequestParam("limit") int limit, 
 			@RequestParam("pageNo") int pageNo, 
 			@RequestParam("sortBy") String sortBy, 
 			@RequestParam("sortOrder") String sortOrder, 

@@ -1,6 +1,7 @@
 package com.portal.dao.interfaces;
 
 import com.portal.entity.User;
+import com.portal.init.ClassUser;
 
 import java.util.List;
 
@@ -18,7 +19,7 @@ public interface UserDAOI {
 
     public List<User> findAll();
     
-    public List<User> getAllUsers(int limit, int pageNo, String sortBy, String sortOrder);
+    public ClassUser getAllUsers(int limit, int pageNo, String sortBy, String sortOrder);
     
     public int totalUsers();
 

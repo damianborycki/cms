@@ -9,6 +9,8 @@ import com.portal.entity.Comment;
 import com.portal.entity.CommentState;
 import com.portal.entity.User;
 import com.portal.init.ParentComment;
+import com.portal.init.ClassParentComment;
+import com.portal.init.ClassComment;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -225,7 +227,7 @@ public class CommentDAOImpl implements CommentDAOI {
 	}
 	
 	@Override
-	public List<Comment> getUserComments(long userID, int limit, int pageNO, String sortOrder){
+	public ClassComment getUserComments(long userID, int limit, int pageNO, String sortOrder){
 		
 		List<Comment> comments = new ArrayList<Comment>();		
 		Criteria criteria = openSession().createCriteria(Comment.class);			
@@ -237,10 +239,13 @@ public class CommentDAOImpl implements CommentDAOI {
 				criteria.addOrder(Order.desc("id"));	
 			} else {
 				criteria.addOrder(Order.asc("id"));
-			}
-			
+			}			
 		List<Comment> coms = criteria.list();
 			
+		Criteria criteria2 = openSession().createCriteria(Comment.class);			
+			criteria2.add(Restrictions.eq("user.id", userID));
+			criteria2.add(Restrictions.eq("state.id", 2L));
+		List<Comment> coms2 = criteria2.list();
 		
         for(Comment c : coms) {
 
@@ -275,12 +280,15 @@ public class CommentDAOImpl implements CommentDAOI {
             
             comments.add(com);
         }
+        ClassComment classComment = new ClassComment();
+        classComment.setComments(comments);
+        classComment.setSize(coms2.size());
         
-        return comments;
+        return classComment;
 	}
 
 	@Override
-	public List<ParentComment> getArticleComments(long articleID, int limit, int pageNO, String sortOrder) {
+	public ClassParentComment getArticleComments(long articleID, int limit, int pageNO, String sortOrder) {
 		
 		List<ParentComment> pComments = new ArrayList<ParentComment>();		
 		Criteria criteria = openSession().createCriteria(Comment.class);			
@@ -297,12 +305,19 @@ public class CommentDAOImpl implements CommentDAOI {
 			
 		List<Comment> coms = criteria.list();
 			
-		
+		Criteria criteria2 = openSession().createCriteria(Comment.class);
+			criteria2.add(Restrictions.eq("article.id", articleID));
+			criteria2.add(Restrictions.isNull("parent"));
+		List<Comment> coms2 = criteria2.list();
+			
+			
 		for(Comment c : coms) {
 
        		ParentComment parentComment = new ParentComment();
        		User user = new User();
        		user.setId(c.getUser().getId());
+       		user.setLogin(c.getUser().getLogin());
+       		user.setAvatar(c.getUser().getAvatar());
        		user.setDateOfRegistration(null);
                
        		CommentState state = new CommentState();
@@ -329,6 +344,8 @@ public class CommentDAOImpl implements CommentDAOI {
           		
            		User userR = new User();
            		userR.setId(r.getUser().getId());
+           		userR.setLogin(r.getUser().getLogin());
+           		userR.setAvatar(r.getUser().getAvatar());
            		userR.setDateOfRegistration(null);
                   
            		CommentState stateR = new CommentState();
@@ -356,13 +373,15 @@ public class CommentDAOImpl implements CommentDAOI {
               	
            	pComments.add(parentComment);           	
         }        
+		ClassParentComment comParent = new ClassParentComment();
+        comParent.setComments(pComments);
+        comParent.setSize(coms2.size());
         
-        
-        return pComments;	
+        return comParent;	
 	}
 
 	@Override
-	public List<ParentComment> getAllComments(long status, int limit, int pageNo,	String sortOrder) {
+	public ClassParentComment getAllComments(long status, int limit, int pageNo,	String sortOrder) {
 		
 		List<ParentComment> pComments = new ArrayList<ParentComment>();		
 		Criteria criteria = openSession().createCriteria(Comment.class);
@@ -378,11 +397,18 @@ public class CommentDAOImpl implements CommentDAOI {
 			
 		List<Comment> coms = criteria.list();
 		
+		Criteria criteria2 = openSession().createCriteria(Comment.class);			
+			criteria2.add(Restrictions.isNull("parent"));
+			criteria2.add(Restrictions.eq("state.id", status));
+		
+		List<Comment> coms2 = criteria2.list();
+		
 		for(Comment c : coms) {
 
        		ParentComment parentComment = new ParentComment();
        		User user = new User();
        		user.setId(c.getUser().getId());
+       		user.setLogin(c.getUser().getLogin());
        		user.setDateOfRegistration(null);
                
        		CommentState state = new CommentState();
@@ -437,12 +463,15 @@ public class CommentDAOImpl implements CommentDAOI {
            	pComments.add(parentComment);           	
         }        
         
+        ClassParentComment classParCom = new ClassParentComment();
+        classParCom.setComments(pComments);
+        classParCom.setSize(coms2.size());
         
-        return pComments;	
+        return classParCom;	
 	}
 
 	@Override
-	public List<ParentComment> getAllComments(int limit, int pageNo, String sortOrder) {
+	public ClassParentComment getAllComments(int limit, int pageNo, String sortOrder) {
 		
 		List<ParentComment> pComments = new ArrayList<ParentComment>();
 		
@@ -457,12 +486,18 @@ public class CommentDAOImpl implements CommentDAOI {
 			}
 			
 		List<Comment> coms = criteria.list();
+		
+		Criteria criteria2 = openSession().createCriteria(Comment.class);			
+			criteria2.add(Restrictions.isNull("parent"));
+	
+		List<Comment> coms2 = criteria2.list();
 
         for(Comment c : coms) {
 
        		ParentComment parentComment = new ParentComment();
        		User user = new User();
        		user.setId(c.getUser().getId());
+       		user.setLogin(c.getUser().getLogin());
        		user.setDateOfRegistration(null);
                
        		CommentState state = new CommentState();
@@ -518,8 +553,11 @@ public class CommentDAOImpl implements CommentDAOI {
            	System.out.println("lalal: " + pComments.get(0).getReplies().get(0));
         }        
         
+        ClassParentComment classParCom = new ClassParentComment();
+        classParCom.setComments(pComments);
+        classParCom.setSize(coms2.size());
         
-        return pComments;	
+        return classParCom;	
 	}
 
 	@Override
@@ -535,7 +573,7 @@ public class CommentDAOImpl implements CommentDAOI {
 	}
 
 	@Override
-	public List<Comment> getUserComments(long userID, long status, int limit,
+	public ClassComment getUserComments(long userID, long status, int limit,
 			int pageNo, String sortOrder) {
 		
 		List<Comment> comments = new ArrayList<Comment>();		
@@ -553,7 +591,11 @@ public class CommentDAOImpl implements CommentDAOI {
 			}
 			
 		List<Comment> coms = criteria.list();
-			
+		
+		Criteria criteria2 = openSession().createCriteria(Comment.class);			
+			criteria2.add(Restrictions.eq("user.id", userID));
+			criteria2.add(Restrictions.eq("state.id", status));
+		List<Comment> coms2 = criteria2.list();
 		
         for(Comment c : coms) {
 
@@ -567,7 +609,7 @@ public class CommentDAOImpl implements CommentDAOI {
             
             Article article = new Article();
             article.setId(c.getArticle().getId());
-            //article.setContent(c.getArticle().getContent());
+            article.setContent(c.getArticle().getContent());
             
             Comment parent = new Comment();
             
@@ -588,8 +630,11 @@ public class CommentDAOImpl implements CommentDAOI {
             
             comments.add(com);
         }
+        ClassComment classComment = new ClassComment();
+        classComment.setComments(comments);
+        classComment.setSize(coms2.size());
         
-        return comments;
+        return classComment;
 	}
 	
 }
