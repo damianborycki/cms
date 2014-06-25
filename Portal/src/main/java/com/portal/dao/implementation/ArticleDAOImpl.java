@@ -3,9 +3,6 @@ package com.portal.dao.implementation;
 
 import com.portal.dao.interfaces.ArticleDAOI;
 import com.portal.entity.*;
-
-import java.util.*;
-
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -13,6 +10,11 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 @Repository
 public class ArticleDAOImpl implements ArticleDAOI {
@@ -94,7 +96,7 @@ public class ArticleDAOImpl implements ArticleDAOI {
 	@Override
 	public Article getById(long id) {
 		Article art = (Article) openSession().load(Article.class, id);
-		return art;
+        return art;
 	}
 
 	@Override
