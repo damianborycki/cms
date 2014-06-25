@@ -1,5 +1,9 @@
 package com.portal.entity;
 
+import org.codehaus.jackson.annotate.JsonBackReference;
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonManagedReference;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -24,10 +28,12 @@ public class Category {
 
     private String description;
 
+    @JsonBackReference("parent")
     @ManyToOne
     @JoinColumn(name = "parent")
     public Category parent;
 
+    @JsonManagedReference("parent")
     @OneToMany(mappedBy="parent", cascade = CascadeType.ALL)
     public List<Category> children;
 
@@ -69,5 +75,23 @@ public class Category {
 
     public void setChildren(List<Category> children) {
         this.children = children;
+    }
+
+    public void fromTemplate(Category template){
+        if (template.getName() != null){
+            setName(template.getName());
+        }
+
+        if (template.getDescription() != null){
+            setDescription(template.getDescription());
+        }
+
+        if (template.getParent() != null) {
+            setParent(template.getParent());
+        }
+
+        if (template.getChildren() != null){
+            setChildren(template.getChildren());
+        }
     }
 }
