@@ -1,6 +1,7 @@
 package com.portal.entity;
 
 import org.codehaus.jackson.annotate.JsonCreator;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
@@ -11,13 +12,13 @@ import javax.validation.constraints.Size;
 @Entity
 @JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
 @Table(name="groups")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Group {
 	
 	@JsonCreator
 	public Group(@JsonProperty("group_id") Long id) {
 		this.id = id;
 	}
-	
 //	@JsonCreator
 //	public Group(Long id, String name, String description) {
 //		this.id = id;

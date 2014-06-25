@@ -26,10 +26,14 @@ public class TagTypeDAOImpl implements TagTypeDAOI {
 	private Session getCurrentSession() {
 		return sessionFactory.getCurrentSession();
 	}
+
+    private Session openSession() {
+        return sessionFactory.openSession();
+    }
 	
 	private Criteria getCriteria(int limit, int pageNum,
 			String sortby, boolean asc){
-		Criteria criteria=this.getCurrentSession().createCriteria(TagType.class,"t");
+		Criteria criteria=this.openSession().createCriteria(TagType.class,"t");
 		if(asc)
 			criteria.addOrder(Order.asc(sortby));
 		else
@@ -41,18 +45,18 @@ public class TagTypeDAOImpl implements TagTypeDAOI {
 	
     @Override
     public List<TagType> findAll() {
-    	Criteria criteria = this.getCurrentSession().createCriteria(TagType.class);
+    	Criteria criteria = this.openSession().createCriteria(TagType.class);
     	return criteria.list();
     }
 
     @Override
     public TagType get(Long id) {
-        return (TagType) this.getCurrentSession().load(TagType.class, id);
+        return (TagType) this.openSession().load(TagType.class, id);
     }
     
     @Override
     public void create(TagType tagType) {
-        this.getCurrentSession().save(tagType);
+        this.openSession().save(tagType);
     }
 
     @Override
@@ -60,12 +64,12 @@ public class TagTypeDAOImpl implements TagTypeDAOI {
         TagType tagType = get(tagTypeId);
         tagType.setName(template.getName());
         tagType.setDescription(template.getDescription());
-        this.getCurrentSession().merge(tagType);
+        this.openSession().merge(tagType);
     }
 
     @Override
     public void delete(Long id) {
-    	Query q = this.getCurrentSession().createQuery("delete Entity where id = :id");
+    	Query q = this.openSession().createQuery("delete Entity where id = :id");
     	q.setParameter("id", id);
     	q.executeUpdate();
     }

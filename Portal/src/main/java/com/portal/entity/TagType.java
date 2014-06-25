@@ -6,6 +6,8 @@
 
 package com.portal.entity;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
@@ -15,6 +17,7 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 @Table(name = "tag_type")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class TagType {
     
     @Column(name = "id", unique = true)
