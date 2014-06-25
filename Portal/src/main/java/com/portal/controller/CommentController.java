@@ -50,15 +50,15 @@ public class CommentController {
 		response.setStatus(HttpServletResponse.SC_OK);
 	}
 	
-	@RequestMapping(value="/userComments/{userId}", method=RequestMethod.GET)	
-	public @ResponseBody ClassComment usersComments(@PathVariable("userId") long userID,
+	@RequestMapping(value="/userComments/{login}", method=RequestMethod.GET)	
+	public @ResponseBody ClassComment usersComments(@PathVariable("login") String login,
 			@RequestParam("limit") int limit, 
 			@RequestParam("pageNo") int pageNO,
 			@RequestParam("sortOrder") String sortOrder,
 			HttpServletResponse response){
 		response.setStatus(HttpServletResponse.SC_OK);
 		
-		return commentDAO.getUserComments(userID, limit, pageNO, sortOrder);
+		return commentDAO.getUserComments(login, limit, pageNO, sortOrder);
 	}
 	
 	@RequestMapping(value="/articleComments/{articleId}", method=RequestMethod.GET)
@@ -101,14 +101,14 @@ public class CommentController {
 		return commentDAO.getTotalComments(status);							
 	}
 	
-	@RequestMapping(value="/comments/{userID}", method=RequestMethod.GET)
-	public @ResponseBody ClassComment getUserComments(@PathVariable("userID") long userID,
+	@RequestMapping(value="/comments/{login}", method=RequestMethod.GET)
+	public @ResponseBody ClassComment getUserComments(@PathVariable("login") String login,
 			@RequestParam("status") long status, 
 			@RequestParam("limit") int limit, 
 			@RequestParam("pageNo") int pageNo,			
 			@RequestParam("sortOrder") String sortOrder,
 			HttpServletResponse response){
 		 	
-		return commentDAO.getUserComments(userID, status, limit, pageNo, sortOrder);
+		return commentDAO.getUserComments(login, status, limit, pageNo, sortOrder);
 	}
 }
