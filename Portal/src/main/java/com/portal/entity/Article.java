@@ -9,6 +9,7 @@ package com.portal.entity;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
+import org.codehaus.jackson.annotate.JsonManagedReference;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import java.util.Date;
@@ -78,7 +79,8 @@ public class Article {
     @JoinColumn(name = "rank")
     private ArticleRank rank;
     
-    @OneToMany(mappedBy="article")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy="article")
+    @JsonManagedReference
     private List <Comment> comments;
     
     @NotNull

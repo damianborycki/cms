@@ -3,6 +3,7 @@ package com.portal.entity;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
+import org.codehaus.jackson.annotate.JsonBackReference;
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
@@ -75,6 +76,7 @@ public class Comment {
     
     @ManyToOne
     @JoinColumn(name = "article_id", nullable = true)
+    @JsonBackReference
     private Article article;
     
 	@NotNull
