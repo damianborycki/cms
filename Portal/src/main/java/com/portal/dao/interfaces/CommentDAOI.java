@@ -36,9 +36,9 @@ public interface CommentDAOI {
     
     public ClassParentComment getArticleComments(long articleID, int limit, int pageNO, String sortOrder);
     
-    public ClassParentComment getAllComments(long status, int limit, int pageNo, String sortOrder);
+    public ClassComment getAllComments(long status, int limit, int pageNo, String sortOrder);
     
-    public ClassParentComment getAllComments(int limit, int pageNo, String sortOrder);
+    public ClassComment getAllComments(int limit, int pageNo, String sortOrder);
     
     public long getTotalComments(long status);   
     

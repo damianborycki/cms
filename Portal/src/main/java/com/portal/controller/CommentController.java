@@ -80,7 +80,7 @@ public class CommentController {
 	}
 	
 	@RequestMapping(value="/comment", method=RequestMethod.GET)
-	public @ResponseBody ClassParentComment getAllComments(@RequestParam("status") long status, 
+	public @ResponseBody ClassComment getAllComments(@RequestParam("status") long status, 
 			@RequestParam("limit") int limit, 
 			@RequestParam("pageNo") int pageNo,			
 			@RequestParam("sortOrder") String sortOrder,
