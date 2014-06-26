@@ -6,12 +6,12 @@
 		 <th class="col-md-6 col-md">Treść</th>
 		 <th class="col-md-1 col-md">Data</th>
 		 <th class="col-md-2 col-md">Akcje</th>
-		<tr ng-repeat="tag in listOfTags" ng-class="['odd', 'even'][$index %2]">
-		<td class="col-md-1">  <input type="checkbox" value="{{tag.id}}" ng-checked="selection.indexOf(tag.id) > -1" ng-click="toggleSelection(tag.id)"> </td>
-		<td class="col-md-2">{{tag.name}}</td>
-		<td class="col-md-6">{{tag.description}}</td>
-		<td class="col-md-1">{{GetTagType(tag.type).name}}</td>
-		<td class="col-md-2"><button class="btn btn-success btn-p" ng-click="SetTagForModal(tag.id)"> Akceptuj</button><a class="btn btn-danger btn-p" ng-click="remove(tag.id)"> Odrzuć</a></td>
+		<tr ng-repeat="comment in listOfCommentsWithStatus.comments" ng-class="['odd', 'even'][$index %2]">
+		<td class="col-md-1 col-lg-1">  <input type="checkbox" value="{{tag.id}}" ng-checked="selection.indexOf(comment.id) > -1" ng-click="toggleSelection(comment.id)"> </td>
+		<td class="col-md-2 col-md-2">{{comment.user.login}}</td>
+		<td class="col-md-2 col-md-2">{{comment.content}}</td>
+		<td class="col-md-1 col-md-1">{{comment.date}}</td>
+		<td class="col-md-4 col-md-4"><button class="btn btn-success btn-p" ng-click="SetTagForModal(tag.id)"> Akceptuj</button><a class="btn btn-danger btn-p" ng-click="remove(tag.id)"> Odrzuć</a></td>
 		</tr>
 		</table>
       </div>

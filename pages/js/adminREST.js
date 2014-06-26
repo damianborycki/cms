@@ -18,3 +18,10 @@ $http({method: 'GET', url: '/portal/category'}).
 		$scope.listOfCategories = data;
 	  }); 
 	};
+
+function GetCommentsWithStatus($scope, $http){
+$http({method: 'GET', url: '/portal/comment?status=1&limit=10&pageNo=1&sortOrder=DESC'}).
+	  success(function(data, status, headers, config) {
+		$scope.listOfCommentsWithStatus = data;
+	  }); 
+	};

@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html ng-app="studentInfoApp">
 <head>
 <script src="angular/angular.js"></script>
@@ -1268,117 +1268,27 @@ $scope.orderProp = '';
 
 app.controller('CommentModerationController', function($scope, $http) { 
 
-	$scope.listOfTags = [];
+	$scope.listOfCommentsWithStatus = [];
 
-	$scope.getListOfTags = function()
+	$scope.getCommentsWithStatus = function()
 	{
-	if ($scope.listOfTags.length != 0)
-		return $scope.listOfTags;
+	if ($scope.listOfCommentsWithStatus.length != 0)
+		return $scope.listOfCommentsWithStatus;
 
-	GetTags($scope, $http);
+	GetCommentsWithStatus($scope, $http);
 };
 
-$scope.getListOfTags();
+$scope.getCommentsWithStatus();
 
-	$scope.listOfTagsTypes = [];
 
-	$scope.getListOfTagsTypes  = function(len)
-	{
-	if ($scope.listOfTagsTypes.length != 0)
-		return $scope.listOfTagsTypes;
-
+$scope.getListOfElementsByParent=function(id)
+{
+	$scope.listOfCommentsWithStatus();
 	var arr = [];
-	for (var i=0;i<len;i++)
-	{
-	arr.push({
-		id: (i + 1),
-		name:  "Typ" + i,
-		description: "typ"
-	});
-	}
-
-	$scope.listOfTagsTypes = arr;
+	
+	arr = $scope.getChildrenArrayRecurrency(id, $scope.listOfCommentsWithStatus);
 	return arr;
-};
-
-$scope.GetIndexOfTagById=function($id)
-{
-	var arr = $scope.getListOfTags(4);
-	
-	for (var tagIndex in arr)
-	{
-		if (arr[tagIndex].id == $id)
-		{
-			return tagIndex;
-		}
-	}
-	
-	return -1;
-};
-
-   
-$scope.selection = [];
-
-$scope.remove=function($id){ 
-	var idx = $scope.GetIndexOfTagById($id);
-
-	if (idx > -1) {
-		$scope.listOfTags.splice(idx,1);  
-	} 
-	
-	idx = $scope.selection.indexOf($id);
-	
-	if (idx > -1) {
-	  $scope.selection.splice(idx, 1);
-	}  
-};
-
-$scope.removeSelected=function(){
-	if ($scope.selection.length != 0)
-	{
-		for (var id in $scope.selection)
-		{
-			var idx = -1;
-			
-			for (var tagIndex in $scope.listOfTags)
-			{
-				if ($scope.listOfTags[tagIndex].id == $scope.selection[id])
-				{
-					idx = tagIndex;
-				}
-			}
-			
-			if (idx > -1)
-			{
-				$scope.listOfTags.splice(idx,1); 
-			}
-		}
-		$scope.selection = [];
-	}
-};
-
-$scope.invertSelection=function()
-{
-	for (var tagIndex in $scope.listOfTags)
-	{
-		$scope.toggleSelection($scope.listOfTags[tagIndex].id)
-	}
 }
-
-  // toggle selection for a given fruit by name
-  $scope.toggleSelection = function toggleSelection(id) {
-    var idx = $scope.selection.indexOf(id);
-
-    // is currently selected
-    if (idx > -1) {
-      $scope.selection.splice(idx, 1);
-    }
-
-    // is newly selected
-    else {
-      $scope.selection.push(id);
-    }
-  };
   
 });
 
