@@ -108,15 +108,13 @@ function GetArticle(articleId, $scope, $http){
 	}); 
 };
 
-function CommentArticle(userId, articleId, content, parent, $scope, $http){
+function CommentArticle(login, articleId, content, parent, $scope, $http){
 	$scope.waitingForResponse = true;
-	$http.post('/portal/comment', {user: {id: userId}, article: {id: articleId}, content: content, parent: {id: parent}}).
+	$http.post('/portal/comment', {login: login, articleId: articleId, content: content, parent: parent}).
 	  success(function(data, status, headers, config) {
-		$scope.Registered = status == "201";
 		$scope.waitingForResponse = false;
 	  }).
 	  error(function(data, status, headers, config) {
 		$scope.waitingForResponse = false;
-		$scope.Registered = false;
 	}); 
 };

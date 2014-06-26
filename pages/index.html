@@ -1,6 +1,6 @@
 ﻿<!doctype html>
 <html ng-app="studentInfoApp">
-<head>qwdqwdqdw
+<head>
 <title>Student Info</title>
 <script src="angular/angular.js"></script>
 <script src="angular/angular-sanitize.js"></script>
@@ -368,6 +368,22 @@ $scope.article = null;
   $scope.milisecToDate = function(miliseconds)
   {
 	return new Date(miliseconds).yyyymmddhhmmss();
+  }
+  
+  $scope.replyComment = {};
+  $scope.commentContent = "";
+  
+  $scope.addComment = function(parentId)
+  {
+	CommentArticle($scope.currentUserName.data, $scope.articleId, $scope.commentContent, null, $scope, $http);
+	$scope.commentContent = "";
+  }
+  
+  $scope.addReplyComment = function(parentId)
+  {
+	CommentArticle($scope.currentUserName.data, $scope.articleId, $scope.replyComment[parentId], parentId, $scope, $http);
+	$scope.replyComment[parentId] = "";
+	$scope.clickComment(parentId);
   }
 });
 
