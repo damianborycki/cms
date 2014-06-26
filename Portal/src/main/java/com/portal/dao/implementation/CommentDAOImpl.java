@@ -396,184 +396,133 @@ public class CommentDAOImpl implements CommentDAOI {
 	}
 
 	@Override
-	public ClassParentComment getAllComments(long status, int limit, int pageNo,	String sortOrder) {
-		
-		List<ParentComment> pComments = new ArrayList<ParentComment>();		
-		Criteria criteria = openSession().createCriteria(Comment.class);
-			criteria.add(Restrictions.isNull("parent"));
-			criteria.add(Restrictions.eq("state.id", status));
-			criteria.setFirstResult(limit*(pageNo-1));
-			criteria.setMaxResults(limit);
-			if(sortOrder.equals("DESC")){
-				criteria.addOrder(Order.desc("id"));	
-			} else {
-				criteria.addOrder(Order.asc("id"));
-			}
-			
-		List<Comment> coms = criteria.list();
-		
-		Criteria criteria2 = openSession().createCriteria(Comment.class);			
-			criteria2.add(Restrictions.isNull("parent"));
-			criteria2.add(Restrictions.eq("state.id", status));
-		
-		List<Comment> coms2 = criteria2.list();
-		
-		for(Comment c : coms) {
-
-       		ParentComment parentComment = new ParentComment();
-       		User user = new User();
-       		user.setId(c.getUser().getId());
-       		user.setLogin(c.getUser().getLogin());
-       		user.setDateOfRegistration(null);
-               
-       		CommentState state = new CommentState();
-       		state.setId(c.getState().getId());
-       		
-       		Article article = new Article();
-           	article.setId(c.getArticle().getId());
-              	
-           	parentComment.setId(c.getId());
-          	parentComment.setUser(user);
-           	parentComment.setContent(c.getContent());
-           	parentComment.setDate(c.getDate());
-           	parentComment.setResponsesNumber(c.getResponsesNumber());           
-           	parentComment.setArticle(article);
-           	parentComment.setState(state);
-           	parentComment.setParent(null);
+    public ClassComment getAllComments(long status, int limit, int pageNo,  String sortOrder) {
+        
+        List<Comment> comments = new ArrayList<Comment>();      
+        Criteria criteria = openSession().createCriteria(Comment.class);
+            //criteria.add(Restrictions.isNull("parent"));
+            criteria.add(Restrictions.eq("state.id", status));
+            criteria.setFirstResult(limit*(pageNo-1));
+            criteria.setMaxResults(limit);
+            if(sortOrder.equals("DESC")){
+                criteria.addOrder(Order.desc("id"));    
+            } else {
+                criteria.addOrder(Order.asc("id"));
+            }
             
-          	List<Comment> com = new ArrayList<Comment>();
-          	com = children(parentComment);          	
-              	
-           	for(Comment r : com){
-           		
-           		Comment reply = new Comment();
-          		
-           		User userR = new User();
-           		userR.setId(r.getUser().getId());
-           		userR.setDateOfRegistration(null);
-                  
-           		CommentState stateR = new CommentState();
-           		stateR.setId(r.getState().getId());
-               
-           		Article articleR = new Article();
-          		articleR.setId(r.getArticle().getId());
-            		
-           		Comment parentR = new Comment();
-              		
-           		parentR.setId(r.getParent().getId());
-              		
-                  
-           		reply.setId(r.getId());
-           		reply.setUser(userR);
-           		reply.setContent(r.getContent());
-           		reply.setDate(r.getDate());
-           		reply.setResponsesNumber(null);           
-           		reply.setArticle(articleR);            
-           		reply.setParent(parentR);
-           		reply.setState(stateR);
-               	
-           		parentComment.addReply(reply);
-           	}
-              	
-           	pComments.add(parentComment);           	
-        }        
+        List<Comment> coms = criteria.list();
         
-        ClassParentComment classParCom = new ClassParentComment();
-        classParCom.setComments(pComments);
-        classParCom.setSize(coms2.size());
+        Criteria criteria2 = openSession().createCriteria(Comment.class);           
+            criteria2.add(Restrictions.isNull("parent"));
+            criteria2.add(Restrictions.eq("state.id", status));
         
-        return classParCom;	
-	}
+        List<Comment> coms2 = criteria2.list();
+        
+        for(Comment c : coms) {
+
+            Comment com = new Comment();
+            
+            User user = new User();
+            user.setId(c.getUser().getId());
+            
+            CommentState state = new CommentState();
+            state.setId(c.getState().getId());
+            
+            Article article = new Article();
+            article.setId(c.getArticle().getId());
+            article.setContent(c.getArticle().getContent());
+            
+            Comment parent = new Comment();
+            
+            try{                
+                parent.setId(c.getParent().getId());                
+            } catch (Exception e){
+                parent.setId(0L);
+            }
+            
+            com.setId(c.getId());
+            com.setUser(user);
+            com.setContent(c.getContent());
+            com.setDate(c.getDate());
+            com.setResponsesNumber(c.getResponsesNumber());           
+            com.setArticle(article);            
+            com.setParent(parent);
+            com.setState(state);            
+            
+            comments.add(com);
+        }
+        
+        ClassComment classCom = new ClassComment();
+        classCom.setComments(comments);
+        classCom.setSize(coms2.size());
+        
+        return classCom;    
+    }
 
 	@Override
-	public ClassParentComment getAllComments(int limit, int pageNo, String sortOrder) {
-		
-		List<ParentComment> pComments = new ArrayList<ParentComment>();
-		
-		Criteria criteria = openSession().createCriteria(Comment.class);			
-			criteria.add(Restrictions.isNull("parent"));			
-			criteria.setFirstResult(limit*(pageNo-1));
-			criteria.setMaxResults(limit);
-			if(sortOrder.equals("DESC")){
-				criteria.addOrder(Order.desc("id"));	
-			} else {
-				criteria.addOrder(Order.asc("id"));
-			}
-			
-		List<Comment> coms = criteria.list();
-		
-		Criteria criteria2 = openSession().createCriteria(Comment.class);			
-			criteria2.add(Restrictions.isNull("parent"));
-	
-		List<Comment> coms2 = criteria2.list();
+    public ClassComment getAllComments(int limit, int pageNo, String sortOrder) {
+        
+        List<Comment> comments = new ArrayList<Comment>();
+        
+        Criteria criteria = openSession().createCriteria(Comment.class);            
+            //criteria.add(Restrictions.isNull("parent"));          
+            criteria.setFirstResult(limit*(pageNo-1));
+            criteria.setMaxResults(limit);
+            if(sortOrder.equals("DESC")){
+                criteria.addOrder(Order.desc("id"));    
+            } else {
+                criteria.addOrder(Order.asc("id"));
+            }
+            
+        List<Comment> coms = criteria.list();
+        
+        Criteria criteria2 = openSession().createCriteria(Comment.class);           
+            criteria2.add(Restrictions.isNull("parent"));
+    
+        List<Comment> coms2 = criteria2.list();
 
         for(Comment c : coms) {
 
-       		ParentComment parentComment = new ParentComment();
-       		User user = new User();
-       		user.setId(c.getUser().getId());
-       		user.setLogin(c.getUser().getLogin());
-       		user.setDateOfRegistration(null);
-               
-       		CommentState state = new CommentState();
-       		state.setId(c.getState().getId());
-       		
-       		Article article = new Article();
-           	article.setId(c.getArticle().getId());
-              	
-           	parentComment.setId(c.getId());
-          	parentComment.setUser(user);
-           	parentComment.setContent(c.getContent());
-           	parentComment.setDate(c.getDate());
-           	parentComment.setResponsesNumber(c.getResponsesNumber());           
-           	parentComment.setArticle(article);
-           	parentComment.setState(state);
-           	parentComment.setParent(null);
+            Comment com = new Comment();
             
-          	List<Comment> com = new ArrayList<Comment>();
-          	com = children(parentComment);          	
-              	
-           	for(Comment r : com){
-           		
-           		Comment reply = new Comment();
-          		
-           		User userR = new User();
-           		userR.setId(r.getUser().getId());
-           		userR.setDateOfRegistration(null);
+            User user = new User();
+            user.setId(c.getUser().getId());
+            
+            CommentState state = new CommentState();
+            state.setId(c.getState().getId());
+            
+            Article article = new Article();
+            article.setId(c.getArticle().getId());
+            article.setContent(c.getArticle().getContent());
+            
+            Comment parent = new Comment();
+            
+            try{                
+                parent.setId(c.getParent().getId());                
+            } catch (Exception e){
+                parent.setId(0L);
+            }
+            
+            com.setId(c.getId());
+            com.setUser(user);
+            com.setContent(c.getContent());
+            com.setDate(c.getDate());
+            com.setResponsesNumber(c.getResponsesNumber());           
+            com.setArticle(article);            
+            com.setParent(parent);
+            com.setState(state);            
+            
+            comments.add(com);
+        }
+                
                   
-           		CommentState stateR = new CommentState();
-           		stateR.setId(r.getState().getId());
-               
-           		Article articleR = new Article();
-          		articleR.setId(r.getArticle().getId());
-            		
-           		Comment parentR = new Comment();
-              		
-           		parentR.setId(r.getParent().getId());
-              		
-                  
-           		reply.setId(r.getId());
-           		reply.setUser(userR);
-           		reply.setContent(r.getContent());
-           		reply.setDate(r.getDate());
-           		reply.setResponsesNumber(null);           
-           		reply.setArticle(articleR);            
-           		reply.setParent(parentR);
-           		reply.setState(stateR);
-               	
-           		parentComment.addReply(reply);
-           	}
-              	
-           	pComments.add(parentComment);
-           	System.out.println("lalal: " + pComments.get(0).getReplies().get(0));
-        }        
         
-        ClassParentComment classParCom = new ClassParentComment();
-        classParCom.setComments(pComments);
-        classParCom.setSize(coms2.size());
+        ClassComment classCom = new ClassComment();
+        classCom.setComments(comments);
+        classCom.setSize(coms2.size());
         
-        return classParCom;	
-	}
+        return classCom;    
+    }
 
 	@Override
 	public long getTotalComments(long status) {
