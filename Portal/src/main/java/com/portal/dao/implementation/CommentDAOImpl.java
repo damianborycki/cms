@@ -425,6 +425,11 @@ public class CommentDAOImpl implements CommentDAOI {
             User user = new User();
             user.setId(c.getUser().getId());
             
+            Criteria criteria3 = openSession().createCriteria(User.class);
+    		criteria3.add(Restrictions.eq("id", c.getUser().getId()));
+    		
+            user.setLogin(((User) criteria3.list().get(0)).getLogin());
+            
             CommentState state = new CommentState();
             state.setId(c.getState().getId());
             
@@ -487,6 +492,11 @@ public class CommentDAOImpl implements CommentDAOI {
             
             User user = new User();
             user.setId(c.getUser().getId());
+            
+            Criteria criteria3 = openSession().createCriteria(User.class);
+    		criteria3.add(Restrictions.eq("id", c.getUser().getId()));
+    		
+            user.setLogin(((User) criteria3.list().get(0)).getLogin());
             
             CommentState state = new CommentState();
             state.setId(c.getState().getId());
