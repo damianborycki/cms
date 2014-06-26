@@ -26,7 +26,7 @@ public class CommentController {
 	@RequestMapping(value="/comment", method=RequestMethod.POST)
 	public void addComment(@RequestBody Comment comment, HttpServletResponse response) {
 		
-		commentDAO.add(comment.getUser().getId(), 
+		commentDAO.add(comment.getUser().getLogin(), 
 					   comment.getContent(),
 					   comment.getParent().getId(), 
 					   comment.getArticle().getId());

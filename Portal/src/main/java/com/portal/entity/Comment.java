@@ -21,13 +21,14 @@ public class Comment {
 	@JsonCreator
 	public Comment(@JsonProperty("id") long id,
 				   @JsonProperty("state") CommentState state,
-				   @JsonProperty("userId") long userId, 
+				   @JsonProperty("login") String login, 
 				   @JsonProperty("content") String content, 
 				   @JsonProperty("parent") Long parent, 
 				   @JsonProperty("articleId") long articleId) {
 		
 		User u = new User();
-		u.setId(userId);
+		u.setLogin(login);
+		u.setId(1l);
 		this.user = u;
 		
 		this.content = content;
