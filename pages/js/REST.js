@@ -57,7 +57,8 @@ function GetTags($scope, $http){
 function GetMainCategories($scope, $http){
 	$http.get('/portal/category').
 	  success(function(data, status, headers, config) {
-		$scope.mainCategories.data = data[0].children;
+		$scope.mainCategories.data = data;
+		$('#topMenu').hide().show();
 	  }).
 	  error(function(data, status, headers, config) {
 	}); 
@@ -73,10 +74,12 @@ function GetUser(name, $scope, $http){
 	}); 
 };
 
-function GetUserComments(login, page, limit, $scope, $http){
-	$http.get('/portal/userComments/' + login + '?limit=' + limit + '&pageNo=' + page + '&sortOrder=DESC').
+function GetUserComments(userId, page, limit, $scope, $http){
+	$http.get('/portal/userComments/' + userId + '?limit=' + limit + '&pageNo=' + page + '&sortOrder=DESC').
 	  success(function(data, status, headers, config) {
-		$scope.userComments = data;
+		$scope.userComments = data.comments;
+		$scope.total = data.size;
+		$scope.commentsPage = 0;
 	  }).
 	  error(function(data, status, headers, config) {
 
@@ -86,9 +89,34 @@ function GetUserComments(login, page, limit, $scope, $http){
 function GetArticleComments(articleId, page, limit, $scope, $http){
 	$http.get('/portal/articleComments/' + articleId + '?limit=' + limit + '&pageNo=' + page + '&sortOrder=DESC').
 	  success(function(data, status, headers, config) {
-		$scope.articleComments = data;
+		$scope.articleComments = data.comments;
+		$scope.total = data.size;
+		$scope.commentsPage = 0;
 	  }).
 	  error(function(data, status, headers, config) {
 
+	}); 
+};
+
+function GetArticle(articleId, $scope, $http){
+	$http.get('/portal/article/' + articleId).
+	  success(function(data, status, headers, config) {
+		$scope.article = data;
+	  }).
+	  error(function(data, status, headers, config) {
+
+	}); 
+};
+
+function CommentArticle(userId, articleId, content, parent, $scope, $http){
+	$scope.waitingForResponse = true;
+	$http.post('/portal/comment', {user: {id: userId}, article: {id: articleId}, content: content, parent: {id: parent}}).
+	  success(function(data, status, headers, config) {
+		$scope.Registered = status == "201";
+		$scope.waitingForResponse = false;
+	  }).
+	  error(function(data, status, headers, config) {
+		$scope.waitingForResponse = false;
+		$scope.Registered = false;
 	}); 
 };

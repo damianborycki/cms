@@ -139,9 +139,18 @@ public class CommentDAOImpl implements CommentDAOI {
 		return query.list();
 	}
 	@Override
-	public void add(long userId, String content, Long parent, long articleId) {
+	public void add(String login, String content, Long parent, long articleId) {
 		Comment comment = new Comment();
-		User u = (User) openSession().load(User.class, userId);
+		
+		Criteria criteria = openSession().createCriteria(User.class);
+		criteria.add(Restrictions.eq("login", login));
+		
+		User u = (User) criteria.list().get(0);
+		
+		
+		
+		
+		
 		comment.setUser(u);
 		
 		System.out.println(parent);

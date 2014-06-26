@@ -41,7 +41,7 @@ var app = angular.module('studentInfoApp', ['ngSanitize', 'ngRoute', 'mgcrea.ngS
 app.config(['$routeProvider',
   function($routeProvider) {
     $routeProvider.
-      when('/article', {
+      when('/article/:articleId', {
         templateUrl: 'templates/artykul.html',
         controller: 'ArticleController'
       }).
@@ -61,7 +61,7 @@ app.config(['$routeProvider',
         templateUrl: 'templates/rejestracja.html',
         controller: 'RejestracjaController'
       }).
-      when('/comments', {
+      when('/comments/:articleId', {
         templateUrl: 'templates/komentarze.html',
         controller: 'CommentsController'
       }).
@@ -218,7 +218,7 @@ app.controller('GlownaController', function($scope, SharedData) {
 
 
 
-app.controller('ArticleController', function($scope, $http, SharedData) {
+app.controller('ArticleController', function($scope, $http, SharedData, $routeParams) {
 
  $scope.getImage = function(id, width, height){
     return '/portal/image?id=' + id;
@@ -243,6 +243,7 @@ $scope.getUserAvatar = function(id){
   return $scope.listOfArticles;
 }
 
+  $scope.currentUserName = SharedData.currentUserName;
 $scope.tags = SharedData.tags;
 
 $scope.getTagName = function(id)
@@ -255,18 +256,17 @@ $scope.getTagName = function(id)
 	return "";
 }
 
-$scope.article = {
-   id: 1,
-   title: "Tytul",
-   description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-   content: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\nLorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-   publication_date: "2012-04-23 18:25:43",
-   views:10,
-   image: 1,
-   tag: [1,0],
-   rank: 1,  
-   commntCount: 5
-   };
+$scope.articleId = $routeParams.articleId;
+$scope.article = null;
+
+
+	$scope.getArticle = function(articleId)
+	{
+		GetArticle(articleId, $scope, $http);
+	}
+	
+	$scope.getArticle($scope.articleId);
+
    
    $scope.artykuly = 
    [{
@@ -363,7 +363,7 @@ $scope.article = {
 		GetArticleComments(articleId, $scope.commentsPage, $scope.commentsLimit, $scope, $http);
 	}
 
-	$scope.getArticleComments($scope.article.id);
+	$scope.getArticleComments($scope.articleId);
 	
   $scope.milisecToDate = function(miliseconds)
   {
@@ -453,7 +453,7 @@ $scope.getUserComments = function(userId)
 	GetUserComments(userId, $scope.commentsPage, $scope.commentsLimit, $scope, $http);
 }
 
-$scope.getUserComments(1);
+$scope.getUserComments($scope.userName);
 
 	$scope.ChangePage = function(page)
 	{
@@ -535,20 +535,22 @@ app.controller('RejestracjaController', function($scope, $http) {
 
 
 
-app.controller('CommentsController', function($scope, $http) {
+app.controller('CommentsController', function($scope, $http, $routeParams, SharedData) {
    
-   $scope.article = {
-   id: 1,
-   title: "Tytul",
-   description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-   content: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\nLorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\nLorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-   publication_date: "2012-04-23 18:25:43",
-   views:10,
-   image: 1,
-   tag: [1,5,9],
-   rank: 1,  
-   commntCount: 5
-   };
+   $scope.article = null;
+   
+   
+  $scope.currentUserName = SharedData.currentUserName;
+$scope.articleId = $routeParams.articleId;
+$scope.article = null;
+
+
+	$scope.getArticle = function(articleId)
+	{
+		GetArticle(articleId, $scope, $http);
+	}
+	
+	$scope.getArticle($scope.articleId);
    
    showRepliesToComment = 0;
 
@@ -593,7 +595,7 @@ app.controller('CommentsController', function($scope, $http) {
 		GetArticleComments(articleId, $scope.commentsPage, $scope.commentsLimit, $scope, $http);
 	}
 
-	$scope.getArticleComments($scope.article.id);
+	$scope.getArticleComments($scope.articleId);
 	
 	$scope.ChangePage = function(page)
 	{
@@ -696,7 +698,7 @@ app.controller('CommentsController', function($scope, $http) {
           <h2 class="center1">Popularne</h2>
           <ul class="list-group">
             <li class="list-group-item list1" ng-repeat="zajawka in getListOfArticles(3)">
-              <a href="#article">
+              <a href="#article/{{$index + 1}}">
                 <img ng-src="{{getImage(artykul.image, 300, 200)}}" class="img-responsive">
                 <h4 class="zajawka-title">{{zajawka.title}}</h4> 
                 <div class="caption">
@@ -709,7 +711,7 @@ app.controller('CommentsController', function($scope, $http) {
           <h2 class="center1">Ważne</h2>
           <ul class="list-group">
             <li class="list-group-item list1" ng-repeat="zajawka in getListOfArticles(3)">
-              <a href="#article">
+              <a href="#article/{{$index + 1}}">
                 <img ng-src="{{getImage(artykul.image, 300, 200)}}" class="img-responsive">
                 <h4 class="zajawka-title">{{zajawka.title}}</h4> 
                 <div class="caption">

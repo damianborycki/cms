@@ -5,7 +5,9 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.codehaus.jackson.annotate.JsonCreator;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
+import org.codehaus.jackson.map.SerializationConfig;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 /**
@@ -14,6 +16,7 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 @Entity
 @JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
 @Table(name = "comment_state")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class CommentState {
 	
 	@JsonCreator
