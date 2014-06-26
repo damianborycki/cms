@@ -6,11 +6,12 @@
 
 package com.portal.entity;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.codehaus.jackson.annotate.JsonManagedReference;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 
@@ -21,6 +22,7 @@ import java.util.List;
 @Entity
 @JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
 @Table(name = "articles")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Article {
     
     @Column(name = "id" , unique = true, columnDefinition="bigint")
@@ -78,7 +80,8 @@ public class Article {
     @JoinColumn(name = "rank")
     private ArticleRank rank;
     
-    @OneToMany(mappedBy="article")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy="article")
+    @JsonManagedReference
     private List <Comment> comments;
     
     @NotNull

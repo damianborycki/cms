@@ -3,9 +3,6 @@ package com.portal.dao.implementation;
 
 import com.portal.dao.interfaces.ArticleDAOI;
 import com.portal.entity.*;
-
-import java.util.*;
-
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -13,6 +10,11 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 @Repository
 public class ArticleDAOImpl implements ArticleDAOI {
@@ -23,7 +25,11 @@ public class ArticleDAOImpl implements ArticleDAOI {
 	private Session getCurrentSession() {
 		return sessionFactory.getCurrentSession();
 	}
-	
+
+    private Session openSession() {
+        return sessionFactory.openSession();
+    }
+
 	private List<Article> test(int num, int pageNum){
 		List<Article> a = new ArrayList<Article>(num);
 		for(int i = 0; i < num; ++i){
@@ -34,7 +40,7 @@ public class ArticleDAOImpl implements ArticleDAOI {
 	
 	private Criteria getCriteria(int limit, int pageNum,
 			String sortby, boolean asc){
-		Criteria criteria=this.getCurrentSession().createCriteria(Article.class,"c");
+		Criteria criteria=this.openSession().createCriteria(Article.class,"c");
 		if(asc)
 			criteria.addOrder(Order.asc(sortby));
 		else
@@ -43,15 +49,27 @@ public class ArticleDAOImpl implements ArticleDAOI {
 		criteria.setMaxResults(limit);
 		return criteria;
 	}
-	
-	@Override
+
+    @Override
+    public List<Article> getAll() {
+        return openSession().createQuery("FROM Article").list();
+    }
+
+    @Override
 	public List<Article> get(int num, int pageNum, String sortBy,
 			boolean ascOrder) {
 		Criteria c = this.getCriteria(num, pageNum, sortBy, ascOrder);
 		return c.list();
 	}
 
-	@Override
+    @Override
+    public List<Article> get(int num, int pageNum, String sortBy, boolean ascOrder, ArticleRank articleRank) {
+        Criteria c = this.getCriteria(num, pageNum, sortBy, ascOrder);
+        c.add(Restrictions.in("rank", new ArticleRank[]{articleRank}));
+        return c.list();
+    }
+
+    @Override
 	public List<Article> get(int num, int pageNum, String sortBy,
 			boolean ascOrder, Category category) {
 		Criteria c = this.getCriteria(num, pageNum, sortBy, ascOrder);
@@ -59,7 +77,14 @@ public class ArticleDAOImpl implements ArticleDAOI {
 		return c.list();
 	}
 
-	@Override
+    @Override
+    public List<Article> get(int num, int pageNum, String sortBy, boolean ascOrder, Tag tag) {
+        Criteria c = this.getCriteria(num, pageNum, sortBy, ascOrder);
+        c.add(Restrictions.in("tag", new Tag[]{tag}));
+        return c.list();
+    }
+
+    @Override
 	public List<Article> get(int num, int pageNum, String sortBy,
 			boolean ascOrder, Category category, Tag tag) {
 		Criteria c = this.getCriteria(num, pageNum, sortBy, ascOrder);
@@ -70,8 +95,8 @@ public class ArticleDAOImpl implements ArticleDAOI {
 
 	@Override
 	public Article getById(long id) {
-		Article art = (Article) getCurrentSession().load(Article.class, id);
-		return art;
+		Article art = (Article) openSession().load(Article.class, id);
+        return art;
 	}
 
 	@Override
@@ -99,7 +124,7 @@ public class ArticleDAOImpl implements ArticleDAOI {
 		
 		art.setDate(Calendar.getInstance().getTime());
 		
-		this.getCurrentSession().save(art);
+		this.openSession().save(art);
 	}
 
 	@Override
@@ -125,7 +150,7 @@ public class ArticleDAOImpl implements ArticleDAOI {
 		
 		art.setArticle_owner(article_owner);
 		art.setRank(rank);
-		this.getCurrentSession().merge(art);
+		this.openSession().merge(art);
 		
 	}
 

@@ -236,9 +236,15 @@ public class CommentDAOImpl implements CommentDAOI {
 	}
 	
 	@Override
-	public ClassComment getUserComments(long userID, int limit, int pageNO, String sortOrder){
+	public ClassComment getUserComments(String login, int limit, int pageNO, String sortOrder){
 		
-		List<Comment> comments = new ArrayList<Comment>();		
+		List<User> u = new ArrayList<User>();
+		Criteria cri = openSession().createCriteria(User.class);
+			cri.add(Restrictions.eq("login",login));
+		u = cri.list();
+		Long userID = u.get(0).getId();
+		
+		List<Comment> comments = new ArrayList<Comment>();
 		Criteria criteria = openSession().createCriteria(Comment.class);			
 			criteria.add(Restrictions.eq("user.id", userID));
 			criteria.add(Restrictions.eq("state.id", 2L));
@@ -582,8 +588,14 @@ public class CommentDAOImpl implements CommentDAOI {
 	}
 
 	@Override
-	public ClassComment getUserComments(long userID, long status, int limit,
+	public ClassComment getUserComments(String login, long status, int limit,
 			int pageNo, String sortOrder) {
+		
+		List<User> u = new ArrayList<User>();
+		Criteria cri = openSession().createCriteria(User.class);
+			cri.add(Restrictions.eq("login",login));
+		u = cri.list();
+		Long userID = u.get(0).getId();
 		
 		List<Comment> comments = new ArrayList<Comment>();		
 		Criteria criteria = openSession().createCriteria(Comment.class);			

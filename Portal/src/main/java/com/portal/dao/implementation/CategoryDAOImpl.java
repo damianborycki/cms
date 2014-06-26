@@ -2,6 +2,9 @@ package com.portal.dao.implementation;
 
 import com.portal.dao.interfaces.CategoryDAOI;
 import com.portal.entity.Category;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -16,82 +19,67 @@ import java.util.List;
 @Component
 public class CategoryDAOImpl implements CategoryDAOI {
 
-    @Override
-    public Category get(Long id) {
-        Category mockCategory = new Category();
-        mockCategory.setName("mock category");
-        mockCategory.setDescription("utworzona w celach testowych");
-        mockCategory.setId(id);
-        return mockCategory;
+    @Autowired
+    private SessionFactory sessionFactory;
+
+    private Session getCurrentSession() {
+        return sessionFactory.getCurrentSession();
+    }
+
+    private Session openSession() {
+        return sessionFactory.openSession();
     }
 
     @Override
+    public Category get(Long id) {
+        return (Category)openSession().get(Category.class, id);
+    }
+
+    //@FIXME problem z mapowaniem i petla po parencie
+    @Override
     public List<Category> findAll() {
-        List<Category> list = new ArrayList<Category>();
-
-        Category parent = new Category();
-        parent.setName("Wiadomosci");
-        parent.setDescription("utworzona w celach testowych");
-        parent.setId(1l);
-
-
-        Category child1 = new Category();
-        child1.setName("Sport");
-        child1.setDescription("utworzona w celach testowych");
-        child1.setId(2l);
-
-        Category child2 = new Category();
-        child2.setName("Polityka");
-        child2.setDescription("utworzona w celach testowych");
-        child2.setId(3l);
-
-        List<Category> children = new ArrayList<Category>();
-        children.add(child1);
-        children.add(child2);
-
-        parent.setChildren(children);
-
-        list.add(parent);
-
-        parent = new Category();
-        parent.setName("Inne");
-        parent.setDescription("do testow");
-        parent.setId(5l);
-
-        list.add(parent);
-
-        return list;
+        return openSession().createQuery("from Category").list();
     }
 
     @Override
     public void create(Category category) {
-        //@TODO
+        openSession().save(category);
     }
 
     @Override
-    public void edit(Long categoryId, Category template) {
-        //@TODO
+    public void edit(Long id, Category template) {
+        Session session = openSession();
+
+        Category category = (Category)session.get(Category.class, id);
+        category.fromTemplate(template);
+        session.update(category);
+        session.flush();
+
     }
 
     @Override
     public void delete(Long id) {
-        //@TODO
+        Session session = openSession();
+        Category category = (Category)session.get(Category.class, id);
+        session.delete(category);
+        session.flush();
     }
 
     @Override
     public List<Category> getByParentId(Long id) {
-        List<Category> list = new ArrayList<Category>();
-        Category category = new Category();
-        category.setName("by parent id");
-        category.setDescription("do testow");
-
-        list.add(category);
-
-        return list;
+        Category parent = (Category)openSession().get(Category.class, id);
+        return parent.getChildren();
     }
 
     @Override
     public List<Category> getByChildId(Long id) {
-        return new ArrayList<Category>();
+        Category child = (Category)openSession().get(Category.class, id);
+
+        // lista?
+        List<Category> parents = new ArrayList<>();
+        parents.add(child.getParent());
+
+        return parents;
+
     }
 }

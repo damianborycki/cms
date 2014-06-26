@@ -38,8 +38,8 @@ public class CategoryController {
     @RequestMapping(value="category", method= RequestMethod.GET, params = "parent")
     @ResponseBody
     public List<Category> getByParentId(@RequestParam Long parent){
-
-        return categoryDAO.getByParentId(parent);
+        List<Category> list = categoryDAO.getByParentId(parent);
+        return list;
     }
 
     @RequestMapping(value="category", method= RequestMethod.GET, params = "child")

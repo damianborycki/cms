@@ -86,6 +86,12 @@ $.fn.collapseMe = function(opts){
         
           lastDocumentWidth = w;
       }
+	  
+	  $(this).hide(function()
+	  {
+		$(this).show();
+		refresh();
+	  });
       
       $(window).resize(function() {
             refresh();

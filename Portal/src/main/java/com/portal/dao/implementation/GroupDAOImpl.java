@@ -2,6 +2,7 @@ package com.portal.dao.implementation;
 
 import com.portal.dao.interfaces.GroupDAOI;
 
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.hibernate.Query;
@@ -14,6 +15,7 @@ import java.util.List;
 
 
 @Repository
+@JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
 public class GroupDAOImpl implements GroupDAOI {
 	
 	@Autowired
@@ -23,32 +25,36 @@ public class GroupDAOImpl implements GroupDAOI {
 		return sessionFactory.getCurrentSession();
 	}
 
+    private Session openSession() {
+        return sessionFactory.openSession();
+    }
+
 	public Group get(Long id) {
-		Group group = (Group) getCurrentSession().load(Group.class, id);
+		Group group = (Group) openSession().load(Group.class, id);
 		return group;
 	}
 
     @Override
     public List<Group> findAll() {
-		Query query = getCurrentSession().createQuery("from Group");
+		Query query = openSession().createQuery("from Group");
 		return query.list();
     }
 
     @Override
     public void add(Group group) {
-    	getCurrentSession().persist(group);
+        openSession().persist(group);
     }
 
     @Override
     public void edit(Group group, String name, String description) {
         group.setName(name);
         group.setDescription(description);
-        getCurrentSession().merge(group);
+        openSession().merge(group);
     }
 
     @Override
     public void delete(Group group) {
-    	getCurrentSession().delete(group);
+        openSession().delete(group);
     }
 
 }

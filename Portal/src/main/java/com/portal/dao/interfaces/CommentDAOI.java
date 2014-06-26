@@ -30,9 +30,9 @@ public interface CommentDAOI {
     
     public void delete(List<Comment> comments);
     
-    public ClassComment getUserComments(long userID, int limit, int pageNO, String sortOrder);
+    public ClassComment getUserComments(String login, int limit, int pageNO, String sortOrder);
     
-    public ClassComment getUserComments(long userID, long status, int limit, int pageNo, String sortOrder);
+    public ClassComment getUserComments(String login, long status, int limit, int pageNo, String sortOrder);
     
     public ClassParentComment getArticleComments(long articleID, int limit, int pageNO, String sortOrder);
     
