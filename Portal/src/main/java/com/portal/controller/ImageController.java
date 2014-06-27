@@ -42,7 +42,8 @@ public class ImageController {
 
         try
         {
-            String imagePath = getNewImagePath (imageData);
+            image.setId(image.getId() + imageData.getOriginalFilename());
+            String imagePath = getNewImagePath (imageData, image.getId());
             image.setLink(imagePath);
 
             File imageFile = new File( imagePath );
@@ -108,10 +109,12 @@ public class ImageController {
         return imageDAO.getAllUnapproved();
     }
 
-    private String getNewImagePath(MultipartFile file)
+    private String getNewImagePath(MultipartFile file, String id)
     {
-        // TODO gdzie zapisywac nowe obrazki ???
-        return "example.jpg";
+
+        String imagePath = System.getProperty("catalina.base") + "\\webapps\\images\\" + id;
+
+        return imagePath;
     }
 
     private String getDefaultImageLink()
