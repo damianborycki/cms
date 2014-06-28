@@ -1,14 +1,7 @@
 package com.portal.dao.implementation;
 
-import com.portal.dao.interfaces.ArticleDAOI;
 import com.portal.dao.interfaces.TagTypeDAOI;
-import com.portal.dao.interfaces.UserDAOI;
-import com.portal.entity.Comment;
 import com.portal.entity.TagType;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -16,6 +9,8 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public class TagTypeDAOImpl implements TagTypeDAOI {
@@ -61,17 +56,21 @@ public class TagTypeDAOImpl implements TagTypeDAOI {
 
     @Override
     public void edit(Long tagTypeId, TagType template) {
-        TagType tagType = get(tagTypeId);
+        Session session = openSession();
+        TagType tagType = (TagType) session.get(TagType.class, tagTypeId);
         tagType.setName(template.getName());
         tagType.setDescription(template.getDescription());
-        this.openSession().merge(tagType);
+
+        session.update(tagType);
+        session.flush();
     }
 
     @Override
     public void delete(Long id) {
-    	Query q = this.openSession().createQuery("delete Entity where id = :id");
-    	q.setParameter("id", id);
-    	q.executeUpdate();
+        Session session = openSession();
+        TagType tagType = (TagType) session.get(TagType.class, id);
+        session.delete(tagType);
+        session.flush();
     }
     
 }
