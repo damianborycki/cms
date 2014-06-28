@@ -364,43 +364,34 @@ $scope.orderProp = '';
 
 
 
-app.controller('GroupController', function($scope) {  
+app.controller('GroupController', function($scope, $http) { 
 
-	$scope.listOfTagsTypes = [];
+	$scope.groups = [];
+	$scope.groupForModal = null;
 
-	$scope.getListOfTagsTypes  = function(len)
+	$scope.getGroups  = function()
 	{
-	if ($scope.listOfTagsTypes.length != 0)
-		return $scope.listOfTagsTypes;
+		GetGroups($scope, $http);
+	};
 
-	var arr = [];
-	for (var i=0;i<len;i++)
-	{
-	arr.push({
-		id: (i + 1),
-		name:  "NEW" + i,
-		description: "New, not confirmed user."
-	});
-	}
 
-	$scope.listOfTagsTypes = arr;
-	return arr;
-};
 
-$scope.GetIndexOfTagTypeById=function($id)
+$scope.GetIndexOfGroupById=function($id)
 {
-	var arr = $scope.getListOfTagsTypes(4);
+	var arr = $scope.groups;
 	
-	for (var tagIndex in arr)
+	for (var i = 0; i < arr.length; i++)
 	{
-		if (arr[tagIndex].id == $id)
+		if (arr[i].id == $id)
 		{
-			return tagIndex;
+			return arr[i];
 		}
 	}
 	
 	return -1;
 };
+
+$scope.getGroups();
    
 $scope.selection = [];
 
@@ -450,18 +441,21 @@ $scope.invertSelection=function()
 	}
 }
 
-$scope.tagForModal = null;
+$scope.groupForModal = null;
 
-$scope.SetTagForModal=function($id)
+$scope.SetGroupForModal=function($id)
 {
-	var idx = $scope.GetIndexOfTagTypeById($id);
-	$scope.tagForModal = jQuery.extend(true, {}, $scope.listOfTagsTypes[idx]);
+	//console.log($scope.groups);
+
+	$scope.groupForModal = $scope.GetIndexOfGroupById($id);
+	//console.log($scope.groupForModal);
+	// var idx = $scope.GetIndexOfGroupById($id);
+	// $scope.groupForModal = jQuery.extend(true, {}, $scope.groups[idx]);
 }
 
-$scope.UpdateTag=function($id)
+$scope.UpdateGroup=function($id)
 {
-	var idx = $scope.GetIndexOfTagTypeById($id);
-	$scope.listOfTagsTypes[idx] = $scope.tagForModal;
+	UpdateGroup($scope, $http, $id);
 }
 
 $scope.CreateNewTag=function()

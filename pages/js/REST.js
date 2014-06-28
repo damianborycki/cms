@@ -65,7 +65,7 @@ function GetMainCategories($scope, $http){
 };
 
 function GetUser(name, $scope, $http){
-	$http.get('/portal/user/' + name).
+	$http.get('/portal/userProfile/' + name).
 	  success(function(data, status, headers, config) {
 		$scope.searchedUser = data;
 	  }).
