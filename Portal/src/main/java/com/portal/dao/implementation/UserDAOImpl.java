@@ -16,13 +16,16 @@ import com.portal.dao.interfaces.UserDAOI;
 import com.portal.init.ClassUser;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Repository;
 
+import com.portal.entity.Comment;
 import com.portal.entity.Group;
 import com.portal.entity.User;
 
@@ -50,6 +53,13 @@ public class UserDAOImpl implements UserDAOI {
 		else
 			return null;	
 		
+	}
+	
+	public void setLastLoginDate(String login) {
+		Query query = openSession().createQuery("update User u set u.dateOfLastLogIn = :date where u.login = :login");
+		query.setParameter("login", login);
+		query.setParameter("date", new Date());
+		query.executeUpdate();
 	}
 	
 	public void setUserGroup(String login, Long groupId) {

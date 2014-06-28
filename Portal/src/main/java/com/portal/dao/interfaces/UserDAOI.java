@@ -24,5 +24,7 @@ public interface UserDAOI {
     public int totalUsers();
 
     public void deleteUser(String login);
+    
+    public void setLastLoginDate(String login);
 
 }

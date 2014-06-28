@@ -16,12 +16,17 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import com.portal.dao.interfaces.UserDAOI;
+
 @Controller
 public class AuthController {
 	
 	@Autowired
 	@Qualifier("authManager")
 	private AuthenticationManager authenticationManager;
+	
+	@Autowired
+	private UserDAOI userDAO;
 	
 	@RequestMapping(value = "/login", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, headers = {"content-type=application/json"})
 	public void createSession(@RequestBody com.portal.entity.User user, HttpServletRequest request, HttpServletResponse response) {
@@ -38,6 +43,8 @@ public class AuthController {
 
 	        HttpSession session = request.getSession(true);
 	        session.setAttribute("SPRING_SECURITY_CONTEXT", securityContext);
+	        
+	        userDAO.setLastLoginDate(user.getLogin());
 	        
 	        response.setStatus(HttpServletResponse.SC_CREATED);
 
