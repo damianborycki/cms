@@ -42,7 +42,7 @@ public class GroupDAOImpl implements GroupDAOI {
 
     @Override
     public void add(Group group) {
-        openSession().persist(group);
+        openSession().save(group);
     }
 
     @Override
