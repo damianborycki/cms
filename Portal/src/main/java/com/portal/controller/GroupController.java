@@ -40,16 +40,16 @@ public class GroupController {
 
     @RequestMapping(value = "group/{id}", method = RequestMethod.PUT, consumes = "application/json")
     @ResponseBody
-    public ResponseEntity<Object> put(@RequestBody Group group, @PathVariable String name, @PathVariable String description) {
-        groupDAO.edit(group, name, description);
+    public ResponseEntity<Object> put(@RequestBody Group group, @PathVariable("id") long id) {
+    	group.setId(id);
+        groupDAO.edit(group);
         return new ResponseEntity<Object>(group, HttpStatus.ACCEPTED);
     }
 
-    @RequestMapping(value="group/{id}", method= RequestMethod.DELETE, consumes="application/json")
-    @ResponseBody
-    public ResponseEntity<Object> delete(@RequestBody Group group) {
-        groupDAO.delete(group);
-        return new ResponseEntity<Object>(group, HttpStatus.ACCEPTED);
+    @RequestMapping(value="group/{id}", method= RequestMethod.DELETE)
+    public ResponseEntity<Object> delete(@PathVariable("id") long id) {
+        groupDAO.delete(id);
+        return new ResponseEntity<Object>(HttpStatus.ACCEPTED);
     }
 
 }

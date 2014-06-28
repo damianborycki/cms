@@ -19,7 +19,7 @@ function AddTagType(name, description, $scope, $http){
 	  }).
 	  error(function(data, status, headers, config) {
 	}); 
-	};
+};
 	
 function EditTagType(id, name, description, $scope, $http){
 $http.put('/portal/type/' + id, {name: name, description: description}).
@@ -38,11 +38,48 @@ $http.delete('/portal/type/' + id).
 	  error(function(data, status, headers, config) {
 	}); 
 };
+
+function AddArticle(title, description, content, category_id, user, expiration_date, publication_date, tags, rank, galery, date, image, $scope, $http){
+	$http.post('/portal/article', {title: title, description: description, content: content, category_id: category_id, user: user, expiration_date: expiration_date, publication_date: publication_date, tags: tags, rank: rank, galery: galery, date: date, image: image}).
+	  success(function(data, status, headers, config) {
+		$scope.getListOfTagsTypes();
+	  }).
+	  error(function(data, status, headers, config) {
+	}); 
+};
+
+function GetArticleRank($scope, $http){
+$http({method: 'GET', url: '/portal/articleRank'}).
+	  success(function(data, status, headers, config) {
+		$scope.listOfArticleRanks = data;
+	  }); 
+	};
 	
 function GetCategories($scope, $http){
 $http({method: 'GET', url: '/portal/category'}).
 	  success(function(data, status, headers, config) {
 		$scope.listOfCategories = data;
+	  }); 
+	};
+	
+function AddCategory(name, description, parent, $scope, $http){
+$http({method: 'POST', url: '/portal/category', data: {name: name, description: description, parent: parent}}).
+	  success(function(data, status, headers, config) {
+		$scope.getlistOfCategories();
+	  }); 
+	};
+	
+function EditCategory(id, name, description, parent, $scope, $http){
+$http({method: 'PUT', url: '/portal/category/' + id, data: {name: name, description: description, parent: parent}}).
+	  success(function(data, status, headers, config) {
+		$scope.getlistOfCategories();
+	  }); 
+	};
+	
+function DeleteCategory(id, $scope, $http){
+$http({method: 'DELETE', url: '/portal/category/' + id}).
+	  success(function(data, status, headers, config) {
+		$scope.getlistOfCategories();
 	  }); 
 	};
 
@@ -65,6 +102,43 @@ function SetCommentState($scope, $http, commentList){
 				$scope.listOfCommentsWithStatus.splice(index, 1);
 			}
 		}
+	  }); 
+}
 
+function GetGroups($scope, $http) {
+	$http({method: 'GET', url: '/portal/group'}).
+	  success(function(data, status, headers, config) {
+	  	$scope.groups = data;
+	  }); 
+}
+
+function AddNewGroup($scope, $http) {
+	$http({method: 'POST', url: '/portal/group',
+			data: {'name' : $scope.groupForModal.name, 'description' : $scope.groupForModal.description} }).
+	  success(function(data, status, headers, config) {
+	  	$scope.groups.push(data);
+	  }); 
+}
+
+function UpdateGroup($scope, $http, id) {
+		$http({method: 'PUT', url: '/portal/group/' + id, 
+				data: {'name' : $scope.groupForModal.name, 'description' : $scope.groupForModal.description} }).
+	  success(function(data, status, headers, config) {
+	  	var ix = $scope.getIndexOfGroupById(id);
+	  	$scope.groups(ix).id = data[id];
+	  	$scope.groups(ix).name = data[name];
+	  	$scope.groups(ix).description = data[description];
+	  });
+}
+
+function RemoveGroup($scope, $http, id) {
+	$http({method: 'DELETE', url: '/portal/group/' + id}).
+	  success(function(data, status, headers, config) {
+				var index = $scope.GetIndexOfGroupById(id);
+				var i = $scope.groups.indexOf(index);
+
+				if (i > -1) {
+					$scope.groups.splice(i, 1);
+				}
 	  }); 
 }

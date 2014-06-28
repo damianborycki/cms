@@ -31,7 +31,8 @@ function Register(login, pass, email, firstname, lastname, city, gender, $scope,
 	  error(function(data, status, headers, config) {
 		$scope.waitingForResponse = false;
 		$scope.Registered = false;
-	}); 
+	});
+	alert("Rejestracja zakończona powodzeniem! Możesz teraz już przejść do logowania."); 
 };
 
 function GetCurrentUserLogin($scope, $http){
@@ -65,7 +66,7 @@ function GetMainCategories($scope, $http){
 };
 
 function GetUser(name, $scope, $http){
-	$http.get('/portal/user/' + name).
+	$http.get('/portal/userProfile/' + name).
 	  success(function(data, status, headers, config) {
 		$scope.searchedUser = data;
 	  }).
