@@ -4,6 +4,8 @@ import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
+import com.portal.init.JsonDateSerializer;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -151,15 +153,17 @@ public class User {
     public void setCity(String city) {
         this.city = city;
     }
-
+    
+    @JsonSerialize(using=JsonDateSerializer.class)
     public Date getDateOfRegistration() {
         return dateOfRegistration;
     }
-
+    
     public void setDateOfRegistration(Date dateOfRegistration) {
         this.dateOfRegistration = dateOfRegistration;
     }
-
+    
+    @JsonSerialize(using=JsonDateSerializer.class)
     public Date getDateOfLastLogIn() {
         return dateOfLastLogIn;
     }
