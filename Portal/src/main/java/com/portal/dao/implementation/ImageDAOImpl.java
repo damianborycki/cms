@@ -76,6 +76,13 @@ public class ImageDAOImpl implements ImageDAOI {
         return biggestImage;
     }
 
+    public void deleteImage(String id)
+    {
+        Query query = openSession().createQuery("delete from Image where id=:id");
+        query.setParameter("id", id);
+        query.executeUpdate();
+    }
+
     @Transactional(readOnly=false)
     public void addImage(Image i) {
         Session session = openSession();
