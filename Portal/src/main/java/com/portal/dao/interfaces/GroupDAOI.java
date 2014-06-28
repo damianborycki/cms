@@ -9,6 +9,6 @@ public interface GroupDAOI {
 	public Group get(Long id);
     public List<Group> findAll();
     public void add(Group group);
-    public void edit(Group group, String name, String description);
+    public void edit(Group group);
     public void delete(Group group);
 }
