@@ -47,6 +47,35 @@ public class ImageDAOImpl implements ImageDAOI {
         return imageList;
     }
 
+    private List<Image> getAllImages(String id)
+    {
+        List<Image> imageList = new ArrayList<Image>();
+
+        Query query = openSession().createQuery("from Image i where i.id = :id");
+        query.setParameter("id",id);
+        imageList = query.list();
+        return imageList;
+    }
+
+    public Image getBiggestImage(String id)
+    {
+        List<Image> imageList = getAllImages(id);
+
+        long biggestImageSize = -1;
+        Image biggestImage = null;
+        for(int i=0; i<imageList.size(); i++)
+        {
+            Image current = imageList.get(i);
+            long currentSize = current.getWidth() * current.getHeight();
+            if( currentSize > biggestImageSize )
+            {
+                biggestImage = current;
+                biggestImageSize = currentSize;
+            }
+        }
+        return biggestImage;
+    }
+
     @Transactional(readOnly=false)
     public void addImage(Image i) {
         Session session = openSession();

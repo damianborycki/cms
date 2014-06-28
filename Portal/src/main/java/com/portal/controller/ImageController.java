@@ -21,7 +21,11 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.*;
 import java.util.List;
 
-import magick.*;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import com.mortennobel.imagescaling.ResampleOp;
+import com.mortennobel.imagescaling.AdvancedResizeOp;
+
 
 @Controller
 public class ImageController {
@@ -63,10 +67,6 @@ public class ImageController {
             }
 
             outputStream.close();
-
-            MagickImage magicImage = new MagickImage (new ImageInfo (imagePath));
-            image.setWidth(Long.valueOf(magicImage.getDimension().width));
-            image.setHeight(Long.valueOf(magicImage.getDimension().height));
         }
         catch(Exception e)
         {
@@ -113,10 +113,48 @@ public class ImageController {
 
     private String getNewImagePath(MultipartFile file, String id)
     {
-
         String imagePath = System.getProperty("catalina.base") + "\\webapps\\images\\" + id;
 
         return imagePath;
+    }
+
+    private String getScaledImagePath(String id, long width, long height)
+    {
+        String imagePath = System.getProperty("catalina.base") + "\\webapps\\images\\" + id + "_" + width + "_" + height + ".jpg";
+        return imagePath;
+    }
+
+    private String tryToScaleImage(String id, long width, long height)
+    {
+        Image biggestImage = imageDAO.getBiggestImage(id);
+        if(biggestImage == null)
+            return null;
+        
+        String biggestImageLink = biggestImage.getLink();
+        return scaleImage(id, biggestImageLink, width, height);
+    }
+
+    private String scaleImage(String id, String link, long width, long height)
+    {
+        try
+        {
+            File file = new File(link);
+            BufferedImage source = ImageIO.read(file);
+            ResampleOp resampleOp = new ResampleOp ((int)width,(int)height);
+            resampleOp.setUnsharpenMask(AdvancedResizeOp.UnsharpenMask.VerySharp);
+            BufferedImage rescaled = resampleOp.filter(source, null);
+            String scaledImagePath = getScaledImagePath(id, width, height);
+            File file2 = new File(scaledImagePath);
+            if( rescaled != null && file2 != null )
+            {
+                ImageIO.write( rescaled, "JPG", file2);
+            }
+            return scaledImagePath;
+        }
+        catch(Exception e)
+        {
+            return null;
+        }
     }
 
     private String getDefaultImageLink()
@@ -132,6 +170,12 @@ public class ImageController {
     private String getImagePath(String imageId, long width, long height)
     {
         Image image = imageDAO.getImage(imageId,width,height);
+        if( image == null )
+        {
+            String scaledImage = tryToScaleImage(imageId, width, height);
+            if( scaledImage != null)
+                return scaledImage;
+        }
         if( image == null || image.getApp_usr() == null)
             return getDefaultImageLink();
 
