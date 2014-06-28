@@ -1271,6 +1271,7 @@ app.controller('CommentModerationController', function($scope, $http) {
 
 	$scope.listOfCommentsWithStatus = [];
 	$scope.selectedComments = [];
+	$scope.selectAll = true;
 
 	$scope.getCommentsWithStatus = function() {
 	if ($scope.listOfCommentsWithStatus.length != 0)
@@ -1281,8 +1282,6 @@ app.controller('CommentModerationController', function($scope, $http) {
 
 $scope.getCommentsWithStatus();
 
-console.log($scope.listOfCommentsWithStatus);
-
 $scope.acceptSingle = function(id) {
 	SetCommentState($scope, $http, [{'id' : id, 'state' : {'id' : 2} }]);
 }
@@ -1292,8 +1291,6 @@ $scope.rejectSingle = function(id) {
 }
 
 $scope.acceptSelected = function() {
-
-	console.log($scope.selectedComments);
 
 	for (var i = 0; i < $scope.selectedComments.length; i++) {
 		$scope.selectedComments[i] = {'id' : $scope.selectedComments[i], 'state' : {'id' : 2} }
@@ -1340,19 +1337,29 @@ $scope.getIndexOfCommentById=function($id) {
 
 $scope.toggleSelection = function($id) {
 
-	console.log($scope.selectedComments);
-
 	var index = $scope.selectedComments.indexOf($id);
 
 		if (index > -1) {
-			console.log('wyjalem');
 			$scope.selectedComments.splice(index, 1);
-			
 		} else {
-			console.log('dodalem');
 			$scope.selectedComments.push($id);
 		}
-		console.log($scope.selectedComments);
+}
+
+$scope.invertSelection = function() {
+
+	if ($scope.selectAll) {
+
+		for (var i = 0; i < $scope.listOfCommentsWithStatus.length; i++) {
+			$scope.selectedComments.push($scope.listOfCommentsWithStatus[i].id);
+		}
+
+		$scope.selectAll = false;
+
+	} else {
+		$scope.selectedComments = [];
+		$scope.selectAll = true;
+	}
 }
   
 });
