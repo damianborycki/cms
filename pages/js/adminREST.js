@@ -26,15 +26,17 @@ $http({method: 'GET', url: '/portal/comment?status=1&limit=10&pageNo=1&sortOrder
 	  }); 
 	};
 
-function SetCommentState($scope, $http){
+function SetCommentState($scope, $http, commentList){
 	$http({method: 'PATCH', url: '/portal/setCommentStatus', 
-			data: $scope.selectedComments}).
+			data: commentList}).
 	  success(function(data, status, headers, config) {
-		
-		var index = $scope.getIndexOfCommentById($scope.selectedComments[0].id);
 
-		if (index > -1) {
-    		$scope.listOfCommentsWithStatus.splice(index, 1);
+		for (var i = 0; i < commentList.length; i++) {
+			var index = $scope.getIndexOfCommentById(commentList[i].id);
+
+			if (index > -1) {
+				$scope.listOfCommentsWithStatus.splice(index, 1);
+			}
 		}
 
 	  }); 

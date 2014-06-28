@@ -1272,7 +1272,6 @@ app.controller('CommentModerationController', function($scope, $http) {
 	$scope.listOfCommentsWithStatus = [];
 	$scope.selectedComments = [];
 
-
 	$scope.getCommentsWithStatus = function() {
 	if ($scope.listOfCommentsWithStatus.length != 0)
 		return $scope.listOfCommentsWithStatus;
@@ -1285,15 +1284,35 @@ $scope.getCommentsWithStatus();
 console.log($scope.listOfCommentsWithStatus);
 
 $scope.acceptSingle = function(id) {
-	$scope.selectedComments = [];
-	$scope.selectedComments.push({'id' : id, 'state' : {'id' : 2} });
-	SetCommentState($scope, $http);
+	SetCommentState($scope, $http, [{'id' : id, 'state' : {'id' : 2} }]);
 }
 
 $scope.rejectSingle = function(id) {
+	SetCommentState($scope, $http, [{'id' : id, 'state' : {'id' : 3} }]);
+}
+
+$scope.acceptSelected = function() {
+
+	console.log($scope.selectedComments);
+
+	for (var i = 0; i < $scope.selectedComments.length; i++) {
+		$scope.selectedComments[i] = {'id' : $scope.selectedComments[i], 'state' : {'id' : 2} }
+	}
+
+	SetCommentState($scope, $http, $scope.selectedComments);
+
 	$scope.selectedComments = [];
-	$scope.selectedComments.push({'id' : id, 'state' : {'id' : 3} });
-	SetCommentState($scope, $http);
+}
+
+$scope.rejectSelected = function() {
+
+	for (var i = 0; i < $scope.selectedComments.length; i++) {
+		$scope.selectedComments[i] = {'id' : $scope.selectedComments[i], 'state' : {'id' : 3} }
+	}
+
+	SetCommentState($scope, $http, $scope.selectedComments);
+
+	$scope.selectedComments = [];
 }
 
 $scope.getListOfElementsByParent=function(id)
@@ -1305,8 +1324,7 @@ $scope.getListOfElementsByParent=function(id)
 	return arr;
 }
 
-$scope.getIndexOfCommentById=function($id)
-{
+$scope.getIndexOfCommentById=function($id) {
 	var arr = $scope.listOfCommentsWithStatus;
 	
 	for (var i in arr)
@@ -1319,6 +1337,23 @@ $scope.getIndexOfCommentById=function($id)
 	
 	return -1;
 };
+
+$scope.toggleSelection = function($id) {
+
+	console.log($scope.selectedComments);
+
+	var index = $scope.selectedComments.indexOf($id);
+
+		if (index > -1) {
+			console.log('wyjalem');
+			$scope.selectedComments.splice(index, 1);
+			
+		} else {
+			console.log('dodalem');
+			$scope.selectedComments.push($id);
+		}
+		console.log($scope.selectedComments);
+}
   
 });
 
