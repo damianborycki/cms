@@ -33,7 +33,7 @@ public class UserController {
 		return "adminIndex";
 	}
 	
-	@RequestMapping(value="/user/{login}", method=RequestMethod.GET)
+	@RequestMapping(value="/user/{login:.+}", method=RequestMethod.GET)
 	public @ResponseBody User getUserData(@PathVariable("login") String login, HttpServletResponse response) {
 		
 		try {
@@ -55,8 +55,10 @@ public class UserController {
 		
 	}
 	
-	@RequestMapping(value="/userProfile/{login}", method=RequestMethod.GET)
+	@RequestMapping(value="/userProfile/{login:.+}", method=RequestMethod.GET)
 	public @ResponseBody User getUserProfile(@PathVariable("login") String login, HttpServletResponse response) {
+		
+		System.out.println(login);
 		
 		User user = userDAO.getUser(login);
 		user.setId(null);
@@ -66,7 +68,7 @@ public class UserController {
 		return user;
 	}
 	
-	@RequestMapping(value="/setUserGroup/{login}", method=RequestMethod.PATCH)
+	@RequestMapping(value="/setUserGroup/{login:.+}", method=RequestMethod.PATCH)
 	public void setUserGroup(@PathVariable("login") String login, @RequestBody Group group, HttpServletResponse response) {
 		
 		try {
@@ -92,7 +94,7 @@ public class UserController {
 		
 	}
 	
-	@RequestMapping(value="/user/{login}", method=RequestMethod.DELETE)
+	@RequestMapping(value="/user/{login:.+}", method=RequestMethod.DELETE)
 	public void deleteData(@PathVariable("login") String login, HttpServletResponse response) {
 		
 		try {
@@ -104,7 +106,7 @@ public class UserController {
 		}
 	}
 	
-	@RequestMapping(value="/user/{login}", method=RequestMethod.PATCH)
+	@RequestMapping(value="/user/{login:.+}", method=RequestMethod.PATCH)
 	public void setData(@PathVariable("login") String login, @RequestBody User user, HttpServletResponse response) {
 		
 		if(userDAO.getLoggedUser().getLogin() == login) {
