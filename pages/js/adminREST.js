@@ -75,6 +75,14 @@ function GetGroups($scope, $http) {
 	  }); 
 }
 
+function AddNewGroup($scope, $http) {
+	$http({method: 'POST', url: '/portal/group',
+			data: {'name' : $scope.groupForModal.name, 'description' : $scope.groupForModal.description} }).
+	  success(function(data, status, headers, config) {
+	  	$scope.groups.push(data);
+	  }); 
+}
+
 function UpdateGroup($scope, $http, id) {
 		$http({method: 'PUT', url: '/portal/group/' + id, 
 				data: {'name' : $scope.groupForModal.name, 'description' : $scope.groupForModal.description} }).

@@ -441,10 +441,20 @@ $scope.CreateNewTag=function()
    };
 }
 
-$scope.AddNewTag=function()
+$scope.CreateNewGroup=function()
 {
-	$scope.tagForModal.id = $scope.listOfTagsTypes[$scope.listOfTagsTypes.length - 1].id + 1;
-	$scope.listOfTagsTypes.push($scope.tagForModal);
+	$scope.groupForModal = {'name': '', 'description': ''};
+	// $scope.tagForModal.id = $scope.listOfTagsTypes[$scope.listOfTagsTypes.length - 1].id + 1;
+	// $scope.listOfTagsTypes.push($scope.tagForModal);
+	//AddNewGroup($scope, $http);
+}
+
+$scope.AddNewGroup=function()
+{
+	//$scope.groupForModal() = {'name': '', 'description': ''};
+	// $scope.tagForModal.id = $scope.listOfTagsTypes[$scope.listOfTagsTypes.length - 1].id + 1;
+	// $scope.listOfTagsTypes.push($scope.tagForModal);
+	AddNewGroup($scope, $http);
 }
 
   // toggle selection for a given fruit by name
