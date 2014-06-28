@@ -47,7 +47,7 @@ public class ImageDAOImpl implements ImageDAOI {
         return imageList;
     }
 
-    private List<Image> getAllImages(String id)
+    public List<Image> getAllImages(String id)
     {
         List<Image> imageList = new ArrayList<Image>();
 
@@ -74,13 +74,6 @@ public class ImageDAOImpl implements ImageDAOI {
             }
         }
         return biggestImage;
-    }
-
-    public void deleteImage(String id)
-    {
-        Query query = openSession().createQuery("delete from Image where id=:id");
-        query.setParameter("id", id);
-        query.executeUpdate();
     }
 
     @Transactional(readOnly=false)

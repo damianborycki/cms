@@ -33,12 +33,6 @@ public class ImageController {
     @Autowired
     ImageDAOI imageDAO;
 
-    @RequestMapping(value="/image", method=RequestMethod.DELETE)
-    public void deleteImage(@RequestParam("id") String id)
-    {
-        imageDAO.deleteImage(id);
-    }
-
     @RequestMapping(value="/image", method=RequestMethod.POST)
     public String addImage(@RequestParam("imageData") MultipartFile imageData,
                            @RequestParam("description") String description,
@@ -195,5 +189,12 @@ public class ImageController {
             return getDefaultAvatarLink();
 
         return image.getLink();
+    }
+
+    @RequestMapping(value="/metadata", method=RequestMethod.GET)
+    @ResponseBody
+    public List<Image> getMetadata(@RequestParam("id") String imageId) throws Exception
+    {
+        return imageDAO.getAllImages(imageId);
     }
 }
