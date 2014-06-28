@@ -58,7 +58,7 @@ function GetMainCategories($scope, $http){
 	$http.get('/portal/category').
 	  success(function(data, status, headers, config) {
 		$scope.mainCategories.data = data;
-		$('#topMenu').hide().show();
+		$('#topMenu').show();
 	  }).
 	  error(function(data, status, headers, config) {
 	}); 

@@ -16,8 +16,8 @@ import javax.validation.constraints.Size;
 public class Group {
 	
 	@JsonCreator
-	public Group(@JsonProperty("group_id") Long id) {
-		this.id = id;
+	public Group(@JsonProperty("name") String name) {
+		this.name = name;
 	}
 //	@JsonCreator
 //	public Group(Long id, String name, String description) {
@@ -29,7 +29,6 @@ public class Group {
 	public Group() {}
 	
 	@Id
-	@NotNull
     @Column(name = "id", unique = true, nullable = false)
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;

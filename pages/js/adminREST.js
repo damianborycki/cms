@@ -12,6 +12,33 @@ $http({method: 'GET', url: '/portal/type'}).
 	  }); 
 	};
 	
+function AddTagType(name, description, $scope, $http){
+	$http.post('/portal/type', {name: name, description: description}).
+	  success(function(data, status, headers, config) {
+		$scope.getListOfTagsTypes();
+	  }).
+	  error(function(data, status, headers, config) {
+	}); 
+	};
+	
+function EditTagType(id, name, description, $scope, $http){
+$http.put('/portal/type/' + id, {name: name, description: description}).
+	  success(function(data, status, headers, config) {
+		$scope.getListOfTagsTypes();
+	  }).
+	  error(function(data, status, headers, config) {
+	}); 
+};
+
+function DeleteTagType(id, $scope, $http){
+$http.delete('/portal/type/' + id).
+	  success(function(data, status, headers, config) {
+		$scope.getListOfTagsTypes();
+	  }).
+	  error(function(data, status, headers, config) {
+	}); 
+};
+	
 function GetCategories($scope, $http){
 $http({method: 'GET', url: '/portal/category'}).
 	  success(function(data, status, headers, config) {

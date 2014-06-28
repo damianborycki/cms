@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 
 import com.portal.entity.Group;
 
@@ -42,14 +43,15 @@ public class GroupDAOImpl implements GroupDAOI {
 
     @Override
     public void add(Group group) {
-        openSession().persist(group);
+        openSession().save(group);
     }
 
     @Override
-    public void edit(Group group, String name, String description) {
-        group.setName(name);
-        group.setDescription(description);
-        openSession().merge(group);
+    public void edit(Group group) { 	
+    	Session session = openSession();
+    	Transaction t = session.beginTransaction();
+    	session.merge(group);
+    	t.commit();
     }
 
     @Override

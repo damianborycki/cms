@@ -89,8 +89,8 @@ $.fn.collapseMe = function(opts){
 	  
 	  $(this).hide(function()
 	  {
-		$(this).show();
 		refresh();
+		$(this).show();
 	  });
       
       $(window).resize(function() {
