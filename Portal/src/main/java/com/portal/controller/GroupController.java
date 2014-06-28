@@ -46,7 +46,7 @@ public class GroupController {
         return new ResponseEntity<Object>(group, HttpStatus.ACCEPTED);
     }
 
-    @RequestMapping(value="group/{id}", method= RequestMethod.DELETE, consumes="application/json")
+    @RequestMapping(value="group/{id}", method= RequestMethod.DELETE)
     public ResponseEntity<Object> delete(@PathVariable("id") long id) {
         groupDAO.delete(id);
         return new ResponseEntity<Object>(HttpStatus.ACCEPTED);
