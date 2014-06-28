@@ -10,6 +10,8 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonManagedReference;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
+import com.portal.init.JsonDateSerializer;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
@@ -139,7 +141,8 @@ public class Article {
     public void setUser(User user) {
         this.user = user;
     }
-
+    
+    @JsonSerialize(using=JsonDateSerializer.class)
     public Date getDate() {
         return date;
     }

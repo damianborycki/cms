@@ -8,6 +8,8 @@ import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
+import com.portal.init.JsonDateSerializer;
+
 import java.util.Date;
 
 
@@ -108,7 +110,8 @@ public class Comment {
     public void setContent(String content) {
         this.content = content;
     }
-
+    
+    @JsonSerialize(using=JsonDateSerializer.class)
     public Date getDate() {
         return date;
     }

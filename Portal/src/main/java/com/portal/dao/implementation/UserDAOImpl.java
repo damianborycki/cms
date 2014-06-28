@@ -42,7 +42,7 @@ public class UserDAOImpl implements UserDAOI {
 		List<User> users = new ArrayList<User>();
 		Query query = openSession().createQuery("from User u where u.login = :login");
 		query.setParameter("login", login);
-
+		
 		users = query.list();
 		
 		if (users != null && users.size() > 0)
