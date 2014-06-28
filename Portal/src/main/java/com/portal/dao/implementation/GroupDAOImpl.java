@@ -10,6 +10,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
+import com.portal.entity.Category;
 import com.portal.entity.Group;
 
 import java.util.List;
@@ -55,8 +56,12 @@ public class GroupDAOImpl implements GroupDAOI {
     }
 
     @Override
-    public void delete(Group group) {
-        openSession().delete(group);
+    public void delete(long id) {      
+        Session session = openSession();
+        Group g = (Group) session.get(Group.class, id);
+    	Transaction t = session.beginTransaction();
+    	session.delete(g);
+    	t.commit();
     }
 
 }

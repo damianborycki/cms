@@ -10,5 +10,5 @@ public interface GroupDAOI {
     public List<Group> findAll();
     public void add(Group group);
     public void edit(Group group);
-    public void delete(Group group);
+    public void delete(long id);
 }
