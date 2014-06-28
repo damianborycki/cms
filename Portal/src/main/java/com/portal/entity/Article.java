@@ -46,7 +46,7 @@ public class Article {
     private String description;
     
     @NotNull
-    @Column(name = "content")
+    @Column(name = "content", length = 10000)
     private String content;
     
     @NotNull
