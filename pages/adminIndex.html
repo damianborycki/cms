@@ -1270,17 +1270,31 @@ $scope.orderProp = '';
 app.controller('CommentModerationController', function($scope, $http) { 
 
 	$scope.listOfCommentsWithStatus = [];
+	$scope.selectedComments = [];
 
-	$scope.getCommentsWithStatus = function()
-	{
+
+	$scope.getCommentsWithStatus = function() {
 	if ($scope.listOfCommentsWithStatus.length != 0)
 		return $scope.listOfCommentsWithStatus;
 
-	GetCommentsWithStatus($scope, $http);
-};
+		GetCommentsWithStatus($scope, $http);
+	};
 
 $scope.getCommentsWithStatus();
 
+console.log($scope.listOfCommentsWithStatus);
+
+$scope.acceptSingle = function(id) {
+	$scope.selectedComments = [];
+	$scope.selectedComments.push({'id' : id, 'state' : {'id' : 2} });
+	SetCommentState($scope, $http);
+}
+
+$scope.rejectSingle = function(id) {
+	$scope.selectedComments = [];
+	$scope.selectedComments.push({'id' : id, 'state' : {'id' : 3} });
+	SetCommentState($scope, $http);
+}
 
 $scope.getListOfElementsByParent=function(id)
 {
@@ -1290,6 +1304,21 @@ $scope.getListOfElementsByParent=function(id)
 	arr = $scope.getChildrenArrayRecurrency(id, $scope.listOfCommentsWithStatus);
 	return arr;
 }
+
+$scope.getIndexOfCommentById=function($id)
+{
+	var arr = $scope.listOfCommentsWithStatus;
+	
+	for (var i in arr)
+	{
+		if (arr[i].id == $id)
+		{
+			return i;
+		}
+	}
+	
+	return -1;
+};
   
 });
 

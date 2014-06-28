@@ -22,6 +22,20 @@ $http({method: 'GET', url: '/portal/category'}).
 function GetCommentsWithStatus($scope, $http){
 $http({method: 'GET', url: '/portal/comment?status=1&limit=10&pageNo=1&sortOrder=DESC'}).
 	  success(function(data, status, headers, config) {
-		$scope.listOfCommentsWithStatus = data;
+		$scope.listOfCommentsWithStatus = data.comments;
 	  }); 
 	};
+
+function SetCommentState($scope, $http){
+	$http({method: 'PATCH', url: '/portal/setCommentStatus', 
+			data: $scope.selectedComments}).
+	  success(function(data, status, headers, config) {
+		
+		var index = $scope.getIndexOfCommentById($scope.selectedComments[0].id);
+
+		if (index > -1) {
+    		$scope.listOfCommentsWithStatus.splice(index, 1);
+		}
+
+	  }); 
+}
