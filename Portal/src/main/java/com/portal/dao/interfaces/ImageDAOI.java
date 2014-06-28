@@ -9,5 +9,6 @@ public interface ImageDAOI {
     public Image getBiggestImage(String id);
     public void addImage(Image i);
     public List<Image> getAllUnapproved();
+    public void deleteImage(String id);
 
 }
