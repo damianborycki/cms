@@ -65,6 +65,31 @@ function SetCommentState($scope, $http, commentList){
 				$scope.listOfCommentsWithStatus.splice(index, 1);
 			}
 		}
-
 	  }); 
+}
+
+function GetGroups($scope, $http) {
+	$http({method: 'GET', url: '/portal/group'}).
+	  success(function(data, status, headers, config) {
+	  	$scope.groups = data;
+	  }); 
+}
+
+function AddNewGroup($scope, $http) {
+	$http({method: 'POST', url: '/portal/group',
+			data: {'name' : $scope.groupForModal.name, 'description' : $scope.groupForModal.description} }).
+	  success(function(data, status, headers, config) {
+	  	$scope.groups.push(data);
+	  }); 
+}
+
+function UpdateGroup($scope, $http, id) {
+		$http({method: 'PUT', url: '/portal/group/' + id, 
+				data: {'name' : $scope.groupForModal.name, 'description' : $scope.groupForModal.description} }).
+	  success(function(data, status, headers, config) {
+	  	var ix = $scope.getIndexOfGroupById(id);
+	  	$scope.groups(ix).id = data[id];
+	  	$scope.groups(ix).name = data[name];
+	  	$scope.groups(ix).description = data[description];
+	  });
 }

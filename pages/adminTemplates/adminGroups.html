@@ -1,6 +1,6 @@
 ﻿
       <div class="row btn-d">
-		<button class="btn btn-success btnb" data-animation="am-fade-and-scale" data-template="modal/groupModalAdd.html" bs-modal="modal" ng-click="CreateNewTag()">Dodaj nowy</button>
+		<button class="btn btn-success btnb" data-animation="am-fade-and-scale" data-template="modal/groupModalAdd.html" bs-modal="modal" ng-click="CreateNewGroup()">Dodaj grupę</button>
 
       </div>
       <div class="row row2">
@@ -9,11 +9,11 @@
 		 <th class="col-md-2 col-md">Nazwa</th>
 		 <th class="col-md-6 col-md">Opis</th>
 		 <th class="col-md-2 col-md">Akcje</th>
-		<tr ng-repeat="tag in getListOfTagsTypes(4)" ng-class="['odd', 'even'][$index %2]">
+		<tr ng-repeat="group in groups" ng-class="['odd', 'even'][$index %2]">
 		<td class="col-md-1">  <input type="checkbox" value="{{tag.id}}" ng-checked="selection.indexOf(tag.id) > -1" ng-click="toggleSelection(tag.id)"> </td>
-		<td class="col-md-2">{{tag.name}}</td>
-		<td class="col-md-6">{{tag.description}}</td>
-		<td class="col-md-2"><button class="btn btn-success btn-p" data-animation="am-fade-and-scale" data-template="modal/groupModal.html" bs-modal="modal" ng-click="SetTagForModal(tag.id)"> Edytuj</button><a class="btn btn-danger btn-p" ng-click="remove(tag.id)"> Usuń</a></td>
+		<td class="col-md-2">{{group.name}}</td>
+		<td class="col-md-6">{{group.description}}</td>
+		<td class="col-md-2"><button class="btn btn-success btn-p" data-animation="am-fade-and-scale" data-template="modal/groupModal.html" bs-modal="modal" ng-click="SetGroupForModal(group.id)"> Edytuj</button><a class="btn btn-danger btn-p" ng-click="remove(tag.id)"> Usuń</a></td>
 		</tr>
 		</table>
       </div>

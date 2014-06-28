@@ -36,4 +36,9 @@ public class GalleryController {
 
         return "/home";
     }
+    
+    @RequestMapping(value="/gallery", method=RequestMethod.DELETE)
+    public void deleteGallery(@RequestParam("id") String id) {
+        galleryDAO.deleteGallery(id);
+    }
 }
