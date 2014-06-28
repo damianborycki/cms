@@ -1,9 +1,9 @@
 ﻿
       <div class="row btn-d">
 		Rodzaj:
-		<select ng-init="orderProp = '!'" ng-model="orderProp">
-		<option value="!" selected>Wszystkie</option>
-		<option ng-repeat="tagType in getListOfTagsTypes(4)" value="{{tagType.id}}">{{tagType.name}}</option>
+		<select ng-init="orderProp = ''" ng-model="orderProp">
+		<option value='' selected>Wszystkie</option>
+		<option ng-repeat="tagType in listOfTagsTypes" value="{{tagType.id}}">{{tagType.name}}</option>
 		</select>
 		<button class="btn btn-success btnb" data-animation="am-fade-and-scale" data-template="modal/tagModalAdd.html" bs-modal="modal" ng-click="CreateNewTag()">Dodaj nowy</button>
 
@@ -19,7 +19,7 @@
 		<td class="col-md-1">  <input type="checkbox" value="{{tag.id}}" ng-checked="selection.indexOf(tag.id) > -1" ng-click="toggleSelection(tag.id)"> </td>
 		<td class="col-md-2">{{tag.name}}</td>
 		<td class="col-md-6">{{tag.description}}</td>
-		<td class="col-md-1">{{GetTagType(tag.type).name}}</td>
+		<td class="col-md-1">{{tag.type.name}}</td>
 		<td class="col-md-2"><button class="btn btn-success btn-p" data-animation="am-fade-and-scale" data-template="modal/tagModal.html" bs-modal="modal" ng-click="SetTagForModal(tag.id)"> Edytuj</button><a class="btn btn-danger btn-p" ng-click="remove(tag.id)"> Usuń</a></td>
 		</tr>
 		</table>

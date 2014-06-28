@@ -51,10 +51,12 @@
                   <img ng-src="{{getUserAvatar(komentarz.user.id)}}" class="img-responsive">
                   <h5> {{komentarz.user.login}}</h5>
 				  </a>
-				  <p> {{milisecToDate(komentarz.date)}}</p> 
+				  <p> {{komentarz.date}}</p> 
                 </div>
                 <div class="col-md-10">
-                  <p class="text-justify">{{komentarz.content}}</p>
+                  <p class="text-justify commentText" ng-class="{show: show && komentarz.content.length > 100}">{{komentarz.content}}</p>
+					<a ng-click="show = true" ng-hide="show || komentarz.content.length <= 100">Pokaż całość</a>
+					<a ng-click="show = false" ng-show="show && komentarz.content.length > 100">Ukryj</a>
                 </div>
 				<div class="col-md-10 text-right">
 					 <a class="btn btn-success btn-p" ng-if="komentarz.replies.length>0" ng-click="click(komentarz.id)" >Pokaz odpowiedzi ({{komentarz.replies.length}})</a>
@@ -68,10 +70,12 @@
 								  <img ng-src="{{getUserAvatar(odpowiedzi.user.id)}}" class="img-responsive">
 								  <h5> {{odpowiedzi.user.login}}</h5>
 								</a>
-								  <p> {{milisecToDate(odpowiedzi.date)}}</p> 
+								  <p> {{odpowiedzi.date}}</p> 
 								</div>
 								<div class="col-md-9">
-								  <p class="text-justify">{{odpowiedzi.content}}</p>
+								  <p class="text-justify commentText" ng-class="{show: show && odpowiedzi.content.length > 100}">{{odpowiedzi.content}}</p>
+									<a ng-click="show = true" ng-hide="show || odpowiedzi.content.length <= 100">Pokaż całość</a>
+									<a ng-click="show = false" ng-show="show && odpowiedzi.content.length > 100">Ukryj</a>
 								</div>
 							</div>
 							<hr style="margin: 5px 5px 5px 5px;" ng-hide="$last">

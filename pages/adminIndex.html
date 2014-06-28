@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html ng-app="studentInfoApp">
 <head>
 <script src="angular/angular.js"></script>
@@ -202,42 +202,25 @@ app.controller('TagController', function($scope, $http) {
 
 	$scope.getListOfTags = function()
 	{
-	if ($scope.listOfTags.length != 0)
-		return $scope.listOfTags;
+		GetTags($scope, $http);
+	};
 
-	GetTags($scope, $http);
-};
-
-$scope.getListOfTags();
+	$scope.getListOfTags();
 
 	$scope.listOfTagsTypes = [];
 
 	$scope.getListOfTagsTypes  = function(len)
 	{
-	if ($scope.listOfTagsTypes.length != 0)
-		return $scope.listOfTagsTypes;
-
-	var arr = [];
-	for (var i=0;i<len;i++)
-	{
-	arr.push({
-		id: (i + 1),
-		name:  "Typ" + i,
-		description: "typ"
-	});
-	}
-
-	$scope.listOfTagsTypes = arr;
-	return arr;
-};
+		GetTagTypes($scope, $http);
+	};
+	
+	$scope.getListOfTagsTypes();
 
 $scope.GetIndexOfTagById=function($id)
 {
-	var arr = $scope.getListOfTags(4);
-	
-	for (var tagIndex in arr)
+	for (var tagIndex in $scope.listOfTagsTypes)
 	{
-		if (arr[tagIndex].id == $id)
+		if ($scope.listOfTagsTypes[tagIndex].id == $id)
 		{
 			return tagIndex;
 		}
@@ -248,16 +231,7 @@ $scope.GetIndexOfTagById=function($id)
 
 $scope.GetTagType=function($id)
 {
-	var arr = $scope.getListOfTagsTypes(4);
-	
-	for (var tagTypeIndex in arr)
-	{
-		if (arr[tagTypeIndex].id == $id)
-		{
-			return arr[tagTypeIndex];
-		}
-	}
-	return;
+	return $scope.listOfTagsTypes[$scope.GetIndexOfTagById($id)];
 };
 
    
@@ -511,21 +485,16 @@ app.controller('TagTypeController', function($scope, $http) {
 
 	$scope.getListOfTagsTypes  = function()
 	{
-	if ($scope.listOfTagsTypes.length != 0)
-		return $scope.listOfTagsTypes;
-
 	GetTagTypes($scope, $http);
 };
 
 $scope.getListOfTagsTypes();
 
 $scope.GetIndexOfTagTypeById=function($id)
-{
-	var arr = $scope.getListOfTagsTypes(4);
-	
-	for (var tagIndex in arr)
+{	
+	for (var tagIndex in $scope.listOfTagsTypes)
 	{
-		if (arr[tagIndex].id == $id)
+		if ($scope.listOfTagsTypes[tagIndex].id == $id)
 		{
 			return tagIndex;
 		}
@@ -540,7 +509,7 @@ $scope.remove=function($id){
 	var idx = $scope.GetIndexOfTagTypeById($id);
 
 	if (idx > -1) {
-		$scope.listOfTagsTypes.splice(idx,1);  
+		DeleteTagType($scope.listOfTagsTypes[idx].id, $scope, $http); 
 	} 
 	
 	idx = $scope.selection.indexOf($id);
@@ -567,7 +536,7 @@ $scope.removeSelected=function(){
 			
 			if (idx > -1)
 			{
-				$scope.listOfTagsTypes.splice(idx,1); 
+				DeleteTagType($scope.listOfTagsTypes[idx].id, $scope, $http); 
 			}
 		}
 		$scope.selection = [];
@@ -592,8 +561,7 @@ $scope.SetTagForModal=function($id)
 
 $scope.UpdateTag=function($id)
 {
-	var idx = $scope.GetIndexOfTagTypeById($id);
-	$scope.listOfTagsTypes[idx] = $scope.tagForModal;
+	EditTagType($id, $scope.tagForModal.name, $scope.tagForModal.description, $scope, $http);
 }
 
 $scope.CreateNewTag=function()
@@ -607,8 +575,7 @@ $scope.CreateNewTag=function()
 
 $scope.AddNewTag=function()
 {
-	$scope.tagForModal.id = $scope.listOfTagsTypes[$scope.listOfTagsTypes.length - 1].id + 1;
-	$scope.listOfTagsTypes.push($scope.tagForModal);
+	AddTagType($scope.tagForModal.name, $scope.tagForModal.description, $scope, $http);
 }
 
   // toggle selection for a given fruit by name
