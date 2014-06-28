@@ -1,46 +1,57 @@
 
     <div clas="row">
     
-        <div class="col-md-8">            
-            <img src="http://placehold.it/800x600" class="img-responsive">    
+        <div class="col-md-8">
+        	<script language="Javascript">
+
+			$(function(){ $('#jcrop_target').Jcrop(); });
+
+		</script> 
+
+           	<img src="http://placehold.it/800x600" class="img-responsive" id="jcrop_target"/>
+ 
         </div>     
         
-        <div class="col-md-4">
-            <div class="row">
-                <div class="col-md-6">
-                    <button class="btn btn-block btn-success btnb" data-animation="am-fade-and-scale">Wczytaj plik</button>
-                </div>
-                <div class="col-md-6">
-                    <button class="btn btn-block btn-success btnb" data-animation="am-fade-and-scale">Edytuj istniejący</button>
-                </div>                
-            </div>
-            
-			<div>
-				Autor:
+	<div class="col-md-4">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="col-md-12">
+					<div class="form-group">
+						<label for="istniejacy"  style="color:black">Edytuj istniejący:</label>
+						<button class="btn btn-block btn-success btnb" data-animation="am-fade-and-scale" id="istniejacy">Edytuj istniejący</button>
+					</div>
+				</div>	
+				<form method="POST" action="Portal/image" enctype="multipart/form-data" >  <!-- w action wpisać nazwę np. PORTAL-SNAPSHOT.1.1/image-->
+					<div class="col-md-12">
+						<div class="form-group">
+							<label for="file" style="color:black">Wczytaj plik:</label>
+							<input class="form-control btn-success btnb" type="file" name="file" id="file"/>
+						</div>
+					</div>
+
+				    	<div class="col-md-12">
+						<div class="form-group">
+							<label for="author" style="color:black">Autor:</label>
+							<input class="form-control" type="text" name="author" placeholder="Dodaj autora..."/>
+						</div>
+					</div>
+					<div class="col-md-12">
+						<div class="form-group">
+							<label for="description" style="color:black">Opis:</label>
+							<input class="form-control" type="text" name="description" placeholder="Dodaj opis..." id="description"/>
+						</div>
+					</div>
+					<div class="col-md-12">
+						<div class="form-group">
+							<label for="tags" style="color:black">Tagi:</label>
+							<input class="form-control" type="text" name="tags" placeholder="Dodaj tagi..." id="tags"/>
+						</div>
+					</div>
+					<div class="col-md-12">
+				    		<input class="btn btn-block btn-success btnb" type="submit" value="Zapisz" name="Upload" id="upload" />
+					</div>
+				</form>
 			</div>
-			<div>
-                <input class="form-control" rows="1" placeholder="Dodaj autora..."></textarea>
-			</div>  
-            <br>
-            
-			<div>
-				Opis:
-			</div>          
-			<div>
-				<textarea class="form-control" rows="6" placeholder="Dodaj opis..."></textarea>
-			</div>
-            <br>
-            
-			<div>
-				Tagi:
-			</div>
-			<div>
-				<input class="form-control" rows="1" placeholder="Dodaj tagi..."></textarea>
-			</div> 
-            <br>
-            
-			<div>		
-                <button class="btn btn-block btn-success btnb" data-animation="am-fade-and-scale">Zapisz</button>
-            </div>             
+		</div>
         </div>    
     </div>

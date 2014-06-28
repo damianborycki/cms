@@ -8,6 +8,7 @@
 <script src="angularstrap/angular-strap.min.js"></script>
 <script src="angularstrap/angular-strap.tpl.min.js"></script>
 <script src="jQuerry/jquery-1.11.0.min.js"></script>
+<script src="jQuerry/jquery.Jcrop.js"></script>
 <script src="bootstrap/bootstrap.js"></script>
 <script src="js/collapseMe.js"></script>
 <script src="ckeditor/ckeditor.js"></script>
@@ -1269,17 +1270,47 @@ $scope.orderProp = '';
 app.controller('CommentModerationController', function($scope, $http) { 
 
 	$scope.listOfCommentsWithStatus = [];
+	$scope.selectedComments = [];
+	$scope.selectAll = true;
 
-	$scope.getCommentsWithStatus = function()
-	{
+	$scope.getCommentsWithStatus = function() {
 	if ($scope.listOfCommentsWithStatus.length != 0)
 		return $scope.listOfCommentsWithStatus;
 
-	GetCommentsWithStatus($scope, $http);
-};
+		GetCommentsWithStatus($scope, $http);
+	};
 
 $scope.getCommentsWithStatus();
 
+$scope.acceptSingle = function(id) {
+	SetCommentState($scope, $http, [{'id' : id, 'state' : {'id' : 2} }]);
+}
+
+$scope.rejectSingle = function(id) {
+	SetCommentState($scope, $http, [{'id' : id, 'state' : {'id' : 3} }]);
+}
+
+$scope.acceptSelected = function() {
+
+	for (var i = 0; i < $scope.selectedComments.length; i++) {
+		$scope.selectedComments[i] = {'id' : $scope.selectedComments[i], 'state' : {'id' : 2} }
+	}
+
+	SetCommentState($scope, $http, $scope.selectedComments);
+
+	$scope.selectedComments = [];
+}
+
+$scope.rejectSelected = function() {
+
+	for (var i = 0; i < $scope.selectedComments.length; i++) {
+		$scope.selectedComments[i] = {'id' : $scope.selectedComments[i], 'state' : {'id' : 3} }
+	}
+
+	SetCommentState($scope, $http, $scope.selectedComments);
+
+	$scope.selectedComments = [];
+}
 
 $scope.getListOfElementsByParent=function(id)
 {
@@ -1288,6 +1319,47 @@ $scope.getListOfElementsByParent=function(id)
 	
 	arr = $scope.getChildrenArrayRecurrency(id, $scope.listOfCommentsWithStatus);
 	return arr;
+}
+
+$scope.getIndexOfCommentById=function($id) {
+	var arr = $scope.listOfCommentsWithStatus;
+	
+	for (var i in arr)
+	{
+		if (arr[i].id == $id)
+		{
+			return i;
+		}
+	}
+	
+	return -1;
+};
+
+$scope.toggleSelection = function($id) {
+
+	var index = $scope.selectedComments.indexOf($id);
+
+		if (index > -1) {
+			$scope.selectedComments.splice(index, 1);
+		} else {
+			$scope.selectedComments.push($id);
+		}
+}
+
+$scope.invertSelection = function() {
+
+	if ($scope.selectAll) {
+
+		for (var i = 0; i < $scope.listOfCommentsWithStatus.length; i++) {
+			$scope.selectedComments.push($scope.listOfCommentsWithStatus[i].id);
+		}
+
+		$scope.selectAll = false;
+
+	} else {
+		$scope.selectedComments = [];
+		$scope.selectAll = true;
+	}
 }
   
 });

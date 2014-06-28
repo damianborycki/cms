@@ -1,22 +1,28 @@
-﻿
-      <div class="row row2">
-		 <table>
-		 <th class="col-md-1 col-md"></th>
-		 <th class="col-md-2 col-md">Użytkownik</th>
-		 <th class="col-md-6 col-md">Treść</th>
-		 <th class="col-md-1 col-md">Data</th>
-		 <th class="col-md-2 col-md">Akcje</th>
-		<tr ng-repeat="comment in listOfCommentsWithStatus.comments" ng-class="['odd', 'even'][$index %2]">
-		<td class="col-md-1 col-lg-1">  <input type="checkbox" value="{{tag.id}}" ng-checked="selection.indexOf(comment.id) > -1" ng-click="toggleSelection(comment.id)"> </td>
-		<td class="col-md-2 col-md-2">{{comment.user.login}}</td>
-		<td class="col-md-2 col-md-2">{{comment.content}}</td>
-		<td class="col-md-1 col-md-1">{{comment.date}}</td>
-		<td class="col-md-4 col-md-4"><button class="btn btn-success btn-p" ng-click="SetTagForModal(tag.id)"> Akceptuj</button><a class="btn btn-danger btn-p" ng-click="remove(tag.id)"> Odrzuć</a></td>
+﻿<style>
+#comment_table th, td#center {
+	text-align: center;
+}
+</style>
+
+
+<div class="row row2">
+	<table class="table" id="comment_table">
+		<th class="col-md-1 col-md"><input type="checkbox" ng-checked="!selectAll" ng-click="invertSelection()"></th>
+		<th class="col-md-2 col-md">Użytkownik</th>
+		<th class="col-md-5 col-md">Treść</th>
+		<th class="col-md-2 col-md">Data dodania</th>
+		<th class="col-md-2 col-md">Akcje</th>
+		<tr ng-repeat="comment in listOfCommentsWithStatus" ng-class="['odd', 'even'][$index %2]">
+			<td class="col-md-1" id="center"><input type="checkbox" ng-click="toggleSelection(comment.id)" ng-checked="selectedComments.indexOf(comment.id) > -1"/> </td>
+			<td>{{comment.user.login}}</td>
+			<td>{{comment.content}}</td>
+			<td>{{comment.date}}</td>
+			<td><button class="btn btn-success btn-p btn-sm" ng-click="acceptSingle(comment.id)"> Akceptuj</button><a class="btn btn-danger btn-p btn-sm" ng-click="rejectSingle(comment.id)"> Odrzuć</a></td>
 		</tr>
-		</table>
-      </div>
-      <div class="row btn-d">
-		<a class="btn btn-danger btnb" ng-click="removeSelected()">Odrzuć zaznaczone</a>
-		<a class="btn btn-success btnb" ng-click="removeSelected()">Akceptuj zaznaczone</a>
-		<a class="btn btn-primary btnb" ng-click="invertSelection()">Odwróć</a>
-      </div>
+	</table>
+</div>
+<div class="row btn-d">
+	<a class="btn btn-danger btnb" ng-click="rejectSelected()">Odrzuć zaznaczone</a>
+	<a class="btn btn-success btnb" ng-click="acceptSelected()">Akceptuj zaznaczone</a>
+<!-- 	<a class="btn btn-primary btnb" ng-click="invertSelection()">Odwróć</a> -->
+</div>
