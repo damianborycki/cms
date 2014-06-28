@@ -22,10 +22,12 @@ public class ImageDAOImpl implements ImageDAOI {
         return sessionFactory.openSession();
     }
 
-    public Image getImage(String id) {
+    public Image getImage(String id, long width, long height) {
         List<Image> imageList = new ArrayList<Image>();
-        Query query = openSession().createQuery("from Image i where i.id = :id");
+        Query query = openSession().createQuery("from Image i where i.id = :id and i.width = :width and i.height = :height");
         query.setParameter("id", id);
+        query.setParameter("width",width);
+        query.setParameter("height",height);
 
         imageList = query.list();
 

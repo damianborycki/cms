@@ -84,9 +84,11 @@ public class ImageController {
     
     @RequestMapping(value="/image", method=RequestMethod.GET)
     public void getImage(HttpServletResponse response,
-                         @RequestParam("id") String imageId) throws Exception
+                         @RequestParam("id") String imageId,
+                         @RequestParam("width") long width,
+                         @RequestParam("height") long height) throws Exception
     {
-        File file = new File( getImagePath(imageId));
+        File file = new File( getImagePath(imageId, width, height));
         FileInputStream is = new FileInputStream(file);
         IOUtils.copy(is, response.getOutputStream());
         response.flushBuffer();
@@ -127,9 +129,9 @@ public class ImageController {
         return System.getProperty("catalina.base") + "\\webapps\\images\\avatars\\defaultAvatar\\default_avatar.jpg";
     }
 
-    private String getImagePath(String imageId)
+    private String getImagePath(String imageId, long width, long height)
     {
-        Image image = imageDAO.getImage(imageId);
+        Image image = imageDAO.getImage(imageId,width,height);
         if( image == null || image.getApp_usr() == null)
             return getDefaultImageLink();
 
@@ -138,7 +140,7 @@ public class ImageController {
 
     private String getAvatarPath(String imageId)
     {
-        Image image = imageDAO.getImage(imageId);
+        Image image = imageDAO.getImage(imageId,100,100);
         if (image == null || image.getApp_usr() == null)
             return getDefaultAvatarLink();
 
