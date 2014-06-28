@@ -369,6 +369,10 @@ $scope.getGroups();
    
 $scope.selection = [];
 
+$scope.removeSingle = function($id) {
+	RemoveGroup($scope, $http, $id);
+}
+
 $scope.remove=function($id){ 
 	var idx = $scope.GetIndexOfTagTypeById($id);
 

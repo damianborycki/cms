@@ -93,3 +93,15 @@ function UpdateGroup($scope, $http, id) {
 	  	$scope.groups(ix).description = data[description];
 	  });
 }
+
+function RemoveGroup($scope, $http, id) {
+	$http({method: 'DELETE', url: '/portal/group/' + id}).
+	  success(function(data, status, headers, config) {
+				var index = $scope.GetIndexOfGroupById(id);
+				var i = $scope.groups.indexOf(index);
+
+				if (i > -1) {
+					$scope.groups.splice(i, 1);
+				}
+	  }); 
+}
