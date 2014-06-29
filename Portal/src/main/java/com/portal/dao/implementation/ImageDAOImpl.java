@@ -4,6 +4,7 @@ import com.portal.dao.interfaces.ImageDAOI;
 import com.portal.entity.Image;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -79,6 +80,9 @@ public class ImageDAOImpl implements ImageDAOI {
     @Transactional(readOnly=false)
     public void addImage(Image i) {
         Session session = openSession();
+				Transaction tx = session.beginTransaction();
         session.save(i);
+				tx.commit();
+				session.close();
     }
 }

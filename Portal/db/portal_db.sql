@@ -155,8 +155,7 @@ CREATE TABLE IF NOT EXISTS `image` (
   `link` varchar(255) NOT NULL,
   `type` varchar(10) NOT NULL,
   `width` bigint(20) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `id` (`id`)
+  PRIMARY KEY (`id`, `width`, `height`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
