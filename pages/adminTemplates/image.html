@@ -2,13 +2,11 @@
     <div clas="row">
     
         <div class="col-md-8">
-        	<script language="Javascript">
-
+        <script language="Javascript">
 			$(function(){ $('#jcrop_target').Jcrop(); });
-
 		</script> 
 
-           	<img src="http://placehold.it/800x600" class="img-responsive" id="jcrop_target"/>
+           	<img src="http://localhost:8080/portal/image?id=default&width=800&height=600" class="img-responsive" id="jcrop_target"/>
  
         </div>     
         
@@ -21,11 +19,11 @@
 						<button class="btn btn-block btn-success btnb" data-animation="am-fade-and-scale" id="istniejacy">Edytuj istniejący</button>
 					</div>
 				</div>	
-				<form method="POST" action="Portal/image" enctype="multipart/form-data" >  <!-- w action wpisać nazwę np. PORTAL-SNAPSHOT.1.1/image-->
+				<form method="POST" action="http://localhost:8080/portal/add_image" enctype="multipart/form-data" >
 					<div class="col-md-12">
 						<div class="form-group">
 							<label for="file" style="color:black">Wczytaj plik:</label>
-							<input class="form-control btn-success btnb" type="file" name="file" id="file"/>
+							<input class="form-control btn-success btnb" type="file" name="file" id="file" onchange="onFileSelected(event)"/>
 						</div>
 					</div>
 

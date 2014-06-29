@@ -10,7 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile; 
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.BufferedWriter;
@@ -36,53 +37,47 @@ public class ImageController {
 
     private char slash = '\\';
 
-    @RequestMapping(value="/image", method=RequestMethod.POST)
-    public String addImage(@RequestParam("imageData") MultipartFile imageData,
+    @RequestMapping(value="/add_image",method = RequestMethod.POST)
+    public ModelAndView addImage(@RequestParam("file") MultipartFile imageData,
                            @RequestParam("description") String description,
                            @RequestParam("author") String author,
                            //@RequestParam("tags") Tag tags,
-                           @RequestParam("add_usr") Long add_urs,
-                           Model model) {
+                           Model model) throws Exception 
+    {
         Image image = new Image();
         OutputStream outputStream = null;
         InputStream inputStream = null;
 
-        try
+        image.setId(image.getId() + imageData.getOriginalFilename());
+        String imagePath = getNewImagePath (imageData, image.getId());
+        image.setLink(imagePath);
+
+        File imageFile = new File( imagePath );
+        if (!imageFile.exists()) 
         {
-            image.setId(image.getId() + imageData.getOriginalFilename());
-            String imagePath = getNewImagePath (imageData, image.getId());
-            image.setLink(imagePath);
+            imageFile.createNewFile();  
+        }
+        outputStream = new FileOutputStream(imageFile);
+        inputStream = imageData.getInputStream();
 
-            File imageFile = new File( imagePath );
-            if (!imageFile.exists()) 
-            {
-                imageFile.createNewFile();  
-            }
-            outputStream = new FileOutputStream(imageFile);
-            inputStream = imageData.getInputStream();
-
-            int read = 0;  
-            byte[] bytes = new byte[1024];  
+        int read = 0;  
+        byte[] bytes = new byte[1024];  
           
-            while ((read = inputStream.read(bytes)) != -1) 
-            {
-                outputStream.write(bytes, 0, read);  
-            }
-
-            outputStream.close();
-        }
-        catch(Exception e)
+        while ((read = inputStream.read(bytes)) != -1) 
         {
-            return "/home";
+            outputStream.write(bytes, 0, read);  
         }
 
-        image.setAdd_usr(add_urs);
+        outputStream.close();
+
+        image.setAdd_usr((long)1);//add_urs);
         image.setAuthor(author);
         image.setType("jpg");
+        setImageSize(image, imagePath);
 
         imageDAO.addImage(image);
 
-        return "/home";
+        return new ModelAndView("redirect:http://localhost:8080/pages");
     }
     
     @RequestMapping(value="/image", method=RequestMethod.GET)
@@ -149,6 +144,14 @@ public class ImageController {
             imageDAO.addImage(scaledImage);
         }
         return scaledImagePath;
+    }
+
+    private void setImageSize(Image image, String imagePath) throws Exception
+    {
+        File file = new File(imagePath);
+        BufferedImage bufferedImage = ImageIO.read(file);
+        image.setHeight((long)bufferedImage.getHeight());
+        image.setWidth((long)bufferedImage.getWidth());
     }
 
     private String scaleImage(String id, String link, long width, long height)
