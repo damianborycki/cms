@@ -76,12 +76,28 @@ public class ArticleDAOImpl implements ArticleDAOI {
     }
 
     @Override
-	public List<Article> get(int num, int pageNum, String sortBy,
-			boolean ascOrder, Category category) {
-		Criteria c = this.getCriteria(num, pageNum, sortBy, ascOrder);
-		c.add(Restrictions.in("category", new Category[]{category}));
-		return c.list();
-	}
+    public List<Article> get(long categoryID, int num, int pageNum, String sortBy,
+			boolean ascOrder) {
+		
+    	List<Article> articles = new ArrayList<Article>();		
+		Criteria criteria = openSession().createCriteria(Article.class);			
+		criteria.add(Restrictions.eq("category_id.id", categoryID));		
+		criteria.setFirstResult(num*(pageNum-1));
+		criteria.setMaxResults(num);
+		if(ascOrder){
+			criteria.addOrder(Order.asc(sortBy));	
+		} else {
+			criteria.addOrder(Order.desc(sortBy));
+		}			
+		articles = criteria.list();
+		for (Article art : articles) {
+			User u = new User();
+			u.setLogin(art.getUser().getLogin());
+			art.setUser(u);
+	    	art.setComments(null);
+	    }	
+		return articles;
+    }
 
     @Override
     public List<Article> get(int num, int pageNum, String sortBy, boolean ascOrder, Tag tag) {
