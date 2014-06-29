@@ -5,6 +5,7 @@ import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonManagedReference;
 import org.codehaus.jackson.annotate.JsonProperty;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -17,6 +18,7 @@ import java.util.List;
  */
 
 @Entity
+//@JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
 @Table(name = "categories")
 public class Category {
 	
@@ -48,7 +50,7 @@ public class Category {
 
     private String description;
 
-    @JsonBackReference("parent")
+    //@JsonBackReference("parent")
     @ManyToOne
     @JoinColumn(name = "parent")
     public Category parent;

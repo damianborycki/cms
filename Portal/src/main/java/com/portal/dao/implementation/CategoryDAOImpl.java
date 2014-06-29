@@ -2,6 +2,8 @@ package com.portal.dao.implementation;
 
 import com.portal.dao.interfaces.CategoryDAOI;
 import com.portal.entity.Category;
+import com.portal.entity.Comment;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +40,17 @@ public class CategoryDAOImpl implements CategoryDAOI {
     //@FIXME problem z mapowaniem i petla po parencie
     @Override
     public List<Category> findAll() {
-        return openSession().createQuery("from Category").list();
+    	List<Category> c = openSession().createQuery("from Category").list();
+    	
+    	for (Category c1 : c) {
+    		Category ce = new Category();
+    		if (c1.getParent() != null) {
+    			ce.setId(c1.getParent().getId());
+    			c1.setParent(ce);
+    		}
+    	}
+    	
+        return c;
     }
 
     @Override
