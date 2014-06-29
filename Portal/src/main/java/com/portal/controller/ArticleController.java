@@ -64,14 +64,17 @@ public class ArticleController {
         return articleDAO.getAll();
     }
 
-    @RequestMapping(value="/articlesByTag", method=RequestMethod.GET)
+    @RequestMapping(value="/articlesByTag/{tagId}", method=RequestMethod.GET)
     public @ResponseBody List<Article> getArticlesByTag(@RequestParam("limit") int limit,
                                                    @RequestParam("pageNo") int pageNO,
                                                    @RequestParam("sortBy") String sortBy,
                                                    @RequestParam("sortOrder") Boolean sortOrder,
-                                                   @RequestBody Tag tag,
+                                                   @PathVariable("tagId") Long tagId,
                                                    HttpServletResponse response){
         response.setStatus(HttpServletResponse.SC_OK);
+
+        Tag tag = new Tag();
+        tag.setId(tagId);
 
         return articleDAO.get(limit, pageNO, sortBy, sortOrder, tag);
     }
