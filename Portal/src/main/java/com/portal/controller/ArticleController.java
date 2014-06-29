@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -64,19 +65,26 @@ public class ArticleController {
         return articleDAO.getAll();
     }
 
-    @RequestMapping(value="/articlesByTag/{tagId}", method=RequestMethod.GET)
+    @RequestMapping(value="/articlesByTag/{tagIds}", method=RequestMethod.GET)
     public @ResponseBody List<Article> getArticlesByTag(@RequestParam("limit") int limit,
                                                    @RequestParam("pageNo") int pageNO,
                                                    @RequestParam("sortBy") String sortBy,
                                                    @RequestParam("sortOrder") Boolean sortOrder,
-                                                   @PathVariable("tagId") Long tagId,
+                                                   @PathVariable("tagIds") String tagIds,
                                                    HttpServletResponse response){
         response.setStatus(HttpServletResponse.SC_OK);
 
-        Tag tag = new Tag();
-        tag.setId(tagId);
+        String[] split = tagIds.split(",");
+        List<Tag> tags = new ArrayList<>();
 
-        return articleDAO.get(limit, pageNO, sortBy, sortOrder, tag);
+        Tag temp = null;
+        for (int i = 0; i< split.length; ++i){
+            temp = new Tag();
+            temp.setId(Long.parseLong(split[i]));
+            tags.add(temp);
+        }
+
+        return articleDAO.get(limit, pageNO, sortBy, sortOrder, tags);
     }
 
     @RequestMapping(value="/articlesByCategory/{categoryID}", method=RequestMethod.GET)

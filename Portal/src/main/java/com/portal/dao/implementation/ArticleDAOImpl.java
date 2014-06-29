@@ -100,9 +100,9 @@ public class ArticleDAOImpl implements ArticleDAOI {
     }
 
     @Override
-    public List<Article> get(int num, int pageNum, String sortBy, boolean ascOrder, Tag tag) {
+    public List<Article> get(int num, int pageNum, String sortBy, boolean ascOrder, List<Tag> tags) {
         Criteria c = this.getCriteria(num, pageNum, sortBy, ascOrder);
-        c.add(Restrictions.in("tag", new Tag[]{tag}));
+        c.add(Restrictions.in("tag", tags));
         return c.list();
     }
 

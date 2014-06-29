@@ -32,7 +32,7 @@ public interface ArticleDAOI {
                       int pageNum,
                       String sortBy,
                       boolean ascOrder,
-                      Tag tag);
+                      List<Tag> tags);
 
     List<Article> get(int num,
                       int pageNum,
