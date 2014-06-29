@@ -68,7 +68,7 @@
 </style>
 <script type="text/ng-template"  id="tree_item_renderer.html">
     {{data.name}}
-    <button class="btn btn-success" data-animation="am-fade-and-scale" data-template="modal/categoryModal.html" bs-modal="modal" ng-click="SetTagForModal(data.id)"> Edytuj</button>
+    <button class="btn btn-success" data-animation="am-fade-and-scale" data-template="modal/categoryModal.html" bs-modal="modal" ng-click="SetCategoryForModal(data.id)"> Edytuj</button>
     <button class="btn btn-danger" ng-click="remove(data.id)" ng-show="getListOfElementsByParent(data.id).length == 0">Usuń</button>
     <ul class="hier-ul">
         <li class="hier-li" ng-repeat="data in getListOfElementsByParent(data.id)" ng-include="'tree_item_renderer.html'"></li>
@@ -609,7 +609,7 @@ app.controller('CategoryController', function($scope, $http) {
 
 	$scope.listOfCategories = [];
 	//$scope.categoryForModal = null;
-$scope.categoryForModal = {'name': '', 'description': ''};
+$scope.categoryForModal = {'name': '', 'description': '', 'parent':''};
 	$scope.getlistOfCategories = function()
 	{
 		if ($scope.listOfCategories.Length > 0)
@@ -630,7 +630,7 @@ $scope.categoryForModal = {'name': '', 'description': ''};
 
 	$scope.editCategory  = function(id)
 	{
-		EditCategory(id, $scope.tagForModal.name ,$scope.tagForModal.description, $scope.tagForModal.parent ,$scope, $http);
+		EditCategory(id, $scope.categoryForModal.name ,$scope.categoryForModal.description, $scope.categoryForModal.parent ,$scope, $http);
 	};
 
 	$scope.deleteCategory  = function(id)
@@ -640,7 +640,7 @@ $scope.categoryForModal = {'name': '', 'description': ''};
 
 	$scope.CreateNewCategory=function()
 	{
-		$scope.groupForModal = {'name': '', 'description': ''};
+		$scope.groupForModal = {'name': '', 'description': '', 'parent' : ''};
 	}
 	
 
@@ -758,15 +758,16 @@ $scope.remove=function($id){
 
 //$scope.categoryForModal = null;
 
-// $scope.SetTagForModal = function($id)
-// {
-// 	$scope.tagForModal = $scope.GetCategoryById($id);
-// }
+$scope.SetCategoryForModal = function($id)
+{
+	console.log($scope.GetCategoryById($id));
+	$scope.categoryForModal = $scope.GetCategoryById($id);
+}
 
-// $scope.UpdateTag=function($id)
-// {
-// 	$scope.editCategory($id);
-// }
+$scope.UpdateCategory=function($id)
+{
+	$scope.editCategory($id);
+}
 
 // $scope.CreateNewTag=function()
 // {
