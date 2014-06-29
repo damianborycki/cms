@@ -101,14 +101,17 @@ public class ArticleController {
         return articleDAO.get(limit, pageNO, sortBy, sortOrder, category, tag);
     }
 
-    @RequestMapping(value="/articlesByRank", method=RequestMethod.GET)
+    @RequestMapping(value="/articlesByRank/{rankId}", method=RequestMethod.GET)
     public @ResponseBody List<Article> getArticlesByRank(@RequestParam("limit") int limit,
                                                                    @RequestParam("pageNo") int pageNO,
                                                                    @RequestParam("sortBy") String sortBy,
                                                                    @RequestParam("sortOrder") Boolean sortOrder,
-                                                                   @RequestBody ArticleRank articleRank,
+                                                                   @PathVariable("rankId") Long rankId,
                                                                    HttpServletResponse response){
         response.setStatus(HttpServletResponse.SC_OK);
+
+        ArticleRank articleRank = new ArticleRank();
+        articleRank.setId(rankId);
 
         return articleDAO.get(limit, pageNO, sortBy, sortOrder, articleRank);
     }
