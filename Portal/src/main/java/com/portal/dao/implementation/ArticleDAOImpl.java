@@ -159,5 +159,9 @@ public class ArticleDAOImpl implements ArticleDAOI {
 		this.openSession().merge(art);
 		
 	}
+	
+	public void createNew(Article a) {
+		openSession().save(a);
+	}
 
 }

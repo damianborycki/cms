@@ -23,18 +23,20 @@ public class ArticleController {
 
     @RequestMapping(value = "/article", method=RequestMethod.POST)
     public void addArticle(@RequestBody Article article, HttpServletResponse response) {
-        articleDAO.create(article.getTitle(),
-                article.getCategory_id(),
-                article.getDescription(),
-                article.getContent(),
-                article.getUser(),
-                article.getExpiration_date(),
-                article.getPublication_date(),
-                article.getGalery(),
-                article.getImage(),
-                article.getTag(),
-                article.getArticle_owner(),
-                article.getRank());
+//        articleDAO.create(article.getTitle(),
+//                article.getCategory_id(),
+//                article.getDescription(),
+//                article.getContent(),
+//                article.getUser(),
+//                article.getExpiration_date(),
+//                article.getPublication_date(),
+//                article.getGalery(),
+//                article.getImage(),
+//                article.getTag(),
+//                article.getArticle_owner(),
+//                article.getRank());
+        
+        articleDAO.createNew(article);
         response.setStatus(HttpServletResponse.SC_CREATED);
     }
 

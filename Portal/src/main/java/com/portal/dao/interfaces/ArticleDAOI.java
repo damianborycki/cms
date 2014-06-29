@@ -69,5 +69,7 @@ public interface ArticleDAOI {
               List<Tag> tags,
               String article_owner,
               ArticleRank rank);
+    
+    void createNew(Article a);
 
 }

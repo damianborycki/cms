@@ -6,14 +6,18 @@
 
 package com.portal.entity;
 
+import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonManagedReference;
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import com.portal.init.JsonDateSerializer;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -26,6 +30,56 @@ import java.util.List;
 @Table(name = "articles")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Article {
+	
+	@JsonCreator
+    public Article(@JsonProperty("title") String title, 
+    			@JsonProperty("description") String descr,
+    			@JsonProperty("content") String content, 
+    			@JsonProperty("userId") long userId, 
+    			@JsonProperty("publicationDate") Date pubDate,
+    			@JsonProperty("expirationDate") Date expDate,
+    			@JsonProperty("categoryId") long categoryId,
+    			@JsonProperty("rankId") long rankId,
+    			@JsonProperty("tags") List<Long> tagIds,
+    			@JsonProperty("imageId") long imageId
+    			) 
+	
+	{
+		
+		this.title = title;
+		this.description = descr;
+		this.content = content;
+		User u = new User();
+		u.setId(userId);
+		this.user = u;
+		this.publication_date = pubDate;
+		this.expiration_date = expDate;
+		
+		Category c = new Category();
+		c.setId(categoryId);
+		
+		this.category_id = c;
+		
+		ArticleRank r = new ArticleRank();
+		r.setId(rankId);
+		this.rank = r;
+		
+		List<Tag> tags = new ArrayList<Tag>();
+		
+		for (Long l : tagIds) {
+			Tag t = new Tag();
+			t.setId(l);
+			tags.add(t);
+		}
+		
+		this.tag = tags;
+		
+		this.image = imageId;
+		
+		this.views = 0l;
+	}
+	
+	public Article() { }
     
     @Column(name = "id" , unique = true, columnDefinition="bigint")
     @Id
@@ -56,7 +110,7 @@ public class Article {
     
     @NotNull
     @Column(name = "date")
-    private Date date;
+    private Date date = new Date(System.currentTimeMillis());;
     
     @NotNull
     @Column(name = "publication_date")
@@ -90,7 +144,6 @@ public class Article {
     @Column(name = "image")
     private Long image;
     
-    @NotNull
     @Column(name = "views", columnDefinition="bigint default 0")
     private Long views;
 
