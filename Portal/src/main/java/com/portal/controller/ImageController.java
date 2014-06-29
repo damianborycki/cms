@@ -2,6 +2,7 @@ package com.portal.controller;
 
 import com.portal.dao.interfaces.ImageDAOI;
 import com.portal.entity.Image;
+import com.portal.entity.ImageMetadata;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -209,8 +210,8 @@ public class ImageController {
 
     @RequestMapping(value="/metadata", method=RequestMethod.GET)
     @ResponseBody
-    public List<Image> getMetadata(@RequestParam("id") String imageId) throws Exception
+    public ImageMetadata getMetadata(@RequestParam("id") String imageId) throws Exception
     {
-        return imageDAO.getAllImages(imageId);
+        return imageDAO.getImageMetadata(imageId);
     }
 }

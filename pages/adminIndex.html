@@ -238,11 +238,7 @@ $scope.GetTagType=function($id)
 $scope.selection = [];
 
 $scope.remove=function($id){ 
-	var idx = $scope.GetIndexOfTagById($id);
-
-	if (idx > -1) {
-		$scope.listOfTags.splice(idx,1);  
-	} 
+	DeleteTag($id);
 	
 	idx = $scope.selection.indexOf($id);
 	
@@ -256,20 +252,7 @@ $scope.removeSelected=function(){
 	{
 		for (var id in $scope.selection)
 		{
-			var idx = -1;
-			
-			for (var tagIndex in $scope.listOfTags)
-			{
-				if ($scope.listOfTags[tagIndex].id == $scope.selection[id])
-				{
-					idx = tagIndex;
-				}
-			}
-			
-			if (idx > -1)
-			{
-				$scope.listOfTags.splice(idx,1); 
-			}
+			DeleteTag($scope.selection[id]);
 		}
 		$scope.selection = [];
 	}
@@ -293,8 +276,7 @@ $scope.SetTagForModal=function($id)
 
 $scope.UpdateTag=function($id)
 {
-	var idx = $scope.GetIndexOfTagById($id);
-	$scope.listOfTags[idx] = $scope.tagForModal;
+	EditTag($id, $scope.tagForModal.name, $scope.tagForModal.description, $scope.tagForModal.type, $scope,$http);
 }
 
 $scope.CreateNewTag=function()
@@ -309,8 +291,7 @@ $scope.CreateNewTag=function()
 
 $scope.AddNewTag=function()
 {
-	$scope.tagForModal.id = $scope.listOfTags[$scope.listOfTags.length - 1].id + 1;
-	$scope.listOfTags.push($scope.tagForModal);
+	AddTag($scope.tagForModal.name, $scope.tagForModal.description, $scope.tagForModal.type, $scope,$http);
 }
 
   // toggle selection for a given fruit by name
@@ -508,11 +489,8 @@ $scope.GetIndexOfTagTypeById=function($id)
 $scope.selection = [];
 
 $scope.remove=function($id){ 
-	var idx = $scope.GetIndexOfTagTypeById($id);
 
-	if (idx > -1) {
-		DeleteTagType($scope.listOfTagsTypes[idx].id, $scope, $http); 
-	} 
+	DeleteTagType($id, $scope, $http); 
 	
 	idx = $scope.selection.indexOf($id);
 	
@@ -526,20 +504,7 @@ $scope.removeSelected=function(){
 	{
 		for (var id in $scope.selection)
 		{
-			var idx = -1;
-			
-			for (var tagIndex in $scope.listOfTagsTypes)
-			{
-				if ($scope.listOfTagsTypes[tagIndex].id == $scope.selection[id])
-				{
-					idx = tagIndex;
-				}
-			}
-			
-			if (idx > -1)
-			{
-				DeleteTagType($scope.listOfTagsTypes[idx].id, $scope, $http); 
-			}
+			DeleteTagType($scope.selection[id], $scope, $http); 
 		}
 		$scope.selection = [];
 	}

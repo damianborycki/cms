@@ -190,7 +190,10 @@ $scope.loadTags = function(query) {
   $scope.getUserAvatar(0);
 });
 
-app.controller('GlownaController', function($scope, SharedData) {
+
+
+
+app.controller('GlownaController', function($scope, SharedData, $http) {
 
  $scope.listOfArticles = [];
  
@@ -207,12 +210,30 @@ app.controller('GlownaController', function($scope, SharedData) {
   return $scope.listOfArticles;
 }
 
+$scope.getListOfArticles(3);
+
 
   $scope.mainCategories = SharedData.mainCategories;
   
   $scope.getImage = function(id, width, height){
     return 'http://placehold.it/' + width + 'x' + height;
   };
+  
+  $scope.articlesForCategories = {};
+  
+  $scope.getArticlesByCategoryForMain = function(id)
+  {
+	GetArticlesByCategoryForMainPage(id, 3, 1, 1, 'publication_date', $scope, $http);
+  }
+  
+  $scope.getArticlesForCategorySection = function()
+  {
+	for (var i in $scope.mainCategories.data)
+	{
+		$scope.getArticlesByCategoryForMain($scope.mainCategories.data[i].id);
+	}
+  }
+  $scope.getArticlesForCategorySection();
 });
 
 
@@ -582,6 +603,7 @@ $scope.addListener();
 	$scope.waitingForResponse = false;
 	$scope.Registered = false;
 });
+
 
 
 

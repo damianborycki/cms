@@ -1,23 +1,30 @@
 package com.portal.dao.implementation;
 
-import com.portal.dao.interfaces.ImageDAOI;
-import com.portal.entity.Image;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.portal.dao.interfaces.ImageDAOI;
+import com.portal.dao.interfaces.UserDAOI;
+import com.portal.entity.User;
+import com.portal.entity.Image;
+import com.portal.entity.ImageMetadata;
 
 @Repository
 public class ImageDAOImpl implements ImageDAOI {
 
     @Autowired
     private SessionFactory sessionFactory;
+
+    @Autowired
+    private UserDAOI userDAO;
 
     private Session openSession() {
         return sessionFactory.openSession();
@@ -75,6 +82,30 @@ public class ImageDAOImpl implements ImageDAOI {
             }
         }
         return biggestImage;
+    }
+
+    private Image getFirstImage(String id)
+    {
+        List<Image> imageList = getAllImages(id);
+        if( imageList.size() <= 0 )
+            return null;
+        return imageList.get(0);
+    }
+
+    public ImageMetadata getImageMetadata(String id)
+    {
+        Image image = getFirstImage(id);
+        if(image == null)
+            return null;
+        
+        String authorUserName = image.getAuthor();
+
+        User author = userDAO.getUser(authorUserName);
+
+        ImageMetadata result = new ImageMetadata();
+        result.setAuthor(author.getName() + " " + author.getSurname());
+        result.setDescription(image.getDescription());
+        return result;
     }
 
     @Transactional(readOnly=false)

@@ -5,6 +5,33 @@ $http({method: 'GET', url: '/portal/tag'}).
 	  }); 
 	};
 	
+	function AddTag(name, description, type, $scope, $http){
+	$http.post('/portal/tag', {name: name, description: description, type: type}).
+	  success(function(data, status, headers, config) {
+		$scope.getListOfTags();
+	  }).
+	  error(function(data, status, headers, config) {
+	}); 
+	};
+	
+	function EditTag(id, name, description, type, $scope, $http){
+$http.put('/portal/tag/' + id, {name: name, description: description, type: type}).
+	  success(function(data, status, headers, config) {
+		$scope.getListOfTags();
+	  }).
+	  error(function(data, status, headers, config) {
+	}); 
+	};
+	
+	function DeleteTag(id, $scope, $http){
+$http.delete('/portal/tag/' + id).
+	  success(function(data, status, headers, config) {
+		$scope.getListOfTags();
+	  }).
+	  error(function(data, status, headers, config) {
+	}); 
+	};
+	
 function GetTagTypes($scope, $http){
 $http({method: 'GET', url: '/portal/type'}).
 	  success(function(data, status, headers, config) {
