@@ -1,0 +1,96 @@
+﻿
+        <div class="row containerm">
+		  <div class="column">
+			<p>
+				<h1 class="comment1"> Wszystkie komentarze </h1>
+			</p>
+          </div>
+          <div class="well list1">
+            <h1 class="art-tytul">{{article.title}} </h1>
+			<p class="art-data">{{milisecToDate(article.publication_date)}}</p>
+            <div class="col-md-4">
+				<img src="{{getImage(article.image, 300, 200)}}" class="img-responsive">
+            </div>
+            <p class="art-tresc">
+              {{article.description}}
+            </p>
+			<br><br>
+            <a class="btn1 btn-lg btn-primary" href="#article/{{articleId}}">Powrót do artykułu</a>
+          </div>
+		</div>
+      
+		 <div class="row containerm">
+          <div class="column" style="margin: 16px 5px 5px 5px;" ng-hide="currentUserName.data == ''">
+            <textarea class="span6" rows="9" placeholder="Napisz komentarz..." required="" 
+			style="margin: 0px; height: 180px; width: 100%; resize:vertical;"></textarea>
+            <a class="btn1 btn-lg btn-primary">KOMENTUJ</a>
+			 <p class="comment2">Komentarze ({{total}})</p>
+          </div>
+		  <div class="column">
+			<p>
+				<h3 class="comment3"> 
+					<a href="#comments">Najnowsze</a> | <a href="#comments">Najstarsze</a> | <a href="#comments">Najczęściej odpowiadane</a>
+				</h3>
+			</p>
+          </div>
+	
+		  <div class="column" style="margin: 16px 5px 5px 5px;">
+				<div paging page="commentsPage" page-size="commentsLimit" total="total" show-prev-next="true" adjacent="1" paging-action="ChangePage(page)"></div>
+          <ul class="list-group ">
+            <li class="list-group-item list1" ng-repeat="komentarz in articleComments">
+              <div class="row ">
+                <div class="col-md-2">
+				<a href="#userPage/{{komentarz.user.login}}">
+                  <img ng-src="{{getUserAvatar(komentarz.user.id)}}" class="img-responsive">
+                  <h5> {{komentarz.user.login}}</h5>
+				  </a>
+				  <p> {{komentarz.date}}</p> 
+                </div>
+                <div class="col-md-10">
+                  <p class="text-justify commentText" ng-class="{show: show && komentarz.content.length > 100}">{{komentarz.content}}</p>
+					<a ng-click="show = true" ng-hide="show || komentarz.content.length <= 100">Pokaż całość</a>
+					<a ng-click="show = false" ng-show="show && komentarz.content.length > 100">Ukryj</a>
+                </div>
+				<div class="col-md-10 text-right">
+					 <a class="btn btn-success btn-p" ng-if="komentarz.replies.length>0" ng-click="click(komentarz.id)" >Pokaz odpowiedzi ({{komentarz.replies.length}})</a>
+					 <div ng-show="showButton(komentarz.id)">
+						<div class="containerm" style="margin-left: auto; margin-right: auto; border-radius: 32px; padding: 10px 10px 5px 10px; margin-top: 10px; margin-bottom: 10px;">
+						<ul class="list-group">
+							<li class="list-group-item list1" ng-repeat="odpowiedzi in komentarz.replies">
+							  <div class="row">
+								<div class="col-md-3 text-left">
+								<a href="#userPage/{{odpowiedzi.user.login}}">
+								  <img ng-src="{{getUserAvatar(odpowiedzi.user.id)}}" class="img-responsive">
+								  <h5> {{odpowiedzi.user.login}}</h5>
+								</a>
+								  <p> {{odpowiedzi.date}}</p> 
+								</div>
+								<div class="col-md-9">
+								  <p class="text-justify commentText" ng-class="{show: show && odpowiedzi.content.length > 100}">{{odpowiedzi.content}}</p>
+									<a ng-click="show = true" ng-hide="show || odpowiedzi.content.length <= 100">Pokaż całość</a>
+									<a ng-click="show = false" ng-show="show && odpowiedzi.content.length > 100">Ukryj</a>
+								</div>
+							</div>
+							<hr style="margin: 5px 5px 5px 5px;" ng-hide="$last">
+						</li>
+						</ul>
+						</div>
+					 </div>
+					<div class="btn btn-success btn-p" ng-click="clickComment(komentarz.id)" ng-hide="currentUserName.data == ''">Odpowiedz</div>
+					<div ng-show="showCommentButton(komentarz.id)">
+					 <div class="row">
+						<div class="column">
+						<textarea class="span6" rows="9" placeholder="Napisz komentarz..." required="" 
+						style="margin: 0px; height: 180px; width: 100%; resize:vertical;" ng-model="replyComment[komentarz.id]"></textarea>
+						<a class="btn btn-success btn-p" ng-click="addReplyComment(komentarz.id)">DODAJ</a>
+						</div>
+					 </div>
+					</div>
+				</div>
+			</div>
+			<hr style="margin: 5px 5px 5px 5px;" ng-hide="$last">
+		</li>
+		</ul>
+				<div paging page="commentsPage" page-size="commentsLimit" total="total" show-prev-next="true" adjacent="1" paging-action="ChangePage(page)"></div>	
+		</div>
+		</div>

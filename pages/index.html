@@ -1,0 +1,774 @@
+﻿<!doctype html>
+<html ng-app="studentInfoApp">
+<head>
+<title>Student Info</title>
+<script src="angular/angular.js"></script>
+<script src="angular/angular-sanitize.js"></script>
+<script src="angular/angular-animate.js"></script>
+<script src="angular/angular-route.js"></script>
+<script src="angularstrap/angular-strap.min.js"></script>
+<script src="angularstrap/angular-strap.tpl.min.js"></script>
+<script src="jQuerry/jquery-1.11.0.min.js"></script>
+    <script src="slick/slick.min.js"></script>
+    <script src="angular/slick.min.js"></script>
+    <script src="angular/paging.js"></script>
+<script src="bootstrap/bootstrap.js"></script>
+    <script src="tagInput/ng-tags-input.min.js"></script>
+    <link rel="stylesheet" href="tagInput/ng-tags-input.min.css" />
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="css/collapsingMenu.css" rel="stylesheet">
+<link href="slick/slick.css" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css" >
+<script src="js/collapseMe.js"></script>
+<script src="js/mocki.js"></script>
+<script src="js/REST.js"></script>
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;sensor=false&amp;libraries=places"></script>
+<script>
+Date.prototype.yyyymmddhhmmss = function() {         
+                                
+        var yyyy = this.getFullYear().toString();                                    
+        var mm = (this.getMonth()+1).toString(); // getMonth() is zero-based         
+        var dd  = this.getDate().toString();   
+		
+        var hh = this.getHours().toString();                                  
+        var min = this.getMinutes().toString();
+        var ss  = this.getSeconds().toString();          
+                            
+        return yyyy + '-' + (mm[1]?mm:"0"+mm[0]) + '-' + (dd[1]?dd:"0"+dd[0]) + ' ' + (hh[1]?hh:"0"+hh[0]) + ':' + (min[1]?min:"0"+min[0]) + ':' + (ss[1]?ss:"0"+ss[0]);
+   };
+   
+var app = angular.module('studentInfoApp', ['ngSanitize', 'ngRoute', 'mgcrea.ngStrap', 'ngTagsInput', 'slick', 'paging']);
+
+app.config(['$routeProvider',
+  function($routeProvider) {
+    $routeProvider.
+      when('/article/:articleId', {
+        templateUrl: 'templates/artykul.html',
+        controller: 'ArticleController'
+      }).
+      when('/articleList', {
+        templateUrl: 'templates/listaArtykolow.html',
+        controller: 'ListaArtykolowControler'
+      }).
+      when('/main', {
+        templateUrl: 'templates/glowna.htm',
+        controller: 'GlownaController'
+      }).
+      when('/userPage/:userName', {
+        templateUrl: 'templates/stronaUzytkownika.html',
+        controller: 'StronaUzytkownikaController'
+      }).
+      when('/register', {
+        templateUrl: 'templates/rejestracja.html',
+        controller: 'RejestracjaController'
+      }).
+      when('/comments/:articleId', {
+        templateUrl: 'templates/komentarze.html',
+        controller: 'CommentsController'
+      }).
+      otherwise({
+        redirectTo: '/main'
+      });
+  }]);
+
+'use strict';
+
+
+app.config(function($dropdownProvider) {
+  angular.extend($dropdownProvider.defaults, {
+    html: true
+  });
+})
+
+app.factory("SharedData", function(){
+
+  return {currentUserName: {data: "" },
+			mainCategories: {data: "" },
+			tags: {data: "" }  }
+
+});
+
+app.service('tags', function($q) {
+  
+  this.load = function(tags) {
+    var deferred = $q.defer();
+    deferred.resolve(tags);
+    return deferred.promise;
+  };
+}); 
+
+app.controller('topAndSideContrler', function($scope, $http, SharedData, tags) {
+
+ $scope.listOfArticles = [];
+ 
+    $scope.getListOfArticles = function(len)
+  {
+  
+  if ($scope.listOfArticles.length != 0)
+		return $scope.listOfArticles;
+		
+  var arr = getListOfArticles(len);
+
+  $scope.listOfArticles = arr;
+  
+  return $scope.listOfArticles;
+}
+
+$scope.userLoggedIn = false;
+
+$scope.LogIn = function(login, pass)
+{
+	Login(login, pass, $scope, $http);
+}
+
+$scope.LogOut = function()
+{
+	Logout($scope, $http);
+}
+  
+  $scope.getImage = function(id, width, height){
+    return 'http://placehold.it/' + width + 'x' + height;
+  };
+  
+  
+  $scope.currentUserName = SharedData.currentUserName;
+  
+  $scope.GetCurrentUserName = function()
+{
+	GetCurrentUserLogin($scope, $http);
+}
+
+$scope.getUser = function(name)
+{
+	GetUser(name, $scope, $http);
+}
+
+$scope.GetCurrentUserName();
+  
+  $scope.getTags = function()
+  {
+	GetTags($scope, $http);
+  }
+  
+$scope.selectedTags = [];
+$scope.tags = SharedData.tags;
+$scope.getTags();
+
+$scope.loadTags = function(query) {
+    return tags.load($scope.tags.data);
+  };
+  
+  $scope.getTagString = function() {
+	var out = [];
+	for (i in $scope.selectedTags)
+  {
+	out.push($scope.selectedTags[i].id);
+	}
+	
+	return out.toString();
+  }
+
+  $scope.mainCategories = SharedData.mainCategories;
+  $scope.getMainCategries = function()
+  {
+	GetMainCategories($scope, $http);
+  }
+  $scope.getMainCategries();
+  
+  
+  
+  $scope.UserAvatarPath = "";
+  
+  $scope.getUserAvatar = function(id){
+	if ($scope.UserAvatarPath.length != 0)
+		return $scope.UserAvatarPath;
+	
+	$scope.UserAvatarPath = "/portal/avatar?id=" + id;
+	return $scope.UserAvatarPath;
+  };
+  
+  $scope.getUserAvatar(0);
+});
+
+app.controller('GlownaController', function($scope, SharedData) {
+
+ $scope.listOfArticles = [];
+ 
+    $scope.getListOfArticles = function(len)
+  {
+  
+  if ($scope.listOfArticles.length != 0)
+		return $scope.listOfArticles;
+		
+  var arr = getListOfArticles(len);
+
+  $scope.listOfArticles = arr;
+  
+  return $scope.listOfArticles;
+}
+
+
+  $scope.mainCategories = SharedData.mainCategories;
+  
+  $scope.getImage = function(id, width, height){
+    return 'http://placehold.it/' + width + 'x' + height;
+  };
+});
+
+
+
+
+
+app.controller('ArticleController', function($scope, $http, SharedData, $routeParams) {
+
+ $scope.getImage = function(id, width, height){
+    return '/portal/image?id=' + id;
+  };
+  
+$scope.getUserAvatar = function(id){
+	return "/portal/avatar?id=" + id;
+  };
+  
+ $scope.listOfArticles = [];
+ 
+    $scope.getListOfArticles = function(len)
+  {
+  
+  if ($scope.listOfArticles.length != 0)
+		return $scope.listOfArticles;
+		
+  var arr = getListOfArticles(len);
+
+  $scope.listOfArticles = arr;
+  
+  return $scope.listOfArticles;
+}
+
+  $scope.currentUserName = SharedData.currentUserName;
+$scope.tags = SharedData.tags;
+
+$scope.getTagName = function(id)
+{
+	for (i in $scope.tags.data)
+	{
+		if ($scope.tags.data[i].id == id)
+			return $scope.tags.data[i].name;
+	}
+	return "";
+}
+
+$scope.articleId = $routeParams.articleId;
+$scope.article = null;
+
+
+	$scope.getArticle = function(articleId)
+	{
+		GetArticle(articleId, $scope, $http);
+	}
+	
+	$scope.getArticle($scope.articleId);
+
+   
+   $scope.artykuly = 
+   [{
+   id: 1,
+   title: "Tytul",
+   description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+   content: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\nLorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+   publication_date: "2012-04-23 18:25:43",
+   views:10,
+   image: 1,
+   tag: [1,0],
+   rank: 1,  
+   commntCount: 5
+   },
+   {
+   title: "Tytul",
+   description: "Opis",
+   publication_date: "2012-04-23 18:25:43",
+   views:10,
+   image: 1,
+   tag: [1,5,9],
+   rank: 1,  
+   commntCount: 5
+   },
+   {
+   title: "Tytul",
+   description: "Opis",
+   publication_date: "2012-04-23 18:25:43",
+   views:10,
+   image: 1,
+   tag: [1,5,9],
+   rank: 1,  
+   commntCount: 5
+   }];
+   
+   $scope.komentarze =
+   [{
+   commentId : 12345,
+   userId : 1,
+   content : "Sample content",
+   date : "25.04.14",
+   time: "14.15",
+   nr_of_replies : 0
+   },
+   {
+   commentId : 12346,
+   userId : 2,
+   content : "Sample content234234",
+   date : "25.04.14",
+   time: "14.15",
+   nr_of_replies : 4
+   }];
+
+   var showRepliesToComment = 0;
+
+   $scope.click = function(commentId){
+   if (showRepliesToComment == commentId)
+   {
+     showRepliesToComment = 0;
+	 }
+	 else
+	 {
+		showRepliesToComment = commentId
+	 }
+   }
+   $scope.showButton = function(commentId){
+     return showRepliesToComment == commentId;
+   }
+   
+   var showComment = 0;
+
+   $scope.clickComment = function(commentId){
+	if (showComment == commentId)
+	{
+     showComment = 0;
+	 }
+	 else
+	 {
+     showComment = commentId;
+	 }
+   }
+   $scope.showCommentButton = function(commentId){
+     return showComment == commentId;
+   }
+   
+	$scope.articleComments = null;
+
+	$scope.commentsPage = 1;
+	$scope.commentsLimit = 20;
+	$scope.total = 30;
+
+	$scope.getArticleComments = function(articleId)
+	{
+		GetArticleComments(articleId, $scope.commentsPage, $scope.commentsLimit, $scope, $http);
+	}
+
+	$scope.getArticleComments($scope.articleId);
+	
+  $scope.milisecToDate = function(miliseconds)
+  {
+	return new Date(miliseconds).yyyymmddhhmmss();
+  }
+  
+  $scope.replyComment = {};
+  $scope.commentContent = "";
+  
+  $scope.addComment = function(parentId)
+  {
+	CommentArticle($scope.currentUserName.data, $scope.articleId, $scope.commentContent, null, $scope, $http);
+	$scope.commentContent = "";
+  }
+  
+  $scope.addReplyComment = function(parentId)
+  {
+	CommentArticle($scope.currentUserName.data, $scope.articleId, $scope.replyComment[parentId], parentId, $scope, $http);
+	$scope.replyComment[parentId] = "";
+	$scope.clickComment(parentId);
+  }
+});
+
+
+
+
+
+app.controller('ListaArtykolowControler', function($scope, $http, $location) {
+  
+  $scope.getImage = function(id, width, height){
+    return 'http://placehold.it/' + width + 'x' + height;
+  };
+  
+ $scope.listOfArticles = [];
+ 
+  $scope.getListOfArticles = function(len)
+  {
+  if ($scope.listOfArticles.length != 0)
+		return $scope.listOfArticles;
+		
+  var arr = getListOfArticles(len);
+
+  $scope.listOfArticles = arr;
+  
+  return $scope.listOfArticles;
+}
+
+$scope.search = $location.search()['search'];
+
+if ($scope.search != null)
+{
+	$scope.search = $scope.search.split(",");
+}
+
+$scope.category = $location.search()['category'];
+
+});
+
+
+
+
+
+app.controller('StronaUzytkownikaController', function($scope, $http, $routeParams, SharedData) {
+  
+  $scope.user = null;
+
+$scope.getUserById = function(id)
+{
+	if ($scope.user != null)
+		return $scope.user;
+		
+  var user = GetUserById(id);
+
+  $scope.user = user;
+  
+  return $scope.user;
+}
+
+$scope.currentUserName = SharedData.currentUserName;
+
+$scope.userName = $routeParams.userName;
+
+$scope.getUserById(1);
+
+$scope.searchedUser =null;
+
+$scope.getUser = function(name)
+{
+	GetUser(name, $scope, $http);
+}
+
+$scope.getUser($scope.userName);
+
+
+$scope.userComments = null;
+
+$scope.commentsPage = 1;
+$scope.commentsLimit = 20;
+$scope.total = 30;
+
+$scope.getUserComments = function(userId)
+{
+	GetUserComments(userId, $scope.commentsPage, $scope.commentsLimit, $scope, $http);
+}
+
+$scope.getUserComments($scope.userName);
+
+	$scope.ChangePage = function(page)
+	{
+		$scope.commentsPage = page;
+		$scope.getUserComments(1);
+	}
+  
+ $scope.listOfArticles = [];
+ 
+  $scope.getListOfArticles = function(len)
+  {
+  if ($scope.listOfArticles.length != 0)
+		return $scope.listOfArticles;
+		
+  var arr = getListOfArticles(len);
+
+  $scope.listOfArticles = arr;
+  
+  return $scope.listOfArticles;
+}
+
+ $scope.listOfComments = [];
+    $scope.getListOfCommentsMadeByUser = function(userId, len)
+  {
+  if ($scope.listOfComments.length != 0)
+		return $scope.listOfComments;
+		
+  var arr = getListOfCommentsMadeByUser(userId, len);
+
+  $scope.listOfComments = arr;
+
+  return arr;
+}
+
+  $scope.getImage = function(id, width, height){
+    return 'http://placehold.it/' + width + 'x' + height;
+  };
+  
+  $scope.showEditDesc = false;
+  
+  $scope.click = function(){
+   $scope.showEditDesc = !$scope.showEditDesc;
+   }
+   
+  $scope.milisecToDate = function(miliseconds)
+  {
+	return new Date(miliseconds).yyyymmddhhmmss();
+  }
+});
+
+app.controller('RejestracjaController', function($scope, $http) {
+
+  var options = {    
+    types: ['(cities)'],    
+    componentRestrictions: {country: "pl"}
+  };
+  var input = document.getElementById('city');
+  var autocomplete = new google.maps.places.Autocomplete(input, options);
+  
+	$scope.user = 
+	{'login': '',
+	'email': '',
+	'password': '',
+	'password1': '',
+	'firstname': '',
+	'lastname': '',
+	'gender': '',
+	'city': ''};
+
+	  $scope.getAddress = function(viewValue) {
+		var params = {address: viewValue, sensor: false};
+		return $http.get('http://maps.googleapis.com/maps/api/geocode/json', {params: params})
+		.then(function(res) {
+		  return res.data.results;
+		});
+	  };
+  
+	$scope.register = function()
+	{
+		Register($scope.user.login, $scope.user.password, $scope.user.email, $scope.user.firstname, $scope.user.lastname, $scope.user.city, $scope.user.gender, $scope, $http);
+	}
+	$scope.waitingForResponse = false;
+	$scope.Registered = false;
+});
+
+
+
+
+app.controller('CommentsController', function($scope, $http, $routeParams, SharedData) {
+   
+   $scope.article = null;
+   
+   
+  $scope.currentUserName = SharedData.currentUserName;
+$scope.articleId = $routeParams.articleId;
+$scope.article = null;
+
+
+	$scope.getArticle = function(articleId)
+	{
+		GetArticle(articleId, $scope, $http);
+	}
+	
+	$scope.getArticle($scope.articleId);
+   
+   showRepliesToComment = 0;
+
+   $scope.click = function(commentId){
+   if (showRepliesToComment == commentId)
+   {
+     showRepliesToComment = 0;
+	 }
+	 else
+	 {
+		showRepliesToComment = commentId
+	 }
+   }
+   $scope.showButton = function(commentId){
+     return showRepliesToComment == commentId;
+   }
+   
+   showComment = 0;
+
+   $scope.clickComment = function(commentId){
+	if (showComment == commentId)
+	{
+     showComment = 0;
+	 }
+	 else
+	 {
+     showComment = commentId;
+	 }
+   }
+   $scope.showCommentButton = function(commentId){
+     return showComment == commentId;
+   }
+   
+	$scope.articleComments = null;
+
+	$scope.commentsPage = 1;
+	$scope.commentsLimit = 20;
+	$scope.total = 30;
+
+	$scope.getArticleComments = function(articleId)
+	{
+		GetArticleComments(articleId, $scope.commentsPage, $scope.commentsLimit, $scope, $http);
+	}
+
+	$scope.getArticleComments($scope.articleId);
+	
+	$scope.ChangePage = function(page)
+	{
+		$scope.commentsPage = page;
+		$scope.getArticleComments($scope.article.id);
+	}
+	
+  $scope.milisecToDate = function(miliseconds)
+  {
+	return new Date(miliseconds).yyyymmddhhmmss();
+  }
+  
+  $scope.replyComment = {};
+  $scope.commentContent = "";
+  
+  $scope.addComment = function(parentId)
+  {
+	CommentArticle($scope.currentUserName.data, $scope.articleId, $scope.commentContent, null, $scope, $http);
+	$scope.commentContent = "";
+  }
+  
+  $scope.addReplyComment = function(parentId)
+  {
+	CommentArticle($scope.currentUserName.data, $scope.articleId, $scope.replyComment[parentId], parentId, $scope, $http);
+	$scope.replyComment[parentId] = "";
+	$scope.clickComment(parentId);
+  }
+});
+
+</script>
+</head>
+<body>
+
+<div class="bs-docs-section" ng-controller="topAndSideContrler">
+    <div class="container">
+	<div class="row containerm">
+	 <div class="header" style="margin-top: 10px;">
+      <div class="col-md-4">
+        <a href="#main"><img src=""></a>
+      </div>
+      <div class="col-md-4 center-block">
+        <div class="input-group col-xs-10">
+			<tags-input ng-model="selectedTags" display-property="name" add-on-enter="false" placeholder="Dodaj tag">
+				<auto-complete source="loadTags($query)" max-results-to-show="3"></auto-complete>
+			</tags-input>
+            <span class="input-group-btn">
+          <a class="btn btn-primary" type="button" href="#articleList?search={{getTagString()}}"ng-disabled="selectedTags.length == 0">Szukaj</a>
+          </span>
+        </div>
+      </div>
+      <div class="col-md-2">
+        <a href="#register" ng-hide="userLoggedIn">Załóż konto</a>
+      </div>
+      <div class="col-md-2">
+        <div class='dropdown'>
+			  <button type='button' class='btn dropdown-toggle' data-toggle='dropdown'>
+				<img ng-src="{{UserAvatarPath}}">
+				<b class='caret'></b>
+			  </button>
+			  <ul class="dropdown-menu list-unstyled" ng-hide="userLoggedIn">
+				<li>
+				  <form role="form">
+					<div class="form-group">
+					  <label>Login</label>
+					  <input class="form-control" placeholder="" type="text" ng-model="login">
+					</div>
+					<div class="form-group">
+					  <label for="exampleInputPassword1">Hasło</label>
+					  <input class="form-control" id="exampleInputPassword1" placeholder="Hasło" type="password" ng-model="pass">
+					</div>
+					<button type="submit" class="btn btn-default" ng-click="LogIn(login, pass)">Zaloguj</button>
+				  </form>
+				</li>
+			  </ul>
+			  <ul class="dropdown-menu list-unstyled" ng-show="userLoggedIn">
+				<li>
+					<a class="btn btn-default" href="#userPage/{{currentUserName.data}}">Konto</a>
+					<a class="btn btn-default" ng-click="LogOut()">Wyloguj</a>
+				</li>
+			  </ul>
+        </div>
+      </div>
+	  </div>
+	  
+      <div>
+
+        <div class="col-md-12">
+          <div class="navbar1 navbar-default navbar-inverse">
+           
+            <div class="navbar-collapse collapse">
+              <ul class="nav navbar-nav nav-collapsing" id="topMenu">
+                <li ng_repeat="category in mainCategories.data"><a href="#articleList?category={{category.name}}"><b>{{category.name}}</b></a>
+                </li>
+                <li><a class="dropdown-toggle" data-toggle="dropdown">
+                    Więcej <i class="glyphicon glyphicon-chevron-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-right" id="collapsed"></ul>
+                </li>
+              </ul>
+            </div>
+          </div>
+		   <div class="green"></div>
+        </div>
+	  </div>
+		
+					
+    </div>
+      <div class="row">
+		<div class="col-md-9">
+		<div class="ng-view">
+		</div>
+		</div>
+        <div class="col-md-3">
+		<div class="row containerm">
+		<div class="col-md-12" style="color: #000">
+          <h2 class="center1">Popularne</h2>
+          <ul class="list-group">
+            <li class="list-group-item list1" ng-repeat="zajawka in getListOfArticles(3)">
+              <a href="#article/{{$index + 1}}">
+                <img ng-src="{{getImage(artykul.image, 300, 200)}}" class="img-responsive">
+                <h4 class="zajawka-title">{{zajawka.title}}</h4> 
+                <div class="caption">
+                  <p class="zajawka-text-justify">{{zajawka.description}}</p>
+                </div>
+              </a>
+			  <hr style="margin: 5px 5px 5px 5px;" ng-hide="$last">
+            </li>
+          </ul>
+          <h2 class="center1">Ważne</h2>
+          <ul class="list-group">
+            <li class="list-group-item list1" ng-repeat="zajawka in getListOfArticles(3)">
+              <a href="#article/{{$index + 1}}">
+                <img ng-src="{{getImage(artykul.image, 300, 200)}}" class="img-responsive">
+                <h4 class="zajawka-title">{{zajawka.title}}</h4> 
+                <div class="caption">
+                  <p class="zajawka-text-justify">{{zajawka.description}}</p>
+                </div>
+              </a>
+			  <hr ng-hide="$last">
+            </li>
+          </ul>
+        </div>
+      </div>
+      </div>
+      </div>
+      <div class="foot">
+      <a href='#'> O stronie </a> | <a href='#'> Kontakt </a> | <a href='#'> Regulamin </a>
+      </div>
+</div>
+
+</body>
+</html>
