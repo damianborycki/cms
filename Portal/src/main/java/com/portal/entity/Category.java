@@ -1,8 +1,10 @@
 package com.portal.entity;
 
 import org.codehaus.jackson.annotate.JsonBackReference;
+import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonManagedReference;
+import org.codehaus.jackson.annotate.JsonProperty;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -17,6 +19,24 @@ import java.util.List;
 @Entity
 @Table(name = "categories")
 public class Category {
+	
+	@JsonCreator
+    public Category(@JsonProperty("name") String name, 
+    			@JsonProperty("description") String descr,
+    			@JsonProperty("parentId") Long parentId ) {
+		
+        this.name = name;
+        this.description = descr;
+        
+        if (parentId != null) {
+	        Category c = new Category();
+	        c.setId(parentId);
+	        this.parent = c;
+        }
+        
+    }
+	
+	public Category() { }
 
     @Column(name = "id", unique = true)
     @Id
