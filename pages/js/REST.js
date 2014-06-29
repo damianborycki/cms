@@ -120,3 +120,12 @@ function CommentArticle(login, articleId, content, parent, $scope, $http){
 		$scope.waitingForResponse = false;
 	}); 
 };
+
+function GetArticlesByCategoryForMainPage(categoryId, limit, pageNo, sortOrder, sortBy, $scope, $http){
+	$http.get('/portal/articlesByCategory/' + categoryId + '?limit=' + limit + '&pageNo=' + pageNo + '&sortOrder=' + sortOrder + '&sortBy=' + sortBy).
+	  success(function(data, status, headers, config) {
+		$scope.articlesForCategories[categoryId] = data;
+	  }).
+	  error(function(data, status, headers, config) {
+	}); 
+};

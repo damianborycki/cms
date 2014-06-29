@@ -109,7 +109,7 @@ public class UserController {
 	@RequestMapping(value="/user/{login:.+}", method=RequestMethod.PATCH)
 	public void setData(@PathVariable("login") String login, @RequestBody User user, HttpServletResponse response) {
 		
-		if(userDAO.getLoggedUser().getLogin() == login) {
+		if(userDAO.getLoggedUser().getLogin().trim().equals(login.trim())) {
 			try {
 				userDAO.setUserData(user);
 				response.setStatus(HttpServletResponse.SC_OK);

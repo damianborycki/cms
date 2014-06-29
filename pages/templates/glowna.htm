@@ -1,7 +1,7 @@
 			<div class="row containerm">
 				<div class="col-md-8">
 				<slick arrows="false" dots="true" infinite="true" autoplay="true" autoplaySpeed="300" speed="2000" slides-to-show="1" touch-move="false" slides-to-scroll="1">
-					<div ng-repeat="zajawka in getListOfArticles(3)">
+					<div ng-repeat="zajawka in listOfArticles">
 					<a href="#article/{{$index + 1}}">
 						<img ng-src="{{getImage(zajawka.image, 560, 300)}}">
 						<div class="carousel-caption">
@@ -14,7 +14,7 @@
 			  </div>
 			  <div class="col-md-4">
 				  <ul class="list-group" style="margin-top: 5px">
-					<li class="list-group-item list1" style="padding-top: 1px; padding-bottom: 1px;" ng-repeat="zajawka in getListOfArticles(3)">
+					<li class="list-group-item list1" style="padding-top: 1px; padding-bottom: 1px;" ng-repeat="zajawka in listOfArticles">
 					  <a href="#article/{{$index + 1}}">
 						<h4>{{zajawka.title}}</h4> 
 					  </a>
@@ -25,7 +25,7 @@
 		  </div>
           <div class="row containerm" ng-repeat="category in mainCategories.data">
 			<h1 style="margin-left: 20px;"> {{category.name}} </h1>
-            <div class="col-md-4"  ng-repeat="zajawka in getListOfArticles(3)">
+            <div class="col-md-4"  ng-repeat="zajawka in articlesForCategories[category.id]">
 				<a href="#article/{{$index + 1}}">
                 <img ng-src="{{getImage(zajawka.image, 300, 200)}}" class="img-responsive">
                <div class="bg-title"> <h4>{{zajawka.title}}</h4> </div>

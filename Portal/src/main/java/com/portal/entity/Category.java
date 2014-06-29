@@ -50,7 +50,7 @@ public class Category {
 
     private String description;
 
-    //@JsonBackReference("parent")
+    @JsonBackReference("parent")
     @ManyToOne
     @JoinColumn(name = "parent")
     public Category parent;
