@@ -529,7 +529,7 @@ app.controller('RejestracjaController', function($scope, $http) {
   };
   var input = document.getElementById('city');
   var autocomplete = new google.maps.places.Autocomplete(input, options);
-  
+
 	$scope.user = 
 	{'login': '',
 	'email': '',
@@ -540,6 +540,25 @@ app.controller('RejestracjaController', function($scope, $http) {
 	'gender': '',
 	'city': ''};
 
+$scope.addListener = function() {
+  google.maps.event.addListener(autocomplete, 'place_changed', function() {
+
+    var places = autocomplete.getPlace();
+
+    var city = places.adr_address.split('>')[1];
+    city = city.split('<')[0];
+
+    input.value = "siem";
+    $scope.user.city = city;
+
+    setTimeout(function(){
+        input.value = $scope.user.city;    
+    },1);
+});
+}
+
+$scope.addListener();
+
 	  $scope.getAddress = function(viewValue) {
 		var params = {address: viewValue, sensor: false};
 		return $http.get('http://maps.googleapis.com/maps/api/geocode/json', {params: params})
@@ -547,6 +566,14 @@ app.controller('RejestracjaController', function($scope, $http) {
 		  return res.data.results;
 		});
 	  };
+
+    $scope.removeCountry = function() {
+
+      if($scope.user.city.indexOf(',') !== -1)
+      {
+        $scope.user.city = $scope.user.city.split(',')[0];
+      }
+    }
   
 	$scope.register = function()
 	{
@@ -555,7 +582,6 @@ app.controller('RejestracjaController', function($scope, $http) {
 	$scope.waitingForResponse = false;
 	$scope.Registered = false;
 });
-
 
 
 
