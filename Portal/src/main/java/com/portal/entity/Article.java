@@ -151,6 +151,7 @@ public class Article {
         this.date = date;
     }
 
+    @JsonSerialize(using=JsonDateSerializer.class)
     public Date getPublication_date() {
         return publication_date;
     }
@@ -159,6 +160,7 @@ public class Article {
         this.publication_date = publication_date;
     }
 
+    @JsonSerialize(using=JsonDateSerializer.class)
     public Date getExpiration_date() {
         return expiration_date;
     }

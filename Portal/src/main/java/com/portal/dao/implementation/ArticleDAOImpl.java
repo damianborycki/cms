@@ -52,7 +52,13 @@ public class ArticleDAOImpl implements ArticleDAOI {
 
     @Override
     public List<Article> getAll() {
-        return openSession().createQuery("FROM Article").list();
+        
+    	List<Article> a = openSession().createQuery("FROM Article").list();
+    	for (Article art : a) {
+    		art.setComments(null);
+    	}
+    	
+    	return a;
     }
 
     @Override
