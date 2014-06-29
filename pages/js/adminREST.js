@@ -49,19 +49,32 @@ $http({method: 'GET', url: '/portal/articleRank'}).
 function GetCategories($scope, $http){
 $http({method: 'GET', url: '/portal/category'}).
 	  success(function(data, status, headers, config) {
+	  	console.log(data);
 		$scope.listOfCategories = data;
 	  }); 
 	};
 	
-function AddCategory(name, description, parent, $scope, $http){
-$http({method: 'POST', url: '/portal/category', data: {name: name, description: description, parent: parent}}).
+function AddCategory($scope, $http){
+
+var name = $scope.categoryForModal.name;
+var parent = $scope.categoryForModal.parent;
+var descr = $scope.categoryForModal.description;
+
+if (parent == "null") parent = null;
+
+console.log(parent);
+
+$http({method: 'POST', url: '/portal/category', data: {name: name, description: descr, parentId: parent}}).
 	  success(function(data, status, headers, config) {
 		$scope.getlistOfCategories();
 	  }); 
 	};
 	
 function EditCategory(id, name, description, parent, $scope, $http){
-$http({method: 'PUT', url: '/portal/category/' + id, data: {name: name, description: description, parent: parent}}).
+
+if (parent == "null") parent = null;
+
+$http({method: 'PUT', url: '/portal/category/' + id, data: {name: name, description: description, parentId: parent}}).
 	  success(function(data, status, headers, config) {
 		$scope.getlistOfCategories();
 	  }); 

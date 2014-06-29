@@ -9,7 +9,7 @@
       <div class="green"></div>
           </div>
           <div class="panel-body">
-          <form class="form-horizontal" role="form" name="regForm" action="index.html">
+          <form class="form-horizontal" role="form" name="regForm">
             <div class="form-group">
               <label for="inputLogin3" class="col-sm-2 col-md-offset-2 control-label">Login*</label>
               <div class="col-sm-4">
@@ -91,7 +91,7 @@
               <label for="inputCity3" class="col-sm-2 col-md-offset-2 control-label">Miasto</label>
               <div class="col-sm-4">
               <!-- <input id="town" placeholder="Miasto" class="form-control" type="text" ng-model="user.town"> -->
-                <input type="text" class="form-control" id="city" ng-model="user.city" placeholder="Podaj miasto">
+                <input ng-change="removeCountry()" type="text" class="form-control" id="city" ng-model="user.city" placeholder="Podaj miasto">
               </div>              
             </div>
             <span class="col-md-offset-4">* - pola obowiązkowe</span>

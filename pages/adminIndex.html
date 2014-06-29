@@ -68,7 +68,7 @@
 </style>
 <script type="text/ng-template"  id="tree_item_renderer.html">
     {{data.name}}
-    <button class="btn btn-success" data-animation="am-fade-and-scale" data-template="modal/categoryModal.html" bs-modal="modal" ng-click="SetTagForModal(data.id)"> Edytuj</button>
+    <button class="btn btn-success" data-animation="am-fade-and-scale" data-template="modal/categoryModal.html" bs-modal="modal" ng-click="SetCategoryForModal(data.id)"> Edytuj</button>
     <button class="btn btn-danger" ng-click="remove(data.id)" ng-show="getListOfElementsByParent(data.id).length == 0">Usuń</button>
     <ul class="hier-ul">
         <li class="hier-li" ng-repeat="data in getListOfElementsByParent(data.id)" ng-include="'tree_item_renderer.html'"></li>
@@ -419,7 +419,7 @@ $scope.invertSelection=function()
 	}
 }
 
-$scope.groupForModal = null;
+//$scope.groupForModal = null;
 
 $scope.SetGroupForModal=function($id)
 {
@@ -448,16 +448,10 @@ $scope.CreateNewTag=function()
 $scope.CreateNewGroup=function()
 {
 	$scope.groupForModal = {'name': '', 'description': ''};
-	// $scope.tagForModal.id = $scope.listOfTagsTypes[$scope.listOfTagsTypes.length - 1].id + 1;
-	// $scope.listOfTagsTypes.push($scope.tagForModal);
-	//AddNewGroup($scope, $http);
 }
 
 $scope.AddNewGroup=function()
 {
-	//$scope.groupForModal() = {'name': '', 'description': ''};
-	// $scope.tagForModal.id = $scope.listOfTagsTypes[$scope.listOfTagsTypes.length - 1].id + 1;
-	// $scope.listOfTagsTypes.push($scope.tagForModal);
 	AddNewGroup($scope, $http);
 }
 
@@ -614,8 +608,9 @@ $scope.orderProp = '';
 app.controller('CategoryController', function($scope, $http) {  
 
 	$scope.listOfCategories = [];
-
-	$scope.getlistOfCategories  = function()
+	//$scope.categoryForModal = null;
+$scope.categoryForModal = {'name': '', 'description': '', 'parent':''};
+	$scope.getlistOfCategories = function()
 	{
 		if ($scope.listOfCategories.Length > 0)
 		{
@@ -625,21 +620,28 @@ app.controller('CategoryController', function($scope, $http) {
 	};
 
 	$scope.getlistOfCategories();
-
-	$scope.addCategory  = function()
+//$scope.categoryForModal = null;
+	$scope.addCategory = function()
 	{
-		AddCategory($scope.tagForModal.name ,$scope.tagForModal.description, $scope.tagForModal.parent ,$scope, $http);
+
+		console.log($scope.categoryForModal.name);
+		AddCategory($scope, $http);
 	};
 
 	$scope.editCategory  = function(id)
 	{
-		EditCategory(id, $scope.tagForModal.name ,$scope.tagForModal.description, $scope.tagForModal.parent ,$scope, $http);
+		EditCategory(id, $scope.categoryForModal.name ,$scope.categoryForModal.description, $scope.categoryForModal.parent ,$scope, $http);
 	};
 
 	$scope.deleteCategory  = function(id)
 	{
 		DeleteCategory(id ,$scope, $http);
 	};
+
+	$scope.CreateNewCategory=function()
+	{
+		$scope.groupForModal = {'name': '', 'description': '', 'parent' : ''};
+	}
 	
 
 $scope.getListOfElementsByParent=function(id)
@@ -754,37 +756,38 @@ $scope.remove=function($id){
 };
 
 
-$scope.tagForModal = null;
+//$scope.categoryForModal = null;
 
-$scope.SetTagForModal = function($id)
+$scope.SetCategoryForModal = function($id)
 {
-	$scope.tagForModal = $scope.GetCategoryById($id);
+	console.log($scope.GetCategoryById($id));
+	$scope.categoryForModal = $scope.GetCategoryById($id);
 }
 
-$scope.UpdateTag=function($id)
+$scope.UpdateCategory=function($id)
 {
 	$scope.editCategory($id);
 }
 
-$scope.CreateNewTag=function()
-{
-	$scope.tagForModal = {
-		id: -1,
-      name:  "",
-      parent: "null"
-   };
-}
+// $scope.CreateNewTag=function()
+// {
+// 	$scope.tagForModal = {
+// 		id: -1,
+//       name:  "",
+//       parent: "null"
+//    };
+// }
 
-$scope.AddNewTag=function()
-{
-	$scope.addCategory();
-}
+// $scope.AddNewTag=function()
+// {
+// 	$scope.addCategory();
+// }
   
-  $scope.getImage = function(id, width, height){
-    return 'http://placehold.it/' + width + 'x' + height;
-  };
+//   $scope.getImage = function(id, width, height){
+//     return 'http://placehold.it/' + width + 'x' + height;
+//   };
   
-$scope.orderProp = '';
+//$scope.orderProp = '';
   
 });
 
