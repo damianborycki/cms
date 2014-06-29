@@ -65,7 +65,7 @@ public class ImageController {
 
         imageDAO.addImage(image);
 
-        return new ModelAndView("redirect:http://localhost:8080/pages");
+        return new ModelAndView("redirect:http://localhost:8080/pages/adminIndex.html#/image");
     }
     
     @RequestMapping(value="/image", method=RequestMethod.GET)
