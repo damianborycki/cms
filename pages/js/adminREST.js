@@ -39,15 +39,6 @@ $http.delete('/portal/type/' + id).
 	}); 
 };
 
-function AddArticle(title, description, content, category_id, user, expiration_date, publication_date, tags, rank, galery, date, image, $scope, $http){
-	$http.post('/portal/article', {title: title, description: description, content: content, category_id: category_id, user: user, expiration_date: expiration_date, publication_date: publication_date, tags: tags, rank: rank, galery: galery, date: date, image: image}).
-	  success(function(data, status, headers, config) {
-		$scope.getListOfTagsTypes();
-	  }).
-	  error(function(data, status, headers, config) {
-	}); 
-};
-
 function GetArticleRank($scope, $http){
 $http({method: 'GET', url: '/portal/articleRank'}).
 	  success(function(data, status, headers, config) {
@@ -104,6 +95,43 @@ function SetCommentState($scope, $http, commentList){
 		}
 	  }); 
 }
+
+function GetArticles($scope, $http) {
+	$http.get('/portal/articles').
+	  success(function(data, status, headers, config) {
+	  	$scope.listOfArticles = data;
+	  }); 
+}
+
+function GetArticle(articleId, $scope, $http){
+	$http.get('/portal/article/' + articleId).
+	  success(function(data, status, headers, config) {
+		$scope.newArticle = data;
+		$scope.selectedTags = data.tag;
+		$scope.newArticle.publication_date = parseDate($scope.newArticle.publication_date);
+		$scope.newArticle.expiration_date = parseDate($scope.newArticle.expiration_date);
+	  }).
+	  error(function(data, status, headers, config) {
+
+	}); 
+};
+
+function AddArticle(title, description, content, category_id, user, expiration_date, publication_date, tags, rank, galery, date, image, $scope, $http){
+	$http.post('/portal/article', {title: title, description: description, content: content, categoryId: category_id, userId: 1, expiration_date: expiration_date, publication_date: publication_date, tags: tags, rankId: rank}).
+	  success(function(data, status, headers, config) {
+	  }).
+	  error(function(data, status, headers, config) {
+	}); 
+};
+
+function EditArticle(id, title, description, content, category_id, user, expiration_date, publication_date, tags, rank, galery, date, image, $scope, $http){
+	$http.put('/portal/article/' + id, {title: title, description: description, content: content, categoryId: category_id, userId: 1, expiration_date: expiration_date, publication_date: publication_date, tags: tags, rankId: rank}).
+	  success(function(data, status, headers, config) {
+	  }).
+	  error(function(data, status, headers, config) {
+	}); 
+};
+
 
 function GetGroups($scope, $http) {
 	$http({method: 'GET', url: '/portal/group'}).

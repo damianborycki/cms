@@ -37,23 +37,23 @@
 				<div>
 				
 				Kategoria:
-				<select ng-model="newArticle.category">
-				<option ng-selected="{{tagType.id == newArticle.rank}}" ng-repeat="tagType in listOfCategories" value="{{tagType.id}}">{{tagType.name}}</option>
+				<select ng-model="newArticle.category_id.id">
+				<option ng-selected="{{category.id == newArticle.category_id.id}}" ng-repeat="category in listOfCategories" value="{{category.id}}">{{category.name}}</option>
 				</select>
 				</div>
 				<div>
 				
 				Ranga:
-				<select ng-model="newArticle.rank">
-				<option ng-selected="{{tagType.id == newArticle.rank}}" ng-repeat="tagType in listOfArticleRanks" value="{{tagType.id}}">{{tagType.name}}</option>
+				<select ng-model="newArticle.rank.id">
+				<option ng-selected="{{tagType.id == newArticle.rank.id}}" ng-repeat="tagType in listOfArticleRanks" value="{{tagType.id}}">{{tagType.name}}</option>
 				</select>
 				</div>
 			</div>
 			</div>
 		</form>
-		<a type="button" class="btn btn-primary" href="adminArticles.html">Zamknij</a>
+		<a type="button" class="btn btn-primary" href="#articles">Zamknij</a>
 		<a type="button" class="btn btn-success" ng-show="newArticle.id == -1" ng-click="addArticle()">Dodaj</a>
-		<a type="button" class="btn btn-success" ng-show="newArticle.id > -1">Zapisz zmiany</a>
+		<a type="button" class="btn btn-success" ng-show="newArticle.id > -1" ng-click="editArticle()">Zapisz zmiany</a>
 		</div>
 			</div>
 		<div class="row">

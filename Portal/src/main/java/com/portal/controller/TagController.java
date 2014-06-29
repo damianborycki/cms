@@ -3,12 +3,11 @@ package com.portal.controller;
 import com.portal.dao.interfaces.TagDAOI;
 import com.portal.entity.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -33,6 +32,24 @@ public class TagController {
     @ResponseBody
     public List<Tag> getAll(){
         return tagDAO.findAll();
+    }
+
+    @RequestMapping(value="/tag/{id}", method=RequestMethod.DELETE)
+    public void delete(@PathVariable Long id, HttpServletResponse response) {
+        tagDAO.delete(id);
+        response.setStatus(HttpServletResponse.SC_OK);
+    }
+
+    @RequestMapping(value="/tag", method= RequestMethod.PUT, consumes= MediaType.APPLICATION_JSON_VALUE)
+    public void edit(@PathVariable Long id, @RequestBody Tag tag, HttpServletResponse response) {
+        tagDAO.edit(id, tag);
+        response.setStatus(HttpServletResponse.SC_OK);
+    }
+
+    @RequestMapping(value="/tag", method= RequestMethod.POST, consumes= MediaType.APPLICATION_JSON_VALUE)
+    public void create(@RequestBody Tag tag, HttpServletResponse response) {
+        tagDAO.create(tag);
+        response.setStatus(HttpServletResponse.SC_OK);
     }
 
 }
