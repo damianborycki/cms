@@ -63,7 +63,7 @@ public class WebAppConfig {
 		properties.put(PROPERTY_NAME_HIBERNATE_SHOW_SQL, env.getRequiredProperty(PROPERTY_NAME_HIBERNATE_SHOW_SQL));
 
         //TODO odkomentowac --> application.properties:::: validate=waliduje czy tabele w bazie sa poprawne, create=dropuje i tworzy nowe tabelki
-        //properties.put(PROPERTY_NAME_HIBERNATE_HBM2DDL_AUTO, env.getRequiredProperty(PROPERTY_NAME_HIBERNATE_HBM2DDL_AUTO));
+        properties.put(PROPERTY_NAME_HIBERNATE_HBM2DDL_AUTO, env.getRequiredProperty(PROPERTY_NAME_HIBERNATE_HBM2DDL_AUTO));
 
 
 		return properties;	

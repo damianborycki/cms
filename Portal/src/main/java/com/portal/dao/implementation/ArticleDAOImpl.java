@@ -4,6 +4,7 @@ package com.portal.dao.implementation;
 import com.portal.dao.interfaces.ArticleDAOI;
 import com.portal.entity.*;
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
@@ -102,7 +103,16 @@ public class ArticleDAOImpl implements ArticleDAOI {
     @Override
     public List<Article> get(int num, int pageNum, String sortBy, boolean ascOrder, List<Tag> tags) {
         Criteria c = this.getCriteria(num, pageNum, sortBy, ascOrder);
-        c.add(Restrictions.in("tag", tags));
+
+        List<Long> tagIds = new ArrayList<>(tags.size());
+
+        for (int i = 0; i < tags.size(); ++i){
+            tagIds.add(tags.get(i).getId());
+        }
+
+        c.createAlias("tag", "t");
+        c.add(Restrictions.in("t.id", tagIds));
+
         return c.list();
     }
 
