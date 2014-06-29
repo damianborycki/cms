@@ -113,7 +113,7 @@ public class ArticleDAOImpl implements ArticleDAOI {
 		
 		Article art = new Article();
 		art.setTitle(title);
-		art.setCategory(category);
+		art.setCategory_id(category);
 		art.setDescription(description);
 		
 		art.setContent(content);
@@ -142,7 +142,7 @@ public class ArticleDAOImpl implements ArticleDAOI {
 		Article art = this.getById(id);
 		
 		art.setTitle(title);
-		art.setCategory(category);
+		art.setCategory_id(category);
 		art.setDescription(description);
 		
 		art.setContent(content);
