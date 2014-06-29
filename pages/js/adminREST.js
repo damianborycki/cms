@@ -49,6 +49,7 @@ $http({method: 'GET', url: '/portal/articleRank'}).
 function GetCategories($scope, $http){
 $http({method: 'GET', url: '/portal/category'}).
 	  success(function(data, status, headers, config) {
+	  	console.log(data);
 		$scope.listOfCategories = data;
 	  }); 
 	};
@@ -70,7 +71,10 @@ $http({method: 'POST', url: '/portal/category', data: {name: name, description: 
 	};
 	
 function EditCategory(id, name, description, parent, $scope, $http){
-$http({method: 'PUT', url: '/portal/category/' + id, data: {name: name, description: description, parent: 1}}).
+
+if (parent == "null") parent = null;
+
+$http({method: 'PUT', url: '/portal/category/' + id, data: {name: name, description: description, parentId: parent}}).
 	  success(function(data, status, headers, config) {
 		$scope.getlistOfCategories();
 	  }); 
