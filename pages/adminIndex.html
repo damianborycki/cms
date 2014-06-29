@@ -419,7 +419,7 @@ $scope.invertSelection=function()
 	}
 }
 
-$scope.groupForModal = null;
+//$scope.groupForModal = null;
 
 $scope.SetGroupForModal=function($id)
 {
@@ -448,16 +448,10 @@ $scope.CreateNewTag=function()
 $scope.CreateNewGroup=function()
 {
 	$scope.groupForModal = {'name': '', 'description': ''};
-	// $scope.tagForModal.id = $scope.listOfTagsTypes[$scope.listOfTagsTypes.length - 1].id + 1;
-	// $scope.listOfTagsTypes.push($scope.tagForModal);
-	//AddNewGroup($scope, $http);
 }
 
 $scope.AddNewGroup=function()
 {
-	//$scope.groupForModal() = {'name': '', 'description': ''};
-	// $scope.tagForModal.id = $scope.listOfTagsTypes[$scope.listOfTagsTypes.length - 1].id + 1;
-	// $scope.listOfTagsTypes.push($scope.tagForModal);
 	AddNewGroup($scope, $http);
 }
 
@@ -614,8 +608,9 @@ $scope.orderProp = '';
 app.controller('CategoryController', function($scope, $http) {  
 
 	$scope.listOfCategories = [];
-
-	$scope.getlistOfCategories  = function()
+	//$scope.categoryForModal = null;
+$scope.categoryForModal = {'name': '', 'description': ''};
+	$scope.getlistOfCategories = function()
 	{
 		if ($scope.listOfCategories.Length > 0)
 		{
@@ -625,10 +620,12 @@ app.controller('CategoryController', function($scope, $http) {
 	};
 
 	$scope.getlistOfCategories();
-
-	$scope.addCategory  = function()
+//$scope.categoryForModal = null;
+	$scope.addCategory = function()
 	{
-		AddCategory($scope.tagForModal.name ,$scope.tagForModal.description, $scope.tagForModal.parent ,$scope, $http);
+
+		console.log($scope.categoryForModal.name);
+		AddCategory($scope, $http);
 	};
 
 	$scope.editCategory  = function(id)
@@ -640,6 +637,11 @@ app.controller('CategoryController', function($scope, $http) {
 	{
 		DeleteCategory(id ,$scope, $http);
 	};
+
+	$scope.CreateNewCategory=function()
+	{
+		$scope.groupForModal = {'name': '', 'description': ''};
+	}
 	
 
 $scope.getListOfElementsByParent=function(id)
@@ -754,37 +756,37 @@ $scope.remove=function($id){
 };
 
 
-$scope.tagForModal = null;
+//$scope.categoryForModal = null;
 
-$scope.SetTagForModal = function($id)
-{
-	$scope.tagForModal = $scope.GetCategoryById($id);
-}
+// $scope.SetTagForModal = function($id)
+// {
+// 	$scope.tagForModal = $scope.GetCategoryById($id);
+// }
 
-$scope.UpdateTag=function($id)
-{
-	$scope.editCategory($id);
-}
+// $scope.UpdateTag=function($id)
+// {
+// 	$scope.editCategory($id);
+// }
 
-$scope.CreateNewTag=function()
-{
-	$scope.tagForModal = {
-		id: -1,
-      name:  "",
-      parent: "null"
-   };
-}
+// $scope.CreateNewTag=function()
+// {
+// 	$scope.tagForModal = {
+// 		id: -1,
+//       name:  "",
+//       parent: "null"
+//    };
+// }
 
-$scope.AddNewTag=function()
-{
-	$scope.addCategory();
-}
+// $scope.AddNewTag=function()
+// {
+// 	$scope.addCategory();
+// }
   
-  $scope.getImage = function(id, width, height){
-    return 'http://placehold.it/' + width + 'x' + height;
-  };
+//   $scope.getImage = function(id, width, height){
+//     return 'http://placehold.it/' + width + 'x' + height;
+//   };
   
-$scope.orderProp = '';
+//$scope.orderProp = '';
   
 });
 

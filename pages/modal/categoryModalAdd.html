@@ -12,7 +12,7 @@
 			</div>
 			
 			<div class="col-md-9">
-				<input ng-model="tagForModal.name">
+				<input ng-model="categoryForModal.name">
 			</div>
 		</div>
 		<div class="row">
@@ -20,17 +20,19 @@
 				Rodzic:
 			</div>
 			<div class="col-md-9">
-				<select ng-model="tagForModal.parent">
-				<option ng-selected="{{'null' == tagForModal.parent}}" value="null">null</option>
-				<option ng-selected="{{tagType.id == tagForModal.parent}}" ng-repeat="tagType in GetFlatCategoriesList()" value="{{tagType.id}}">{{tagType.name}}</option>
+				<select ng-model="categoryForModal.parent">
+				<option ng-selected="{{'null' == categoryForModal.parent}}" value="null">null</option>
+				<option ng-selected="{{categoryForModal.id == categoryForModal.parent}}" ng-repeat="cat in GetFlatCategoriesList()" value="{{cat.id}}">{{cat.name}}</option>
 				</select>
 			</div>
+
+			<textarea style="margin: 0px; height: 180px; width: 100%; resize:vertical;" ng-model="categoryForModal.description"></textarea>
 		</div>
 		* - pola obowiązkowe
 	  </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" ng-click="$hide()">Zamknij</button>
-        <button type="button" class="btn btn-success" ng-disabled="tagForModal.name == '' || tagForModal.name.length < 3 || tagForModal.parent == tagForModal.id" ng-click="AddNewTag(); $hide()">Dodaj</button>
+        <button type="button" class="btn btn-success" ng-disabled="categoryForModal.name == '' || categoryForModal.name.length < 3 || categoryForModal.parent == categoryForModal.id" ng-click="addCategory(); $hide()">Dodaj</button>
       </div>
     </div>
   </div>

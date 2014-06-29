@@ -32,7 +32,8 @@ function Register(login, pass, email, firstname, lastname, city, gender, $scope,
 		$scope.waitingForResponse = false;
 		$scope.Registered = false;
 	});
-	alert("Rejestracja zakończona powodzeniem! Możesz teraz już przejść do logowania."); 
+	//alert("Rejestracja zakończona powodzeniem! Możesz teraz już przejść do logowania."); 
+	window.location.href = '/pages';
 };
 
 function GetCurrentUserLogin($scope, $http){

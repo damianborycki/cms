@@ -62,15 +62,24 @@ $http({method: 'GET', url: '/portal/category'}).
 	  }); 
 	};
 	
-function AddCategory(name, description, parent, $scope, $http){
-$http({method: 'POST', url: '/portal/category', data: {name: name, description: description, parent: parent}}).
+function AddCategory($scope, $http){
+
+var name = $scope.categoryForModal.name;
+var parent = $scope.categoryForModal.parent;
+var descr = $scope.categoryForModal.description;
+
+if (parent == "null") parent = null;
+
+console.log(parent);
+
+$http({method: 'POST', url: '/portal/category', data: {name: name, description: descr, parentId: parent}}).
 	  success(function(data, status, headers, config) {
 		$scope.getlistOfCategories();
 	  }); 
 	};
 	
 function EditCategory(id, name, description, parent, $scope, $http){
-$http({method: 'PUT', url: '/portal/category/' + id, data: {name: name, description: description, parent: parent}}).
+$http({method: 'PUT', url: '/portal/category/' + id, data: {name: name, description: description, parent: 1}}).
 	  success(function(data, status, headers, config) {
 		$scope.getlistOfCategories();
 	  }); 
