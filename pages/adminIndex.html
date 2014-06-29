@@ -369,6 +369,10 @@ $scope.getGroups();
    
 $scope.selection = [];
 
+$scope.removeSingle = function($id) {
+	RemoveGroup($scope, $http, $id);
+}
+
 $scope.remove=function($id){ 
 	var idx = $scope.GetIndexOfTagTypeById($id);
 
@@ -613,18 +617,33 @@ app.controller('CategoryController', function($scope, $http) {
 
 	$scope.getlistOfCategories  = function()
 	{
-	if ($scope.listOfCategories.length != 0)
-		return $scope.listOfCategories;
+		if ($scope.listOfCategories.Length > 0)
+		{
+			return;
+		}
+			GetCategories($scope, $http);
+	};
 
+	$scope.getlistOfCategories();
+
+	$scope.addCategory  = function()
+	{
+		AddCategory($scope.tagForModal.name ,$scope.tagForModal.description, $scope.tagForModal.parent ,$scope, $http);
+	};
+
+	$scope.editCategory  = function(id)
+	{
+		EditCategory(id, $scope.tagForModal.name ,$scope.tagForModal.description, $scope.tagForModal.parent ,$scope, $http);
+	};
+
+	$scope.deleteCategory  = function(id)
+	{
+		DeleteCategory(id ,$scope, $http);
+	};
 	
-	GetCategories($scope, $http);
-};
-
-$scope.getlistOfCategories();
 
 $scope.getListOfElementsByParent=function(id)
 {
-	$scope.getlistOfCategories();
 	var arr = [];
 	
 	arr = $scope.getChildrenArrayRecurrency(id, $scope.listOfCategories);
@@ -687,11 +706,9 @@ $scope.getFlatCategoryListRecurrency = function(arr)
 
 $scope.GetIndexOfCategoryById=function($id)
 {
-	var arr = $scope.getlistOfCategories();
-	
-	for (var tagIndex in arr)
+	for (var tagIndex in $scope.listOfCategories)
 	{
-		if (arr[tagIndex].id == $id)
+		if ($scope.listOfCategories[tagIndex].id == $id)
 		{
 			return tagIndex;
 		}
@@ -746,8 +763,7 @@ $scope.SetTagForModal = function($id)
 
 $scope.UpdateTag=function($id)
 {
-	var idx = $scope.GetIndexOfCategoryById($id);
-	$scope.listOfCategories[idx] = $scope.tagForModal;
+	$scope.editCategory($id);
 }
 
 $scope.CreateNewTag=function()
@@ -761,8 +777,7 @@ $scope.CreateNewTag=function()
 
 $scope.AddNewTag=function()
 {
-	$scope.tagForModal.id = $scope.listOfCategories[$scope.listOfCategories.length - 1].id + 1;
-	$scope.listOfCategories.push($scope.tagForModal);
+	$scope.addCategory();
 }
   
   $scope.getImage = function(id, width, height){
@@ -941,48 +956,16 @@ $scope.getTags();
 $scope.loadTags = function(query) {
     return tags.load($scope.listOfTags);
   };
-
-	$scope.listOfArticles = [];
-
-	$scope.getlistOfArticles  = function(len)
-	{
-	if ($scope.listOfArticles.length != 0)
-		return $scope.listOfArticles;
-
+  
+  $scope.getSelectedTagIds = function()
+  {
 	var arr = [];
-	for (var i=0;i<len;i++)
+	for (var i in $scope.selectedTags)
 	{
-	arr.push({
-		id: i,
-		title: "Tytul" + (i + 1),
-		description: "Opis",
-		publication_date: "2014-04-23 18:25:43",
-		views:10,
-		image: 1,
-		tag: [1,5,9],
-		rank: 1,  
-		commntCount: 5
-		});
+		arr.push($scope.selectedTags[i].id);
 	}
-
-	$scope.listOfArticles = arr;
 	return arr;
-};
-
-$scope.GetIndexOfArticleById=function($id)
-{
-	var arr = $scope.getlistOfArticles(4);
-	
-	for (var articleIndex in arr)
-	{
-		if (arr[articleIndex].id == $id)
-		{
-			return articleIndex;
-		}
-	}
-	
-	return -1;
-};
+  }
 
 $scope.newArticle = null;
 		
@@ -1002,10 +985,12 @@ $scope.GetArticle=function(id)
 		description: "",
 		content: "",
 		publication_date: new Date(),
+		expiration_date: new Date(),
 		views:0,
 		image: 1,
 		tag: [],
 		rank: 1,  
+		category_id: 1, 
 		commntCount: 0
 		};
 	}
@@ -1033,64 +1018,36 @@ $scope.GetArticle=function(id)
 
 $scope.GetArticle($routeParams.articleId);
   
-  $scope.getImage = function(id, width, height){
-    return 'http://placehold.it/' + width + 'x' + height;
+ $scope.getImage = function(id, width, height){
+    return '/portal/image?id=' + id;
   };
   
-$scope.orderProp = '';
+  $scope.listOfArticleRanks = [];
+
+	$scope.getlistOfArticleRanks  = function()
+	{
+		GetArticleRank($scope, $http);
+	}
+  $scope.getlistOfArticleRanks();
 
 $scope.startDate = new Date();
 $scope.endDate = new Date();
-  
-$scope.invertSelection=function()
-{
-	for (var tagIndex in $scope.listOfTags)
-	{
-		$scope.toggleSelection($scope.listOfTags[tagIndex].id)
-	}
-}
+ 
 
-	$scope.toggleSelection = function toggleSelection(id) {
-    var idx = $scope.newArticle.tag.indexOf(id);
-
-    // is currently selected
-    if (idx > -1) {
-      $scope.newArticle.tag.splice(idx, 1);
-    }
-
-    // is newly selected
-    else {
-      $scope.newArticle.tag.push(id);
-    }
-  };
-  
-  
-  
 	$scope.listOfCategories = [];
 
 	$scope.getlistOfCategories  = function()
 	{
-	if ($scope.listOfCategories.length != 0)
-		return $scope.listOfCategories;
+		GetCategories($scope, $http);
+	};
+	
+	$scope.getlistOfCategories();
 
-	var arr = [
-{id:1,
- name: 'główna',
- parent: 'null'},
-      {id:2,
-       name: 'PKat',
-       parent:1},
-       {id:3,
-        name: 'PKat2',
-        parent:1},
-              {id:4,
-               name:'PPKat1',
-               parent:2}];
-
-	$scope.listOfCategories = arr;
-	return arr;
-};
-
+	$scope.addArticle = function()
+	{
+		AddArticle($scope.newArticle.title, $scope.newArticle.description, $scope.newArticle.content, $scope.newArticle.category_id, "admin", $scope.newArticle.publication_date.getTime(), $scope.newArticle.expiration_date.getTime(), $scope.getSelectedTagIds, $scope.newArticle.rank, null, new Date().getTime(), 1, $scope, $http);
+	}
+	
 $scope.editorOptions = {
     language: 'pl'
 };
