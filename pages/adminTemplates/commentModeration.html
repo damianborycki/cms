@@ -4,7 +4,7 @@
 }
 </style>
 
-<span ng-switch on="listOfCommentsWithStatus.length > 0">
+<span ng-switch on="listOfCommentsWithStatus.length > 0 || listOfCommentsWithStatus != undefined">
 <div ng-switch-when="true">
 	<div class="row row2">
 
@@ -31,5 +31,7 @@
 </div>
 <div ng-switch-when="false">
 	<h3 style="text-align: center;">Brak komentarzy do moderacji</h3>
+</div>
+<div ng-switch-default>
 </div>
 </span>

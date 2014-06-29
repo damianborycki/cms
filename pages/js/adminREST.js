@@ -110,6 +110,13 @@ $http({method: 'PUT', url: '/portal/category/' + id, data: {name: name, descript
 function DeleteCategory(id, $scope, $http){
 $http({method: 'DELETE', url: '/portal/category/' + id}).
 	  success(function(data, status, headers, config) {
+
+	  	var idx = $scope.GetIndexOfCategoryById(id);
+
+		if (idx > -1) {
+			$scope.listOfCategories.splice(idx,1);  
+		}
+
 		$scope.getlistOfCategories();
 	  }); 
 	};
