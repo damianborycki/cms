@@ -52,7 +52,13 @@ public class ArticleDAOImpl implements ArticleDAOI {
 
     @Override
     public List<Article> getAll() {
-        return openSession().createQuery("FROM Article").list();
+        
+    	List<Article> a = openSession().createQuery("FROM Article").list();
+    	for (Article art : a) {
+    		art.setComments(null);
+    	}
+    	
+    	return a;
     }
 
     @Override
@@ -70,12 +76,28 @@ public class ArticleDAOImpl implements ArticleDAOI {
     }
 
     @Override
-	public List<Article> get(int num, int pageNum, String sortBy,
-			boolean ascOrder, Category category) {
-		Criteria c = this.getCriteria(num, pageNum, sortBy, ascOrder);
-		c.add(Restrictions.idEq(category));
-		return c.list();
-	}
+    public List<Article> get(long categoryID, int num, int pageNum, String sortBy,
+			boolean ascOrder) {
+		
+    	List<Article> articles = new ArrayList<Article>();		
+		Criteria criteria = openSession().createCriteria(Article.class);			
+		criteria.add(Restrictions.eq("category_id.id", categoryID));		
+		criteria.setFirstResult(num*(pageNum-1));
+		criteria.setMaxResults(num);
+		if(ascOrder){
+			criteria.addOrder(Order.asc(sortBy));	
+		} else {
+			criteria.addOrder(Order.desc(sortBy));
+		}			
+		articles = criteria.list();
+		for (Article art : articles) {
+			User u = new User();
+			u.setLogin(art.getUser().getLogin());
+			art.setUser(u);
+	    	art.setComments(null);
+	    }	
+		return articles;
+    }
 
     @Override
     public List<Article> get(int num, int pageNum, String sortBy, boolean ascOrder, Tag tag) {
@@ -100,14 +122,14 @@ public class ArticleDAOImpl implements ArticleDAOI {
 	}
 
 	@Override
-	public void create(String title, Category category_id, String description,
+	public void create(String title, Category category, String description,
 			String content, User user, Date expiration_date,
 			Date publication_date, long galery, long image, List<Tag> tags,
 			String article_owner, ArticleRank rank) {
 		
 		Article art = new Article();
 		art.setTitle(title);
-		art.setCategory_id(category_id);
+		art.setCategory_id(category);
 		art.setDescription(description);
 		
 		art.setContent(content);
@@ -128,7 +150,7 @@ public class ArticleDAOImpl implements ArticleDAOI {
 	}
 
 	@Override
-	public void edit(long id, String title, Category category_id,
+	public void edit(long id, String title, Category category,
 			String description, String content, User user,
 			Date expiration_date, Date publication_date, Long galery,
 			Long image, List<Tag> tags, String article_owner, ArticleRank rank) {
@@ -136,7 +158,7 @@ public class ArticleDAOImpl implements ArticleDAOI {
 		Article art = this.getById(id);
 		
 		art.setTitle(title);
-		art.setCategory_id(category_id);
+		art.setCategory_id(category);
 		art.setDescription(description);
 		
 		art.setContent(content);
@@ -152,6 +174,10 @@ public class ArticleDAOImpl implements ArticleDAOI {
 		art.setRank(rank);
 		this.openSession().merge(art);
 		
+	}
+	
+	public void createNew(Article a) {
+		openSession().save(a);
 	}
 
 }

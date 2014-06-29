@@ -6,14 +6,18 @@
 
 package com.portal.entity;
 
+import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonManagedReference;
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import com.portal.init.JsonDateSerializer;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -26,51 +30,101 @@ import java.util.List;
 @Table(name = "articles")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Article {
-    
+
+	@JsonCreator
+    public Article(@JsonProperty("title") String title,
+    			@JsonProperty("description") String descr,
+    			@JsonProperty("content") String content,
+    			@JsonProperty("userId") long userId,
+    			@JsonProperty("publicationDate") Date pubDate,
+    			@JsonProperty("expirationDate") Date expDate,
+    			@JsonProperty("categoryId") long categoryId,
+    			@JsonProperty("rankId") long rankId,
+    			@JsonProperty("tags") List<Long> tagIds,
+    			@JsonProperty("imageId") long imageId
+    			)
+
+	{
+
+		this.title = title;
+		this.description = descr;
+		this.content = content;
+		User u = new User();
+		u.setId(userId);
+		this.user = u;
+		this.publication_date = pubDate;
+		this.expiration_date = expDate;
+
+		Category c = new Category();
+		c.setId(categoryId);
+
+		this.category_id = c;
+
+		ArticleRank r = new ArticleRank();
+		r.setId(rankId);
+		this.rank = r;
+
+		List<Tag> tags = new ArrayList<Tag>();
+
+		for (Long l : tagIds) {
+			Tag t = new Tag();
+			t.setId(l);
+			tags.add(t);
+		}
+
+		this.tag = tags;
+
+		this.image = imageId;
+
+		this.views = 0l;
+	}
+
+	public Article() { }
+
     @Column(name = "id" , unique = true, columnDefinition="bigint")
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    
+
     @NotNull
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category_id;
-    
+
     @NotNull
     @Column(name = "title")
     private String title;
-    
+
     @NotNull
     @Column(name = "description")
     private String description;
-    
+
     @NotNull
     @Column(name = "content", length = 10000)
     private String content;
-    
+
     @NotNull
     @ManyToOne
     @JoinColumn(name = "user")
     private User user;
-    
+
     @NotNull
     @Column(name = "date")
-    private Date date;
-    
+    private Date date = new Date(System.currentTimeMillis());;
+
     @NotNull
     @Column(name = "publication_date")
     private Date publication_date;
-    
+
     @NotNull
     @Column(name = "expiration_date")
     private Date expiration_date;
-    
+
     @Column(name = "galery", nullable = true)
     private Long galery;
 
     @NotNull
-    @OneToMany
+    @ManyToMany
     @JoinColumn(name = "tag")
     private List<Tag> tag;
 
@@ -81,16 +135,15 @@ public class Article {
     @ManyToOne
     @JoinColumn(name = "rank")
     private ArticleRank rank;
-    
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy="article")
     @JsonManagedReference
     private List <Comment> comments;
-    
+
     @NotNull
     @Column(name = "image")
     private Long image;
-    
-    @NotNull
+
     @Column(name = "views", columnDefinition="bigint default 0")
     private Long views;
 
@@ -141,7 +194,7 @@ public class Article {
     public void setUser(User user) {
         this.user = user;
     }
-    
+
     @JsonSerialize(using=JsonDateSerializer.class)
     public Date getDate() {
         return date;
@@ -151,6 +204,7 @@ public class Article {
         this.date = date;
     }
 
+    @JsonSerialize(using=JsonDateSerializer.class)
     public Date getPublication_date() {
         return publication_date;
     }
@@ -159,6 +213,7 @@ public class Article {
         this.publication_date = publication_date;
     }
 
+    @JsonSerialize(using=JsonDateSerializer.class)
     public Date getExpiration_date() {
         return expiration_date;
     }

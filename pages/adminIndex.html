@@ -104,7 +104,7 @@ function parseDate(input)
 	var date = parts[0].split('-');
 	var time = parts[1].split(':');
 	
-	return new Date(date[0], date[1]-1, date[2], time[0], time[1], time[2]);
+	return new Date(date[2], date[0]-1, date[1], time[0], time[1], time[2]);
 }
    
 var app = angular.module('studentInfoApp', ['ngSanitize', 'ngRoute', 'mgcrea.ngStrap', 'ngCkeditor', 'ngTagsInput']);
@@ -794,42 +794,24 @@ $scope.remove=function($id){
 
 
 
-app.controller('ArticleController', function($scope) {  
+app.controller('ArticleController', function($scope, $http) {  
 
 	$scope.listOfArticles = [];
 
-	$scope.getlistOfArticles  = function(len)
+	$scope.getlistOfArticles  = function()
 	{
 	if ($scope.listOfArticles.length != 0)
 		return $scope.listOfArticles;
-
-	var arr = [];
-	for (var i=0;i<len;i++)
-	{
-	arr.push({
-		id: i,
-		title: "Tytul" + (i + 1),
-		description: "Opis",
-		publication_date: "2014-04-23 18:25:43",
-		views:10,
-		image: 1,
-		tag: [1,5,9],
-		rank: 1,  
-		commntCount: 5
-		});
-	}
-
-	$scope.listOfArticles = arr;
-	return arr;
-};
+		
+		GetArticles($scope, $http);
+	};
+	$scope.getlistOfArticles();
 
 $scope.GetIndexOfArticleById=function($id)
 {
-	var arr = $scope.getlistOfArticles(4);
-	
-	for (var articleIndex in arr)
+	for (var articleIndex in $scope.listOfArticles)
 	{
-		if (arr[articleIndex].id == $id)
+		if ($scope.listOfArticles[articleIndex].id == $id)
 		{
 			return articleIndex;
 		}
@@ -981,7 +963,7 @@ $scope.GetArticle=function(id)
 	if (typeof id === 'undefined')
 	{
 	
-	article = {
+	newArticle = {
 		id: -1,
 		title: "",
 		description: "",
@@ -991,31 +973,15 @@ $scope.GetArticle=function(id)
 		views:0,
 		image: 1,
 		tag: [],
-		rank: 1,  
-		category_id: 1, 
+		rank: {id: 1},  
+		category_id: {id: 1}, 
 		commntCount: 0
 		};
 	}
 	else
 	{
-	article = {
-		id: id,
-		title: "Tytul " + id,
-		description: "Opis",
-		content: "Treść",
-		publication_date: parseDate("2014-04-23 18:25:43"),
-		views:0,
-		image: 1,
-		tag: [],
-		rank: 1,  
-		category: 1,  
-		commntCount: 0
-		};
+		GetArticle(id, $scope, $http);
 	}
-		
-	$scope.newArticle = article;
-	
-	return article;
 }
 
 $scope.GetArticle($routeParams.articleId);
@@ -1047,7 +1013,12 @@ $scope.endDate = new Date();
 
 	$scope.addArticle = function()
 	{
-		AddArticle($scope.newArticle.title, $scope.newArticle.description, $scope.newArticle.content, $scope.newArticle.category_id, "admin", $scope.newArticle.publication_date.getTime(), $scope.newArticle.expiration_date.getTime(), $scope.getSelectedTagIds, $scope.newArticle.rank, null, new Date().getTime(), 1, $scope, $http);
+		AddArticle($scope.newArticle.title, $scope.newArticle.description, $scope.newArticle.content, $scope.newArticle.category_id.id, "admin", $scope.newArticle.publication_date.getTime(), $scope.newArticle.expiration_date.getTime(), $scope.getSelectedTagIds(), $scope.newArticle.rank.id, null, new Date().getTime(), 1, $scope, $http);
+	}
+	
+	$scope.editArticle = function()
+	{
+		EditArticle($routeParams.articleId, $scope.newArticle.title, $scope.newArticle.description, $scope.newArticle.content, $scope.newArticle.category_id.id, "admin", $scope.newArticle.publication_date.getTime(), $scope.newArticle.expiration_date.getTime(), $scope.getSelectedTagIds(), $scope.newArticle.rank.id, null, new Date().getTime(), 1, $scope, $http);
 	}
 	
 $scope.editorOptions = {

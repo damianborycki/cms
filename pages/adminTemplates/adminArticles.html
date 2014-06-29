@@ -16,11 +16,11 @@
 		 <th class="col-md-2 col-md">Data publikacji</th>
 		 <th class="col-md-6 col-md">Tytuł</th>
 		 <th class="col-md-2 col-md">Akcje</th>
-		<tr ng-repeat="tag in getlistOfArticles(4) | filter:{title: query, publication_date: datepicker.date.yyyymmdd()}" ng-class="['odd', 'even'][$index %2]">
-		<td class="col-md-1">  <input type="checkbox" value="{{tag.id}}" ng-checked="selection.indexOf(tag.id) > -1" ng-click="toggleSelection(tag.id)"> </td>
-		<td class="col-md-2">{{tag.publication_date}}</td>
-		<td class="col-md-6">{{tag.title}}</td>
-		<td class="col-md-2"><a class="btn btn-success btn-p" href="#editArticle/{{tag.id}}"> Edytuj</a><a class="btn btn-danger btn-p" ng-click="remove(tag.id)"> Usuń</a></td>
+		<tr ng-repeat="article in listOfArticles | filter:{title: query, publication_date: datepicker.date.yyyymmdd()}" ng-class="['odd', 'even'][$index %2]">
+		<td class="col-md-1">  <input type="checkbox" value="{{article.id}}" ng-checked="selection.indexOf(article.id) > -1" ng-click="toggleSelection(article.id)"> </td>
+		<td class="col-md-2">{{article.publication_date}}</td>
+		<td class="col-md-6">{{article.title}}</td>
+		<td class="col-md-2"><a class="btn btn-success btn-p" href="#editArticle/{{article.id}}"> Edytuj</a><a class="btn btn-danger btn-p" ng-click="remove(article.id)"> Usuń</a></td>
 		</tr>
 		</table>
       </div>

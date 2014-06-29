@@ -41,4 +41,29 @@ public class TagDAOImpl implements TagDAOI {
         Tag tag = (Tag)openSession().load(Tag.class, id);
         return tag;
     }
+
+    @Override
+    public void create(Tag tag) {
+        this.openSession().save(tag);
+    }
+
+    @Override
+    public void edit(Long id, Tag template) {
+        Session session = openSession();
+        Tag tag = (Tag) session.get(Tag.class, id);
+        tag.setName(template.getName());
+        tag.setDescription(template.getDescription());
+        tag.setType(template.getType());
+
+        session.update(tag);
+        session.flush();
+    }
+
+    @Override
+    public void delete(Long id) {
+        Session session = openSession();
+        Tag tag = (Tag) session.get(Tag.class, id);
+        session.delete(tag);
+        session.flush();
+    }
 }

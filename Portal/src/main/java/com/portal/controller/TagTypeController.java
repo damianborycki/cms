@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletResponse;
+
 @Controller
 public class TagTypeController {
     @Autowired
@@ -30,25 +32,22 @@ public class TagTypeController {
     public TagType get(@PathVariable Long id){
         return tagTypeDAO.get(id);
     }
-    
+
     @RequestMapping(value="type", method= RequestMethod.POST, consumes= MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody
-    ResponseEntity<Object> create(@RequestBody TagType tagType){
+    public void create(@RequestBody TagType tagType, HttpServletResponse response){
         tagTypeDAO.create(tagType);
-        return new ResponseEntity<Object>(null, HttpStatus.ACCEPTED);
+        response.setStatus(HttpServletResponse.SC_OK);
     }
-    
+
     @RequestMapping(value="type/{id}", method= RequestMethod.PUT, consumes=MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody
-    ResponseEntity<Object> edit(@PathVariable Long id, @RequestBody TagType tagType){
+    public void edit(@PathVariable Long id, @RequestBody TagType tagType, HttpServletResponse response){
         tagTypeDAO.edit(id, tagType);
-        return new ResponseEntity<Object>(null, HttpStatus.ACCEPTED);
+        response.setStatus(HttpServletResponse.SC_OK);
     }
 
     @RequestMapping(value="type/{id}", method= RequestMethod.DELETE)
-    public @ResponseBody
-    ResponseEntity<Object> delete(@PathVariable Long id){
+    public void delete(@PathVariable Long id, HttpServletResponse response){
         tagTypeDAO.delete(id);
-        return new ResponseEntity<Object>(null, HttpStatus.ACCEPTED);
+        response.setStatus(HttpServletResponse.SC_OK);
     }
 }

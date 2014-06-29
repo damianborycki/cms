@@ -22,11 +22,11 @@ public interface ArticleDAOI {
                       boolean ascOrder,
                       ArticleRank articleRank);
 
-    List<Article> get(int num,
+    List<Article> get(long categoryID,
+    				  int num,
                       int pageNum,
                       String sortBy,
-                      boolean ascOrder,
-                      Category category);
+                      boolean ascOrder);
 
     List<Article> get(int num,
                       int pageNum,
@@ -69,5 +69,7 @@ public interface ArticleDAOI {
               List<Tag> tags,
               String article_owner,
               ArticleRank rank);
+    
+    void createNew(Article a);
 
 }

@@ -1,6 +1,7 @@
 package com.portal.dao.interfaces;
 
 import com.portal.entity.Tag;
+import com.portal.entity.TagType;
 
 import java.util.List;
 
@@ -12,7 +13,10 @@ import java.util.List;
 
 public interface TagDAOI {
 
-    List<Tag> findAll();
-    Tag get(Long id);
+    public List<Tag> findAll();
+    public Tag get(Long id);
+    public void create(Tag tag);
+    public void edit(Long id, Tag template);
+    public void delete(Long id);
 
 }

@@ -23,18 +23,20 @@ public class ArticleController {
 
     @RequestMapping(value = "/article", method=RequestMethod.POST)
     public void addArticle(@RequestBody Article article, HttpServletResponse response) {
-        articleDAO.create(article.getTitle(),
-                article.getCategory_id(),
-                article.getDescription(),
-                article.getContent(),
-                article.getUser(),
-                article.getExpiration_date(),
-                article.getPublication_date(),
-                article.getGalery(),
-                article.getImage(),
-                article.getTag(),
-                article.getArticle_owner(),
-                article.getRank());
+//        articleDAO.create(article.getTitle(),
+//                article.getCategory_id(),
+//                article.getDescription(),
+//                article.getContent(),
+//                article.getUser(),
+//                article.getExpiration_date(),
+//                article.getPublication_date(),
+//                article.getGalery(),
+//                article.getImage(),
+//                article.getTag(),
+//                article.getArticle_owner(),
+//                article.getRank());
+        
+        articleDAO.createNew(article);
         response.setStatus(HttpServletResponse.SC_CREATED);
     }
 
@@ -74,16 +76,16 @@ public class ArticleController {
         return articleDAO.get(limit, pageNO, sortBy, sortOrder, tag);
     }
 
-    @RequestMapping(value="/articlesByCategory", method=RequestMethod.GET)
-    public @ResponseBody List<Article> getArticlesByCategory(@RequestParam("limit") int limit,
+    @RequestMapping(value="/articlesByCategory/{categoryID}", method=RequestMethod.GET)
+    public @ResponseBody List<Article> getArticlesByCategory(@PathVariable("categoryID") long categoryID,
+    													@RequestParam("limit") int limit,
                                                         @RequestParam("pageNo") int pageNO,
                                                         @RequestParam("sortBy") String sortBy,
-                                                        @RequestParam("sortOrder") Boolean sortOrder,
-                                                        @RequestBody Category category,
+                                                        @RequestParam("sortOrder") Boolean sortOrder,                                                        
                                                         HttpServletResponse response){
         response.setStatus(HttpServletResponse.SC_OK);
 
-        return articleDAO.get(limit, pageNO, sortBy, sortOrder, category);
+        return articleDAO.get(categoryID, limit, pageNO, sortBy, sortOrder);
     }
 
     @RequestMapping(value="/articlesByTagAndCategory", method=RequestMethod.GET)

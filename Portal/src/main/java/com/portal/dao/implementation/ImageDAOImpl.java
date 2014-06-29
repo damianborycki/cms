@@ -4,6 +4,7 @@ import com.portal.dao.interfaces.ImageDAOI;
 import com.portal.entity.Image;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -47,7 +48,7 @@ public class ImageDAOImpl implements ImageDAOI {
         return imageList;
     }
 
-    private List<Image> getAllImages(String id)
+    public List<Image> getAllImages(String id)
     {
         List<Image> imageList = new ArrayList<Image>();
 
@@ -76,16 +77,12 @@ public class ImageDAOImpl implements ImageDAOI {
         return biggestImage;
     }
 
-    public void deleteImage(String id)
-    {
-        Query query = openSession().createQuery("delete from Image where id=:id");
-        query.setParameter("id", id);
-        query.executeUpdate();
-    }
-
     @Transactional(readOnly=false)
     public void addImage(Image i) {
         Session session = openSession();
+				Transaction tx = session.beginTransaction();
         session.save(i);
+				tx.commit();
+				session.close();
     }
 }
