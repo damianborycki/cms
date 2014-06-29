@@ -33,6 +33,8 @@ public class ImageController {
     @Autowired
     ImageDAOI imageDAO;
 
+    private char slash = '\\';
+
     @RequestMapping(value="/image", method=RequestMethod.POST)
     public String addImage(@RequestParam("imageData") MultipartFile imageData,
                            @RequestParam("description") String description,
@@ -111,16 +113,21 @@ public class ImageController {
         return imageDAO.getAllUnapproved();
     }
 
+    private String getImagesDirectory()
+    {
+        return System.getProperty("catalina.base") + slash + "webapps" +slash + "images" + slash;
+    }
+
     private String getNewImagePath(MultipartFile file, String id)
     {
-        String imagePath = System.getProperty("catalina.base") + "\\webapps\\images\\" + id;
+        String imagePath = getImagesDirectory() + id;
 
         return imagePath;
     }
 
     private String getScaledImagePath(String id, long width, long height)
     {
-        String imagePath = System.getProperty("catalina.base") + "\\webapps\\images\\" + id + "_" + width + "_" + height + ".jpg";
+        String imagePath = getImagesDirectory() + id + "_" + width + "_" + height + ".jpg";
         return imagePath;
     }
 
@@ -136,6 +143,8 @@ public class ImageController {
         {
             Image scaledImage = biggestImage;
             scaledImage.setLink(scaledImagePath);
+            scaledImage.setWidth(width);
+            scaledImage.setHeight(height);
             imageDAO.addImage(scaledImage);
         }
         return scaledImagePath;
@@ -166,12 +175,12 @@ public class ImageController {
 
     private String getDefaultImageLink()
     {
-        return System.getProperty("catalina.base") + "\\webapps\\images\\default\\default.jpg";
+        return getImagesDirectory() + "default" + slash + "default.jpg";
     }
 
     private String getDefaultAvatarLink()
     {
-        return System.getProperty("catalina.base") + "\\webapps\\images\\avatars\\defaultAvatar\\default_avatar.jpg";
+        return getImagesDirectory() + "avatars" + slash + "defaultAvatar" + slash + "default_avatar.jpg";
     }
 
     private String getImagePath(String imageId, long width, long height)
