@@ -2,8 +2,9 @@
 		<div class="row containerm">
           <h1 class="art-tytul"> Artykuły </h1>
 		  <div class="column" style="margin: 16px 5px 5px 5px;">
+				<div paging page="articlesPage" page-size="articlesLimit" total="total" show-prev-next="true" adjacent="1" paging-action="ChangePage(page)"></div>
         <ul class="list-group">
-            <li class="list-group-item list1" ng-repeat="zajawka in getListOfArticles(3)">
+            <li class="list-group-item list1" ng-repeat="zajawka in listOfArticles">
               <div class="row">
               <a href="#article">
                 <div class="col-md-2">
@@ -21,5 +22,6 @@
 			  <hr ng-hide="$last">
             </li>
           </ul>
+				<div paging page="articlesPage" page-size="articlesLimit" total="total" show-prev-next="true" adjacent="1" paging-action="ChangePage(page)"></div>
 		  </div>
 		  </div>
