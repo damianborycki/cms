@@ -114,6 +114,18 @@ app.controller('topAndSideContrler', function($scope, $http, SharedData, tags) {
   return $scope.listOfArticles;
 }
 
+$scope.articlesForRanks = {};
+
+$scope.getArticleByRankId = function(id)
+{
+	if ($scope.articlesForRanks[id] == null)
+	{
+		GetArticlesByRankForSide(id, 3, 1, 1, 'publication_date', $scope, $http);
+	}
+}
+
+$scope.getArticleByRankId(1);
+
 $scope.userLoggedIn = false;
 
 $scope.LogIn = function(login, pass)
@@ -215,8 +227,8 @@ $scope.getListOfArticles(3);
 
   $scope.mainCategories = SharedData.mainCategories;
   
-  $scope.getImage = function(id, width, height){
-    return 'http://placehold.it/' + width + 'x' + height;
+$scope.getImage = function(id, width, height){
+    return '/portal/image?id=' + id + '&width=' + width + '&height=' + height;
   };
   
   $scope.articlesForCategories = {};
@@ -431,6 +443,10 @@ $scope.total = 30;
   {
 	GetArticlesByCategory($scope.category, $scope.articlesLimit, $scope.articlesPage, 1, 'publication_date', $scope, $http);
   }
+  else if ($scope.search != null)
+  {
+	GetArticlesByTags('1,1', $scope.articlesLimit, $scope.articlesPage, 1, 'publication_date', $scope, $http);
+  }
 }
 
 	$scope.ChangePage = function(page)
@@ -440,11 +456,6 @@ $scope.total = 30;
 	}
 
 $scope.search = $location.search()['search'];
-
-if ($scope.search != null)
-{
-	$scope.search = $scope.search.split(",");
-}
 
 $scope.category = $location.search()['category'];
 $scope.getListOfArticles();
@@ -797,7 +808,7 @@ $scope.article = null;
           </ul>
           <h2 class="center1">Ważne</h2>
           <ul class="list-group">
-            <li class="list-group-item list1" ng-repeat="zajawka in getListOfArticles(3)">
+            <li class="list-group-item list1" ng-repeat="zajawka in articlesForRanks[1]">
               <a href="#article/{{$index + 1}}">
                 <img ng-src="{{getImage(artykul.image, 300, 200)}}" class="img-responsive">
                 <h4 class="zajawka-title">{{zajawka.title}}</h4> 
