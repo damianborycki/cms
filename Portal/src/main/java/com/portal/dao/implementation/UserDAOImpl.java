@@ -21,6 +21,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Repository;
@@ -243,62 +244,27 @@ public class UserDAOImpl implements UserDAOI {
 
     public ClassUser getAllUsers(int limit, int pageNo, final String sortBy, final String sortOrder){ 
     	
-    	List<User> users = new ArrayList<User>();
-		List<User> returnUsers = new ArrayList<User>();
-		Query query = openSession().createQuery("from User");		
-		users = query.list();
+    	List<User> u = new ArrayList<User>();		
+		Criteria c = openSession().createCriteria(User.class);		
+		u = c.list();
 		
-	  	
-		Collections.sort(users, new Comparator<User>(){
-			  @Override
-			  public int compare(final User object1, final User object2) {		  
-				
-				  int sortO;				  	
-				  if(sortOrder.equals("DESC")){
-					  sortO = -1;
-				  } else {
-					  sortO = 1;
-				  }
-			  	
-				  switch(sortBy){				  		
-			  	  	case "city":
-			  	  		return object1.getCity().compareTo(object2.getCity()) * sortO;
-			  		case "last_login_date":
-			  			return object1.getDateOfLastLogIn().compareTo(object2.getDateOfLastLogIn()) * sortO;
-			  		case "registration_date":
-			  			return object1.getDateOfRegistration().compareTo(object2.getDateOfRegistration()) * sortO;
-			  		case "email":
-			  			return object1.getEmail().compareTo(object2.getEmail()) * sortO;
-			  		case "gender":
-			  			return object1.getGender().compareTo(object2.getGender()) * sortO;				  			
-			  		case "login":
-			  			return object1.getLogin().compareTo(object2.getLogin()) * sortO;
-			  		case "name":
-			  			return object1.getName().compareTo(object2.getName()) * sortO;
-			  		case "surname":
-			  			return object1.getSurname().compareTo(object2.getSurname()) * sortO;
-			  		case "group":				  			
-			  			return object1.getGroup().getId().compareTo(object2.getGroup().getId()) * sortO;
-				  }
-				  return object1.getId().compareTo(object2.getId()) * sortO;
-			  }
-		});		
-
-		
-		for (int i = (pageNo - 1) * limit; i < pageNo * limit; i++){
-			try{				
-				returnUsers.add(users.get(i));
-			} catch(IndexOutOfBoundsException e){
-				break;
-			}			
+		List<User> users = new ArrayList<User>();
+	  	Criteria criteria = openSession().createCriteria(User.class);
+	  	criteria.setFirstResult(limit*(pageNo-1));
+		criteria.setMaxResults(limit);
+		if(sortOrder.equals("DESC")){
+			criteria.addOrder(Order.desc(sortBy));	
+		} else {
+			criteria.addOrder(Order.asc(sortBy));
 		}
+		users = criteria.list();
 		
-		for( User rU : returnUsers ){
+		for( User rU : users ){
 			rU.setPassword(null);
 		}
 		ClassUser classUser = new ClassUser();
-		classUser.setUsers(returnUsers);
-		classUser.setSize(users.size());
+		classUser.setUsers(users);
+		classUser.setSize(u.size());
 		return classUser;
     }
     
