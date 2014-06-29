@@ -130,10 +130,28 @@ function CommentArticle(login, articleId, content, parent, $scope, $http){
 	}); 
 };
 
+function GetArticlesByRankForSide(rankId, limit, pageNo, sortOrder, sortBy, $scope, $http){
+	$http.get('/portal/articlesByRank/' + rankId + '?limit=' + limit + '&pageNo=' + pageNo + '&sortOrder=' + sortOrder + '&sortBy=' + sortBy).
+	  success(function(data, status, headers, config) {
+		$scope.articlesForRanks[rankId] = data;
+	  }).
+	  error(function(data, status, headers, config) {
+	}); 
+};
+
 function GetArticlesByCategoryForMainPage(categoryId, limit, pageNo, sortOrder, sortBy, $scope, $http){
 	$http.get('/portal/articlesByCategory/' + categoryId + '?limit=' + limit + '&pageNo=' + pageNo + '&sortOrder=' + sortOrder + '&sortBy=' + sortBy).
 	  success(function(data, status, headers, config) {
 		$scope.articlesForCategories[categoryId] = data;
+	  }).
+	  error(function(data, status, headers, config) {
+	}); 
+};
+
+function GetArticlesByTags(tags, limit, pageNo, sortOrder, sortBy, $scope, $http){
+	$http.get('/portal/articlesByTag/' + tags + '?limit=' + limit + '&pageNo=' + pageNo + '&sortOrder=' + sortOrder + '&sortBy=' + sortBy).
+	  success(function(data, status, headers, config) {
+		$scope.listOfArticles = data;
 	  }).
 	  error(function(data, status, headers, config) {
 	}); 

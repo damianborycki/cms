@@ -3,7 +3,7 @@
 				<slick arrows="false" dots="true" infinite="true" autoplay="true" autoplaySpeed="300" speed="2000" slides-to-show="1" touch-move="false" slides-to-scroll="1">
 					<div ng-repeat="zajawka in listOfArticles">
 					<a href="#article/{{$index + 1}}">
-						<img ng-src="{{getImage(zajawka.image, 560, 300)}}">
+						<img ng-src="{{getImage('3i876ounjckc0uf1629a5khuasNiebieskie gory.jpg', 560, 300)}}">
 						<div class="carousel-caption">
 						  <h2>{{zajawka.title}} {{$index}}</h2>
 						  <p>{{zajawka.description}}</p>
@@ -27,7 +27,7 @@
 			<h1 style="margin-left: 20px;"> {{category.name}} </h1>
             <div class="col-md-4"  ng-repeat="zajawka in articlesForCategories[category.id]">
 				<a href="#article/{{$index + 1}}">
-                <img ng-src="{{getImage(zajawka.image, 300, 200)}}" class="img-responsive">
+                <img ng-src="{{getImage('6um06n3pekf4t20r5p8m1e6vkqZachod slonca.jpg', 300, 200)}}" class="img-responsive">
                <div class="bg-title"> <h4>{{zajawka.title}}</h4> </div>
                 <div class="caption">
                   <p class="text-justify">{{zajawka.description}}</p>
