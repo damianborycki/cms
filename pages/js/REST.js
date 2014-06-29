@@ -36,6 +36,15 @@ function Register(login, pass, email, firstname, lastname, city, gender, $scope,
 	window.location.href = '/pages';
 };
 
+function EditUser(login, info, $scope, $http){
+	$http({method: 'PATCH', url: '/portal/user/' + login, data: {login: login, info: info}}).
+	  success(function(data, status, headers, config) {
+		$scope.getUser(login);
+	  }).
+	  error(function(data, status, headers, config) {
+	});
+};
+
 function GetCurrentUserLogin($scope, $http){
 	$http.get('/portal/getCurrentUserLogin').
 	  success(function(data, status, headers, config) {
@@ -125,6 +134,15 @@ function GetArticlesByCategoryForMainPage(categoryId, limit, pageNo, sortOrder, 
 	$http.get('/portal/articlesByCategory/' + categoryId + '?limit=' + limit + '&pageNo=' + pageNo + '&sortOrder=' + sortOrder + '&sortBy=' + sortBy).
 	  success(function(data, status, headers, config) {
 		$scope.articlesForCategories[categoryId] = data;
+	  }).
+	  error(function(data, status, headers, config) {
+	}); 
+};
+
+function GetArticlesByCategory(categoryId, limit, pageNo, sortOrder, sortBy, $scope, $http){
+	$http.get('/portal/articlesByCategory/' + categoryId + '?limit=' + limit + '&pageNo=' + pageNo + '&sortOrder=' + sortOrder + '&sortBy=' + sortBy).
+	  success(function(data, status, headers, config) {
+		$scope.listOfArticles = data;
 	  }).
 	  error(function(data, status, headers, config) {
 	}); 

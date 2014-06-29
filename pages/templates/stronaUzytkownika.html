@@ -13,13 +13,14 @@
               <div class="col-md-9">Płeć: {{searchedUser.gender}} | Info: {{searchedUser.info}}<br><br>
 			  
 			  <div class="przycisk1" style="text-align:right">
-			  <a class="btn btn-lg btn-primary"  ng-click="click()"  ng_show="searchedUser.login == currentUserName.data"> Zmień opis</a>
+			  <a class="btn btn-lg btn-primary"  ng-click="click()"  ng_show="searchedUser.login == currentUserName.data" ng-hide="showEditDesc"> Zmień opis</a>
 			  <div ng-show="showEditDesc">
 					 <div class="row">
 						<div class="column">
 						<textarea class="span6" rows="9" placeholder="Napisz opis..." required="" ng-model="searchedUser.info"
 						style="margin: 0px; height: 180px; width: 100%; resize:vertical;"></textarea>
-						<a class="btn btn-lg btn-primary" ng-click="click()"> Zapisz</a>
+						<a class="btn btn-lg btn-primary"  ng-click="click()"  ng_show="searchedUser.login == currentUserName.data">Zamknij</a>
+						<a class="btn btn-lg btn-primary" ng-click="editDescription()"> Zapisz</a>
 						</div>
 					 </div>
 					</div>

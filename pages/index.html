@@ -419,19 +419,25 @@ app.controller('ListaArtykolowControler', function($scope, $http, $location) {
     return 'http://placehold.it/' + width + 'x' + height;
   };
   
+  $scope.articlesPage = 1;
+$scope.articlesLimit = 20;
+$scope.total = 30;
+
  $scope.listOfArticles = [];
  
-  $scope.getListOfArticles = function(len)
+  $scope.getListOfArticles = function()
   {
-  if ($scope.listOfArticles.length != 0)
-		return $scope.listOfArticles;
-		
-  var arr = getListOfArticles(len);
-
-  $scope.listOfArticles = arr;
-  
-  return $scope.listOfArticles;
+  if ($scope.category != null)
+  {
+	GetArticlesByCategory($scope.category, $scope.articlesLimit, $scope.articlesPage, 1, 'publication_date', $scope, $http);
+  }
 }
+
+	$scope.ChangePage = function(page)
+	{
+		$scope.articlesPage = page;
+		$scope.getListOfArticles();
+	}
 
 $scope.search = $location.search()['search'];
 
@@ -441,7 +447,7 @@ if ($scope.search != null)
 }
 
 $scope.category = $location.search()['category'];
-
+$scope.getListOfArticles();
 });
 
 
@@ -449,26 +455,10 @@ $scope.category = $location.search()['category'];
 
 
 app.controller('StronaUzytkownikaController', function($scope, $http, $routeParams, SharedData) {
-  
-  $scope.user = null;
-
-$scope.getUserById = function(id)
-{
-	if ($scope.user != null)
-		return $scope.user;
-		
-  var user = GetUserById(id);
-
-  $scope.user = user;
-  
-  return $scope.user;
-}
 
 $scope.currentUserName = SharedData.currentUserName;
 
 $scope.userName = $routeParams.userName;
-
-$scope.getUserById(1);
 
 $scope.searchedUser =null;
 
@@ -536,11 +526,20 @@ $scope.getUserComments($scope.userName);
    $scope.showEditDesc = !$scope.showEditDesc;
    }
    
+   $scope.editDescription = function()
+   {
+	EditUser($scope.userName, $scope.searchedUser.info, $scope, $http);
+	$scope.click();
+   }
+   
   $scope.milisecToDate = function(miliseconds)
   {
 	return new Date(miliseconds).yyyymmddhhmmss();
   }
 });
+
+
+
 
 app.controller('RejestracjaController', function($scope, $http) {
 
@@ -660,7 +659,7 @@ $scope.article = null;
 
 	$scope.commentsPage = 1;
 	$scope.commentsLimit = 20;
-	$scope.total = 30;
+	$scope.total = 1;
 
 	$scope.getArticleComments = function(articleId)
 	{
@@ -759,7 +758,7 @@ $scope.article = null;
            
             <div class="navbar-collapse collapse">
               <ul class="nav navbar-nav nav-collapsing" id="topMenu">
-                <li ng_repeat="category in mainCategories.data"><a href="#articleList?category={{category.name}}"><b>{{category.name}}</b></a>
+                <li ng_repeat="category in mainCategories.data"><a href="#articleList?category={{category.id}}"><b>{{category.name}}</b></a>
                 </li>
                 <li><a class="dropdown-toggle" data-toggle="dropdown">
                     Więcej <i class="glyphicon glyphicon-chevron-down"></i>
