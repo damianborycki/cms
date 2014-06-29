@@ -79,7 +79,7 @@ public class ArticleDAOImpl implements ArticleDAOI {
 	public List<Article> get(int num, int pageNum, String sortBy,
 			boolean ascOrder, Category category) {
 		Criteria c = this.getCriteria(num, pageNum, sortBy, ascOrder);
-		c.add(Restrictions.idEq(category));
+		c.add(Restrictions.in("category", new Category[]{category}));
 		return c.list();
 	}
 
@@ -106,14 +106,14 @@ public class ArticleDAOImpl implements ArticleDAOI {
 	}
 
 	@Override
-	public void create(String title, Category category_id, String description,
+	public void create(String title, Category category, String description,
 			String content, User user, Date expiration_date,
 			Date publication_date, long galery, long image, List<Tag> tags,
 			String article_owner, ArticleRank rank) {
 		
 		Article art = new Article();
 		art.setTitle(title);
-		art.setCategory_id(category_id);
+		art.setCategory(category);
 		art.setDescription(description);
 		
 		art.setContent(content);
@@ -134,7 +134,7 @@ public class ArticleDAOImpl implements ArticleDAOI {
 	}
 
 	@Override
-	public void edit(long id, String title, Category category_id,
+	public void edit(long id, String title, Category category,
 			String description, String content, User user,
 			Date expiration_date, Date publication_date, Long galery,
 			Long image, List<Tag> tags, String article_owner, ArticleRank rank) {
@@ -142,7 +142,7 @@ public class ArticleDAOImpl implements ArticleDAOI {
 		Article art = this.getById(id);
 		
 		art.setTitle(title);
-		art.setCategory_id(category_id);
+		art.setCategory(category);
 		art.setDescription(description);
 		
 		art.setContent(content);
