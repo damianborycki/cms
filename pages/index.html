@@ -561,6 +561,15 @@ app.controller('RejestracjaController', function($scope, $http) {
   var input = document.getElementById('city');
   var autocomplete = new google.maps.places.Autocomplete(input, options);
 
+ $scope.lTest = function(){
+    if($scope.user.login.trim() != '')
+      LoginExists($scope, $http, $scope.user.login);
+  };
+  $scope.eTest = function(){
+    if($scope.user.email.trim() != '')
+      EmailExists($scope, $http, $scope.user.email);
+  };
+  
 	$scope.user = 
 	{'login': '',
 	'email': '',

@@ -165,3 +165,17 @@ function GetArticlesByCategory(categoryId, limit, pageNo, sortOrder, sortBy, $sc
 	  error(function(data, status, headers, config) {
 	}); 
 };
+
+function LoginExists($scope, $http, login){
+	$http.post('/portal/loginExists', {login: login}).
+	  success(function(data, status, headers, config) {
+		$scope.loginE = data;
+	  });
+};
+
+function EmailExists($scope, $http, email){
+	$http.post('/portal/emailExists', {email: email}).
+	  success(function(data, status, headers, config) {
+		$scope.emailE = data;		
+	  });
+};

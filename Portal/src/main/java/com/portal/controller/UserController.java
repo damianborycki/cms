@@ -166,4 +166,16 @@ public class UserController {
 		
 	}
 	
+	@RequestMapping(value = "/loginExists", method = RequestMethod.POST)
+	public @ResponseBody boolean loginExist(@RequestBody User login, HttpServletResponse response){
+		
+		return userDAO.loginExists(login);
+	}
+	
+	@RequestMapping(value = "/emailExists", method = RequestMethod.POST)
+	public @ResponseBody boolean emailExists(@RequestBody User email, HttpServletResponse response){
+		
+		return userDAO.emailExists(email);
+	}
+	
 }

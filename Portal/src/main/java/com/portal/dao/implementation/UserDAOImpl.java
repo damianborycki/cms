@@ -272,4 +272,34 @@ public class UserDAOImpl implements UserDAOI {
     	Query query = openSession().createQuery("from User");		
 		return query.list().size();
     }
+
+
+
+	@Override
+	public boolean loginExists(User login) {
+		List<User> u = new ArrayList<User>();
+		Criteria criteria = openSession().createCriteria(User.class);
+		criteria.add(Restrictions.eq("login", login.getLogin()));
+		u = criteria.list();
+		
+		if(u.size() == 0)
+			return false;
+			
+		return true;
+	}
+
+
+
+	@Override
+	public boolean emailExists(User email) {
+		List<User> u = new ArrayList<User>();
+		Criteria criteria = openSession().createCriteria(User.class);
+		criteria.add(Restrictions.eq("email", email.getEmail()));
+		u = criteria.list();
+		
+		if(u.size() == 0)
+			return false;
+			
+		return true;
+	}
 }

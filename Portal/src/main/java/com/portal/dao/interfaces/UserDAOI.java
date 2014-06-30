@@ -26,5 +26,8 @@ public interface UserDAOI {
     public void deleteUser(String login);
     
     public void setLastLoginDate(String login);
-
+    
+    public boolean loginExists(User login);
+    
+    public boolean emailExists(User email);
 }
