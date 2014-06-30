@@ -25,7 +25,7 @@
 						</select> -->
 					<div ng-controller="groupChange">
  						<select ng-model="groupChange" >
-							<option ng-selected="group.name == user.group.name" ng-repeat="group in groups" value="{{group.id}}">{{group.name}}</option>
+							<option ng-show="currentUserLogin != user.login" ng-selected="group.name == user.group.name" ng-repeat="group in groups" value="{{group.id}}">{{group.name}}</option>
 						</select>
 						
 						<a class="btn btn-danger btn-p"  ng-show="groupChange != user.group.id" ng-click="ChangeGroup()"> Zmień</a>

@@ -247,3 +247,14 @@ function SetUserGroup($scope, $http, login, group){
 	  success(function(data, status, headers, config) {		
 	  }); 
 }
+
+function GetCurrentUserLogin($scope, $http){
+	$http.get('/portal/getCurrentUserLogin').
+	  success(function(data, status, headers, config) {
+		$scope.userLoggedIn = true;		
+		$scope.currentUserLogin = data.login;
+	  }).
+	  error(function(data, status, headers, config) {
+		$scope.userLoggedIn = false;
+	}); 
+};
