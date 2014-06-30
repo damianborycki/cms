@@ -217,3 +217,33 @@ function RemoveGroup($scope, $http, id) {
 				}
 	  }); 
 }
+
+function GetUsers($scope, $http, pageNO){
+	$http.get('/portal/user?limit=50&pageNo=' + pageNO + '&sortBy=id&sortOrder=ASC').
+		success(function(data, status, headers, config) {
+			$scope.listOfUsers = data.users;						
+		});
+
+}
+
+function GetUserByLogin($scope, $http, login){
+	$http.get('/portal/user/' + login).
+		success(function(data, status, headers, config) {
+			$scope.user = data;			
+		});
+		
+}
+
+function DeleteUser($scope, $http, login){
+	$http.delete('/portal/user/' + login).
+		success(function(data, status, headers, config) {
+			$scope.getlistOfUsers(1);
+		});
+}
+
+function SetUserGroup($scope, $http, login, group){
+	$http({method: 'PATCH', url: '/portal/setUserGroup/' + login, 
+			data: group}).
+	  success(function(data, status, headers, config) {		
+	  }); 
+}

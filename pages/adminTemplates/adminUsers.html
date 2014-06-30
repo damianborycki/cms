@@ -1,0 +1,41 @@
+<style>
+#comment_table th, td#center {
+	text-align: center;
+}
+</style>
+
+ <div class="row btn-d">
+
+    	<div class="row row2">
+			<table>
+				<th class="col-md-1 col-md">ID</th>
+		 		<th class="col-md-2 col-md">Login</th>
+		 		<th class="col-md-2 col-md">email</th>
+		 		<th class="col-md-2 col-md">Ranga</th>
+		 		<th class="col-md-2 col-md">Operacje</th>
+				
+				<tr ng-repeat="user in listOfUsers">
+					<td class="col-md-1">{{user.id}}</td>
+					<td class="col-md-2">{{user.login}}</td>
+					<td class="col-md-2">{{user.email}}</td>
+					<td class="col-md-2">
+					
+	
+<!-- 						<select ng-options = "group.name for group in groups" ng-model="groupChange" >
+						</select> -->
+					<div ng-controller="groupChange">
+ 						<select ng-model="groupChange" >
+							<option ng-selected="group.name == user.group.name" ng-repeat="group in groups" value="{{group.id}}">{{group.name}}</option>
+						</select>
+						
+						<a class="btn btn-danger btn-p"  ng-show="groupChange != user.group.id" ng-click="ChangeGroup()"> Zmień</a>
+					</div>
+					</td>
+					<td class="col-md-2"><button class="btn btn-success btn-p" data-animation="am-fade-and-scale" data-template="modal/userModal.html" bs-modal="modal" ng-click="setUserForModal(user.login)"> Edytuj</button>
+				
+					</td>
+				</tr>
+			</table>
+      </div>
+
+</div>

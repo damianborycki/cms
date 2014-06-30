@@ -165,9 +165,13 @@ app.config(['$routeProvider',
         templateUrl: 'adminTemplates/commentModeration.html',
         controller: 'CommentModerationController'
       }).
-      otherwise({
-        redirectTo: '/groups'
-      });
+      when('/users', {
+      	templateUrl: 'adminTemplates/adminUsers.html',
+      	controller: 'UsersController'
+      }).
+      // otherwise({
+      //   redirectTo: '/groups'
+      // });
   }]);
 
 'use strict';
@@ -1229,6 +1233,58 @@ $scope.invertSelection = function() {
   
 });
 
+app.controller('UsersController', function($scope, $http) { 
+	$scope.listOfUsers = [];
+	$scope.userForModal = null;
+	$scope.user = [];
+	$scope.UpdateStatus = 0;
+	GetGroups($scope, $http);
+	
+	$scope.setUpdateStatus = function($status){
+		$scope.UpdateStatus = $status;
+	}
+	
+	$scope.test = function($d) {
+		alert($d);
+	}
+
+	$scope.getlistOfUsers = function($pageNO) {
+		if($scope.listOfUsers.length != 0)
+		return $scope.listOfUsers;
+		
+		GetUsers($scope, $http, $pageNO);		
+	};
+	$scope.getlistOfUsers(1);	
+
+
+	$scope.setUserForModal = function($login){
+		GetUserByLogin($scope, $http, $login);	
+	};
+
+	$scope.deleteUser = function($login){
+		DeleteUser($scope, $http, $login);
+	};
+
+	
+
+
+});
+
+app.controller("groupChange", function($scope, $http) {
+	
+	 for (i = 0; i < $scope.groups.length; i++) { 
+     	if($scope.groups[i].name == $scope.user.group.name)
+     		$scope.groupChange = $scope.groups[i].id;     		     	
+	 }
+
+	$scope.ChangeGroup = function() {		
+		SetUserGroup($scope, $http, $scope.user.login, $scope.groups[$scope.groupChange-1]);
+		$scope.user.group.id = $scope.groupChange;		
+	};	
+
+
+});
+
 </script>
 </head>
 <body>
@@ -1268,6 +1324,8 @@ $scope.invertSelection = function() {
                 <li ng-class="{active:isActive('/imageModeration')}"><a href="#imageModeration">Moderacja obrazków</a>
                 </li> 
                 <li ng-class="{active:isActive('/gallery')}"><a href="#gallery">Galerie</a>
+                </li>
+                <li ng-class="{active:isActive('/users')}"><a href="#users">Użytkownicy</a>
                 </li>
                 <li><a class="dropdown-toggle" data-toggle="dropdown" href="#">
                     Więcej <i class="glyphicon glyphicon-chevron-down"></i>
