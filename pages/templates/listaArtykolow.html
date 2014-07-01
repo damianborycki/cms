@@ -6,7 +6,7 @@
         <ul class="list-group">
             <li class="list-group-item list1" ng-repeat="zajawka in listOfArticles">
               <div class="row">
-              <a href="#article">
+              <a href="#article/{{zajawka.id}}">
                 <div class="col-md-2">
                   <img src="{{getImage(zajawka.image, 150, 150)}}" class="img-responsive">
                 </div>

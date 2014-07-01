@@ -2,15 +2,13 @@
 <html ng-app="studentInfoApp">
 <head>
 <title>Student Info</title>
+<script src="jQuerry/jquery-1.11.0.min.js"></script>
 <script src="angular/angular.js"></script>
 <script src="angular/angular-sanitize.js"></script>
 <script src="angular/angular-animate.js"></script>
 <script src="angular/angular-route.js"></script>
 <script src="angularstrap/angular-strap.min.js"></script>
 <script src="angularstrap/angular-strap.tpl.min.js"></script>
-<script src="jQuerry/jquery-1.11.0.min.js"></script>
-    <script src="slick/slick.min.js"></script>
-    <script src="angular/slick.min.js"></script>
     <script src="angular/paging.js"></script>
 <script src="bootstrap/bootstrap.js"></script>
     <script src="tagInput/ng-tags-input.min.js"></script>
@@ -19,6 +17,8 @@
 <link href="css/collapsingMenu.css" rel="stylesheet">
 <link href="slick/slick.css" rel="stylesheet">
 <link rel="stylesheet" href="css/styles.css" >
+    <script src="slick/slick.min.js"></script>
+    <script src="angular/slick.min.js"></script>
 <script src="js/collapseMe.js"></script>
 <script src="js/mocki.js"></script>
 <script src="js/REST.js"></script>
@@ -37,7 +37,7 @@ Date.prototype.yyyymmddhhmmss = function() {
         return yyyy + '-' + (mm[1]?mm:"0"+mm[0]) + '-' + (dd[1]?dd:"0"+dd[0]) + ' ' + (hh[1]?hh:"0"+hh[0]) + ':' + (min[1]?min:"0"+min[0]) + ':' + (ss[1]?ss:"0"+ss[0]);
    };
    
-var app = angular.module('studentInfoApp', ['ngSanitize', 'ngRoute', 'mgcrea.ngStrap', 'ngTagsInput', 'slick', 'paging']);
+var app = angular.module('studentInfoApp', ['ngSanitize', 'ngRoute', 'mgcrea.ngStrap', 'ngTagsInput', 'bardo.directives', 'paging']);
 
 app.config(['$routeProvider',
   function($routeProvider) {
@@ -120,10 +120,11 @@ $scope.getArticleByRankId = function(id)
 {
 	if ($scope.articlesForRanks[id] == null)
 	{
-		GetArticlesByRankForSide(id, 3, 1, 1, 'publication_date', $scope, $http);
+		GetArticlesByRankForSide(id, 3, 0, 1, 'publication_date', $scope, $http);
 	}
 }
 
+$scope.getArticleByRankId(2);
 $scope.getArticleByRankId(1);
 
 $scope.userLoggedIn = false;
@@ -221,6 +222,19 @@ $scope.loadTags = function(query) {
 
 app.controller('GlownaController', function($scope, SharedData, $http) {
 
+$scope.articlesForRanks = {};
+
+$scope.getArticleByRankId = function(id)
+{
+	if ($scope.articlesForRanks[id] == null)
+	{
+		GetArticlesByRankForSide(id, 3, 0, 1, 'publication_date', $scope, $http);
+	}
+}
+
+$scope.getArticleByRankId(2);
+$scope.getArticleByRankId(1);
+
  $scope.listOfArticles = [];
  
     $scope.getListOfArticles = function(len)
@@ -238,8 +252,14 @@ app.controller('GlownaController', function($scope, SharedData, $http) {
 
 $scope.getListOfArticles(3);
 
-
-  $scope.mainCategories = SharedData.mainCategories;
+  $scope.mainCategories = [];
+  
+  $scope.getMainCategries = function()
+  {
+	GetMainCategoriesForMainPage($scope, $http);
+  }
+  
+  $scope.getMainCategries();
   
 $scope.getImage = function(id, width, height){
     return '/portal/image?id=' + id + '&width=' + width + '&height=' + height;
@@ -254,12 +274,25 @@ $scope.getImage = function(id, width, height){
   
   $scope.getArticlesForCategorySection = function()
   {
-	for (var i in $scope.mainCategories.data)
+	for (var i in $scope.mainCategories)
 	{
-		$scope.getArticlesByCategoryForMain($scope.mainCategories.data[i].id);
+		$scope.getArticlesByCategoryForMain($scope.mainCategories[i].id);
 	}
   }
-  $scope.getArticlesForCategorySection();
+  
+	$scope.slickConfig = {
+		arrows: false,
+		dots: true,
+		infinite: true,
+		autoplay: true,
+		autoplaySpeed: 300,
+		speed: 2000,
+		slidesToShow: 1,
+		touchMove: false,
+		slidesToScroll: 1};
+
+	$scope.slickHandle = {
+	};
 });
 
 
@@ -275,21 +308,6 @@ app.controller('ArticleController', function($scope, $http, SharedData, $routePa
 $scope.getUserAvatar = function(id){
 	return "/portal/avatar?id=" + id;
   };
-  
- $scope.listOfArticles = [];
- 
-    $scope.getListOfArticles = function(len)
-  {
-  
-  if ($scope.listOfArticles.length != 0)
-		return $scope.listOfArticles;
-		
-  var arr = getListOfArticles(len);
-
-  $scope.listOfArticles = arr;
-  
-  return $scope.listOfArticles;
-}
 
   $scope.currentUserName = SharedData.currentUserName;
 $scope.tags = SharedData.tags;
@@ -315,58 +333,25 @@ $scope.article = null;
 	
 	$scope.getArticle($scope.articleId);
 
+	
+$scope.getTagString = function() {
+	var out = [];
+	for (i in $scope.article.tag)
+  {
+	out.push($scope.article.tag[i].id);
+	}
+	
+	return out.toString();
+  }
    
-   $scope.artykuly = 
-   [{
-   id: 1,
-   title: "Tytul",
-   description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-   content: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\nLorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-   publication_date: "2012-04-23 18:25:43",
-   views:10,
-   image: 1,
-   tag: [1,0],
-   rank: 1,  
-   commntCount: 5
-   },
-   {
-   title: "Tytul",
-   description: "Opis",
-   publication_date: "2012-04-23 18:25:43",
-   views:10,
-   image: 1,
-   tag: [1,5,9],
-   rank: 1,  
-   commntCount: 5
-   },
-   {
-   title: "Tytul",
-   description: "Opis",
-   publication_date: "2012-04-23 18:25:43",
-   views:10,
-   image: 1,
-   tag: [1,5,9],
-   rank: 1,  
-   commntCount: 5
-   }];
+   $scope.listOfArticles = [];
    
-   $scope.komentarze =
-   [{
-   commentId : 12345,
-   userId : 1,
-   content : "Sample content",
-   date : "25.04.14",
-   time: "14.15",
-   nr_of_replies : 0
-   },
+   $scope.getArticles = function()
    {
-   commentId : 12346,
-   userId : 2,
-   content : "Sample content234234",
-   date : "25.04.14",
-   time: "14.15",
-   nr_of_replies : 4
-   }];
+	GetArticlesByTags($scope.getTagString(), 3, 0, 1, 'publication_date', $scope, $http);
+   }
+   
+   
 
    var showRepliesToComment = 0;
 
@@ -433,6 +418,20 @@ $scope.article = null;
 	$scope.replyComment[parentId] = "";
 	$scope.clickComment(parentId);
   }
+  
+	$scope.slickConfig = {
+		arrows: true,
+		dots: true,
+		infinite: true,
+		autoplay: true,
+		autoplaySpeed: 300,
+		speed: 2000,
+		slidesToShow: 1,
+		touchMove: false,
+		slidesToScroll: 1};
+
+	$scope.slickHandle = {
+	};
 });
 
 
@@ -459,7 +458,7 @@ $scope.total = 30;
   }
   else if ($scope.search != null)
   {
-	GetArticlesByTags('1,1', $scope.articlesLimit, $scope.articlesPage, 1, 'publication_date', $scope, $http);
+	GetArticlesByTags($scope.search, $scope.articlesLimit, $scope.articlesPage - 1, 1, 'publication_date', $scope, $http);
   }
 }
 
@@ -596,6 +595,16 @@ $scope.user =
     if($scope.user.email.trim() != '')
       EmailExists($scope, $http, $scope.user.email);
   };
+  
+	$scope.user = 
+	{'login': '',
+	'email': '',
+	'password': '',
+	'password1': '',
+	'firstname': '',
+	'lastname': '',
+	'gender': '',
+	'city': ''};
 
   var original = angular.copy($scope.user);
 
@@ -835,7 +844,7 @@ $scope.article = null;
 		<div class="col-md-12" style="color: #000">
           <h2 class="center1">Popularne</h2>
           <ul class="list-group">
-            <li class="list-group-item list1" ng-repeat="zajawka in getListOfArticles(3)">
+            <li class="list-group-item list1" ng-repeat="zajawka in articlesForRanks[2]">
               <a href="#article/{{$index + 1}}">
                 <img ng-src="{{getImage(artykul.image, 300, 200)}}" class="img-responsive">
                 <h4 class="zajawka-title">{{zajawka.title}}</h4> 

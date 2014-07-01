@@ -75,6 +75,16 @@ function GetMainCategories($scope, $http){
 	}); 
 };
 
+function GetMainCategoriesForMainPage($scope, $http){
+	$http.get('/portal/category').
+	  success(function(data, status, headers, config) {
+		$scope.mainCategories = data;
+		$scope.getArticlesForCategorySection();
+	  }).
+	  error(function(data, status, headers, config) {
+	}); 
+};
+
 function GetUser(name, $scope, $http){
 	$http.get('/portal/userProfile/' + name).
 	  success(function(data, status, headers, config) {
@@ -113,6 +123,7 @@ function GetArticle(articleId, $scope, $http){
 	$http.get('/portal/article/' + articleId).
 	  success(function(data, status, headers, config) {
 		$scope.article = data;
+		$scope.getArticles();
 	  }).
 	  error(function(data, status, headers, config) {
 

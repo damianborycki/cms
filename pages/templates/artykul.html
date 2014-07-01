@@ -4,7 +4,7 @@
           <div class="well list1">
 			<hr style="margin-top: -10px;"/>
             <h1 class="art-tytul">{{article.title}} </h1>
-			<p class="art-data">{{milisecToDate(article.publication_date)}}</p>
+			<p class="art-data">{{article.publication_date}}</p>
             <div class="col-md-7">
 				<div style="margin-left: -10px; background-color: #FFF; border-radius: 16px; padding: 10px 10px 10px 10px; width: 470px; margin-top: 10px;">
 					<img ng-src="{{getImage(artykuly[0].image)}}" class="img-responsive">
@@ -18,14 +18,15 @@
             <p class="art-tresc">
 				{{article.content}}
             </p>
-			<div style="width: 550px; margin-left: auto; margin-right: auto; background-color: rgba(0,0,0,0.1); border-radius: 32px; padding: 20px 30px 10px 30px; margin-top: 20px; margin-bottom: 10px;" ng-hide="gallery == null">
-				<slick arrows="true" dots="true" infinite="true" autoplay="true" autoplaySpeed="300" speed="300" slides-to-show="1" touch-move="false" slides-to-scroll="1" style="width: 490px;">
+			<div style="width: 550px; margin-left: auto; margin-right: auto; background-color: rgba(0,0,0,0.1); border-radius: 32px; padding: 20px 30px 10px 30px; margin-top: 20px; margin-bottom: 10px;">
+				<slick ng-transclude settings="slickConfig" control="slickHandle" style="width: 490px;">
 					<div ng-repeat="zajawka in getListOfArticles(3)">
-						<div style="margin-left: auto; margin-right: auto; background-color: #FFF; border-radius: 16px; padding: 10px 10px 10px 10px; width: 470px">
+						<p style="margin-left: auto; margin-right: auto; background-color: #FFF; border-radius: 16px; padding: 10px 10px 10px 10px; width: 470px">
 							<img ng-src="{{getImage(zajawka.image)}}" class="img-responsive">
-							<p>Opis opis</p>
-							<p>Autor: </p>
-						</div>
+							Opis:
+							</br>
+							Autor:
+						</p>
 					</div>
 				</slick>
 			</div>
@@ -107,7 +108,7 @@
 			<h3 contenteditable="true" class="podobne">Podobne artykuly</h3>
 		  </div>
 		<div style="padding-top: 10px;">
-		  <div class="col-md-4 "  ng-repeat="artykul in artykuly">
+		  <div class="col-md-4 "  ng-repeat="artykul in listOfArticles">
 		  <a href="#article">
 			<div class="list1" style="background-color: #FFF; border-radius: 16px; padding: 10px 10px 10px 10px; margin-top: 10px;">
 			 <img ng-src="{{getImage(artykul.image, 300, 200)}}" class="img-responsive">
