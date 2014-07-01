@@ -128,6 +128,20 @@ $scope.getArticleByRankId(1);
 
 $scope.userLoggedIn = false;
 
+$scope.getButtonText = function() {
+  // if ($scope.GetCurrentUserName()) {
+    //return 'Zaloguj';
+  // } else {
+  //   return $scope.currentUserData.name;
+  // }
+
+  if ($scope.userLoggedIn) {
+    return $scope.currentUserName.data;
+  } else {
+    return 'Zaloguj';
+  }
+}
+
 $scope.LogIn = function(login, pass)
 {
 	Login(login, pass, $scope, $http);
@@ -741,48 +755,48 @@ $scope.article = null;
     <div class="container">
 	<div class="row containerm">
 	 <div class="header" style="margin-top: 10px;">
-      <div class="col-md-4">
-        <a href="#main"><img src=""></a>
-      </div>
-      <div class="col-md-4 center-block">
+          <div class="col-md-4 pull-left">
         <div class="input-group col-xs-10">
-			<tags-input ng-model="selectedTags" display-property="name" add-on-enter="false" placeholder="Dodaj tag">
-				<auto-complete source="loadTags($query)" max-results-to-show="3"></auto-complete>
-			</tags-input>
+      <tags-input ng-model="selectedTags" display-property="name" add-on-enter="false" placeholder="Dodaj tag">
+        <auto-complete source="loadTags($query)" max-results-to-show="3"></auto-complete>
+      </tags-input>
             <span class="input-group-btn">
           <a class="btn btn-primary" type="button" href="#articleList?search={{getTagString()}}"ng-disabled="selectedTags.length == 0">Szukaj</a>
           </span>
         </div>
       </div>
-      <div class="col-md-2">
-        <a href="#register" ng-hide="userLoggedIn">Załóż konto</a>
+      <div class="col-md-4">
+        <a href="#main"><img src=""></a>
       </div>
       <div class="col-md-2">
+        <a href="#register" ng-hide="userLoggedIn" class="pull-right">Załóż konto</a>
+      </div>
+      <div class="col-md-2 pull-right">
         <div class='dropdown'>
-			  <button type='button' class='btn dropdown-toggle' data-toggle='dropdown'>
-				<img ng-src="{{UserAvatarPath}}">
+			  <button type='button' class='btn dropdown-toggle pull-right' data-toggle='dropdown'>
+<!-- 				<img ng-src="{{UserAvatarPath}}"> -->{{getButtonText()}}
 				<b class='caret'></b>
 			  </button>
-			  <ul class="dropdown-menu list-unstyled" ng-hide="userLoggedIn">
+			  <ul class="dropdown-menu list-unstyled pull-right" ng-hide="userLoggedIn" style="width: 220px; padding: 8% 10% 8% 10%; margin-top: 24%;">
 				<li>
 				  <form role="form">
 					<div class="form-group">
-					  <label>Login</label>
-					  <input class="form-control" placeholder="" type="text" ng-model="login">
+<!-- 					  <label>Login</label> -->
+					  <input class="form-control" placeholder="Login" type="text" ng-model="login">
 					</div>
 					<div class="form-group">
-					  <label for="exampleInputPassword1">Hasło</label>
+<!-- 					  <label for="exampleInputPassword1">Hasło</label> -->
 					  <input class="form-control" id="exampleInputPassword1" placeholder="Hasło" type="password" ng-model="pass">
 					</div>
-					<button type="submit" class="btn btn-default" ng-click="LogIn(login, pass)">Zaloguj</button>
+					<button type="submit" class="btn btn-primary pull-right" ng-click="LogIn(login, pass)">Zaloguj</button>
 				  </form>
 				</li>
 			  </ul>
-			  <ul class="dropdown-menu list-unstyled" ng-show="userLoggedIn">
+			  <ul class="dropdown-menu list-unstyled" ng-show="userLoggedIn" style="margin-top: 24%;">
 				<li>
-					<a class="btn btn-default" href="#userPage/{{currentUserName.data}}">Konto</a>
-					<a class="btn btn-default" ng-click="LogOut()">Wyloguj</a>
-				</li>
+					<a class="btn btn-default" href="#userPage/{{currentUserName.data}}">Konto</a></li>
+					<li><a class="btn btn-default" ng-click="LogOut()">Wyloguj</a></li>
+				<!-- </li> -->
 			  </ul>
         </div>
       </div>
