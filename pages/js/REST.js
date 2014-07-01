@@ -85,6 +85,16 @@ function GetMainCategoriesForMainPage($scope, $http){
 	}); 
 };
 
+function GetCategoriesForBreadCrumbs(id, $scope, $http){
+	$http.get('/portal/category').
+	  success(function(data, status, headers, config) {
+		$scope.categoriesByChild = data;
+		$scope.getCategoryForBreadCrumbs();
+	  }).
+	  error(function(data, status, headers, config) {
+	}); 
+};
+
 function GetUser(name, $scope, $http){
 	$http.get('/portal/userProfile/' + name).
 	  success(function(data, status, headers, config) {
@@ -124,6 +134,7 @@ function GetArticle(articleId, $scope, $http){
 	  success(function(data, status, headers, config) {
 		$scope.article = data;
 		$scope.getArticles();
+	$scope.getCategoryByChild($scope.article.category_id.id);
 	  }).
 	  error(function(data, status, headers, config) {
 

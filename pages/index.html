@@ -432,6 +432,42 @@ $scope.getTagString = function() {
 
 	$scope.slickHandle = {
 	};
+	
+	$scope.categoriesByChild = [];
+	$scope.getCategoryByChild = function(id)
+	{
+		GetCategoriesForBreadCrumbs(id, $scope, $http)
+	}
+	
+	
+	$scope.categoriesForBreadcrumbs = []
+	$scope.getCategoryForBreadCrumbs = function()
+	{
+		$scope.categoriesForBreadcrumbs = $scope.getCategoryForBreadcrumbsRecursive($scope.article.category_id.id, $scope.categoriesByChild);
+	}
+	
+	$scope.getCategoryForBreadcrumbsRecursive = function(id, arr)
+	{
+		for (var index in arr)
+		{
+			if (arr[index].id == id)
+			{
+				return [arr[index]];
+			}
+			else if (arr[index].children != null && arr[index].children.length > 0)
+			{
+				var out = $scope.getCategoryForBreadcrumbsRecursive(id, arr[index].children);
+				
+				if (out != null)
+				{
+					var outArr = [arr[index]];
+					outArr.push.apply(outArr, out);
+					return outArr;
+				}
+			}
+		}
+		return null;
+	}
 });
 
 
