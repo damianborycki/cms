@@ -554,6 +554,17 @@ $scope.getUserComments($scope.userName);
 
 app.controller('RejestracjaController', function($scope, $http) {
 
+$scope.user = 
+  {'login': '',
+  'email': '',
+  'password': '',
+  'password1': '',
+  'firstname': '',
+  'lastname': '',
+  'gender': '',
+  'city': ''};
+
+
   var options = {    
     types: ['(cities)'],    
     componentRestrictions: {country: "pl"}
@@ -562,40 +573,46 @@ app.controller('RejestracjaController', function($scope, $http) {
   var autocomplete = new google.maps.places.Autocomplete(input, options);
 
  $scope.lTest = function(){
+    if($scope.user.login != undefined)
     if($scope.user.login.trim() != '')
       LoginExists($scope, $http, $scope.user.login);
   };
   $scope.eTest = function(){
+    if($scope.user.email != undefined)
     if($scope.user.email.trim() != '')
       EmailExists($scope, $http, $scope.user.email);
   };
-  
-	$scope.user = 
-	{'login': '',
-	'email': '',
-	'password': '',
-	'password1': '',
-	'firstname': '',
-	'lastname': '',
-	'gender': '',
-	'city': ''};
 
-$scope.addListener = function() {
-  google.maps.event.addListener(autocomplete, 'place_changed', function() {
+  var original = angular.copy($scope.user);
 
-    var places = autocomplete.getPlace();
+  $scope.reset = function() {
+    $scope.user = angular.copy(original);
+    $scope.password1 = $scope.user.password;
+    $scope.regForm.$setPristine();
 
-    var city = places.adr_address.split('>')[1];
-    city = city.split('<')[0];
+    original = angular.copy($scope.user);
+  };
 
-    input.value = "siem";
-    $scope.user.city = city;
+  $scope.canReset = function() {
+    return !angular.equals($scope.user, original);
+  };
 
-    setTimeout(function(){
-        input.value = $scope.user.city;    
-    },1);
-});
-}
+  $scope.addListener = function() {
+    google.maps.event.addListener(autocomplete, 'place_changed', function() {
+
+      var places = autocomplete.getPlace();
+
+      var city = places.adr_address.split('>')[1];
+      city = city.split('<')[0];
+
+      input.value = "siem";
+      $scope.user.city = city;
+
+      setTimeout(function(){
+          input.value = $scope.user.city;    
+      },1);
+  });
+  }
 
 $scope.addListener();
 
