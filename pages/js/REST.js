@@ -46,10 +46,12 @@ function EditUser(login, info, $scope, $http){
 };
 
 function GetCurrentUserLogin($scope, $http){
-	$http.get('/portal/getCurrentUserLogin').
+	$http.get('/portal/getCurrentUser').
 	  success(function(data, status, headers, config) {
 		$scope.userLoggedIn = true;
 		$scope.currentUserName.data = data.login;
+		if (data.group)
+		$scope.currentUserGroup = data.group.id;
 	  }).
 	  error(function(data, status, headers, config) {
 		$scope.userLoggedIn = false;

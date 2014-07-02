@@ -143,6 +143,8 @@ $scope.getButtonText = function() {
   }
 }
 
+$scope.currentUserGroup = null;
+
 $scope.LogIn = function(login, pass)
 {
 	Login(login, pass, $scope, $http);
@@ -151,6 +153,7 @@ $scope.LogIn = function(login, pass)
 $scope.LogOut = function()
 {
 	Logout($scope, $http);
+  $scope.currentUserGroup = null;
 }
   
   $scope.getImage = function(id, width, height){
@@ -815,6 +818,12 @@ $scope.article = null;
       </div>
       <div class="col-md-2">
         <a href="#register" ng-hide="userLoggedIn" class="pull-right">Załóż konto</a>
+
+        <span ng-switch on="currentUserGroup">
+<div ng-switch-when="1"><a class="btn btn-default" href="adminIndex.html/#grous">Panel administratora</a></li></div>
+<div ng-switch-when="2"><a class="btn btn-default" href="adminIndex.html/#groups">Panel moderatora</a></li></div>
+
+
       </div>
       <div class="col-md-2 pull-right">
         <div class='dropdown'>
