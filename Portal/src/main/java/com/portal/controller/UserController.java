@@ -23,10 +23,10 @@ public class UserController {
 	@Autowired
 	private UserDAOI userDAO;
 	
-	@RequestMapping(value={"/", "/index", "/home"}, method=RequestMethod.GET)
-	public String homePage() {
-		return "index";
-	}
+//	@RequestMapping(value={"/", "/index", "/home", "portal"}, method=RequestMethod.GET)
+//	public String homePage() {
+//		return "/index.html";
+//	}
 
     @RequestMapping(value={"/admin"}, method=RequestMethod.GET)
 	public String adminPage() {
@@ -81,7 +81,7 @@ public class UserController {
 		
 	}
 	
-	@RequestMapping(value="/getCurrentUserLogin", method=RequestMethod.GET)
+	@RequestMapping(value="/getCurrentUser", method=RequestMethod.GET)
 	public @ResponseBody User userPage(HttpServletResponse response, HttpServletRequest request) {
 		
 		try {

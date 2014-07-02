@@ -134,10 +134,30 @@ public class UserDAOImpl implements UserDAOI {
 			org.springframework.security.core.userdetails.User user = 
 			(org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			
-			User systemUser = new User(user.getUsername(), null);
-			systemUser.setDateOfRegistration(null);
+			Query query = openSession().createQuery("from User u where u.login = :login");
+			query.setParameter("login", user.getUsername());
+			
+			List<User> users = query.list();
+			
+			User usr = users.get(0);
+			usr.setAvatar(null);
+			usr.setCity(null);
+			usr.setDateOfRegistration(null);
+			usr.setDateOfLastLogIn(null);
+			usr.setEmail(null);
+			usr.setGender(null);
+			usr.setId(null);
+			usr.setName(null);
+			usr.setInfo(null);
+			usr.setPassword(null);
+			usr.setSurname(null);
+			
+			usr.getGroup().setDescription(null);
+			usr.getGroup().setName(null);
+			
+			usr.setDateOfRegistration(null);
 		
-			return systemUser;
+			return usr;
 		
 		} catch(Exception e) {
 			
