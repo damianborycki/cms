@@ -1,10 +1,7 @@
 package com.portal.entity;
 
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.sql.Date;
@@ -102,6 +99,14 @@ public class Image {
         this.link = link;
     }
 
+    public Long getGallery_id() {
+        return gallery_id;
+    }
+
+    public void setGallery_id(Long gallery_id) {
+        this.gallery_id = gallery_id;
+    }
+
     @Id
     @Column(name = "id", unique = true, nullable = false)
  //   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -141,5 +146,7 @@ public class Image {
     @Column(name = "link", nullable = false)
     private String link;
 
-
+    @ManyToOne(targetEntity = Gallery.class)
+    @JoinColumn(name = "gallery_id")
+    private Long gallery_id;
 }

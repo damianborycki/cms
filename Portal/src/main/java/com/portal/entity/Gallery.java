@@ -42,6 +42,22 @@ public class Gallery {
         this.add_usr = add_usr;
     }
 
+    public List<Image> getImages() {
+        return images;
+    }
+
+    public void setImages(List<Image> images) {
+        this.images = images;
+    }
+
+    public List<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<Tag> tags) {
+        this.tags = tags;
+    }
+
     @Id
     @Column(name = "id", unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -50,14 +66,14 @@ public class Gallery {
     @Column(name = "description", nullable = true)
     private String description;
 
-    // TODO: uncomment after Tag is added
-    //@Column(name = "tags", nullable = false)
-    //private List<Tag> tags;
-
+    @OneToMany (mappedBy = "id")
+    private List<Tag> tags;
     @Column(name = "add_datetime", nullable = false)
     private Date add_datetime = new Date(System.currentTimeMillis());
 
     @Column(name = "add_usr")
     private Long add_usr;
 
+    @OneToMany (mappedBy = "gallery_id")
+    private List<Image> images;
 }
