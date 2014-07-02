@@ -12,6 +12,7 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -189,5 +190,10 @@ public class ArticleDAOImpl implements ArticleDAOI {
 	public void createNew(Article a) {
 		openSession().save(a);
 	}
+
+    @Override
+    public Long countAll() {
+        return ((BigInteger) openSession().createSQLQuery("SELECT Count(*) FROM articles").uniqueResult()).longValue();
+    }
 
 }

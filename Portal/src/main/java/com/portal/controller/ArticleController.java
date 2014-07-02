@@ -128,10 +128,15 @@ public class ArticleController {
     }
 
     @RequestMapping(value = "/article/{id}", method = RequestMethod.GET)
-    public @ResponseBody
-    Article getArticle(@PathVariable("id") long id, HttpServletResponse response) {
+         public @ResponseBody
+         Article getArticle(@PathVariable("id") long id, HttpServletResponse response) {
         response.setStatus(HttpServletResponse.SC_OK);
         return articleDAO.getById(id);
     }
 
+    @RequestMapping(value = "/articleCount", method = RequestMethod.GET)
+    public @ResponseBody Long getArticleCount(HttpServletResponse response) {
+        response.setStatus(HttpServletResponse.SC_OK);
+        return articleDAO.countAll();
+    }
 }

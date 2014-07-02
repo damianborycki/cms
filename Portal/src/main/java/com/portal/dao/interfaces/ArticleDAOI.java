@@ -72,4 +72,5 @@ public interface ArticleDAOI {
     
     void createNew(Article a);
 
+    Long countAll();
 }
