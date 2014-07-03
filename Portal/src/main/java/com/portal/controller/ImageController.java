@@ -31,6 +31,7 @@ import com.portal.dao.interfaces.UserDAOI;
 import com.portal.entity.Image;
 import com.portal.entity.ImageMetadata;
 import com.portal.entity.User;
+import com.portal.controller.ImageScaler;
 
 
 @Controller
@@ -42,7 +43,14 @@ public class ImageController {
     @Autowired
     UserDAOI userDAO;
 
-    private char slash = '\\';
+    private char slash = '/';
+
+    ImageScaler imageScaler;
+
+    ImageController()
+    {
+         imageScaler = new ImageScaler(getImagesDirectory());
+    }
 
     @RequestMapping(value="/add_image",method = RequestMethod.POST)
     public ModelAndView addImage(@RequestParam("file") MultipartFile imageData,
@@ -129,12 +137,6 @@ public class ImageController {
         return imagePath;
     }
 
-    private String getScaledImagePath(String id, long width, long height)
-    {
-        String imagePath = getImagesDirectory() + id + "_" + width + "_" + height + ".jpg";
-        return imagePath;
-    }
-
     private long getLoggedUserId() throws RuntimeException
     {
         User loggedUser = userDAO.getLoggedUser();
@@ -142,25 +144,6 @@ public class ImageController {
             throw new RuntimeException("no user logged in!");
         String loggedUserLogin = loggedUser.getLogin();
         return userDAO.getUser(loggedUserLogin).getId();
-    }
-
-    private String tryToScaleImage(String id, long width, long height)
-    {
-        Image biggestImage = imageDAO.getBiggestImage(id);
-        if(biggestImage == null)
-            return null;
-        
-        String biggestImageLink = biggestImage.getLink();
-        String scaledImagePath = scaleImage(id, biggestImageLink, width, height);
-        if( scaledImagePath != null)
-        {
-            Image scaledImage = biggestImage;
-            scaledImage.setLink(scaledImagePath);
-            scaledImage.setWidth(width);
-            scaledImage.setHeight(height);
-            imageDAO.addImage(scaledImage);
-        }
-        return scaledImagePath;
     }
 
     private void setImageSize(Image image, String imagePath) throws Exception
@@ -171,31 +154,14 @@ public class ImageController {
         image.setWidth((long)bufferedImage.getWidth());
     }
 
-    private String scaleImage(String id, String link, long width, long height)
+    private String getDefaultImageLink(long width,long height)
     {
-        try
-        {
-            File file = new File(link);
-            BufferedImage source = ImageIO.read(file);
-            ResampleOp resampleOp = new ResampleOp ((int)width,(int)height);
-            resampleOp.setUnsharpenMask(AdvancedResizeOp.UnsharpenMask.VerySharp);
-            BufferedImage rescaled = resampleOp.filter(source, null);
-            String scaledImagePath = getScaledImagePath(id, width, height);
-            File file2 = new File(scaledImagePath);
-            if( rescaled != null && file2 != null )
-            {
-                ImageIO.write( rescaled, "JPG", file2);
-            }
-            return scaledImagePath;
-        }
-        catch(Exception e)
-        {
-            return null;
-        }
-    }
-
-    private String getDefaultImageLink()
-    {
+	Image scaledDefault = imageDAO.getImage("default", width, height);
+	if( scaledDefault != null )
+	    return scaledDefault.getLink();
+        scaledDefault = imageScaler.tryToScaleImage(imageDAO, "default", width, height);
+	if( scaledDefault != null )
+            return scaledDefault.getLink();
         return getImagesDirectory() + "default" + slash + "default.jpg";
     }
 
@@ -209,12 +175,13 @@ public class ImageController {
         Image image = imageDAO.getImage(imageId,width,height);
         if( image == null )
         {
-            String scaledImage = tryToScaleImage(imageId, width, height);
-            if( scaledImage != null)
-                return scaledImage;
+            Image scaledImage = imageScaler.tryToScaleImage(imageDAO, imageId, width, height);
+            if( scaledImage != null )
+                if( scaledImage.getApp_usr() != null )
+                    return scaledImage.getLink();
         }
         if( image == null || image.getApp_usr() == null)
-            return getDefaultImageLink();
+            return getDefaultImageLink(width,height);
 
         return image.getLink();
     }
