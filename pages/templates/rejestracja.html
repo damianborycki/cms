@@ -19,7 +19,7 @@
               <span class="help-block" style="color:#CC330E; font-size: 13px;" data-ng-show="regForm.userLogin.$error.pattern">
                 <span style="background-color:#F13333;" class="badge pull-left">!</span>&nbsp;Wprowadzono niedozwolone znaki
               </span>
-              <span class="help-block" style="color:#CC330E; font-size: 13px;" data-ng-show="loginE">
+              <span class="help-block" style="color:#CC330E; font-size: 13px;" data-ng-show="loginE == 'true' && user.login.length > 3">
                 <span style="background-color:#F13333;" class="badge pull-left">!</span>&nbsp;Podany login już jest zajęty
               </span>              
             </div>
@@ -31,7 +31,7 @@
               <span class="help-block" style="color:#CC330E; font-size: 13px;" ng-show="regForm.userEmail.$error.email">
                 <span style="background-color:#F13333;" class="badge pull-left ">!</span>&nbsp;Podany email jest niepoprawny
               </span>
-              <span class="help-block" style="color:#CC330E; font-size: 13px;" ng-show="emailE">
+              <span class="help-block" style="color:#CC330E; font-size: 13px;" ng-show="emailE == 'true' && user.email.length > 0">
                 <span style="background-color:#F13333;" class="badge pull-left ">!</span>&nbsp;Podany email jest już zajęty
               </span>
             </div>
@@ -81,6 +81,7 @@
               <label for="inputGender3" class="col-sm-3 col-md-offset-0 control-label">Płeć</label>
               <div class="col-sm-5">
                 <select class="form-control" ng-model="user.gender">
+                  <option value="">-wybierz płec-</option>                  
                   <option value="K">kobieta</option>
                   <option value="M">mężczyzna</option>
                 </select>
@@ -99,7 +100,10 @@
             <br/>
               <div class="col-sm-5 col-sm-offset-3">            
                 <button ng-click="reset()" ng-disabled="!canReset()" class="btn btn-medium btn-primary col-md-3" style="width: 28%;">Wyczyść</button>
-                <button type="submit" style="margin-left: 3%; width: 68%; padding-left:22%; padding-right:22%;" class="btn btn-medium btn-success col-md-8" ng-disabled="user.login == '' || user.email == '' || user.password.length < 6 || user.password != user.password1 || regForm.userLogin.$error.pattern || regForm.userEmail.$error.email || regForm.userFirstname.$error.pattern || regForm.userLastname.$error.pattern || loginE != 'false' || emailE != 'false'" ng-click="register()">Zarejestruj</button>
+                <button type="submit" style="margin-left: 3%; width: 68%; padding-left:22%; padding-right:22%;" class="btn btn-medium btn-success col-md-8" 
+                ng-disabled="user.login == '' || user.login.length < 3 || user.email == '' || user.password.length < 6 || 
+                user.password != user.password1 || regForm.userLogin.$error.pattern || regForm.userEmail.$error.email || 
+                regForm.userFirstname.$error.pattern || regForm.userLastname.$error.pattern || loginE != 'false' || emailE != 'false'" ng-click="register()">Zarejestruj</button>
 
 
               </div>
