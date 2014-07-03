@@ -7,7 +7,8 @@
 <script src="angular/angular-route.js"></script>
 <script src="angularstrap/angular-strap.min.js"></script>
 <script src="angularstrap/angular-strap.tpl.min.js"></script>
-<script src="jQuerry/jquery-1.11.0.min.js"></script>
+<!-- <script src="jQuerry/jquery-1.11.0.min.js"></script> -->
+<script src="jQuerry/jquery-1.4.2.min.js"></script> 
 <script src="jQuerry/jquery.Jcrop.js"></script>
 <script src="bootstrap/bootstrap.js"></script>
 <script src="js/collapseMe.js"></script>
@@ -21,6 +22,7 @@
 <link href="css/modal.css" rel="stylesheet">
 <link rel="stylesheet" href="css/styles.css" >
 <link rel="stylesheet" href="css/styles-admin.css" >
+<link rel="stylesheet" href="css/jcrop.css" >
 <link href="css/ng-ckeditor.css" rel="stylesheet">
 <style>
 	.odd {
@@ -198,7 +200,62 @@ app.service('tags', function($q) {
 });
 
 
+app.controller('ImageController', function($scope) {
+  $scope.selected = function(cords) {
+    $scope.cropped=true;
+        var rx = 150 / cords.w;
+        var ry = 150 / cords.h;
+           
+           $('#preview').css({
+            width: Math.round(rx * boundx) + 'px',
+            height: Math.round(ry * boundy) + 'px',
+            marginLeft: '-' + Math.round(rx * cords.x) + 'px',
+            marginTop: '-' + Math.round(ry * cords.y) + 'px'
+        });
+  };
+});
 
+app.directive('imgCropped', function() {
+  return {
+    restrict: 'E',
+    replace: true,
+    scope: { src:'@', selected:'&' },
+    link: function(scope,element, attr) {
+      var myImg;
+      var clear = function() {
+        if (myImg) {
+          myImg.next().remove();
+          myImg.remove();
+          myImg = undefined;
+        }
+      };
+      scope.$watch('src', function(nv) {        
+        clear();
+        if (nv) {
+          element.after('<img />');
+          myImg = element.next();     
+          myImg.attr('src',nv);
+          $(myImg).Jcrop({
+            trackDocument: true,  
+            onSelect: function(x) {              
+              scope.$apply(function() {
+                scope.selected({cords: x});
+              });
+            }
+          },
+           function () {
+                        // Use the API to get the real image size  
+                        var bounds = this.getBounds();
+                        boundx = bounds[0];
+                        boundy = bounds[1];
+                    });
+        }
+      });
+      
+      scope.$on('$destroy', clear);
+    }
+  };
+});
 
 app.controller('TagController', function($scope, $http) { 
 
