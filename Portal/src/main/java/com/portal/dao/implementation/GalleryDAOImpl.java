@@ -44,7 +44,7 @@ public class GalleryDAOImpl implements GalleryDAOI {
         session.save(g);
     }
     
-    public void deleteGallery(String id) {
+    public void deleteGallery(Long id) {
         Query query = openSession().createQuery("delete from Gallery where id=:id");
         query.setParameter("id", id);
         query.executeUpdate();

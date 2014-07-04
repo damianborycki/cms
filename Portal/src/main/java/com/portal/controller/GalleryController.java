@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletResponse;
 import java.sql.Date;
 import java.util.List;
 
@@ -41,8 +42,15 @@ public class GalleryController {
         return "/home";
     }
 
+    @RequestMapping(value="/gallery", method=RequestMethod.GET)
+    public @ResponseBody Gallery getGallery(HttpServletResponse response,
+                           @RequestParam("id") Long id) {
+        return galleryDAO.getGallery(id);
+    }
+
+
     @RequestMapping(value="/gallery", method=RequestMethod.DELETE)
-    public void deleteGallery(@RequestParam("id") String id) {
+    public void deleteGallery(@RequestParam("id") Long id) {
         galleryDAO.deleteGallery(id);
     }
 
