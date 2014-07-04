@@ -21,6 +21,8 @@ public class ImageScaler
     }
 
     private char slash = '/';
+    private int jcropWidth = 700;
+    private int jcropHeight = 500;
 
     public Image tryToScaleImage(ImageDAOI imageDAO, String id, long width, long height)
     {
@@ -69,6 +71,23 @@ public class ImageScaler
     {
         String imagePath = imagesDirectory + id + "_" + width + "_" + height + ".jpg";
         return imagePath;
+    }
+
+    private int recalculateCoords(int origSize, int coordSize, long coord )
+    {
+         return ( (int)coord * origSize ) / coordSize;
+    }
+
+    public void cropImage(String tempFilePath, String path, long x1, long y1, long x2, long y2) throws Exception
+    {
+        BufferedImage image = ImageIO.read(new File(tempFilePath));
+        int originalWidth = image.getWidth();
+        int originalHeight = image.getHeight();
+        BufferedImage cropped = image.getSubimage( recalculateCoords( originalWidth,   jcropWidth,  x1 ),
+                             	                   recalculateCoords( originalHeight,  jcropHeight, y1 ),
+                                                   recalculateCoords( originalWidth,   jcropWidth,  x2-x1 ),
+                                                   recalculateCoords( originalHeight,  jcropHeight, y2-y1 ) );
+        ImageIO.write( cropped, "jpg", new File(path) );
     }
 
     String imagesDirectory;
