@@ -7,8 +7,7 @@
 <script src="angular/angular-route.js"></script>
 <script src="angularstrap/angular-strap.min.js"></script>
 <script src="angularstrap/angular-strap.tpl.min.js"></script>
-<!-- <script src="jQuerry/jquery-1.11.0.min.js"></script> -->
-<script src="jQuerry/jquery-1.4.2.min.js"></script> 
+<script src="jQuerry/jquery-1.11.0.min.js"></script>
 <script src="jQuerry/jquery.Jcrop.js"></script>
 <script src="bootstrap/bootstrap.js"></script>
 <script src="js/collapseMe.js"></script>
@@ -22,7 +21,6 @@
 <link href="css/modal.css" rel="stylesheet">
 <link rel="stylesheet" href="css/styles.css" >
 <link rel="stylesheet" href="css/styles-admin.css" >
-<link rel="stylesheet" href="css/jcrop.css" >
 <link href="css/ng-ckeditor.css" rel="stylesheet">
 <style>
 	.odd {
@@ -184,9 +182,17 @@ app.config(function($modalProvider) {
   });
 })
 
-app.controller('topAndSideContrler', function($scope, $location) {
+app.controller('topAndSideContrler', function($scope, $location, $http) {
+
+	$scope.currentUserGroup = 0;
+	GetCurrentUserLogin($scope, $http);
+
 	$scope.isActive = function(route) {
         return route === $location.path();
+    }
+
+    $scope.isAdmin = function() {
+    	return $scope.currentUserGroup == 1;
     }
 });
 
@@ -200,65 +206,7 @@ app.service('tags', function($q) {
 });
 
 
-app.controller('ImageController', function($scope) {
-  $scope.selected = function(cords) {
-    $scope.cropped=true;
-        var rx = 150 / cords.w;
-        var ry = 150 / cords.h;
-           
-           $('#preview').css({
-            width: Math.round(rx * boundx) + 'px',
-            height: Math.round(ry * boundy) + 'px',
-            marginLeft: '-' + Math.round(rx * cords.x) + 'px',
-            marginTop: '-' + Math.round(ry * cords.y) + 'px'
-        });
-  };
-});
 
-app.directive('imgCropped', function() {
-  return {
-    restrict: 'E',
-    replace: true,
-    scope: { src:'@', selected:'&' },
-    link: function(scope,element, attr) {
-      var myImg;
-      var clear = function() {
-        if (myImg) {
-          myImg.next().remove();
-          myImg.remove();
-          myImg = undefined;
-        }
-      };
-      scope.$watch('src', function(nv) {        
-        clear();
-        if (nv) {
-          element.after('<img />');
-          myImg = element.next();     
-          myImg.attr('src',nv);
-          $(myImg).Jcrop({
-            trackDocument: true,  
-            onSelect: function(c) {              
-            		jQuery('#x1').val(c.x);
-		            jQuery('#y1').val(c.y);
-		            jQuery('#x2').val(c.x2);
-		            jQuery('#y2').val(c.y2);
-		            jQuery('#w').val(c.w);
-		            jQuery('#h').val(c.h);
-            }
-          },
-           function () {
-                        // Use the API to get the real image size  
-                        var bounds = this.getBounds();
-                        boundx = bounds[0];
-                        boundy = bounds[1];
-                    });
-        }
-      });
-      
-      scope.$on('$destroy', clear);
-    }
-  };
-});
 
 app.controller('TagController', function($scope, $http) { 
 
@@ -1365,8 +1313,8 @@ app.controller("groupChange", function($scope, $http) {
             </div>
             <div class="navbar-collapse collapse">
               <ul class="nav navbar-nav nav-collapsing" id="topMenu">
-                <li ng-class="{active:isActive('/groups')}"><a href="#groups">Grupa</a>
-                </li>
+<!--                 <li ng-class="{active:isActive('/groups')}"><a href="#groups">Grupa</a>
+                </li> -->
                 <li ng-class="{active:isActive('/tag')}"><a href="#tag">Tag</a>
                 </li>
                 <li ng-class="{active:isActive('/tagTypes')}"><a href="#tagTypes">Rodzaj Tagu</a>
@@ -1385,8 +1333,16 @@ app.controller("groupChange", function($scope, $http) {
                 </li> 
                 <li ng-class="{active:isActive('/gallery')}"><a href="#gallery">Galerie</a>
                 </li>
-                <li ng-class="{active:isActive('/users')}"><a href="#users">Użytkownicy</a>
+                
+                <li ng-show="isAdmin()" ng-class="{active:isActive('/groups')}"><a href="#groups">Grupa</a>
                 </li>
+				<li ng-show="isAdmin()" ng-class="{active:isActive('/users')}"><a href="#users">Użytkownicy</a>
+                </li>
+            	
+                
+
+
+
                 <li><a class="dropdown-toggle" data-toggle="dropdown" href="#">
                     Więcej <i class="glyphicon glyphicon-chevron-down"></i>
                     </a>
