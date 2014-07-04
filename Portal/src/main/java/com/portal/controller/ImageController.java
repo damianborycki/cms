@@ -56,13 +56,17 @@ public class ImageController {
     public ModelAndView addImage(@RequestParam("file") MultipartFile imageData,
                            @RequestParam("description") String description,
                            @RequestParam("author") String author,
+                           @RequestParam("x1") long x1,
+                           @RequestParam("y1") long y1,
+                           @RequestParam("x2") long x2,
+                           @RequestParam("y2") long y2,
                            //@RequestParam("tags") Tag tags,
                            Model model) throws Exception 
     {
         Image image = new Image();
         String imagePath = getNewImagePath (imageData, image.getId());
 
-        saveImage(imageData, imagePath);
+        saveImage(imageData, imagePath, x1,y1,x2,y2);
 
         image.setId(image.getId() + imageData.getOriginalFilename());
         image.setLink(imagePath);
@@ -105,7 +109,7 @@ public class ImageController {
         return imageDAO.getAllUnapproved();
     }
 
-    private void saveImage(MultipartFile imageData, String path) throws Exception
+    private void saveTempImageFile( String path, MultipartFile imageData ) throws Exception
     {
         File imageFile = new File( path );
         if (!imageFile.exists()) 
@@ -122,7 +126,21 @@ public class ImageController {
             outputStream.write(bytes, 0, read);  
         }
 
-        outputStream.close();
+        outputStream.close();       
+    }
+
+    private void deleteTempFile(String path) throws Exception
+    {
+        File file = new File(path);
+        file.delete();
+    }
+
+    private void saveImage(MultipartFile imageData, String path, long x1, long y1, long x2, long y2) throws Exception
+    {
+        String tempFilePath = path + ".temp";
+        saveTempImageFile( tempFilePath, imageData );
+        imageScaler.cropImage( tempFilePath, path, x1, y1, x2, y2 );
+        deleteTempFile( tempFilePath );
     }
 
     private String getImagesDirectory()
