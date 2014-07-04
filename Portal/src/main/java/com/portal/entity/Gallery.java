@@ -26,14 +26,6 @@ public class Gallery {
         this.description = description;
     }
 
-    public Date getAdd_datetime() {
-        return add_datetime;
-    }
-
-    public void setAdd_datetime(Date add_datetime) {
-        this.add_datetime = add_datetime;
-    }
-
     public Long getAdd_usr() {
         return add_usr;
     }
@@ -68,8 +60,6 @@ public class Gallery {
 
     @OneToMany (mappedBy = "id")
     private List<Tag> tags;
-    @Column(name = "add_datetime", nullable = false)
-    private Date add_datetime = new Date(System.currentTimeMillis());
 
     @Column(name = "add_usr")
     private Long add_usr;
