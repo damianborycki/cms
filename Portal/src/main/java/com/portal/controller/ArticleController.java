@@ -95,8 +95,14 @@ public class ArticleController {
                                                         @RequestParam("sortOrder") Boolean sortOrder,                                                        
                                                         HttpServletResponse response){
         response.setStatus(HttpServletResponse.SC_OK);
+        
+        List<Article> arts = articleDAO.get(categoryID, limit, pageNO, sortBy, sortOrder);
+        
+        for(int i = 0; i < arts.size(); i++) {
+        	arts.get(i).setComments(null);
+        }
 
-        return articleDAO.get(categoryID, limit, pageNO, sortBy, sortOrder);
+        return arts;
     }
 
     @RequestMapping(value="/articlesByTagAndCategory", method=RequestMethod.GET)
@@ -123,8 +129,14 @@ public class ArticleController {
 
         ArticleRank articleRank = new ArticleRank();
         articleRank.setId(rankId);
+        
+        List<Article> arts = articleDAO.get(limit, pageNO, sortBy, sortOrder, articleRank);
+        
+        for(int i = 0; i < arts.size(); i++) {
+        	arts.get(i).setComments(null);
+        }
 
-        return articleDAO.get(limit, pageNO, sortBy, sortOrder, articleRank);
+        return arts;
     }
 
     @RequestMapping(value = "/article/{id}", method = RequestMethod.GET)
