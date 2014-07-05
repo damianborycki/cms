@@ -890,7 +890,7 @@ $scope.article = null;
           <h2 class="center1">Popularne</h2>
           <ul class="list-group">
             <li class="list-group-item list1" ng-repeat="zajawka in articlesForRanks[2]">
-              <a href="#article/{{$index + 1}}">
+              <a href="#article/{{zajawka.id}}">
                 <img ng-src="{{getImage(artykul.image, 300, 200)}}" class="img-responsive">
                 <h4 class="zajawka-title">{{zajawka.title}}</h4> 
                 <div class="caption">
@@ -903,7 +903,7 @@ $scope.article = null;
           <h2 class="center1">Ważne</h2>
           <ul class="list-group">
             <li class="list-group-item list1" ng-repeat="zajawka in articlesForRanks[1]">
-              <a href="#article/{{$index + 1}}">
+              <a href="#article/{{zajawka.id}}">
                 <img ng-src="{{getImage(artykul.image, 300, 200)}}" class="img-responsive">
                 <h4 class="zajawka-title">{{zajawka.title}}</h4> 
                 <div class="caption">
