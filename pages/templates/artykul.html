@@ -36,13 +36,13 @@
           </div>
       
 		 <div class="row containerm">
-          <div class="column" style="margin: 16px 5px 5px 5px;" ng-hide="currentUserName.data == ''">
+          <div class="column" style="margin: 5px 5px 5px 5px;" ng-hide="currentUserName.data == ''">
             <textarea class="span6" rows="9" placeholder="Napisz komentarz..." required="" 
 			style="margin: 0px; height: 180px; width: 100%; resize:vertical;" ng-model="commentContent"></textarea>
             <a class="btn btn-success btn-p" ng-click="addComment()">KOMENTUJ</a>
 			
           </div>
-		  <div class="column" style="margin: 16px 5px 5px 5px;">
+		  <div class="column" style="margin: 5px 5px 5px 5px;">
 		   <h3 class="c1">Komentarze</h3>
           <ul class="list-group ">
             <li class="list-group-item list1" ng-repeat="komentarz in articleComments">
@@ -62,8 +62,8 @@
 				<div class="col-md-10 text-right">
 					 <a class="btn btn-success btn-p" ng-if="komentarz.replies.length>0" ng-click="click(komentarz.id)" >Pokaz odpowiedzi ({{komentarz.replies.length}})</a>
 					 <div ng-show="showButton(komentarz.id)">
-						<div class="containerm" style="margin-left: auto; margin-right: auto; border-radius: 32px; padding: 10px 10px 5px 10px; margin-top: 10px; margin-bottom: 10px;">
-						<ul class="list-group">
+						<div class="containerm" style="margin-left: auto; margin-right: auto; border-radius: 16px; padding: 6px; margin-top: 10px; margin-bottom: 5px;">
+						<ul class="list-group" style="margin-bottom: 0px;">
 							<li class="list-group-item list1" ng-repeat="odpowiedzi in komentarz.replies">
 							  <div class="row">
 								<div class="col-md-3 text-left">
