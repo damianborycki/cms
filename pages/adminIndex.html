@@ -1,13 +1,15 @@
 ﻿<!doctype html>
 <html ng-app="studentInfoApp">
 <head>
+	<script src="jQuerry/jquery-1.11.0.min.js"></script>
 <script src="angular/angular.js"></script>
 <script src="angular/angular-sanitize.js"></script>
 <script src="angular/angular-animate.js"></script>
 <script src="angular/angular-route.js"></script>
 <script src="angularstrap/angular-strap.min.js"></script>
 <script src="angularstrap/angular-strap.tpl.min.js"></script>
-<script src="jQuerry/jquery-1.11.0.min.js"></script>
+<!-- <script src="jQuerry/jquery-1.11.0.min.js"></script> -->
+    <script src="angular/paging.js"></script>
 <script src="jQuerry/jquery.Jcrop.js"></script>
 <script src="bootstrap/bootstrap.js"></script>
 <script src="js/collapseMe.js"></script>
@@ -68,12 +70,15 @@
 	}
 </style>
 <script type="text/ng-template"  id="tree_item_renderer.html">
+
+	<span>
     {{data.name}}
     <button class="btn btn-success" data-animation="am-fade-and-scale" data-template="modal/categoryModal.html" bs-modal="modal" ng-click="SetCategoryForModal(data.id)"> Edytuj</button>
     <button class="btn btn-danger" ng-click="remove(data.id)" ng-show="getListOfElementsByParent(data.id).length == 0">Usuń</button>
     <ul class="hier-ul">
         <li class="hier-li" ng-repeat="data in getListOfElementsByParent(data.id)" ng-include="'tree_item_renderer.html'"></li>
     </ul>
+</span>
 </script>
 <script>
 
@@ -185,7 +190,7 @@ app.config(function($modalProvider) {
 
 app.controller('topAndSideContrler', function($scope, $location, $http) {
 
-	$scope.currentUserGroup = 0;
+	$scope.currentUserGroup;
 	GetCurrentUserLogin($scope, $http);
 
 	$scope.isActive = function(route) {
@@ -195,6 +200,7 @@ app.controller('topAndSideContrler', function($scope, $location, $http) {
     $scope.isAdmin = function() {
     	return $scope.currentUserGroup == 1;
     }
+
 });
 
 app.service('tags', function($q) {
@@ -653,10 +659,23 @@ $scope.categoryForModal = {'name': '', 'description': '', 'parent':''};
 			return;
 		}
 			GetCategories($scope, $http);
+
+
 	};
 
 	$scope.getlistOfCategories();
-//$scope.categoryForModal = null;
+
+
+	// $scope.addParents() = function() {
+	// 	for(var cat in $scope.listOfCategories) {
+	// 			cat["parent"] = null;
+	// 		}
+	// }
+
+	// $scope.addParents();
+
+	console.log($scope.listOfCategories);
+
 	$scope.addCategory = function()
 	{
 

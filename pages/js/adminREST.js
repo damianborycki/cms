@@ -76,8 +76,17 @@ $http({method: 'GET', url: '/portal/articleRank'}).
 function GetCategories($scope, $http){
 $http({method: 'GET', url: '/portal/category'}).
 	  success(function(data, status, headers, config) {
-	  	console.log(data);
 		$scope.listOfCategories = data;
+
+		for(var i = 0; i < $scope.listOfCategories.length; i++) {
+			$scope.listOfCategories[i]["parent"] = null;
+
+				for(var j = 0; j < $scope.listOfCategories[i].children.length; j++) {
+					$scope.listOfCategories[i].children[j]["parent"] = $scope.listOfCategories[i].id;
+				}
+		}
+
+		console.log($scope.listOfCategories);
 	  }); 
 	};
 	
@@ -259,5 +268,6 @@ function GetCurrentUserLogin($scope, $http){
 	  }).
 	  error(function(data, status, headers, config) {
 		$scope.userLoggedIn = false;
+		window.location.href = '/pages';
 	}); 
 };
