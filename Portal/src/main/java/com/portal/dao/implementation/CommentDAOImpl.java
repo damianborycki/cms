@@ -296,6 +296,7 @@ public class CommentDAOImpl implements CommentDAOI {
 			}
 
 			com.setId(c.getId());
+			com.setArticle(article);
 			com.setUser(user);
 			com.setContent(c.getContent());
 			com.setDate(c.getDate());
@@ -306,6 +307,7 @@ public class CommentDAOImpl implements CommentDAOI {
 
 			comments.add(com);
 		}
+
 		ClassComment classComment = new ClassComment();
 		classComment.setComments(comments);
 		classComment.setSize(coms2.size());
@@ -609,6 +611,7 @@ public class CommentDAOImpl implements CommentDAOI {
 			}
 
 			com.setId(c.getId());
+			com.setArticle(article);
 			com.setUser(user);
 			com.setContent(c.getContent());
 			com.setDate(c.getDate());

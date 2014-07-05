@@ -79,7 +79,7 @@ public class Comment {
     
     @ManyToOne
     @JoinColumn(name = "article_id", nullable = true)
-    @JsonBackReference
+    //@JsonBackReference
     private Article article;
     
 	@NotNull
