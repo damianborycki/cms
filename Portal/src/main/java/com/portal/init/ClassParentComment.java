@@ -20,6 +20,6 @@ public class ClassParentComment {
 	}
 	
 	public List<ParentComment> getComments(){
-		return comments;		
+		return this.comments;		
 	}
 }

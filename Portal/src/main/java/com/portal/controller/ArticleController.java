@@ -143,7 +143,12 @@ public class ArticleController {
          public @ResponseBody
          Article getArticle(@PathVariable("id") long id, HttpServletResponse response) {
         response.setStatus(HttpServletResponse.SC_OK);
-        return articleDAO.getById(id);
+        
+        Article art = articleDAO.getById(id);
+        
+        art.setComments(null);
+        
+        return art;
     }
 
     @RequestMapping(value = "/articleCount", method = RequestMethod.GET)

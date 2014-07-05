@@ -68,7 +68,13 @@ public class CommentController {
 			@RequestParam("sortOrder") String sortOrder,
 			HttpServletResponse response){
 		
-		return commentDAO.getArticleComments(articleID, limit, pageNO, sortOrder);
+		ClassParentComment coms = commentDAO.getArticleComments(articleID, limit, pageNO, sortOrder);
+		
+		for (int i = 0; i < coms.getComments().size(); i++) {
+			coms.getComments().get(i).getArticle().setComments(null);
+		}
+		
+		return coms;
 	}
 	
 	@RequestMapping(value="/comment/{commentId}", method=RequestMethod.GET)
