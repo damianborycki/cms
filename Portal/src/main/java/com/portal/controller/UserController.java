@@ -58,8 +58,6 @@ public class UserController {
 	@RequestMapping(value="/userProfile/{login:.+}", method=RequestMethod.GET)
 	public @ResponseBody User getUserProfile(@PathVariable("login") String login, HttpServletResponse response) {
 		
-		System.out.println(login);
-		
 		User user = userDAO.getUser(login);
 		user.setId(null);
 		user.setPassword(null);

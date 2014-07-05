@@ -50,7 +50,7 @@ public class CommentController {
 		response.setStatus(HttpServletResponse.SC_OK);
 	}
 	
-	@RequestMapping(value="/userComments/{login}", method=RequestMethod.GET)	
+	@RequestMapping(value="/userComments/{login:.+}", method=RequestMethod.GET)	
 	public @ResponseBody ClassComment usersComments(@PathVariable("login") String login,
 			@RequestParam("limit") int limit, 
 			@RequestParam("pageNo") int pageNO,
@@ -101,7 +101,7 @@ public class CommentController {
 		return commentDAO.getTotalComments(status);							
 	}
 	
-	@RequestMapping(value="/comments/{login}", method=RequestMethod.GET)
+	@RequestMapping(value="/comments/{login:.+}", method=RequestMethod.GET)
 	public @ResponseBody ClassComment getUserComments(@PathVariable("login") String login,
 			@RequestParam("status") long status, 
 			@RequestParam("limit") int limit, 
