@@ -4,7 +4,9 @@ package com.portal.dao.interfaces;
 import com.portal.entity.Comment;
 import com.portal.init.ClassParentComment;
 import com.portal.init.ClassComment;
+import com.portal.init.CustomCommentList;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface CommentDAOI {
@@ -26,7 +28,7 @@ public interface CommentDAOI {
 
     public List<Comment> children(Comment comment);
     
-    public void setStates(List<Comment> comments);
+    public void setStates(CustomCommentList comments);
     
     public void delete(List<Comment> comments);
     
