@@ -4,8 +4,7 @@
 }
 </style>
 
-<span ng-switch on="listOfCommentsWithStatus.length > 0 || listOfCommentsWithStatus != undefined">
-<div ng-switch-when="true">
+<div ng-show="listOfCommentsWithStatus.length > 0 || listOfCommentsWithStatus != undefined">
 	<div class="row row2">
 
 		<table class="table" id="comment_table">
@@ -23,7 +22,7 @@
 			</tr>
 		</table>
 
-		<div paging page="commentsPage" page-size="commentsLimit" total="total" show-prev-next="true" adjacent="1" paging-action="ChangePage(page)"></div>
+		<div paging page="commentsPage" page-size="commentsLimit" total="total" show-prev-next="true" adjacent="1" paging-action="ChangePage(page)"></div>{{commentsPage}}
 		
 	</div>
 	<div class="row btn-d">
@@ -31,10 +30,10 @@
 		<a class="btn btn-success btnb" ng-click="acceptSelected()">Akceptuj zaznaczone</a>
 	<!-- 	<a class="btn btn-primary btnb" ng-click="invertSelection()">Odwróć</a> -->
 	</div>
+
 </div>
-<div ng-switch-when="false">
+<div ng-hide="listOfCommentsWithStatus.length > 0 || listOfCommentsWithStatus != undefined">
 	<h3 style="text-align: center;">Brak komentarzy do moderacji</h3>
 </div>
-<div ng-switch-default>
-</div>
+
 </span>

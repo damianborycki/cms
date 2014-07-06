@@ -113,7 +113,7 @@ function parseDate(input)
 	return new Date(date[2], date[0]-1, date[1], time[0], time[1], time[2]);
 }
    
-var app = angular.module('studentInfoApp', ['ngSanitize', 'ngRoute', 'mgcrea.ngStrap', 'ngCkeditor', 'ngTagsInput']);
+var app = angular.module('studentInfoApp', ['ngSanitize', 'ngRoute', 'mgcrea.ngStrap', 'ngCkeditor', 'ngTagsInput', 'paging']);
 
 app.filter('unsafe', function($sce) {
     return function(val) {
@@ -1228,12 +1228,22 @@ app.controller('CommentModerationController', function($scope, $http) {
 	$scope.selectedComments = [];
 	$scope.selectAll = true;
 
+	$scope.commentsPage = 2;
+	$scope.commentsLimit = 5;
+	$scope.total = 1;
+
 	$scope.getCommentsWithStatus = function() {
-	if ($scope.listOfCommentsWithStatus.length != 0)
-		return $scope.listOfCommentsWithStatus;
+	// if ($scope.listOfCommentsWithStatus.length != 0)
+	// 	return $scope.listOfCommentsWithStatus;
 
 		GetCommentsWithStatus($scope, $http);
 	};
+
+	$scope.ChangePage = function(page)
+	{
+		$scope.commentsPage = page;
+		$scope.getCommentsWithStatus();
+	}
 
 $scope.getCommentsWithStatus();
 
