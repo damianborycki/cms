@@ -1250,21 +1250,24 @@ app.controller('CommentModerationController', function($scope, $http) {
 	$scope.selectedComments = [];
 	$scope.selectAll = true;
 
-	$scope.commentsPage = 2;
+	$scope.page = 0;
+
+	$scope.commentsPage = 1;
 	$scope.commentsLimit = 5;
 	$scope.total = 1;
 
-	$scope.getCommentsWithStatus = function() {
+	$scope.getCommentsWithStatus = function(page) {
 	// if ($scope.listOfCommentsWithStatus.length != 0)
 	// 	return $scope.listOfCommentsWithStatus;
 
-		GetCommentsWithStatus($scope, $http);
+		GetCommentsWithStatus($scope, $http, page);
 	};
 
 	$scope.ChangePage = function(page)
 	{
+		$scope.page = page;
 		$scope.commentsPage = page;
-		$scope.getCommentsWithStatus();
+		$scope.getCommentsWithStatus(page);
 	}
 
 $scope.getCommentsWithStatus();

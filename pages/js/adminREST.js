@@ -130,12 +130,14 @@ $http({method: 'DELETE', url: '/portal/category/' + id}).
 	  }); 
 	};
 
-function GetCommentsWithStatus($scope, $http){
+function GetCommentsWithStatus($scope, $http, page){
 $http({method: 'GET', url: '/portal/comment?status=1&limit=' + $scope.commentsLimit+ '&pageNo='+$scope.commentsPage+'&sortOrder=DESC'}).
 	  success(function(data, status, headers, config) {
 		$scope.listOfCommentsWithStatus = data.comments;
 		$scope.total = data.size;
-		$scope.commentsPage = 0;
+		console.log($scope.page + ' ' + $scope.commentsPage);
+
+		$scope.commentsPage = page;
 	  }); 
 	};
 
