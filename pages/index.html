@@ -530,6 +530,7 @@ $scope.showEditSurname = true;
 $scope.showEditCity = true;
 $scope.showEditGender = true;
 $scope.showEditEmail = true;
+$scope.showEditDesc = true;
 
 $scope.click = function(){
   $scope.showEditDesc = !$scope.showEditDesc;
@@ -648,8 +649,6 @@ $scope.getUserComments($scope.userName);
   $scope.getImage = function(id, width, height){
     return '/portal/image?id=' + id + '&width=' + width + '&height=' + height;
   };
-  
-  $scope.showEditDesc = false;
   
   
    
