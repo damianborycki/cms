@@ -2,6 +2,9 @@ package com.portal.dao.implementation;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.LinkedHashSet;
+import java.sql.Date;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -115,5 +118,24 @@ public class ImageDAOImpl implements ImageDAOI {
         session.save(i);
 				tx.commit();
 				session.close();
+    }
+
+    public List<String> getImageIds(long userId, Date startDate, Date endDate)
+    {
+        Query query = openSession().createQuery("from Image i where add_usr = :add_usr and add_datetime between '" + startDate.toString() + "' and '" + endDate.toString() + "'");
+        query.setParameter("add_usr",userId);
+        //query.setParameter("startDate",startDate);
+        //query.setParameter("endDate",endDate);
+        List<Image> imageList = query.list();
+        List<String> idsList = new ArrayList<String>();
+        for(int i=0; i<imageList.size(); i++) 
+        {
+            idsList.add( imageList.get(i).getId() );
+        }
+
+        Set<String> setItems = new LinkedHashSet(idsList);
+        idsList.clear();
+        idsList.addAll(setItems);
+        return idsList;
     }
 }

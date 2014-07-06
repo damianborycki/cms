@@ -9,6 +9,7 @@ import java.io.FileWriter;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
+import java.sql.Date;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletResponse;
@@ -218,5 +219,15 @@ public class ImageController {
     public ImageMetadata getMetadata(@RequestParam("id") String imageId) throws Exception
     {
         return imageDAO.getImageMetadata(imageId);
+    }
+
+    @RequestMapping(value="/getImageIds", method=RequestMethod.GET)
+    @ResponseBody
+    public List<String> getImageIds(@RequestParam("login") String login,
+                                    @RequestParam("startDate") Date startDate,
+                                    @RequestParam("endDate") Date endDate ) throws Exception
+    {
+        User user = userDAO.getUser(login);
+        return imageDAO.getImageIds(user.getId(), startDate, endDate);
     }
 }
