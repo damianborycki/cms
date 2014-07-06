@@ -5,6 +5,7 @@ import com.portal.entity.Comment;
 import com.portal.init.ClassParentComment;
 import com.portal.init.ClassComment;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface CommentDAOI {

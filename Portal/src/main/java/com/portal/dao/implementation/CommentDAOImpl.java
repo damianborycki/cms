@@ -234,8 +234,11 @@ public class CommentDAOImpl implements CommentDAOI {
 
 	@Override
 	public void setStates(List<Comment> comments) {
+		
+		//System.out.println(commentyczki.getClass());
 
 		for (Comment c : comments) {
+			System.out.println("c type: " + c.getClass());
 			Query query = openSession().createQuery(
 					"update Comment c set c.state = :state where c.id = :id");
 			query.setParameter("id", c.getId());
@@ -296,6 +299,7 @@ public class CommentDAOImpl implements CommentDAOI {
 			}
 
 			com.setId(c.getId());
+			com.setArticle(article);
 			com.setUser(user);
 			com.setContent(c.getContent());
 			com.setDate(c.getDate());
@@ -306,6 +310,7 @@ public class CommentDAOImpl implements CommentDAOI {
 
 			comments.add(com);
 		}
+
 		ClassComment classComment = new ClassComment();
 		classComment.setComments(comments);
 		classComment.setSize(coms2.size());
@@ -334,6 +339,7 @@ public class CommentDAOImpl implements CommentDAOI {
 
 		Criteria criteria2 = openSession().createCriteria(Comment.class);
 		criteria2.add(Restrictions.eq("article.id", articleID));
+		criteria2.add(Restrictions.eq("state.id", 2L));
 		criteria2.add(Restrictions.isNull("parent"));
 		List<Comment> coms2 = criteria2.list();
 
@@ -609,6 +615,7 @@ public class CommentDAOImpl implements CommentDAOI {
 			}
 
 			com.setId(c.getId());
+			com.setArticle(article);
 			com.setUser(user);
 			com.setContent(c.getContent());
 			com.setDate(c.getDate());

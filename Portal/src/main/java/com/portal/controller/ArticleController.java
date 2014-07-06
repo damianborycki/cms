@@ -42,8 +42,8 @@ public class ArticleController {
     }
 
     @RequestMapping(value = "article/{id}", method = RequestMethod.PUT, consumes = "application/json")
-    public void put(@RequestBody Article article, HttpServletResponse response) {
-        articleDAO.edit(article.getId(),
+    public void put(@PathVariable("id") long pasedId, @RequestBody Article article, HttpServletResponse response) {
+        articleDAO.edit(pasedId,
                 article.getTitle(),
                 article.getCategory_id(),
                 article.getDescription(),
@@ -95,8 +95,14 @@ public class ArticleController {
                                                         @RequestParam("sortOrder") Boolean sortOrder,                                                        
                                                         HttpServletResponse response){
         response.setStatus(HttpServletResponse.SC_OK);
+        
+        List<Article> arts = articleDAO.get(categoryID, limit, pageNO, sortBy, sortOrder);
+        
+        for(int i = 0; i < arts.size(); i++) {
+        	arts.get(i).setComments(null);
+        }
 
-        return articleDAO.get(categoryID, limit, pageNO, sortBy, sortOrder);
+        return arts;
     }
 
     @RequestMapping(value="/articlesByTagAndCategory", method=RequestMethod.GET)
@@ -123,15 +129,26 @@ public class ArticleController {
 
         ArticleRank articleRank = new ArticleRank();
         articleRank.setId(rankId);
+        
+        List<Article> arts = articleDAO.get(limit, pageNO, sortBy, sortOrder, articleRank);
+        
+        for(int i = 0; i < arts.size(); i++) {
+        	arts.get(i).setComments(null);
+        }
 
-        return articleDAO.get(limit, pageNO, sortBy, sortOrder, articleRank);
+        return arts;
     }
 
     @RequestMapping(value = "/article/{id}", method = RequestMethod.GET)
          public @ResponseBody
          Article getArticle(@PathVariable("id") long id, HttpServletResponse response) {
         response.setStatus(HttpServletResponse.SC_OK);
-        return articleDAO.getById(id);
+        
+        Article art = articleDAO.getById(id);
+        
+        art.setComments(null);
+        
+        return art;
     }
 
     @RequestMapping(value = "/articleCount", method = RequestMethod.GET)

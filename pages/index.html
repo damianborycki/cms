@@ -157,7 +157,7 @@ $scope.LogOut = function()
 }
   
   $scope.getImage = function(id, width, height){
-    return 'http://placehold.it/' + width + 'x' + height;
+    return '/portal/image?id=' + id + '&width=' + width + '&height=' + height;
   };
   
   
@@ -305,7 +305,7 @@ $scope.getImage = function(id, width, height){
 app.controller('ArticleController', function($scope, $http, SharedData, $routeParams) {
 
  $scope.getImage = function(id, width, height){
-    return '/portal/image?id=' + id;
+    return '/portal/image?id=' + id + '&width=' + width + '&height=' + height;
   };
   
 $scope.getUserAvatar = function(id){
@@ -480,7 +480,7 @@ $scope.getTagString = function() {
 app.controller('ListaArtykolowControler', function($scope, $http, $location) {
   
   $scope.getImage = function(id, width, height){
-    return 'http://placehold.it/' + width + 'x' + height;
+    return '/portal/image?id=' + id + '&width=' + width + '&height=' + height;
   };
   
   $scope.articlesPage = 1;
@@ -519,11 +519,78 @@ $scope.getListOfArticles();
 
 app.controller('StronaUzytkownikaController', function($scope, $http, $routeParams, SharedData) {
 
-$scope.currentUserName = SharedData.currentUserName;
-
+//$scope.currentUserName = SharedData.currentUserName;
+GetCurrentUserLogin($scope, $http);
 $scope.userName = $routeParams.userName;
 
 $scope.searchedUser =null;
+
+$scope.showEditName = true;
+$scope.showEditSurname = true;
+$scope.showEditCity = true;
+$scope.showEditGender = true;
+$scope.showEditEmail = true;
+$scope.showEditDesc = true;
+
+$scope.click = function(){
+  $scope.showEditDesc = !$scope.showEditDesc;
+}
+
+$scope.click1 = function(){
+  $scope.showEditName = !$scope.showEditName;
+};
+
+$scope.click2 = function(){
+  $scope.showEditSurname = !$scope.showEditSurname;
+};
+
+$scope.click3 = function(){
+  $scope.showEditCity = !$scope.showEditCity;
+};
+
+$scope.click4 = function(){
+  $scope.showEditGender = !$scope.showEditGender;
+};
+
+$scope.click5 = function(){
+  $scope.showEditEmail = !$scope.showEditEmail;
+};
+
+$scope.editName = function()
+{
+  EditUser($scope, $http, $scope.userName, {'login': $scope.userName, 'name': $scope.searchedUser.name});
+  $scope.click1();
+}
+
+$scope.editSurname = function()
+{
+  EditUser($scope, $http, $scope.userName, {'login': $scope.userName, 'surname': $scope.searchedUser.surname});
+  $scope.click2();
+}
+
+$scope.editCity = function()
+{
+  EditUser($scope, $http, $scope.userName, {'login': $scope.userName, 'city': $scope.searchedUser.city});
+  $scope.click3();
+}
+
+$scope.editGender = function()
+{
+  EditUser($scope, $http, $scope.userName, {'login': $scope.userName, 'gender': $scope.searchedUser.gender});
+  $scope.click4();
+}
+
+$scope.editEmail = function()
+{
+  EditUser($scope, $http, $scope.userName, {'login': $scope.userName, 'email': $scope.searchedUser.email});
+  $scope.click5();
+}
+
+$scope.editDescription = function()
+{
+   EditUser($scope, $http, $scope.userName, {'login': $scope.userName, 'info': $scope.searchedUser.info});
+   $scope.click();
+}
 
 $scope.getUser = function(name)
 {
@@ -580,24 +647,14 @@ $scope.getUserComments($scope.userName);
 }
 
   $scope.getImage = function(id, width, height){
-    return 'http://placehold.it/' + width + 'x' + height;
+    return '/portal/image?id=' + id + '&width=' + width + '&height=' + height;
   };
   
-  $scope.showEditDesc = false;
   
-  $scope.click = function(){
-   $scope.showEditDesc = !$scope.showEditDesc;
-   }
-   
-   $scope.editDescription = function()
-   {
-	EditUser($scope.userName, $scope.searchedUser.info, $scope, $http);
-	$scope.click();
-   }
    
   $scope.milisecToDate = function(miliseconds)
   {
-	return new Date(miliseconds).yyyymmddhhmmss();
+	 return new Date(miliseconds).yyyymmddhhmmss();
   }
 });
 
@@ -803,6 +860,9 @@ $scope.article = null;
     <div class="container">
 	<div class="row containerm">
 	 <div class="header" style="margin-top: 10px;">
+      <div class="col-md-4">
+        <a href="#main"><img src="pics/logo.png"></a>
+      </div>
           <div class="col-md-4 pull-left">
         <div class="input-group col-xs-10">
       <tags-input ng-model="selectedTags" display-property="name" add-on-enter="false" placeholder="Dodaj tag">
@@ -812,9 +872,6 @@ $scope.article = null;
           <a class="btn btn-primary" type="button" href="#articleList?search={{getTagString()}}"ng-disabled="selectedTags.length == 0">Szukaj</a>
           </span>
         </div>
-      </div>
-      <div class="col-md-4">
-        <a href="#main"><img src=""></a>
       </div>
       <div class="col-md-2">
         <a href="#register" ng-hide="userLoggedIn" class="pull-right">Załóż konto</a>

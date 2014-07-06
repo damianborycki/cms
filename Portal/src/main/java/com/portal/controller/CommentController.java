@@ -7,12 +7,16 @@ import com.portal.init.ClassComment;
 import com.portal.init.ClassParentComment;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 @Controller
 public class CommentController {
@@ -68,7 +72,13 @@ public class CommentController {
 			@RequestParam("sortOrder") String sortOrder,
 			HttpServletResponse response){
 		
-		return commentDAO.getArticleComments(articleID, limit, pageNO, sortOrder);
+		ClassParentComment coms = commentDAO.getArticleComments(articleID, limit, pageNO, sortOrder);
+		
+		for (int i = 0; i < coms.getComments().size(); i++) {
+			coms.getComments().get(i).getArticle().setComments(null);
+		}
+		
+		return coms;
 	}
 	
 	@RequestMapping(value="/comment/{commentId}", method=RequestMethod.GET)
