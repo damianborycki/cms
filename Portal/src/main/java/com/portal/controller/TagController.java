@@ -40,7 +40,7 @@ public class TagController {
         response.setStatus(HttpServletResponse.SC_OK);
     }
 
-    @RequestMapping(value="/tag", method= RequestMethod.PUT, consumes= MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value="/tag/{id}", method= RequestMethod.PUT, consumes= MediaType.APPLICATION_JSON_VALUE)
     public void edit(@PathVariable Long id, @RequestBody Tag tag, HttpServletResponse response) {
         tagDAO.edit(id, tag);
         response.setStatus(HttpServletResponse.SC_OK);

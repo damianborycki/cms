@@ -273,6 +273,9 @@ app.directive('imgCropped', function() {
  });
 
 
+ 
+ 
+ 
 app.controller('TagController', function($scope, $http) { 
 
 	$scope.listOfTags = [];
@@ -293,7 +296,7 @@ app.controller('TagController', function($scope, $http) {
 	
 	$scope.getListOfTagsTypes();
 
-$scope.GetIndexOfTagById=function($id)
+$scope.GetIndexOfTagTypeById=function($id)
 {
 	for (var tagIndex in $scope.listOfTagsTypes)
 	{
@@ -306,16 +309,29 @@ $scope.GetIndexOfTagById=function($id)
 	return -1;
 };
 
+$scope.GetIndexOfTagById=function($id)
+{
+	for (var tagIndex in $scope.listOfTags)
+	{
+		if ($scope.listOfTags[tagIndex].id == $id)
+		{
+			return tagIndex;
+		}
+	}
+	
+	return -1;
+};
+
 $scope.GetTagType=function($id)
 {
-	return $scope.listOfTagsTypes[$scope.GetIndexOfTagById($id)];
+	return $scope.listOfTagsTypes[$scope.GetIndexOfTagTypeById($id)];
 };
 
    
 $scope.selection = [];
 
 $scope.remove=function($id){ 
-	DeleteTag($id);
+	DeleteTag($id,$scope,$http);
 	
 	idx = $scope.selection.indexOf($id);
 	

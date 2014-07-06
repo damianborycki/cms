@@ -1,6 +1,6 @@
 ﻿
 	  <div class="row containerm">
-		  <div class="page-header" style="background-color: #C0C0C0" >
+		  <div class="page-header" style="background-color: #C0C0C0; margin: 0px;" >
               <h1>&nbsp;Użytkownik:&nbsp;<b class="nazwa_uzytk">{{searchedUser.login}}</b>
               </h1>
             </div>
@@ -9,28 +9,28 @@
               <div class="col-md-3">&nbsp;<img src="{{getImage(searchedUser.avatar, 150, 150)}}" class="img-responsive"/> <br>
 			   <a class="btn btn-lg btn-primary" ng_show="searchedUser.login == currentUserName.data"> Zmień avatar</a>
 			  </div>
+              <div class="col-md-9" style="background-color: #fff; border-radius: 32px; margin-top: 15px; padding-bottom: 15px;">
 			     <div class="tytul1" style="text-align: center; font-size: 20px;"><br>Opis użytkownika</div><br>
-              <div class="col-md-9">Płeć: {{searchedUser.gender}} | Info: {{searchedUser.info}}<br><br>
+				 Płeć: {{searchedUser.gender}} | Info: {{searchedUser.info}}<br><br>
 			  
 			  <div class="przycisk1" style="text-align:right">
-			  <a class="btn btn-lg btn-primary"  ng-click="click()"  ng_show="searchedUser.login == currentUserName.data" ng-hide="showEditDesc"> Zmień opis</a>
 			  <div ng-show="showEditDesc">
 					 <div class="row">
 						<div class="column">
 						<textarea class="span6" rows="9" placeholder="Napisz opis..." required="" ng-model="searchedUser.info"
 						style="margin: 0px; height: 180px; width: 100%; resize:vertical;"></textarea>
-						<a class="btn btn-lg btn-primary"  ng-click="click()"  ng_show="searchedUser.login == currentUserName.data">Zamknij</a>
-						<a class="btn btn-lg btn-primary" ng-click="editDescription()"> Zapisz</a>
 						</div>
 					 </div>
+						<a class="btn btn-lg btn-primary"  ng-click="click()"  ng_show="searchedUser.login == currentUserName.data">Zamknij</a>
+						<a class="btn btn-lg btn-primary" ng-click="editDescription()"> Zapisz</a>
 					</div>
+					
+			  <a class="btn btn-lg btn-primary"  ng-click="click()"  ng_show="searchedUser.login == currentUserName.data && !showEditDesc"> Zmień opis</a>
               </div>
 			  </div>
 			</div>
-			<div class="col-md-12">
-			<hr style="margin: 5px 5px 5px 5px;">
-			</div>
-        
+        </div>
+	  <div class="row containerm">
 	  <div class="col-md-12" style="color: #000">
 		<div class="tytul2" style="text-align: left; font-size: 30px;">Komentarze użytkownika</div><br>
 		
@@ -40,8 +40,7 @@
               <div class="row">
                 <div class="col-md-2">
 				  <h3>  <div class="komentarz_login">{{searchedUser.login}}</div></h3>
-                  <!--<h3 contenteditable="true"> {{komentarz.userId}}</h3>-->
-				  <p> {{milisecToDate(komentarz.date)}}</p> 
+				  <p> {{komentarz.date}}</p> 
                 </div>
                 <div class="col-md-10">
                   <p class="text-justify commentText" ng-class="{show: show && komentarz.content.length > 100}">{{komentarz.content}}</p>

@@ -22,7 +22,7 @@
 			<div class="col-md-9">
 				<select ng-model="categoryFormModal.parent">
 				<option ng-selected="{{'null' == categoryForModal.parent}}" value="null">null</option>
-				<option ng-selected="{{categoryForModal.id == categoryForModal.parent}}" ng-repeat="tagType in GetFlatCategoriesList()" value="{{categoryForModal.id}}" ng-hide="categoryForModal.id == categoryForModal.id">{{categoryForModal.name}}</option>
+				<option ng-selected="{{cat.id == categoryForModal.parent}}" ng-repeat="cat in GetFlatCategoriesList()" value="{{cat.id}}" ng-hide="cat.id == categoryForModal.id">{{cat.name}}</option>
 				</select>
 			</div>
 			<textarea style="margin: 0px; height: 180px; width: 100%; resize:vertical;" ng-model="categoryForModal.description"></textarea>

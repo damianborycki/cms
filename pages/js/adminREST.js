@@ -6,7 +6,7 @@ $http({method: 'GET', url: '/portal/tag'}).
 	};
 	
 	function AddTag(name, description, type, $scope, $http){
-	$http.post('/portal/tag', {name: name, description: description, type: type}).
+	$http.post('/portal/tag', {name: name, description: description, type: {id:type}}).
 	  success(function(data, status, headers, config) {
 		$scope.getListOfTags();
 	  }).
@@ -15,7 +15,7 @@ $http({method: 'GET', url: '/portal/tag'}).
 	};
 	
 	function EditTag(id, name, description, type, $scope, $http){
-$http.put('/portal/tag/' + id, {name: name, description: description, type: type}).
+$http.put('/portal/tag/' + id, {name: name, description: description, type: {id:type}}).
 	  success(function(data, status, headers, config) {
 		$scope.getListOfTags();
 	  }).
