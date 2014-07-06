@@ -157,7 +157,7 @@ $scope.LogOut = function()
 }
   
   $scope.getImage = function(id, width, height){
-    return 'http://placehold.it/' + width + 'x' + height;
+    return '/portal/image?id=' + id + '&width=' + width + '&height=' + height;
   };
   
   
@@ -305,7 +305,7 @@ $scope.getImage = function(id, width, height){
 app.controller('ArticleController', function($scope, $http, SharedData, $routeParams) {
 
  $scope.getImage = function(id, width, height){
-    return '/portal/image?id=' + id;
+    return '/portal/image?id=' + id + '&width=' + width + '&height=' + height;
   };
   
 $scope.getUserAvatar = function(id){
@@ -480,7 +480,7 @@ $scope.getTagString = function() {
 app.controller('ListaArtykolowControler', function($scope, $http, $location) {
   
   $scope.getImage = function(id, width, height){
-    return 'http://placehold.it/' + width + 'x' + height;
+    return '/portal/image?id=' + id + '&width=' + width + '&height=' + height;
   };
   
   $scope.articlesPage = 1;
@@ -580,7 +580,7 @@ $scope.getUserComments($scope.userName);
 }
 
   $scope.getImage = function(id, width, height){
-    return 'http://placehold.it/' + width + 'x' + height;
+    return '/portal/image?id=' + id + '&width=' + width + '&height=' + height;
   };
   
   $scope.showEditDesc = false;
@@ -804,7 +804,7 @@ $scope.article = null;
 	<div class="row containerm">
 	 <div class="header" style="margin-top: 10px;">
       <div class="col-md-4">
-        <a href="#main"><img src=""></a>
+        <a href="#main"><img src="pics/logo.png"></a>
       </div>
           <div class="col-md-4 pull-left">
         <div class="input-group col-xs-10">

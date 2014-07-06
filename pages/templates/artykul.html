@@ -7,7 +7,7 @@
 			<p class="art-data">{{article.publication_date}}</p>
             <div class="col-md-7">
 				<div style="margin-left: -10px; background-color: #FFF; border-radius: 16px; padding: 10px 10px 10px 10px; width: 470px; margin-top: 10px;">
-					<img ng-src="{{getImage(artykuly[0].image)}}" class="img-responsive">
+					<img ng-src="{{getImage(artykuly[0].image, 560, 300)}}" class="img-responsive">
 					<p>Opis opis</p>
 					<p>Autor: </p>
 				</div>
@@ -22,7 +22,7 @@
 				<slick ng-transclude settings="slickConfig" control="slickHandle" style="width: 490px;">
 					<div ng-repeat="zajawka in getListOfArticles(3)">
 						<p style="margin-left: auto; margin-right: auto; background-color: #FFF; border-radius: 16px; padding: 10px 10px 10px 10px; width: 470px">
-							<img ng-src="{{getImage(zajawka.image)}}" class="img-responsive">
+							<img ng-src="{{getImage(zajawka.image, 560, 300)}}" class="img-responsive">
 							Opis:
 							</br>
 							Autor:
