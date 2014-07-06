@@ -5,7 +5,6 @@ import com.portal.dao.interfaces.UserDAOI;
 import com.portal.entity.Comment;
 import com.portal.init.ClassComment;
 import com.portal.init.ClassParentComment;
-import com.portal.init.CustomCommentList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -40,7 +39,7 @@ public class CommentController {
 	}
 	
 	@RequestMapping(value="/setCommentStatus", method=RequestMethod.PATCH)
-	public void setCommentStatus(@RequestBody CustomCommentList comments, HttpServletResponse response) {
+	public void setCommentStatus(@RequestBody List<Comment> comments, HttpServletResponse response) {
 		
 		commentDAO.setStates(comments);
 			

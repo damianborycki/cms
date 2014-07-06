@@ -7,7 +7,6 @@ import com.portal.entity.Article;
 import com.portal.entity.Comment;
 import com.portal.entity.CommentState;
 import com.portal.entity.User;
-import com.portal.init.CustomCommentList;
 import com.portal.init.ParentComment;
 import com.portal.init.ClassParentComment;
 import com.portal.init.ClassComment;
@@ -234,11 +233,11 @@ public class CommentDAOImpl implements CommentDAOI {
 	}
 
 	@Override
-	public void setStates(CustomCommentList commentyczki) {
+	public void setStates(List<Comment> comments) {
 		
 		//System.out.println(commentyczki.getClass());
 
-		for (Comment c : (ArrayList<Comment>)commentyczki) {
+		for (Comment c : comments) {
 			System.out.println("c type: " + c.getClass());
 			Query query = openSession().createQuery(
 					"update Comment c set c.state = :state where c.id = :id");
