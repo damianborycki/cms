@@ -390,13 +390,13 @@ $scope.getTagString = function() {
    
 	$scope.articleComments = null;
 
-	$scope.commentsPage = 1;
+	$scope.commentsPage = 0;
 	$scope.commentsLimit = 20;
-	$scope.total = 30;
+	$scope.total = 10;
 
 	$scope.getArticleComments = function(articleId)
 	{
-		GetArticleComments(articleId, $scope.commentsPage, $scope.commentsLimit, $scope, $http);
+		GetArticleComments(articleId, $scope.commentsPage, $scope.commentsLimit, 'DESC', $scope, $http);
 	}
 
 	$scope.getArticleComments($scope.articleId);
@@ -439,8 +439,8 @@ $scope.getTagString = function() {
 	$scope.categoriesByChild = [];
 	$scope.getCategoryByChild = function(id)
 	{
-		GetCategoriesForBreadCrumbs(id, $scope, $http)
-	}
+		GetCategoriesForBreadCrumbs(id, $scope, $http);
+	};
 	
 	
 	$scope.categoriesForBreadcrumbs = []
@@ -483,7 +483,7 @@ app.controller('ListaArtykolowControler', function($scope, $http, $location) {
     return '/portal/image?id=' + id + '&width=' + width + '&height=' + height;
   };
   
-  $scope.articlesPage = 1;
+  $scope.articlesPage = 0;
 $scope.articlesLimit = 20;
 $scope.total = 30;
 
@@ -602,9 +602,9 @@ $scope.getUser($scope.userName);
 
 $scope.userComments = null;
 
-$scope.commentsPage = 1;
+$scope.commentsPage = 0;
 $scope.commentsLimit = 20;
-$scope.total = 30;
+$scope.total = 0;
 
 $scope.getUserComments = function(userId)
 {
@@ -813,13 +813,14 @@ $scope.article = null;
    
 	$scope.articleComments = null;
 
-	$scope.commentsPage = 1;
+	$scope.commentsPage = 0;
 	$scope.commentsLimit = 20;
-	$scope.total = 1;
+	$scope.total = 0;
+	$scope.order = 'DESC';
 
 	$scope.getArticleComments = function(articleId)
 	{
-		GetArticleComments(articleId, $scope.commentsPage, $scope.commentsLimit, $scope, $http);
+		GetArticleComments(articleId, $scope.commentsPage, $scope.commentsLimit, $scope.order,  $scope, $http);
 	}
 
 	$scope.getArticleComments($scope.articleId);
@@ -828,6 +829,21 @@ $scope.article = null;
 	{
 		$scope.commentsPage = page;
 		$scope.getArticleComments($scope.article.id);
+	}
+	
+	$scope.clickOrder = function(val)
+	{
+		if (val)
+		{
+			$scope.order = 'DESC';
+		}
+		else
+		{
+			$scope.order = 'ASC';
+		}
+		
+		$scope.commentsPage = 1;
+		$scope.getArticleComments($scope.articleId);
 	}
 	
   $scope.milisecToDate = function(miliseconds)
