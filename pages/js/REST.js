@@ -36,8 +36,8 @@ function Register(login, pass, email, firstname, lastname, city, gender, $scope,
 	window.location.href = '/pages';
 };
 
-function EditUser(login, info, $scope, $http){
-	$http({method: 'PATCH', url: '/portal/user/' + login, data: {login: login, info: info}}).
+function EditUser($scope, $http, login, userData){
+	$http({method: 'PATCH', url: '/portal/user/' + login, data: userData}).
 	  success(function(data, status, headers, config) {
 		$scope.getUser(login);
 	  }).

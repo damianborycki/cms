@@ -519,11 +519,78 @@ $scope.getListOfArticles();
 
 app.controller('StronaUzytkownikaController', function($scope, $http, $routeParams, SharedData) {
 
-$scope.currentUserName = SharedData.currentUserName;
-
+//$scope.currentUserName = SharedData.currentUserName;
+GetCurrentUserLogin($scope, $http);
 $scope.userName = $routeParams.userName;
 
 $scope.searchedUser =null;
+
+$scope.showEditName = true;
+$scope.showEditSurname = true;
+$scope.showEditCity = true;
+$scope.showEditGender = true;
+$scope.showEditEmail = true;
+$scope.showEditDesc = true;
+
+$scope.click = function(){
+  $scope.showEditDesc = !$scope.showEditDesc;
+}
+
+$scope.click1 = function(){
+  $scope.showEditName = !$scope.showEditName;
+};
+
+$scope.click2 = function(){
+  $scope.showEditSurname = !$scope.showEditSurname;
+};
+
+$scope.click3 = function(){
+  $scope.showEditCity = !$scope.showEditCity;
+};
+
+$scope.click4 = function(){
+  $scope.showEditGender = !$scope.showEditGender;
+};
+
+$scope.click5 = function(){
+  $scope.showEditEmail = !$scope.showEditEmail;
+};
+
+$scope.editName = function()
+{
+  EditUser($scope, $http, $scope.userName, {'login': $scope.userName, 'name': $scope.searchedUser.name});
+  $scope.click1();
+}
+
+$scope.editSurname = function()
+{
+  EditUser($scope, $http, $scope.userName, {'login': $scope.userName, 'surname': $scope.searchedUser.surname});
+  $scope.click2();
+}
+
+$scope.editCity = function()
+{
+  EditUser($scope, $http, $scope.userName, {'login': $scope.userName, 'city': $scope.searchedUser.city});
+  $scope.click3();
+}
+
+$scope.editGender = function()
+{
+  EditUser($scope, $http, $scope.userName, {'login': $scope.userName, 'gender': $scope.searchedUser.gender});
+  $scope.click4();
+}
+
+$scope.editEmail = function()
+{
+  EditUser($scope, $http, $scope.userName, {'login': $scope.userName, 'email': $scope.searchedUser.email});
+  $scope.click5();
+}
+
+$scope.editDescription = function()
+{
+   EditUser($scope, $http, $scope.userName, {'login': $scope.userName, 'info': $scope.searchedUser.info});
+   $scope.click();
+}
 
 $scope.getUser = function(name)
 {
@@ -583,21 +650,11 @@ $scope.getUserComments($scope.userName);
     return '/portal/image?id=' + id + '&width=' + width + '&height=' + height;
   };
   
-  $scope.showEditDesc = false;
   
-  $scope.click = function(){
-   $scope.showEditDesc = !$scope.showEditDesc;
-   }
-   
-   $scope.editDescription = function()
-   {
-	EditUser($scope.userName, $scope.searchedUser.info, $scope, $http);
-	$scope.click();
-   }
    
   $scope.milisecToDate = function(miliseconds)
   {
-	return new Date(miliseconds).yyyymmddhhmmss();
+	 return new Date(miliseconds).yyyymmddhhmmss();
   }
 });
 

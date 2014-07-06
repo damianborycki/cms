@@ -2,10 +2,14 @@
 #comment_table th, td#center {
 	text-align: center;
 }
+
+ul.pagination {
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
 </style>
 
-<span ng-switch on="listOfCommentsWithStatus.length > 0 || listOfCommentsWithStatus != undefined">
-<div ng-switch-when="true">
+<div ng-show="listOfCommentsWithStatus.length > 0 || listOfCommentsWithStatus != undefined">
 	<div class="row row2">
 
 		<table class="table" id="comment_table">
@@ -22,19 +26,19 @@
 				<td><button class="btn btn-success btn-p btn-sm" ng-click="acceptSingle(comment.id)"> Akceptuj</button><a class="btn btn-danger btn-p btn-sm" ng-click="rejectSingle(comment.id)"> Odrzuć</a></td>
 			</tr>
 		</table>
-
-		<div paging page="commentsPage" page-size="commentsLimit" total="total" show-prev-next="true" adjacent="1" paging-action="ChangePage(page)"></div>
 		
 	</div>
 	<div class="row btn-d">
+	<div class="col-md-6">
 		<a class="btn btn-danger btnb" ng-click="rejectSelected()">Odrzuć zaznaczone</a>
-		<a class="btn btn-success btnb" ng-click="acceptSelected()">Akceptuj zaznaczone</a>
+		<a class="btn btn-success btnb" ng-click="acceptSelected()">Akceptuj zaznaczone</a></div>
 	<!-- 	<a class="btn btn-primary btnb" ng-click="invertSelection()">Odwróć</a> -->
+	<div class="col-md-5 pull-right" style="height: 100%;" paging page="commentsPage" page-size="commentsLimit" total="total" show-prev-next="true" adjacent="1" paging-action="ChangePage(page)" ng-init="page=0"></div>
 	</div>
+
 </div>
-<div ng-switch-when="false">
+<div ng-hide="listOfCommentsWithStatus.length > 0 || listOfCommentsWithStatus != undefined">
 	<h3 style="text-align: center;">Brak komentarzy do moderacji</h3>
 </div>
-<div ng-switch-default>
-</div>
+
 </span>

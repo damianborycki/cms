@@ -113,7 +113,7 @@ function parseDate(input)
 	return new Date(date[2], date[0]-1, date[1], time[0], time[1], time[2]);
 }
    
-var app = angular.module('studentInfoApp', ['ngSanitize', 'ngRoute', 'mgcrea.ngStrap', 'ngCkeditor', 'ngTagsInput']);
+var app = angular.module('studentInfoApp', ['ngSanitize', 'ngRoute', 'mgcrea.ngStrap', 'ngCkeditor', 'ngTagsInput', 'paging']);
 
 app.filter('unsafe', function($sce) {
     return function(val) {
@@ -1250,12 +1250,25 @@ app.controller('CommentModerationController', function($scope, $http) {
 	$scope.selectedComments = [];
 	$scope.selectAll = true;
 
-	$scope.getCommentsWithStatus = function() {
-	if ($scope.listOfCommentsWithStatus.length != 0)
-		return $scope.listOfCommentsWithStatus;
+	$scope.page = 0;
 
-		GetCommentsWithStatus($scope, $http);
+	$scope.commentsPage = 1;
+	$scope.commentsLimit = 5;
+	$scope.total = 1;
+
+	$scope.getCommentsWithStatus = function(page) {
+	// if ($scope.listOfCommentsWithStatus.length != 0)
+	// 	return $scope.listOfCommentsWithStatus;
+
+		GetCommentsWithStatus($scope, $http, page);
 	};
+
+	$scope.ChangePage = function(page)
+	{
+		$scope.page = page;
+		$scope.commentsPage = page;
+		$scope.getCommentsWithStatus(page);
+	}
 
 $scope.getCommentsWithStatus();
 
@@ -1443,7 +1456,7 @@ app.controller("groupChange", function($scope, $http) {
 
 
 
-                <li><a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                <li><a class="dropdown-toggle" data-toggle="dropdown" href="">
                     Więcej <i class="glyphicon glyphicon-chevron-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-right" id="collapsed"></ul>
