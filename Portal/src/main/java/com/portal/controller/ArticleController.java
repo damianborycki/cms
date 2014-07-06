@@ -42,8 +42,8 @@ public class ArticleController {
     }
 
     @RequestMapping(value = "article/{id}", method = RequestMethod.PUT, consumes = "application/json")
-    public void put(@RequestBody Article article, HttpServletResponse response) {
-        articleDAO.edit(article.getId(),
+    public void put(@PathVariable("id") long pasedId, @RequestBody Article article, HttpServletResponse response) {
+        articleDAO.edit(pasedId,
                 article.getTitle(),
                 article.getCategory_id(),
                 article.getDescription(),

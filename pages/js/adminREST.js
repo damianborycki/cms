@@ -172,16 +172,16 @@ function GetArticle(articleId, $scope, $http){
 	}); 
 };
 
-function AddArticle(title, description, content, category_id, user, expiration_date, publication_date, tags, rank, galery, date, image, $scope, $http){
-	$http.post('/portal/article', {title: title, description: description, content: content, categoryId: category_id, userId: 1, expiration_date: expiration_date, publication_date: publication_date, tags: tags, rankId: rank}).
+function AddArticle(title, description, content, category_id, user, expiration_date, publication_date, tags, rank, image, galery, date, $scope, $http){
+	$http.post('/portal/article', {title: title, description: description, content: content, categoryId: category_id, userId: 1, expirationDate: expiration_date, publicationDate: publication_date, tags: tags, rankId: rank, imageId: image}).
 	  success(function(data, status, headers, config) {
 	  }).
 	  error(function(data, status, headers, config) {
 	}); 
 };
 
-function EditArticle(id, title, description, content, category_id, user, expiration_date, publication_date, tags, rank, galery, date, image, $scope, $http){
-	$http.put('/portal/article/' + id, {title: title, description: description, content: content, categoryId: category_id, userId: 1, expiration_date: expiration_date, publication_date: publication_date, tags: tags, rankId: rank}).
+function EditArticle(id, title, description, content, category_id, user, expiration_date, publication_date, tags, rank, image, galery, date, $scope, $http){
+	$http.put('/portal/article/' + id, {title: title, description: description, content: content, categoryId: category_id, userId: 1, expirationDate: expiration_date, publicationDate: publication_date, tags: tags, rankId: rank, imageId: image}).
 	  success(function(data, status, headers, config) {
 	  }).
 	  error(function(data, status, headers, config) {

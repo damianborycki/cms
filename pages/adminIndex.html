@@ -1021,6 +1021,8 @@ $scope.loadTags = function(query) {
 	return arr;
   }
 
+
+$scope.articleId = $routeParams.articleId;
 $scope.newArticle = null;
 		
 $scope.GetArticle=function(id)
@@ -1028,12 +1030,9 @@ $scope.GetArticle=function(id)
 	if ($scope.newArticle != null)
 		return $scope.newArticle;
 	
-	var article;
-	
 	if (typeof id === 'undefined')
 	{
-	
-	newArticle = {
+	$scope.newArticle = {
 		id: -1,
 		title: "",
 		description: "",
@@ -1054,7 +1053,7 @@ $scope.GetArticle=function(id)
 	}
 }
 
-$scope.GetArticle($routeParams.articleId);
+$scope.GetArticle($scope.articleId);
   
  $scope.getImage = function(id, width, height){
     return '/portal/image?id=' + id;
@@ -1079,16 +1078,23 @@ $scope.endDate = new Date();
 		GetCategories($scope, $http);
 	};
 	
+$scope.currentUserLogin = "";
+$scope.GetCurrentUserName = function()
+{
+	GetCurrentUserLogin($scope, $http);
+}
+$scope.GetCurrentUserName();
+	
 	$scope.getlistOfCategories();
 
 	$scope.addArticle = function()
 	{
-		AddArticle($scope.newArticle.title, $scope.newArticle.description, $scope.newArticle.content, $scope.newArticle.category_id.id, "admin", $scope.newArticle.publication_date.getTime(), $scope.newArticle.expiration_date.getTime(), $scope.getSelectedTagIds(), $scope.newArticle.rank.id, null, new Date().getTime(), 1, $scope, $http);
+		AddArticle($scope.newArticle.title, $scope.newArticle.description, $scope.newArticle.content, $scope.newArticle.category_id.id, $scope.currentUserLogin, $scope.newArticle.publication_date.getTime(), $scope.newArticle.expiration_date.getTime(), $scope.getSelectedTagIds(), $scope.newArticle.rank.id, 1, new Date().getTime(), null, $scope, $http);
 	}
 	
 	$scope.editArticle = function()
 	{
-		EditArticle($routeParams.articleId, $scope.newArticle.title, $scope.newArticle.description, $scope.newArticle.content, $scope.newArticle.category_id.id, "admin", $scope.newArticle.publication_date.getTime(), $scope.newArticle.expiration_date.getTime(), $scope.getSelectedTagIds(), $scope.newArticle.rank.id, null, new Date().getTime(), 1, $scope, $http);
+		EditArticle($routeParams.articleId, $scope.newArticle.title, $scope.newArticle.description, $scope.newArticle.content, $scope.newArticle.category_id.id, $scope.currentUserLogin, $scope.newArticle.publication_date.getTime(), $scope.newArticle.expiration_date.getTime(), $scope.getSelectedTagIds(), $scope.newArticle.rank.id, 1, new Date().getTime(), null, $scope, $http);
 	}
 	
 $scope.editorOptions = {

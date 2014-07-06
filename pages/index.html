@@ -803,6 +803,9 @@ $scope.article = null;
     <div class="container">
 	<div class="row containerm">
 	 <div class="header" style="margin-top: 10px;">
+      <div class="col-md-4">
+        <a href="#main"><img src=""></a>
+      </div>
           <div class="col-md-4 pull-left">
         <div class="input-group col-xs-10">
       <tags-input ng-model="selectedTags" display-property="name" add-on-enter="false" placeholder="Dodaj tag">
@@ -812,9 +815,6 @@ $scope.article = null;
           <a class="btn btn-primary" type="button" href="#articleList?search={{getTagString()}}"ng-disabled="selectedTags.length == 0">Szukaj</a>
           </span>
         </div>
-      </div>
-      <div class="col-md-4">
-        <a href="#main"><img src=""></a>
       </div>
       <div class="col-md-2">
         <a href="#register" ng-hide="userLoggedIn" class="pull-right">Załóż konto</a>
