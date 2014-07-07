@@ -1446,6 +1446,24 @@ app.controller("groupChange", function($scope, $http) {
 
 });
 
+function onFileSelected(event) {
+  var selectedFile = event.target.files[0];
+  var reader = new FileReader();
+
+  var imgTab = document.getElementsByTagName("img");
+
+
+  reader.onload = function(event) {
+
+      for(var i=0; i<imgTab.length; i++)
+      {
+          imgTab[i].src = event.target.result;
+      }
+  };
+
+  reader.readAsDataURL(selectedFile);
+};
+
 </script>
 </head>
 <body>
