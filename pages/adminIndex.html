@@ -826,7 +826,33 @@ $scope.UpdateCategory=function($id)
 });
 
 
+app.controller('GalleryController', function($scope, $http) {  
 
+	$scope.listOfImages = [];
+
+	$scope.getlistOfImages  = function()
+	{
+	if ($scope.listOfImages.length != 0)
+		return $scope.listOfImages;
+		
+		GetImages($scope, $http);
+	};
+	$scope.getlistOfImages();
+	
+	$scope.toggleSelection = function toggleSelection(images) {
+    var idx = $scope.selection.indexOf(images);
+
+    // is currently selected
+    if (idx > -1) {
+      $scope.selection.splice(idx, 1);
+    }
+
+    // is newly selected
+    else {
+      $scope.selection.push(images);
+    }
+  };
+});
 
 
 app.controller('ArticleController', function($scope, $http) {  

@@ -150,6 +150,24 @@ function GetArticles($scope, $http) {
 	  }); 
 }
 
+function GetImages($scope, $http) {
+	$http.get('/portal/images').
+	  success(function(data, status, headers, config) {
+		var k = 0;
+
+		for (var i = 0; i < data.length; i = i + 5)
+		{
+			var tempList = [];
+			for (var j = 0; j < 5; ++j)
+				tempList[j] = data[i+j]
+			
+			$scope.listOfImages[k] = tempList;
+			++k;
+		}
+				
+	  }); 
+}
+
 function GetArticle(articleId, $scope, $http){
 	$http.get('/portal/article/' + articleId).
 	  success(function(data, status, headers, config) {

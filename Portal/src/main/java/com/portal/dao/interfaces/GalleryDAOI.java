@@ -2,6 +2,7 @@ package com.portal.dao.interfaces;
 
 import com.portal.entity.Gallery;
 import com.portal.entity.GalleryMetadata;
+import com.portal.entity.Image;
 import com.portal.entity.Tag;
 
 import java.util.List;

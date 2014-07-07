@@ -83,8 +83,8 @@ public class ImageController {
     @RequestMapping(value="/image", method=RequestMethod.GET)
     public void getImage(HttpServletResponse response,
                          @RequestParam("id") String imageId,
-                         @RequestParam("width") long width,
-                         @RequestParam("height") long height) throws Exception
+                         @RequestParam(value="width", required=false, defaultValue="300") long width,
+                         @RequestParam(value="height", required=false, defaultValue="200") long height) throws Exception
     {
         File file = new File( getImagePath(imageId, width, height));
         FileInputStream is = new FileInputStream(file);
@@ -219,4 +219,5 @@ public class ImageController {
     {
         return imageDAO.getImageMetadata(imageId);
     }
+
 }

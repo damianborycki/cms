@@ -1,74 +1,90 @@
 
-    <div clas="row">
+    <div class="row">
     
-        <div class="col-md-8">                 
-            <div class="well span4">
-            <ul class="nav nav-list">
-                <li>
-                    <span class="glyphicon glyphicon-chevron-down"></span>                    
-                    <span class="glyphicon glyphicon-chevron-up"></span>                  
-                    Obrazek1                
-                    <span class="glyphicon pull-right glyphicon-remove"></span>
+		<form action="http://localhost:8080/portal/gallery" method="POST">
+			<div class="col-md-8">                 
+				<!--<div class="well span4">
+				<ul class="nav nav-list">
+					<li>
+						<span class="glyphicon glyphicon-chevron-down"></span>                    
+						<span class="glyphicon glyphicon-chevron-up"></span>                  
+						Obrazek1                
+						<span class="glyphicon pull-right glyphicon-remove"></span>
 
-                </li>
-                <li>
-                    <span class="glyphicon glyphicon-chevron-down"></span>                    
-                    <span class="glyphicon glyphicon-chevron-up"></span>                  
-                    Obrazek2                
-                    <span class="glyphicon pull-right glyphicon-remove"></span>
+					</li>
+					<li>
+						<span class="glyphicon glyphicon-chevron-down"></span>                    
+						<span class="glyphicon glyphicon-chevron-up"></span>                  
+						Obrazek2                
+						<span class="glyphicon pull-right glyphicon-remove"></span>
 
-                </li>
-                <li>
-                    <span class="glyphicon glyphicon-chevron-down"></span>                    
-                    <span class="glyphicon glyphicon-chevron-up"></span>                  
-                    Obrazek3                
-                    <span class="glyphicon pull-right glyphicon-remove"></span>
+					</li>
+					<li>
+						<span class="glyphicon glyphicon-chevron-down"></span>                    
+						<span class="glyphicon glyphicon-chevron-up"></span>                  
+						Obrazek3                
+						<span class="glyphicon pull-right glyphicon-remove"></span>
 
-                </li>                
-            </ul>
-            </div>        
-        </div>     
-        
-        <div class="col-md-4">
-        
-            <div>
-                <div>
-                    <input class="form-control" rows="1" placeholder="ID lub link ..."></textarea>
-                </div>
-                <div>
-                    <button class="btn btn-block btn-success btnb" data-animation="am-fade-and-scale">Wczytaj galerię</button>
-                    <button class="btn btn-block btn-success btnb" data-animation="am-fade-and-scale">Usuń galerię</button>
-                </div>             
-            </div>  
-            <br>    
-        
-        
-            <div>
-                <div>
-                    <input class="form-control" rows="1" placeholder="ID lub link ..."></textarea>
-                    <button class="btn btn-block btn-success btnb" data-animation="am-fade-and-scale">Dodaj do galerii</button>
-                </div>             
-            </div>  
-            <br>
-          
-			<div>
-				Opis:
-			</div>          
-			<div>
-				<textarea class="form-control" rows="6" placeholder="Dodaj opis galerii..."></textarea>
-			</div>
-            <br>
-            
-			<div>
-				Tagi:
-			</div>
-			<div>
-				<input class="form-control" rows="1" placeholder="Dodaj tagi dla galerii..."></textarea>
-			</div> 
-            <br>
-            
-			<div>		
-                <button class="btn btn-block btn-success btnb" data-animation="am-fade-and-scale">Zapisz galerię</button>
-            </div>             
-        </div>    
+					</li>                
+				</ul>
+				</div> -->
+			    <div class="row row2">
+				<table>
+				<tr ng-repeat="fiveImages in listOfImages" >
+					<td ng-repeat="image in fiveImages" class="col-md-1">  <div><img src="http://localhost:8080/portal/image?id={{image.id}}" width="100" height="80"/></div>
+																		   <div><span vertical-align="center">{{image.width}} x {{image.height}}</span></div>
+																		   <div><input type="checkbox" name="images" value="{{image.id}}:{{image.width}}:{{image.height}}" /></div></td>
+					<!--<td class="col-md-2">{{article.publication_date}}</td>
+					<td class="col-md-6">{{article.title}}</td>
+					<td class="col-md-2"><a class="btn btn-success btn-p" href="#editArticle/{{article.id}}"> Edytuj</a><a class="btn btn-danger btn-p" ng-click="remove(article.id)"> Usuń</a></td>
+					-->
+				</tr>
+		</table>
+      </div>
+			</div>     
+			
+			<div class="col-md-4">
+			
+				<div>
+					<div>
+						<input class="form-control" rows="1" type="hidden" name="add_usr" value="1" />
+						<!--<input class="form-control" rows="1" placeholder="ID lub link ..." name="images"></textarea>-->
+					</div>
+					<div>
+						<button class="btn btn-block btn-success btnb" data-animation="am-fade-and-scale">Wczytaj galerię</button>
+						<button class="btn btn-block btn-success btnb" data-animation="am-fade-and-scale">Usuń galerię</button>
+					</div>             
+				</div>  
+				<br>    
+			
+			
+				<div>
+					<div>
+						<input class="form-control" rows="1" placeholder="ID lub link ..."></textarea>
+						<button class="btn btn-block btn-success btnb" data-animation="am-fade-and-scale">Dodaj do galerii</button>
+					</div>             
+				</div>  
+				<br>
+			  
+				<div>
+					Opis:
+				</div>          
+				<div>
+					<textarea class="form-control" rows="6" placeholder="Dodaj opis galerii..." name="description"></textarea>
+				</div>
+				<br>
+				
+				<div>
+					Tagi:
+				</div>
+				<div>
+					<input class="form-control" rows="1" placeholder="Dodaj tagi dla galerii..." name="tags"></textarea>
+				</div> 
+				<br>
+				
+				<div>		
+					<input type="submit" class="btn btn-block btn-success btnb" data-animation="am-fade-and-scale" value="Zapisz galerię" />
+				</div>             
+			</div>  
+		</form>
     </div>

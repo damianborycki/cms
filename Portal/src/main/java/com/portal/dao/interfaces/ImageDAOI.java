@@ -12,4 +12,5 @@ public interface ImageDAOI {
     public List<Image> getAllUnapproved();
     public List<Image> getAllImages(String id);
     public ImageMetadata getImageMetadata(String id);
+    public List<Image> getAll();
 }

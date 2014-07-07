@@ -116,4 +116,11 @@ public class ImageDAOImpl implements ImageDAOI {
 				tx.commit();
 				session.close();
     }
+
+    @Override
+    public List<Image> getAll() {
+
+        List<Image> ids = openSession().createQuery("FROM Image i WHERE i.id <> 'default'").list();
+        return ids;
+    }
 }

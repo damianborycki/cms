@@ -6,6 +6,7 @@ import java.util.List;
 import com.portal.dao.interfaces.GalleryDAOI;
 import com.portal.entity.GalleryMetadata;
 import com.portal.entity.Tag;
+import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -41,7 +42,10 @@ public class GalleryDAOImpl implements GalleryDAOI {
     @Transactional(readOnly=false)
     public void addGallery(Gallery g) {
         Session session = openSession();
+        Transaction tx = session.beginTransaction();
         session.save(g);
+        tx.commit();
+       // session.close();
     }
     
     public void deleteGallery(Long id) {
