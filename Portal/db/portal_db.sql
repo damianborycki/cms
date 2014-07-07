@@ -143,7 +143,10 @@ CREATE TABLE IF NOT EXISTS `groups` (
 -- Struktura tabeli dla tabeli `image`
 --
 
-CREATE TABLE IF NOT EXISTS `image` (
+DROP TABLE IF EXISTS `image`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `image` (
   `id` varchar(255) NOT NULL,
   `add_datetime` date NOT NULL,
   `add_usr` bigint(20) NOT NULL,
@@ -155,8 +158,12 @@ CREATE TABLE IF NOT EXISTS `image` (
   `link` varchar(255) NOT NULL,
   `type` varchar(10) NOT NULL,
   `width` bigint(20) NOT NULL,
-  PRIMARY KEY (`id`, `width`, `height`)
+  `gallery_id` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`id`,`width`,`height`),
+  KEY `FK5FAA95BDD0CFE64` (`gallery_id`),
+  CONSTRAINT `FK5FAA95BDD0CFE64` FOREIGN KEY (`gallery_id`) REFERENCES `gallery` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 -- --------------------------------------------------------
 
