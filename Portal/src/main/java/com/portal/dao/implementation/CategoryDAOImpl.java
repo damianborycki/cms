@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -42,13 +43,13 @@ public class CategoryDAOImpl implements CategoryDAOI {
     public List<Category> findAll() {
     	List<Category> c = openSession().createQuery("from Category").list();
     	
-    	for (Category c1 : c) {
-    		Category ce = new Category();
-    		if (c1.getParent() != null) {
-    			ce.setId(c1.getParent().getId());
-    			c1.setParent(ce);
+    	for(int i = 0; i < c.size(); i++) {
+    		if (c.get(i).getParent() != null) {
+    			c.set(i, null);
     		}
     	}
+    	
+    	c.removeAll(Collections.singleton(null));
     	
         return c;
     }

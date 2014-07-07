@@ -3,6 +3,7 @@ package com.portal.dao.interfaces;
 import com.portal.entity.Image;
 import com.portal.entity.ImageMetadata;
 import java.util.List;
+import java.sql.Date;
 
 public interface ImageDAOI {
 
@@ -13,4 +14,5 @@ public interface ImageDAOI {
     public List<Image> getAllImages(String id);
     public ImageMetadata getImageMetadata(String id);
     public List<Image> getAll();
+    public List<String> getImageIds(long userId, Date startDate, Date endDate);
 }

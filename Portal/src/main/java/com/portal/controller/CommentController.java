@@ -7,12 +7,16 @@ import com.portal.init.ClassComment;
 import com.portal.init.ClassParentComment;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 @Controller
 public class CommentController {
@@ -50,7 +54,7 @@ public class CommentController {
 		response.setStatus(HttpServletResponse.SC_OK);
 	}
 	
-	@RequestMapping(value="/userComments/{login}", method=RequestMethod.GET)	
+	@RequestMapping(value="/userComments/{login:.+}", method=RequestMethod.GET)	
 	public @ResponseBody ClassComment usersComments(@PathVariable("login") String login,
 			@RequestParam("limit") int limit, 
 			@RequestParam("pageNo") int pageNO,
@@ -68,7 +72,13 @@ public class CommentController {
 			@RequestParam("sortOrder") String sortOrder,
 			HttpServletResponse response){
 		
-		return commentDAO.getArticleComments(articleID, limit, pageNO, sortOrder);
+		ClassParentComment coms = commentDAO.getArticleComments(articleID, limit, pageNO, sortOrder);
+		
+		for (int i = 0; i < coms.getComments().size(); i++) {
+			coms.getComments().get(i).getArticle().setComments(null);
+		}
+		
+		return coms;
 	}
 	
 	@RequestMapping(value="/comment/{commentId}", method=RequestMethod.GET)
@@ -101,7 +111,7 @@ public class CommentController {
 		return commentDAO.getTotalComments(status);							
 	}
 	
-	@RequestMapping(value="/comments/{login}", method=RequestMethod.GET)
+	@RequestMapping(value="/comments/{login:.+}", method=RequestMethod.GET)
 	public @ResponseBody ClassComment getUserComments(@PathVariable("login") String login,
 			@RequestParam("status") long status, 
 			@RequestParam("limit") int limit, 

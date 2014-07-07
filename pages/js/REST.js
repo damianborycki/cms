@@ -36,8 +36,8 @@ function Register(login, pass, email, firstname, lastname, city, gender, $scope,
 	window.location.href = '/pages';
 };
 
-function EditUser(login, info, $scope, $http){
-	$http({method: 'PATCH', url: '/portal/user/' + login, data: {login: login, info: info}}).
+function EditUser($scope, $http, login, userData){
+	$http({method: 'PATCH', url: '/portal/user/' + login, data: userData}).
 	  success(function(data, status, headers, config) {
 		$scope.getUser(login);
 	  }).
@@ -112,19 +112,19 @@ function GetUserComments(userId, page, limit, $scope, $http){
 	  success(function(data, status, headers, config) {
 		$scope.userComments = data.comments;
 		$scope.total = data.size;
-		$scope.commentsPage = 0;
+		$scope.commentsPage = page;
 	  }).
 	  error(function(data, status, headers, config) {
 
 	}); 
 };
 
-function GetArticleComments(articleId, page, limit, $scope, $http){
-	$http.get('/portal/articleComments/' + articleId + '?limit=' + limit + '&pageNo=' + page + '&sortOrder=DESC').
+function GetArticleComments(articleId, page, limit, order, $scope, $http){
+	$http.get('/portal/articleComments/' + articleId + '?limit=' + limit + '&pageNo=' + page + '&sortOrder=' + order).
 	  success(function(data, status, headers, config) {
 		$scope.articleComments = data.comments;
 		$scope.total = data.size;
-		$scope.commentsPage = 0;
+		$scope.commentsPage = page;
 	  }).
 	  error(function(data, status, headers, config) {
 

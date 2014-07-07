@@ -6,7 +6,7 @@ $http({method: 'GET', url: '/portal/tag'}).
 	};
 	
 	function AddTag(name, description, type, $scope, $http){
-	$http.post('/portal/tag', {name: name, description: description, type: type}).
+	$http.post('/portal/tag', {name: name, description: description, type: {id:type}}).
 	  success(function(data, status, headers, config) {
 		$scope.getListOfTags();
 	  }).
@@ -15,7 +15,7 @@ $http({method: 'GET', url: '/portal/tag'}).
 	};
 	
 	function EditTag(id, name, description, type, $scope, $http){
-$http.put('/portal/tag/' + id, {name: name, description: description, type: type}).
+$http.put('/portal/tag/' + id, {name: name, description: description, type: {id:type}}).
 	  success(function(data, status, headers, config) {
 		$scope.getListOfTags();
 	  }).
@@ -76,8 +76,17 @@ $http({method: 'GET', url: '/portal/articleRank'}).
 function GetCategories($scope, $http){
 $http({method: 'GET', url: '/portal/category'}).
 	  success(function(data, status, headers, config) {
-	  	console.log(data);
 		$scope.listOfCategories = data;
+
+		for(var i = 0; i < $scope.listOfCategories.length; i++) {
+			$scope.listOfCategories[i]["parent"] = null;
+
+				for(var j = 0; j < $scope.listOfCategories[i].children.length; j++) {
+					$scope.listOfCategories[i].children[j]["parent"] = $scope.listOfCategories[i].id;
+				}
+		}
+
+		console.log($scope.listOfCategories);
 	  }); 
 	};
 	
@@ -121,10 +130,14 @@ $http({method: 'DELETE', url: '/portal/category/' + id}).
 	  }); 
 	};
 
-function GetCommentsWithStatus($scope, $http){
-$http({method: 'GET', url: '/portal/comment?status=1&limit=10&pageNo=1&sortOrder=DESC'}).
+function GetCommentsWithStatus($scope, $http, page){
+$http({method: 'GET', url: '/portal/comment?status=1&limit=' + $scope.commentsLimit+ '&pageNo='+$scope.commentsPage+'&sortOrder=DESC'}).
 	  success(function(data, status, headers, config) {
 		$scope.listOfCommentsWithStatus = data.comments;
+		$scope.total = data.size;
+		console.log($scope.page + ' ' + $scope.commentsPage);
+
+		$scope.commentsPage = page;
 	  }); 
 	};
 
@@ -181,16 +194,16 @@ function GetArticle(articleId, $scope, $http){
 	}); 
 };
 
-function AddArticle(title, description, content, category_id, user, expiration_date, publication_date, tags, rank, galery, date, image, $scope, $http){
-	$http.post('/portal/article', {title: title, description: description, content: content, categoryId: category_id, userId: 1, expiration_date: expiration_date, publication_date: publication_date, tags: tags, rankId: rank}).
+function AddArticle(title, description, content, category_id, user, expiration_date, publication_date, tags, rank, image, galery, date, $scope, $http){
+	$http.post('/portal/article', {title: title, description: description, content: content, categoryId: category_id, userId: 1, expirationDate: expiration_date, publicationDate: publication_date, tags: tags, rankId: rank, imageId: image}).
 	  success(function(data, status, headers, config) {
 	  }).
 	  error(function(data, status, headers, config) {
 	}); 
 };
 
-function EditArticle(id, title, description, content, category_id, user, expiration_date, publication_date, tags, rank, galery, date, image, $scope, $http){
-	$http.put('/portal/article/' + id, {title: title, description: description, content: content, categoryId: category_id, userId: 1, expiration_date: expiration_date, publication_date: publication_date, tags: tags, rankId: rank}).
+function EditArticle(id, title, description, content, category_id, user, expiration_date, publication_date, tags, rank, image, galery, date, $scope, $http){
+	$http.put('/portal/article/' + id, {title: title, description: description, content: content, categoryId: category_id, userId: 1, expirationDate: expiration_date, publicationDate: publication_date, tags: tags, rankId: rank, imageId: image}).
 	  success(function(data, status, headers, config) {
 	  }).
 	  error(function(data, status, headers, config) {
@@ -277,5 +290,6 @@ function GetCurrentUserLogin($scope, $http){
 	  }).
 	  error(function(data, status, headers, config) {
 		$scope.userLoggedIn = false;
+		window.location.href = '/pages';
 	}); 
 };

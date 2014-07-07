@@ -28,7 +28,7 @@
 			<h1 style="margin-left: 20px;"> {{category.name}} </h1>
             <div class="col-md-4"  ng-repeat="zajawka in articlesForCategories[category.id]">
 				<a href="#article/{{zajawka.id}}">
-                <img ng-src="{{getImage('6um06n3pekf4t20r5p8m1e6vkqZachod slonca.jpg', 300, 200)}}" class="img-responsive">
+                <img ng-src="{{getImage('default', 300, 200)}}" class="img-responsive">
                <div class="bg-title"> <h4>{{zajawka.title}}</h4> </div>
                 <div class="caption">
                   <p class="text-justify">{{zajawka.description}}</p>
