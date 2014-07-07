@@ -250,11 +250,12 @@ function RemoveGroup($scope, $http, id) {
 }
 
 function GetUsers($scope, $http, pageNO){
-	$http.get('/portal/user?limit=50&pageNo=' + pageNO + '&sortBy=id&sortOrder=ASC').
+	$http.get('/portal/user?limit=15&pageNo=' + pageNO + '&sortBy=id&sortOrder=ASC').
 		success(function(data, status, headers, config) {
-			$scope.listOfUsers = data.users;						
-		});
-
+			$scope.listOfUsers = data.users;
+			$scope.totalUsers = data.size;
+			$scope.usersPage = pageNO;				
+		});			
 }
 
 function GetUserByLogin($scope, $http, login){

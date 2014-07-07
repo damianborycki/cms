@@ -20,7 +20,7 @@
 		 		<th class="col-md-1 col-md">Operacje</th>
 				
 				<tr ng-repeat="user in listOfUsers | filter:{login:search.login} | filter:search.group">				
-					<td class="col-md-1" >{{user.id}}</td>
+					<td class="col-md-1" ng-init="test()">{{$index + 1 + (page-1)*usersLimit}}</td>
 					<td class="col-md-2">{{user.login}}</td>
 					<td class="col-md-4">{{user.email}}</td>
 					<td class="col-md-2">
@@ -39,5 +39,5 @@
 				</tr>
 			</table>
       </div>
-
+      <div class="col-md-4 pull-right" style="height: 100%;" paging page="usersPage" page-size="usersLimit" total="totalUsers" show-prev-next="true" adjacent="1" paging-action="ChangePage(page)" ng-init="page=1"></div>
 </div>

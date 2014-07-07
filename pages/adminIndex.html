@@ -1385,24 +1385,38 @@ app.controller('UsersController', function($scope, $http) {
 	$scope.userForModal = null;
 	$scope.user = [];
 	$scope.UpdateStatus = 0;
+
+	$scope.page = 1;
+	$scope.usersPage = 1;
+	$scope.usersLimit = 15;
+	
+	$scope.userID = 0;
+	
 	GetGroups($scope, $http);
 	
+	$scope.test = function(){
+		//$scope.userID = $scope.userID + 1;
+	};
+
 	$scope.setUpdateStatus = function($status){
 		$scope.UpdateStatus = $status;
-	}
+	};
 	
-	$scope.test = function($d) {
-		alert($d);
-	}
+	
 
 	$scope.getlistOfUsers = function($pageNO) {
-		if($scope.listOfUsers.length != 0)
-		return $scope.listOfUsers;
-		
+		// if($scope.listOfUsers.length != 0)
+		// return $scope.listOfUsers;		
 		GetUsers($scope, $http, $pageNO);		
 	};
-	$scope.getlistOfUsers(1);	
+	$scope.getlistOfUsers(0);
 
+	$scope.ChangePage = function(page)
+	{	
+		$scope.page = page;
+		$scope.usersPage = page;
+		$scope.getlistOfUsers(page);		
+	}
 
 	$scope.setUserForModal = function($login){
 		GetUserByLogin($scope, $http, $login);	
@@ -1454,6 +1468,7 @@ app.controller("groupChange", function($scope, $http) {
               <ul class="nav navbar-nav nav-collapsing" id="topMenu">
 <!--                 <li ng-class="{active:isActive('/groups')}"><a href="#groups">Grupa</a>
                 </li> -->
+                <li><a style="font-size:1.3em; margin-left:-10px;" title="Strona glowna" href="index.html#/main"><i class="glyphicon glyphicon-home"></i></a></li>
                 <li ng-class="{active:isActive('/tag')}"><a href="#tag">Tag</a>
                 </li>
                 <li ng-class="{active:isActive('/tagTypes')}"><a href="#tagTypes">Rodzaj Tagu</a>
