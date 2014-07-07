@@ -13,9 +13,9 @@
 				</div>
             </div>
             <div class="col-md-5">
-				<p class="art-opis"> {{article.description}}</p>
+				<p class="art-opis" style="font-weight:bold;"> {{article.description}}</p>
             </div>
-            <p class="art-tresc">
+            <p class="art-tresc" style="line-height:200%;">
 				{{article.content}}
             </p>
 			<div style="width: 550px; margin-left: auto; margin-right: auto; background-color: rgba(0,0,0,0.1); border-radius: 32px; padding: 20px 30px 10px 30px; margin-top: 20px; margin-bottom: 10px;" ng-hide="gallery == null">
@@ -39,7 +39,7 @@
           <div class="column" style="margin: 5px 5px 5px 5px;" ng-hide="currentUserName.data == ''">
             <textarea class="span6" rows="9" placeholder="Napisz komentarz..." required="" 
 			style="margin: 0px; height: 180px; width: 100%; resize:vertical;" ng-model="commentContent"></textarea>
-            <a class="btn btn-success btn-p" ng-click="addComment()">KOMENTUJ</a>
+            <a class="btn btn-success btn-p" ng-disabled="commentContent == ''" ng-click="addComment()">KOMENTUJ</a>
 			
           </div>
 		  <div class="column" style="margin: 5px 5px 5px 5px;">
@@ -52,10 +52,10 @@
                   <img ng-src="{{getUserAvatar(komentarz.user.id)}}" class="img-responsive">
                   <h5> {{komentarz.user.login}}</h5>
 				  </a>
-				  <p> {{komentarz.date}}</p> 
+				  <p style="font-size:0.6em;"> {{komentarz.date}}</p> 
                 </div>
                 <div class="col-md-10">
-                  <p class="text-justify commentText" ng-class="{show: show && komentarz.content.length > 100}">{{komentarz.content}}</p>
+                  <p class="text-justify commentText" style="font-weight:normal; font-size:1.1em;" ng-class="{show: show && komentarz.content.length > 100}">{{komentarz.content}}</p>
 					<a ng-click="show = true" ng-hide="show || komentarz.content.length <= 100">Pokaż całość</a>
 					<a ng-click="show = false" ng-show="show && komentarz.content.length > 100">Ukryj</a>
                 </div>
@@ -71,10 +71,10 @@
 								  <img ng-src="{{getUserAvatar(odpowiedzi.user.id)}}" class="img-responsive">
 								  <h5> {{odpowiedzi.user.login}}</h5>
 								</a>
-								  <p> {{odpowiedzi.date}}</p> 
+								  <p style="font-size:0.6em;"> {{odpowiedzi.date}}</p> 
 								</div>
 								<div class="col-md-9">
-								  <p class="text-justify commentText" ng-class="{show: show && odpowiedzi.content.length > 100}">{{odpowiedzi.content}}</p>
+								  <p class="text-justify commentText" style="font-weight:normal; font-size:1.1em;" ng-class="{show: show && odpowiedzi.content.length > 100}">{{odpowiedzi.content}}</p>
 									<a ng-click="show = true" ng-hide="show || odpowiedzi.content.length <= 100">Pokaż całość</a>
 									<a ng-click="show = false" ng-show="show && odpowiedzi.content.length > 100">Ukryj</a>
 								</div>
@@ -90,7 +90,7 @@
 						<div class="column">
 						<textarea class="span6" rows="9" placeholder="Napisz komentarz..." required="" 
 						style="margin: 0px; height: 180px; width: 100%; resize:vertical;" ng-model="replyComment[komentarz.id]"></textarea>
-						<a class="btn btn-success btn-p" ng-click="addReplyComment(komentarz.id)">DODAJ</a>
+						<a class="btn btn-success btn-p" ng-disabled="replyComment[komentarz.id] == ''" ng-click="addReplyComment(komentarz.id)">DODAJ</a>
 						</div>
 					 </div>
 					</div>
