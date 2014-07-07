@@ -876,34 +876,36 @@ $scope.article = null;
     <div class="container">
 	<div class="row containerm">
 	 <div class="header" style="margin-top: 10px;">
-      <div class="col-md-4">
+      <div class="col-md-2" style="padding-right: 0px;">
         <a href="#main"><img src="pics/logo.png"></a>
       </div>
-          <div class="col-md-4 pull-left">
-        <div class="input-group col-xs-10">
+
+          <div class="col-md-6 pull-left" style="margin-top: 8%; margin-left: 0%;">
+        <div class="input-group col-xs-6" style="padding-top: 0px;">
       <tags-input ng-model="selectedTags" display-property="name" add-on-enter="false" placeholder="Dodaj tag">
         <auto-complete source="loadTags($query)" max-results-to-show="3"></auto-complete>
       </tags-input>
-            <span class="input-group-btn">
-          <a class="btn btn-primary" type="button" href="#articleList?search={{getTagString()}}"ng-disabled="selectedTags.length == 0">Szukaj</a>
+            <span class="input-group-btn" style="padding-top: 0px;">
+          <a class="btn btn-primary" type="button" href="#articleList?search={{getTagString()}}"ng-disabled="selectedTags.length == 0" style="margin-top: 0px;">Szukaj</a>
           </span>
         </div>
       </div>
-      <div class="col-md-2">
+
+      <div class="col-md-2" style="padding-left: 0px; padding-right: 0px; margin-left: 3%;">
         <a href="#register" ng-hide="userLoggedIn" class="pull-right">Załóż konto</a>
 
         <span ng-switch on="currentUserGroup">
-<div ng-switch-when="1"><a class="btn btn-default" href="adminIndex.html#/groups">Panel administratora</a></li></div>
-<div ng-switch-when="2"><a class="btn btn-default" href="adminIndex.html#/groups">Panel moderatora</a></li></div>
+<div ng-switch-when="1"><a class="btn btn-default pull-right" href="adminIndex.html#/groups">Panel administratora</a></li></div>
+<div ng-switch-when="2"><a class="btn btn-default pull-right" href="adminIndex.html#/groups">Panel moderatora</a></li></div>
 
 
       </div>
-      <div class="col-md-2 pull-right">
+      <div class="col-md-2 pull-right" style="width: 12%; padding-left: 0px;">
         <div class='dropdown'>
-			  <button type='button' class='btn dropdown-toggle pull-right' data-toggle='dropdown'>
+			  <a class='btn btn-default dropdown-toggle pull-right' data-toggle='dropdown' style="width: 100%;">
 <!-- 				<img ng-src="{{UserAvatarPath}}"> -->{{getButtonText()}}
 				<b class='caret'></b>
-			  </button>
+			  </a>
 			  <ul class="dropdown-menu list-unstyled pull-right" ng-hide="userLoggedIn" style="width: 220px; padding: 8% 10% 8% 10%; margin-top: 24%;">
 				<li>
 				  <form role="form">
