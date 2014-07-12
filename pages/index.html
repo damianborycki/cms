@@ -2,23 +2,25 @@
 <html ng-app="studentInfoApp">
 <head>
 <title>Student Info</title>
-<script src="jQuerry/jquery-1.11.0.min.js"></script>
-<script src="angular/angular.js"></script>
-<script src="angular/angular-sanitize.js"></script>
-<script src="angular/angular-animate.js"></script>
-<script src="angular/angular-route.js"></script>
-<script src="angularstrap/angular-strap.min.js"></script>
-<script src="angularstrap/angular-strap.tpl.min.js"></script>
-    <script src="angular/paging.js"></script>
-<script src="bootstrap/bootstrap.js"></script>
-    <script src="tagInput/ng-tags-input.min.js"></script>
-    <link rel="stylesheet" href="tagInput/ng-tags-input.min.css" />
+<script src="js/lib/jQuerry/jquery-1.11.0.min.js"></script>
+<script src="js/lib/angular/angular.js"></script>
+<script src="js/lib/angular/angular-sanitize.js"></script>
+<script src="js/lib/angular/angular-animate.js"></script>
+<script src="js/lib/angular/angular-route.js"></script>
+<script src="js/lib/angularstrap/angular-strap.min.js"></script>
+<script src="js/lib/angularstrap/angular-strap.tpl.min.js"></script>
+<script src="js/lib/angular/paging.js"></script>
+<script src="js/lib/bootstrap/bootstrap.js"></script>
+<script src="js/plugins/tagInput/ng-tags-input.min.js"></script>
+
+<link rel="stylesheet" href="js/plugins/tagInput/ng-tags-input.min.css" />
 <link href="css/bootstrap.min.css" rel="stylesheet">
 <link href="css/collapsingMenu.css" rel="stylesheet">
-<link href="slick/slick.css" rel="stylesheet">
+<link href="js/plugins/slick/slick.css" rel="stylesheet">
 <link rel="stylesheet" href="css/styles.css" >
-    <script src="slick/slick.min.js"></script>
-    <script src="angular/slick.min.js"></script>
+
+<script src="js/plugins/slick/slick.min.js"></script>
+<script src="js/lib/angular/slick.min.js"></script>
 <script src="js/collapseMe.js"></script>
 <script src="js/mocki.js"></script>
 <script src="js/REST.js"></script>
@@ -43,27 +45,27 @@ app.config(['$routeProvider',
   function($routeProvider) {
     $routeProvider.
       when('/article/:articleId', {
-        templateUrl: 'templates/artykul.html',
+        templateUrl: 'html/templates/artykul.html',
         controller: 'ArticleController'
       }).
       when('/articleList', {
-        templateUrl: 'templates/listaArtykolow.html',
+        templateUrl: 'html/templates/listaArtykolow.html',
         controller: 'ListaArtykolowControler'
       }).
       when('/main', {
-        templateUrl: 'templates/glowna.htm',
+        templateUrl: 'html/templates/glowna.htm',
         controller: 'GlownaController'
       }).
       when('/userPage/:userName', {
-        templateUrl: 'templates/stronaUzytkownika.html',
+        templateUrl: 'html/templates/stronaUzytkownika.html',
         controller: 'StronaUzytkownikaController'
       }).
       when('/register', {
-        templateUrl: 'templates/rejestracja.html',
+        templateUrl: 'html/templates/rejestracja.html',
         controller: 'RejestracjaController'
       }).
       when('/comments/:articleId', {
-        templateUrl: 'templates/komentarze.html',
+        templateUrl: 'html/templates/komentarze.html',
         controller: 'CommentsController'
       }).
       otherwise({
@@ -877,7 +879,7 @@ $scope.article = null;
 	<div class="row containerm">
 	 <div class="header" style="margin-top: 10px;">
       <div class="col-md-2" style="padding-right: 0px;">
-        <a href="#main"><img src="pics/logo.png"></a>
+        <a href="#main"><img src="img/logo.png"></a>
       </div>
 
           <div class="col-md-6 pull-left" style="margin-top: 8%; margin-left: 0%;">

@@ -1,23 +1,23 @@
 ﻿<!doctype html>
 <html ng-app="studentInfoApp">
 <head>
-	<script src="jQuerry/jquery-1.11.0.min.js"></script>
-<script src="angular/angular.js"></script>
-<script src="angular/angular-sanitize.js"></script>
-<script src="angular/angular-animate.js"></script>
-<script src="angular/angular-route.js"></script>
-<script src="angularstrap/angular-strap.min.js"></script>
-<script src="angularstrap/angular-strap.tpl.min.js"></script>
+	<script src="js/lib/jQuerry/jquery-1.11.0.min.js"></script>
+<script src="js/lib/angular/angular.js"></script>
+<script src="js/lib/angular/angular-sanitize.js"></script>
+<script src="js/lib/angular/angular-animate.js"></script>
+<script src="js/lib/angular/angular-route.js"></script>
+<script src="js/lib/angularstrap/angular-strap.min.js"></script>
+<script src="js/lib/angularstrap/angular-strap.tpl.min.js"></script>
 <!-- <script src="jQuerry/jquery-1.11.0.min.js"></script> -->
-    <script src="angular/paging.js"></script>
-<script src="jQuerry/jquery.Jcrop.js"></script>
-<script src="bootstrap/bootstrap.js"></script>
+    <script src="js/lib/angular/paging.js"></script>
+<script src="js/lib/jQuerry/jquery.Jcrop.js"></script>
+<script src="js/lib/bootstrap/bootstrap.js"></script>
 <script src="js/collapseMe.js"></script>
-<script src="ckeditor/ckeditor.js"></script>
-<script src="ckeditor/ng-ckeditor.js"></script>
+<script src="js/plugins/ckeditor/ckeditor.js"></script>
+<script src="js/plugins/ckeditor/ng-ckeditor.js"></script>
 <script src="js/adminREST.js"></script>
-    <script src="tagInput/ng-tags-input.min.js"></script>
-    <link rel="stylesheet" href="tagInput/ng-tags-input.min.css" />
+    <script src="js/plugins/tagInput/ng-tags-input.min.js"></script>
+    <link rel="stylesheet" href="js/plugins/tagInput/ng-tags-input.min.css" />
 <link href="css/bootstrap.min.css" rel="stylesheet">
 <link href="css/collapsingMenu.css" rel="stylesheet">
 <link href="css/modal.css" rel="stylesheet">
@@ -73,7 +73,7 @@
 
 	<span>
     {{data.name}}
-    <button class="btn btn-success" data-animation="am-fade-and-scale" data-template="modal/categoryModal.html" bs-modal="modal" ng-click="SetCategoryForModal(data.id)"> Edytuj</button>
+    <button class="btn btn-success" data-animation="am-fade-and-scale" data-template="html/modal/categoryModal.html" bs-modal="modal" ng-click="SetCategoryForModal(data.id)"> Edytuj</button>
     <button class="btn btn-danger" ng-click="remove(data.id)" ng-show="getListOfElementsByParent(data.id).length == 0">Usuń</button>
     <ul class="hier-ul">
         <li class="hier-li" ng-repeat="data in getListOfElementsByParent(data.id)" ng-include="'tree_item_renderer.html'"></li>
@@ -124,55 +124,55 @@ app.config(['$routeProvider',
   function($routeProvider) {
     $routeProvider.
       when('/tag', {
-        templateUrl: 'adminTemplates/adminTag.html',
+        templateUrl: 'html/adminTemplates/adminTag.html',
         controller: 'TagController'
       }).
       when('/tagTypes', {
-        templateUrl: 'adminTemplates/adminTagType.html',
+        templateUrl: 'html/adminTemplates/adminTagType.html',
         controller: 'TagTypeController'
       }).
       when('/groups', {
-        templateUrl: 'adminTemplates/adminGroups.html',
+        templateUrl: 'html/adminTemplates/adminGroups.html',
         controller: 'GroupController'
       }).
       when('/category', {
-        templateUrl: 'adminTemplates/adminCategory.html',
+        templateUrl: 'html/adminTemplates/adminCategory.html',
         controller: 'CategoryController'
       }).
       when('/articles', {
-        templateUrl: 'adminTemplates/adminArticles.html',
+        templateUrl: 'html/adminTemplates/adminArticles.html',
         controller: 'ArticleController'
       }).
       when('/editArticle/:articleId', {
-        templateUrl: 'adminTemplates/adminEditArticle.html',
+        templateUrl: 'html/adminTemplates/adminEditArticle.html',
         controller: 'EditArticleController'
       }).
       when('/editArticle', {
-        templateUrl: 'adminTemplates/adminEditArticle.html',
+        templateUrl: 'html/adminTemplates/adminEditArticle.html',
         controller: 'EditArticleController'
       }).
       when('/articleRank', {
-        templateUrl: 'adminTemplates/adminArticleRank.html',
+        templateUrl: 'html/adminTemplates/adminArticleRank.html',
         controller: 'ArticleRankController'
       }).
       when('/image', {
-        templateUrl: 'adminTemplates/image.html',
+        templateUrl: 'html/adminTemplates/image.html',
         controller: 'ImageController'
       }).
       when('/imageModeration', {
-        templateUrl: 'adminTemplates/imageModeration.html',
+        templateUrl: 'html/adminTemplates/imageModeration.html',
         controller: 'ImageModerationController'
       }).
       when('/gallery', {
-        templateUrl: 'adminTemplates/gallery.html',
+        templateUrl: 'html/adminTemplates/gallery.html',
         controller: 'GalleryController'
       }).
       when('/commentModeration', {
-        templateUrl: 'adminTemplates/commentModeration.html',
+        templateUrl: 'html/adminTemplates/commentModeration.html',
         controller: 'CommentModerationController'
       }).
       when('/users', {
-      	templateUrl: 'adminTemplates/adminUsers.html',
+      	templateUrl: 'html/adminTemplates/adminUsers.html',
       	controller: 'UsersController'
       });
       // otherwise({
