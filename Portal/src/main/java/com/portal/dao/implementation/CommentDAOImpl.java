@@ -40,13 +40,18 @@ public class CommentDAOImpl implements CommentDAOI {
 		return sessionFactory.getCurrentSession();
 	}
 
-	private Session openSession() {
-		return sessionFactory.openSession();
-	}
+//	private Session openSession() {
+//			return sessionFactory.openSession();
+//	}
 
 	@Override
 	public Comment getById(long id) {
-		Comment c = (Comment) openSession().load(Comment.class, id);
+		
+		Session session = sessionFactory.openSession();
+		
+		try {
+		
+		Comment c = (Comment) session.load(Comment.class, id);
 
 		Comment comToReturn = new Comment();
 		comToReturn.setId(c.getId());
@@ -73,8 +78,14 @@ public class CommentDAOImpl implements CommentDAOI {
 		comToReturn.setState(cs);
 		comToReturn.setArticle(a);
 		comToReturn.setUser(u);
-
+		
 		return comToReturn;
+		
+		} finally {
+			if (session != null)
+				session.close();
+		}
+
 	}
 
 	Comment root(Comment comment) {
@@ -138,17 +149,26 @@ public class CommentDAOImpl implements CommentDAOI {
 
 	@Override
 	public List<Comment> getApprovedByUser(long userId) {
-		Query query = this.getCurrentSession().createQuery(
-				"from Comment u where u.user= :login");
-		query.setParameter("userId", userId);
-		return query.list();
+		
+		Session session = sessionFactory.openSession();
+		
+		try {
+			Query query = session.createQuery("from Comment u where u.user= :login");
+			query.setParameter("userId", userId);
+			return query.list();
+		} finally {
+			if (session != null)
+				session.close();
+		}
 	}
 
 	@Override
 	public void add(String login, String content, Long parent, long articleId) {
 		Comment comment = new Comment();
+		
+		Session session = sessionFactory.openSession();
 
-		Criteria criteria = openSession().createCriteria(User.class);
+		Criteria criteria = session.createCriteria(User.class);
 		criteria.add(Restrictions.eq("login", login));
 
 		User u = (User) criteria.list().get(0);
@@ -157,12 +177,10 @@ public class CommentDAOImpl implements CommentDAOI {
 
 		if (parent != null) {
 
-			Comment p = (Comment) openSession().load(Comment.class, parent);
+			Comment p = (Comment) session.load(Comment.class, parent);
 			comment.setParent(p);
 
-			Query incrResponses = openSession()
-					.createQuery(
-							"update Comment c set c.responsesNumber = :resp where c.id = :id");
+			Query incrResponses = session.createQuery("update Comment c set c.responsesNumber = :resp where c.id = :id");
 			incrResponses.setParameter("resp", p.getResponsesNumber() + 1);
 			incrResponses.setParameter("id", parent);
 			incrResponses.executeUpdate();
@@ -172,26 +190,26 @@ public class CommentDAOImpl implements CommentDAOI {
 			List<Comment> children = children(p);
 
 			for (Comment child : children) {
-				Query incrResponses2 = openSession()
-						.createQuery(
-								"update Comment c set c.responsesNumber = :resp where c.id = :id");
-				incrResponses2.setParameter("resp",
-						child.getResponsesNumber() + 1);
+				Query incrResponses2 = session.createQuery("update Comment c set c.responsesNumber = :resp where c.id = :id");
+				incrResponses2.setParameter("resp", child.getResponsesNumber() + 1);
 				incrResponses2.setParameter("id", child.getId());
 				incrResponses2.executeUpdate();
 			}
 		}
 
-		Article a = (Article) openSession().load(Article.class, articleId);
+		Article a = (Article) session.load(Article.class, articleId);
 		comment.setArticle(a);
 
 		comment.setContent(content);
-		CommentState cs = (CommentState) openSession().load(CommentState.class,
+		CommentState cs = (CommentState) session.load(CommentState.class,
 				1l);
 		comment.setState(cs);
 		comment.setDate(new Date());
 
-		openSession().save(comment);
+		session.save(comment);
+		
+		if (session != null)
+			session.close();
 	}
 
 	@Override
@@ -205,47 +223,61 @@ public class CommentDAOImpl implements CommentDAOI {
 
 	@Override
 	public void delete(List<Comment> comments) {
+		
+		Session session = sessionFactory.openSession();
 
 		for (Comment c : comments) {
 
 			List<Comment> children = children(c);
 
 			for (Comment child : children) {
-				Query deleteChild = openSession().createQuery(
+				Query deleteChild = session.createQuery(
 						"delete Comment c where c.id = :id");
 				deleteChild.setParameter("id", child.getId());
 				deleteChild.executeUpdate();
 			}
 
-			Query deleteComment = openSession().createQuery(
+			Query deleteComment = session.createQuery(
 					"delete Comment c where c.id = :id");
 			deleteComment.setParameter("id", c.getId());
 			deleteComment.executeUpdate();
 		}
+		
+		if (session != null)
+			session.close();
 
 	}
 
 	@Override
 	public List<Comment> children(Comment comment) {
-		Criteria criteria = openSession().createCriteria(Comment.class);
+		
+		Session session = sessionFactory.openSession();
+		
+		Criteria criteria = session.createCriteria(Comment.class);
 		criteria.add(Restrictions.eq("parent", comment));
+		
+		if (session != null)
+			session.close();
+		
 		return criteria.list();
 	}
 
 	@Override
 	public void setStates(List<Comment> comments) {
 		
-		//System.out.println(commentyczki.getClass());
+		Session session = sessionFactory.openSession();
 
 		for (Comment c : comments) {
 			System.out.println("c type: " + c.getClass());
-			Query query = openSession().createQuery(
-					"update Comment c set c.state = :state where c.id = :id");
+			Query query = session.createQuery("update Comment c set c.state = :state where c.id = :id");
 			query.setParameter("id", c.getId());
 			query.setParameter("state", c.getState());
 
 			query.executeUpdate();
 		}
+		
+		if (session != null)
+			session.close();
 	}
 
 	@Override
@@ -253,13 +285,16 @@ public class CommentDAOImpl implements CommentDAOI {
 			String sortOrder) {
 
 		List<User> u = new ArrayList<User>();
-		Criteria cri = openSession().createCriteria(User.class);
+		
+		Session session = sessionFactory.openSession();
+		
+		Criteria cri = session.createCriteria(User.class);
 		cri.add(Restrictions.eq("login", login));
 		u = cri.list();
 		Long userID = u.get(0).getId();
 
 		List<Comment> comments = new ArrayList<Comment>();
-		Criteria criteria = openSession().createCriteria(Comment.class);
+		Criteria criteria = session.createCriteria(Comment.class);
 		criteria.add(Restrictions.eq("user.id", userID));
 		criteria.add(Restrictions.eq("state.id", 2L));
 		criteria.setFirstResult(limit * (pageNO - 1));
@@ -271,7 +306,7 @@ public class CommentDAOImpl implements CommentDAOI {
 		}
 		List<Comment> coms = criteria.list();
 
-		Criteria criteria2 = openSession().createCriteria(Comment.class);
+		Criteria criteria2 = session.createCriteria(Comment.class);
 		criteria2.add(Restrictions.eq("user.id", userID));
 		criteria2.add(Restrictions.eq("state.id", 2L));
 		List<Comment> coms2 = criteria2.list();
@@ -315,6 +350,9 @@ public class CommentDAOImpl implements CommentDAOI {
 		classComment.setComments(comments);
 		classComment.setSize(coms2.size());
 
+		if (session != null)
+			session.close();
+		
 		return classComment;
 	}
 
@@ -323,7 +361,10 @@ public class CommentDAOImpl implements CommentDAOI {
 			int pageNO, String sortOrder) {
 
 		List<ParentComment> pComments = new ArrayList<ParentComment>();
-		Criteria criteria = openSession().createCriteria(Comment.class);
+		
+		Session session = sessionFactory.openSession();
+		
+		Criteria criteria = session.createCriteria(Comment.class);
 		criteria.add(Restrictions.eq("article.id", articleID));
 		criteria.add(Restrictions.isNull("parent"));
 		criteria.add(Restrictions.eq("state.id", 2L));
@@ -337,7 +378,7 @@ public class CommentDAOImpl implements CommentDAOI {
 
 		List<Comment> coms = criteria.list();
 
-		Criteria criteria2 = openSession().createCriteria(Comment.class);
+		Criteria criteria2 = session.createCriteria(Comment.class);
 		criteria2.add(Restrictions.eq("article.id", articleID));
 		criteria2.add(Restrictions.eq("state.id", 2L));
 		criteria2.add(Restrictions.isNull("parent"));
@@ -407,6 +448,9 @@ public class CommentDAOImpl implements CommentDAOI {
 		ClassParentComment comParent = new ClassParentComment();
 		comParent.setComments(pComments);
 		comParent.setSize(coms2.size());
+		
+		if (session != null)
+			session.close();
 
 		return comParent;
 	}
@@ -416,7 +460,10 @@ public class CommentDAOImpl implements CommentDAOI {
 			String sortOrder) {
 
 		List<Comment> comments = new ArrayList<Comment>();
-		Criteria criteria = openSession().createCriteria(Comment.class);
+		
+		Session session = sessionFactory.openSession();
+		
+		Criteria criteria = session.createCriteria(Comment.class);
 		// criteria.add(Restrictions.isNull("parent"));
 		criteria.add(Restrictions.eq("state.id", status));
 		criteria.setFirstResult(limit * (pageNo - 1));
@@ -429,7 +476,7 @@ public class CommentDAOImpl implements CommentDAOI {
 
 		List<Comment> coms = criteria.list();
 
-		Criteria criteria2 = openSession().createCriteria(Comment.class);
+		Criteria criteria2 = session.createCriteria(Comment.class);
 		criteria2.add(Restrictions.isNull("parent"));
 		criteria2.add(Restrictions.eq("state.id", status));
 
@@ -442,7 +489,7 @@ public class CommentDAOImpl implements CommentDAOI {
 			User user = new User();
 			user.setId(c.getUser().getId());
 
-			Criteria criteria3 = openSession().createCriteria(User.class);
+			Criteria criteria3 = session.createCriteria(User.class);
 			criteria3.add(Restrictions.eq("id", c.getUser().getId()));
 
 			user.setLogin(((User) criteria3.list().get(0)).getLogin());
@@ -477,6 +524,9 @@ public class CommentDAOImpl implements CommentDAOI {
 		ClassComment classCom = new ClassComment();
 		classCom.setComments(comments);
 		classCom.setSize(coms2.size());
+		
+		if (session != null)
+			session.close();
 
 		return classCom;
 	}
@@ -485,8 +535,10 @@ public class CommentDAOImpl implements CommentDAOI {
 	public ClassComment getAllComments(int limit, int pageNo, String sortOrder) {
 
 		List<Comment> comments = new ArrayList<Comment>();
+		
+		Session session = sessionFactory.openSession();
 
-		Criteria criteria = openSession().createCriteria(Comment.class);
+		Criteria criteria = session.createCriteria(Comment.class);
 		// criteria.add(Restrictions.isNull("parent"));
 		criteria.setFirstResult(limit * (pageNo - 1));
 		criteria.setMaxResults(limit);
@@ -498,7 +550,7 @@ public class CommentDAOImpl implements CommentDAOI {
 
 		List<Comment> coms = criteria.list();
 
-		Criteria criteria2 = openSession().createCriteria(Comment.class);
+		Criteria criteria2 = session.createCriteria(Comment.class);
 		criteria2.add(Restrictions.isNull("parent"));
 
 		List<Comment> coms2 = criteria2.list();
@@ -510,7 +562,7 @@ public class CommentDAOImpl implements CommentDAOI {
 			User user = new User();
 			user.setId(c.getUser().getId());
 
-			Criteria criteria3 = openSession().createCriteria(User.class);
+			Criteria criteria3 = session.createCriteria(User.class);
 			criteria3.add(Restrictions.eq("id", c.getUser().getId()));
 
 			user.setLogin(((User) criteria3.list().get(0)).getLogin());
@@ -545,6 +597,9 @@ public class CommentDAOImpl implements CommentDAOI {
 		ClassComment classCom = new ClassComment();
 		classCom.setComments(comments);
 		classCom.setSize(coms2.size());
+		
+		if (session != null)
+			session.close();
 
 		return classCom;
 	}
@@ -553,10 +608,16 @@ public class CommentDAOImpl implements CommentDAOI {
 	public long getTotalComments(long status) {
 
 		List<Comment> comments = new ArrayList<Comment>();
-		Criteria criteria = openSession().createCriteria(Comment.class);
+		
+		Session session = sessionFactory.openSession();
+		
+		Criteria criteria = session.createCriteria(Comment.class);
 		if (status != 0) {
 			criteria.add(Restrictions.eq("state.id", status));
 		}
+		
+		if (session != null)
+			session.close();
 
 		return criteria.list().size();
 	}
@@ -565,14 +626,16 @@ public class CommentDAOImpl implements CommentDAOI {
 	public ClassComment getUserComments(String login, long status, int limit,
 			int pageNo, String sortOrder) {
 
+		Session session = sessionFactory.openSession();
+		
 		List<User> u = new ArrayList<User>();
-		Criteria cri = openSession().createCriteria(User.class);
+		Criteria cri = session.createCriteria(User.class);
 		cri.add(Restrictions.eq("login", login));
 		u = cri.list();
 		Long userID = u.get(0).getId();
 
 		List<Comment> comments = new ArrayList<Comment>();
-		Criteria criteria = openSession().createCriteria(Comment.class);
+		Criteria criteria = session.createCriteria(Comment.class);
 		criteria.add(Restrictions.eq("user.id", userID));
 		if (status != 0) {
 			criteria.add(Restrictions.eq("state.id", status));
@@ -587,7 +650,7 @@ public class CommentDAOImpl implements CommentDAOI {
 
 		List<Comment> coms = criteria.list();
 
-		Criteria criteria2 = openSession().createCriteria(Comment.class);
+		Criteria criteria2 = session.createCriteria(Comment.class);
 		criteria2.add(Restrictions.eq("user.id", userID));
 		criteria2.add(Restrictions.eq("state.id", status));
 		List<Comment> coms2 = criteria2.list();
@@ -629,6 +692,9 @@ public class CommentDAOImpl implements CommentDAOI {
 		ClassComment classComment = new ClassComment();
 		classComment.setComments(comments);
 		classComment.setSize(coms2.size());
+		
+		if (session != null)
+			session.close();
 
 		return classComment;
 	}

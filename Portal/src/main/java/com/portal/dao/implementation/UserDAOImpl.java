@@ -35,58 +35,80 @@ public class UserDAOImpl implements UserDAOI {
 	
 	@Autowired
 	private SessionFactory sessionFactory;
-	
-	private Session openSession() {	
-		return sessionFactory.openSession();
-	}
-	
-	
 
+//	private Session openSession() {
+//			return sessionFactory.openSession();
+//	}
+	
 	public User getUser(String login) {
 		List<User> users = new ArrayList<User>();
-		Query query = openSession().createQuery("from User u where u.login = :login");
+		
+		Session session = sessionFactory.openSession();
+		
+		Query query = session.createQuery("from User u where u.login = :login");
 		query.setParameter("login", login);
 		
 		users = query.list();
 		
+		try {
 		if (users != null && users.size() > 0)
 			return users.get(0);
 		else
 			return null;	
+		} finally {
+			if (session != null)
+				session.close();
+		}
 		
 	}
 	
 	public void setLastLoginDate(String login) {
-		Query query = openSession().createQuery("update User u set u.dateOfLastLogIn = :date where u.login = :login");
-		query.setParameter("login", login);
-		query.setParameter("date", new Date());
-		query.executeUpdate();
+		
+		Session session = sessionFactory.openSession();
+		
+		try {
+			Query query = session.createQuery("update User u set u.dateOfLastLogIn = :date where u.login = :login");
+			query.setParameter("login", login);
+			query.setParameter("date", new Date());
+			query.executeUpdate();
+		} finally {
+			if (session != null)
+				session.close();
+		}
+		
 	}
 	
 	public void setUserGroup(String login, Long groupId) {
 		
-		Query groupQuery = openSession().createQuery("from Group g where g.id = :groupId");
+		Session session = sessionFactory.openSession();
+		
+		Query groupQuery = session.createQuery("from Group g where g.id = :groupId");
 		groupQuery.setParameter("groupId", groupId);
 		
 		List<Group> groups = groupQuery.list();
 		
-		if (groups != null && groups.size() > 0) {
-			
-			Group groupToSet = groups.get(0);
-			
-			Query query = openSession().createQuery("update User u set u.group = :groupToSet where u.login = :login");
-			query.setParameter("login", login);
-			query.setParameter("groupToSet", groupToSet);
-			query.executeUpdate();
+		try {
+			if (groups != null && groups.size() > 0) {
+				
+				Group groupToSet = groups.get(0);
+				
+				Query query = session.createQuery("update User u set u.group = :groupToSet where u.login = :login");
+				query.setParameter("login", login);
+				query.setParameter("groupToSet", groupToSet);
+				query.executeUpdate();
+			}
+		} finally {
+			if (session != null)
+				session.close();
 		}
 
 	}
 	
 	public void setUserData(User user) {
 		
-		Session session = openSession();
+		Session session = sessionFactory.openSession();
 		
-		Query query = openSession().createQuery("from User u where u.login = :login");
+		Query query = session.createQuery("from User u where u.login = :login");
 		query.setParameter("login", user.getLogin());
 		
 		List<User> users = query.list();
@@ -129,12 +151,14 @@ public class UserDAOImpl implements UserDAOI {
 	
 	public User getLoggedUser() {
 		
+		Session session = sessionFactory.openSession();
+		
 		try {
 			
 			org.springframework.security.core.userdetails.User user = 
 			(org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			
-			Query query = openSession().createQuery("from User u where u.login = :login");
+			Query query = session.createQuery("from User u where u.login = :login");
 			query.setParameter("login", user.getUsername());
 			
 			List<User> users = query.list();
@@ -164,6 +188,9 @@ public class UserDAOImpl implements UserDAOI {
 			System.out.println(e.getMessage());
 			
 			return null;
+		} finally {
+			if (session != null)
+				session.close();
 		}
 	}
 
@@ -204,16 +231,23 @@ public class UserDAOImpl implements UserDAOI {
     @Override
     public void deleteUser(String login) {
         
-    	Query query = openSession().createQuery("delete User u where u.login = :login");
-		query.setParameter("login", login);
-		
-		query.executeUpdate();
+    	Session session = sessionFactory.openSession();
+    	
+    	try {
+	    	Query query = session.createQuery("delete User u where u.login = :login");
+			query.setParameter("login", login);
+			
+			query.executeUpdate();
+    	} finally {
+    		if (session != null)
+				session.close();
+    	}
 		
     }
 
     public User addUser(User user) {
     	
-        Session session = openSession();        
+        Session session = sessionFactory.openSession();       
              
         user.setDateOfLastLogIn(null);
         user.setAvatar(null);
@@ -264,12 +298,14 @@ public class UserDAOImpl implements UserDAOI {
 
     public ClassUser getAllUsers(int limit, int pageNo, final String sortBy, final String sortOrder){ 
     	
+    	Session session = sessionFactory.openSession();
+    	
     	List<User> u = new ArrayList<User>();		
-		Criteria c = openSession().createCriteria(User.class);		
+		Criteria c = session.createCriteria(User.class);		
 		u = c.list();
 		
 		List<User> users = new ArrayList<User>();
-	  	Criteria criteria = openSession().createCriteria(User.class);
+	  	Criteria criteria = session.createCriteria(User.class);
 	  	criteria.setFirstResult(limit*(pageNo-1));
 		criteria.setMaxResults(limit);
 		if(sortOrder.equals("DESC")){
@@ -285,22 +321,40 @@ public class UserDAOImpl implements UserDAOI {
 		ClassUser classUser = new ClassUser();
 		classUser.setUsers(users);
 		classUser.setSize(u.size());
+		
+		if (session != null)
+            session.close();
+		
 		return classUser;
     }
     
     public int totalUsers(){ 
-    	Query query = openSession().createQuery("from User");		
-		return query.list().size();
+    	
+    	Session session = sessionFactory.openSession();
+    	
+    	try {
+	    	Query query = session.createQuery("from User");		
+			return query.list().size(); 
+    	} finally {
+    		if (session != null)
+                session.close();
+    	}
     }
 
 
 
 	@Override
 	public boolean loginExists(User login) {
+		
+		Session session = sessionFactory.openSession();
+		
 		List<User> u = new ArrayList<User>();
-		Criteria criteria = openSession().createCriteria(User.class);
+		Criteria criteria = session.createCriteria(User.class);
 		criteria.add(Restrictions.eq("login", login.getLogin()));
 		u = criteria.list();
+		
+		if (session != null)
+            session.close();
 		
 		if(u.size() == 0)
 			return false;
@@ -313,13 +367,19 @@ public class UserDAOImpl implements UserDAOI {
 	@Override
 	public boolean emailExists(User email) {
 		List<User> u = new ArrayList<User>();
-		Criteria criteria = openSession().createCriteria(User.class);
+		
+		Session session = sessionFactory.openSession();
+		
+		Criteria criteria = session.createCriteria(User.class);
 		criteria.add(Restrictions.eq("email", email.getEmail()));
 		u = criteria.list();
 		
+		if (session != null)
+            session.close();
+		
 		if(u.size() == 0)
 			return false;
-			
+		
 		return true;
 	}
 }
