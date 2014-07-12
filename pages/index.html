@@ -102,6 +102,7 @@ app.service('tags', function($q) {
 app.controller('topAndSideContrler', function($scope, $http, SharedData, tags) {
 
  $scope.listOfArticles = [];
+ $scope.loginError = false;
  
     $scope.getListOfArticles = function(len)
   {
@@ -132,11 +133,6 @@ $scope.getArticleByRankId(1);
 $scope.userLoggedIn = false;
 
 $scope.getButtonText = function() {
-  // if ($scope.GetCurrentUserName()) {
-    //return 'Zaloguj';
-  // } else {
-  //   return $scope.currentUserData.name;
-  // }
 
   if ($scope.userLoggedIn) {
     return $scope.currentUserName.data;
@@ -150,6 +146,7 @@ $scope.currentUserGroup = null;
 $scope.LogIn = function(login, pass)
 {
 	Login(login, pass, $scope, $http);
+  console.log($scope.loginError);
 }
 
 $scope.LogOut = function()
@@ -919,6 +916,11 @@ $scope.article = null;
 <!-- 					  <label for="exampleInputPassword1">Hasło</label> -->
 					  <input class="form-control" id="exampleInputPassword1" placeholder="Hasło" type="password" ng-model="pass">
 					</div>
+
+          <span class="help-block" style="color:#CC330E; font-size: 13px;" data-ng-show="loginError">
+                  <span style="background-color:#F13333;" class="badge pull-left" ng-model="loginError">!</span>&nbsp;Błędny login lub hasło
+                </span>
+
 					<button type="submit" class="btn btn-primary pull-right" ng-click="LogIn(login, pass)">Zaloguj</button>
 				  </form>
 				</li>

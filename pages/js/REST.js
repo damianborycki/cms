@@ -2,8 +2,17 @@ function Login(login, pass, $scope, $http){
 	$http.post('/portal/login', {login: login, password: pass}).
 	  success(function(data, status, headers, config) {
 		$scope.userLoggedIn = status == "201";
-		if ($scope.userLoggedIn)
+		if ($scope.userLoggedIn) {
 			$scope.GetCurrentUserName();
+			$scope.loginError = false;
+
+			$scope.login = '';
+			$scope.pass = '';
+		}
+
+		if (status == "204") {
+			$scope.loginError = true;
+		}
 	  }).
 	  error(function(data, status, headers, config) {
 		$scope.userLoggedIn = false;
