@@ -25,15 +25,24 @@
 			</div>
 			<div class="col-md-9">
 				<select ng-model="categoryForModal.parent">
-				<option ng-selected="{{'null' == categoryForModal.parent}}" value="null">null</option>
-				<option ng-selected="{{categoryForModal.id == categoryForModal.parent}}" ng-repeat="cat in GetFlatCategoriesList()" value="{{cat.id}}">{{cat.name}}</option>
+
+				<option value="null" ng-selected="categoryForModal.parent == null">Brak</option>
+				<option ng-repeat="category in getFlatList()" ng-selected="{{category.parent == categoryForModal.parent}} && categoryForModal.parent != null" value="{{category.id}}">{{category.name}}</option>
 				</select>
 			</div>
+		</div>
 
-			<textarea style="margin: 0px; height: 180px; width: 100%; resize:vertical;" ng-model="categoryForModal.description"></textarea>
+			<div class="row">
+			<div class="col-md-2">
+				Opis:
+			</div>
+			<div class="col-md-9">
+				<textarea style="margin: 0px; height: 80px; width: 100%; resize:vertical;" ng-model="categoryForModal.description"></textarea>
+			</div>
 		</div>
 		* - pola obowiązkowe
-	  </div>
+		</div>
+
       <div class="modal-footer">
         <button type="button" class="btn btn-default" ng-click="$hide()">Zamknij</button>
         <button type="button" class="btn btn-success" ng-disabled="categoryForModal.name == '' || categoryForModal.name.length < 3 || categoryForModal.parent == categoryForModal.id" ng-click="addOrUpdate(modalInfo.op, categoryForModal.id); $hide()" ng-bind="modalInfo.buttonText"></button>

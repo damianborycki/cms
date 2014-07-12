@@ -444,14 +444,23 @@ $scope.GetCategoryById = function($id)
 	return out;
 };
 
+
+$scope.getFlatList = function() {
+	return $scope.getFlatCategoryListRecurrency($scope.listOfCategories);
+}
+
 $scope.SetCategoryForModal = function($id)
 {
-	console.log($scope.GetCategoryById($id));
+	//console.log($scope.GetCategoryById($id));
 	$scope.categoryForModal = $scope.GetCategoryById($id);
+
+	//console.log($scope.categoryForModal);
 
 	$scope.modalInfo.title = 'Edycja kategorii';
 	$scope.modalInfo.buttonText = 'Zatwierdź zmiany';
 	$scope.modalInfo.op = '1';
+
+	console.log($scope.getFlatList());
 }
 
 $scope.UpdateCategory=function($id)
