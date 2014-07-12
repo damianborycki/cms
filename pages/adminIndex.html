@@ -25,6 +25,16 @@
 <link rel="stylesheet" href="css/styles-admin.css" >
 <link rel="stylesheet" href="css/jcrop.css" >
 <link href="css/ng-ckeditor.css" rel="stylesheet">
+
+
+<script type="text/javascript" src="js/plugins/angular-tree-control/angular-tree-control.js"></script>
+<!-- link for CSS when using the tree as a Dom element -->
+<link rel="stylesheet" type="text/css" href="js/plugins/angular-tree-control/css/tree-control.css">
+<!-- link for CSS when using the tree as an attribute -->
+<link rel="stylesheet" type="text/css" href="js/plugins/angular-tree-control/css/tree-control-attribute.css">
+
+
+
 <style>
 	.odd {
 		background-color: #EEE;
@@ -113,7 +123,7 @@ function parseDate(input)
 	return new Date(date[2], date[0]-1, date[1], time[0], time[1], time[2]);
 }
    
-var app = angular.module('studentInfoApp', ['ngSanitize', 'ngRoute', 'mgcrea.ngStrap', 'ngCkeditor', 'ngTagsInput', 'paging']);
+var app = angular.module('studentInfoApp', ['ngSanitize', 'ngRoute', 'mgcrea.ngStrap', 'ngCkeditor', 'ngTagsInput', 'paging', 'treeControl']);
 
 app.filter('unsafe', function($sce) {
     return function(val) {
@@ -135,10 +145,10 @@ app.config(['$routeProvider',
         templateUrl: 'html/adminTemplates/adminGroups.html',
         controller: 'GroupController'
       }).
-      when('/category', {
-        templateUrl: 'html/adminTemplates/adminCategory.html',
-        controller: 'CategoryController'
-      }).
+      // when('/category', {
+      //   templateUrl: 'html/adminTemplates/adminCategory.html',
+      //   controller: 'CategoryController'
+      // }).
       when('/articles', {
         templateUrl: 'html/adminTemplates/adminArticles.html',
         controller: 'ArticleController'
@@ -174,6 +184,10 @@ app.config(['$routeProvider',
       when('/users', {
       	templateUrl: 'html/adminTemplates/adminUsers.html',
       	controller: 'UsersController'
+      }).
+      when('/category', {
+      	templateUrl: 'html/adminTemplates/adminCat.html',
+      	controller: 'CatController'
       });
       // otherwise({
       //   redirectTo: '/groups'
@@ -271,6 +285,188 @@ app.directive('imgCropped', function() {
      }
    };
  });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+app.controller('CatController', function($scope, $http) { 
+
+
+$scope.listOfCategories = [];
+
+$scope.getlistOfCategories = function()
+	{
+		if ($scope.listOfCategories.Length > 0)
+		{
+			return;
+		}
+			GetCategories($scope, $http);
+
+
+	};
+
+$scope.getlistOfCategories();
+
+$scope.treeOptions = {
+    nodeChildren: "children",
+    dirSelectable: false,
+    injectClasses: {
+        ul: "a1",
+        // li: "a2",
+        // liSelected: "a7",
+        // iExpanded: "a3",
+        // iCollapsed: "a4",
+        // iLeaf: "a5",
+        // label: "a6",
+        // labelSelected: "a8"
+    }
+}
+
+$scope.GetIndexOfCategoryById=function($id)
+{
+	for (var tagIndex in $scope.listOfCategories)
+	{
+		if ($scope.listOfCategories[tagIndex].id == $id)
+		{
+			return tagIndex;
+		}
+	}
+	
+	return -1;
+};
+
+
+$scope.getFlatCategoryListRecurrency = function(arr)
+{
+	var out = [];
+	for (var index in arr)
+	{
+		out.push(arr[index]);
+		if (arr[index].children != null && arr[index].children.length > 0)
+		{
+			var out2 = $scope.getFlatCategoryListRecurrency(arr[index].children);
+			
+			if (out2 != null && out.length > 0)
+			{
+				for (var index2 in out2)
+				{
+					out.push(out2[index2]);
+				}
+			}
+		}
+	}
+	
+	return out;
+}
+
+$scope.getChildrenArrayRecurrency = function(id, arr)
+{
+	for (var index in arr)
+	{
+		if (arr[index].id == id)
+		{
+			return arr[index].children;
+		}
+		else if (arr[index].children != null && arr[index].children.length > 0)
+		{
+			var out = $scope.getChildrenArrayRecurrency(id, arr[index].children);
+			
+			if (out != null && out.length > 0)
+				return out;
+		}
+	}
+	
+	return [];
+}
+
+$scope.getListOfElementsByParent=function(id)
+{
+	var arr = [];
+	
+	arr = $scope.getChildrenArrayRecurrency(id, $scope.listOfCategories);
+	return arr;
+}
+
+	$scope.addCategory = function()
+	{
+
+		console.log($scope.categoryForModal.name);
+		AddCategory($scope, $http);
+	};
+
+	$scope.editCategory  = function(id)
+	{
+		EditCategory(id, $scope.categoryForModal.name ,$scope.categoryForModal.description, $scope.categoryForModal.parent ,$scope, $http);
+	};
+
+	$scope.deleteCategory  = function(id)
+	{
+		DeleteCategory(id ,$scope, $http);
+	};
+
+	$scope.CreateNewCategory=function()
+	{
+		$scope.categoryForModal = {'name': '', 'description': '', 'parent' : ''};
+	}
+
+$scope.remove=function($id){ 
+
+	DeleteCategory($id, $scope, $http);
+
+};
+
+
+//$scope.categoryForModal = null;
+
+$scope.SetCategoryForModal = function($id)
+{
+	console.log($scope.GetCategoryById($id));
+	$scope.categoryForModal = $scope.GetCategoryById($id);
+}
+
+$scope.UpdateCategory=function($id)
+{
+	$scope.editCategory($id);
+}
+
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
  
@@ -1487,12 +1683,14 @@ function onFileSelected(event) {
 <!--                 <li ng-class="{active:isActive('/groups')}"><a href="#groups">Grupa</a>
                 </li> -->
                 <li><a style="font-size:1.3em; margin-left:-15px;" title="Strona glowna" href="index.html#/main"><i class="glyphicon glyphicon-home"></i></a></li>
+                <li ng-class="{active:isActive('/category')}"><a href="#category">Kategorie</a>
+                </li>
                 <li ng-class="{active:isActive('/tag')}"><a href="#tag">Tag</a>
                 </li>
                 <li ng-class="{active:isActive('/tagTypes')}"><a href="#tagTypes">Rodzaj Tagu</a>
                 </li>
-                <li ng-class="{active:isActive('/category')}"><a href="#category">Kategoria</a>
-                </li>
+<!--                 <li ng-class="{active:isActive('/category')}"><a href="#category">Kategoria</a>
+                </li> -->
                 <li ng-class="{active:isActive('/articles')}"><a href="#articles">Artykuł</a>
                 </li>
                 <li ng-class="{active:isActive('/articleRank')}"><a href="#articleRank">Ranga Artykułu</a>
