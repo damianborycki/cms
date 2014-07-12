@@ -3,7 +3,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" ng-click="$hide()">&times;</button>
-        <h4 class="modal-title">Edycja kategorii</h4>
+        <h4 class="modal-title" ng-bind="modalInfo.title"></h4>
       </div>
       <div class="modal-body">
 		<div class="row">
@@ -11,27 +11,32 @@
 				Nazwa*:
 			</div>
 			
-			<div class="col-md-9">
+			<div class="col-md-4">
 				<input ng-model="categoryForModal.name">
 			</div>
+
+			<span class="help-block col-md-5" style="color: #f0ad4e; font-size: 12px; margin-bottom: 0px;" data-ng-show="categoryForModal.name != '' && categoryForModal.name.length < 3">Podaj przynajmniej 3 znaki...
+            </span>
+
 		</div>
 		<div class="row">
 			<div class="col-md-2">
 				Rodzic:
 			</div>
 			<div class="col-md-9">
-				<select ng-model="categoryFormModal.parent">
+				<select ng-model="categoryForModal.parent">
 				<option ng-selected="{{'null' == categoryForModal.parent}}" value="null">null</option>
-				<option ng-selected="{{cat.id == categoryForModal.parent}}" ng-repeat="cat in GetFlatCategoriesList()" value="{{cat.id}}" ng-hide="cat.id == categoryForModal.id">{{cat.name}}</option>
+				<option ng-selected="{{categoryForModal.id == categoryForModal.parent}}" ng-repeat="cat in GetFlatCategoriesList()" value="{{cat.id}}">{{cat.name}}</option>
 				</select>
 			</div>
+
 			<textarea style="margin: 0px; height: 180px; width: 100%; resize:vertical;" ng-model="categoryForModal.description"></textarea>
 		</div>
 		* - pola obowiązkowe
 	  </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" ng-click="$hide()">Zamknij</button>
-        <button type="button" class="btn btn-success" ng-disabled="categoryForModal.name == '' || categoryForModal.name.length < 3 || categoryForModal.parent == categoryForModal.id" ng-click="UpdateCategory(categoryForModal.id); $hide()">Zmień</button>
+        <button type="button" class="btn btn-success" ng-disabled="categoryForModal.name == '' || categoryForModal.name.length < 3 || categoryForModal.parent == categoryForModal.id" ng-click="addOrUpdate(modalInfo.op, categoryForModal.id); $hide()" ng-bind="modalInfo.buttonText"></button>
       </div>
     </div>
   </div>

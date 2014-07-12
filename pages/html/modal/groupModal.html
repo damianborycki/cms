@@ -3,7 +3,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" ng-click="$hide()">&times;</button>
-        <h4 class="modal-title">Edycja grupy</h4>
+        <h4 class="modal-title" ng-bind="modalInfo.title"></h4>
       </div>
       <div class="modal-body">
 		<div class="row">
@@ -11,23 +11,27 @@
 				Nazwa*:
 			</div>
 			
-			<div class="col-md-9">
+			<div class="col-md-4">
 				<input ng-model="groupForModal.name">
 			</div>
+
+			<span class="help-block col-md-5" style="color: #f0ad4e; font-size: 12px; margin-bottom: 0px;" data-ng-show="groupForModal.name != '' && groupForModal.name.length < 3">Podaj przynajmniej 3 znaki...
+            </span>
+
 		</div>
 		<div class="row">
 			<div class="col-md-2">
 				Opis:
 			</div>
 			<div class="col-md-9">
-				<textarea style="margin: 0px; height: 180px; width: 100%; resize:vertical;" ng-model="groupForModal.description"></textarea>
+				<textarea style="margin: 0px; height: 80px; width: 100%; resize:vertical;" ng-model="groupForModal.description"></textarea>
 			</div>
 		</div>
 		* - pola obowiązkowe
 	  </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" ng-click="$hide()">Zamknij</button>
-        <button type="button" class="btn btn-success" ng-disabled="groupForModal.name == '' || groupForModal.name.length < 3" ng-click="UpdateGroup(group.id); $hide()">Zmień</button>
+        <button type="button" class="btn btn-success" ng-disabled="groupForModal.name == '' || groupForModal.name.length < 3" ng-click="addOrUpdate(modalInfo.op, groupForModal.id); $hide()" ng-bind="modalInfo.buttonText"></button>
       </div>
     </div>
   </div>

@@ -230,7 +230,7 @@ function UpdateGroup($scope, $http, id) {
 		$http({method: 'PUT', url: '/portal/group/' + id, 
 				data: {'name' : $scope.groupForModal.name, 'description' : $scope.groupForModal.description} }).
 	  success(function(data, status, headers, config) {
-	  	var ix = $scope.getIndexOfGroupById(id);
+	  	var ix = $scope.GetIndexOfGroupById(id);
 	  	$scope.groups(ix).id = data[id];
 	  	$scope.groups(ix).name = data[name];
 	  	$scope.groups(ix).description = data[description];

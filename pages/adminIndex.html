@@ -286,30 +286,11 @@ app.directive('imgCropped', function() {
    };
  });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 app.controller('CatController', function($scope, $http) { 
 
 
 $scope.listOfCategories = [];
+$scope.modalInfo = {'title' : '', 'buttonText' : '', 'op' : ''};
 
 $scope.getlistOfCategories = function()
 	{
@@ -404,18 +385,6 @@ $scope.getListOfElementsByParent=function(id)
 	return arr;
 }
 
-	$scope.addCategory = function()
-	{
-
-		console.log($scope.categoryForModal.name);
-		AddCategory($scope, $http);
-	};
-
-	$scope.editCategory  = function(id)
-	{
-		EditCategory(id, $scope.categoryForModal.name ,$scope.categoryForModal.description, $scope.categoryForModal.parent ,$scope, $http);
-	};
-
 	$scope.deleteCategory  = function(id)
 	{
 		DeleteCategory(id ,$scope, $http);
@@ -424,21 +393,65 @@ $scope.getListOfElementsByParent=function(id)
 	$scope.CreateNewCategory=function()
 	{
 		$scope.categoryForModal = {'name': '', 'description': '', 'parent' : ''};
+		$scope.modalInfo.title = 'Dodawanie kategorii';
+		$scope.modalInfo.buttonText = 'Dodaj';
+		$scope.modalInfo.op = '0';
 	}
 
-$scope.remove=function($id){ 
+	$scope.addOrUpdate = function(op, id) {
+		if (op == 0) {
+			console.log($scope.categoryForModal.name);
+			AddCategory($scope, $http);
+		} else if (op == 1) {
+			console.log(op);
+			console.log(id);
+			EditCategory(id, $scope.categoryForModal.name ,$scope.categoryForModal.description, $scope.categoryForModal.parent ,$scope, $http);
+		}
+	}
 
-	DeleteCategory($id, $scope, $http);
-
-};
+	$scope.remove=function($id){ 
+		DeleteCategory($id, $scope, $http);
+	};
 
 
 //$scope.categoryForModal = null;
+
+$scope.getCategoryRecurrency = function(id, arr)
+{
+	for (var index in arr)
+	{
+		if (arr[index].id == id)
+		{
+			return arr[index];
+		}
+		else if (arr[index].children != null && arr[index].children.length > 0)
+		{
+			var out = $scope.getCategoryRecurrency(id, arr[index].children);
+			
+			if (out != null)
+				return out;
+		}
+	}
+	
+	return null;
+}
+
+$scope.GetCategoryById = function($id)
+{
+	var out = null;
+	out = $scope.getCategoryRecurrency($id, $scope.listOfCategories);
+	
+	return out;
+};
 
 $scope.SetCategoryForModal = function($id)
 {
 	console.log($scope.GetCategoryById($id));
 	$scope.categoryForModal = $scope.GetCategoryById($id);
+
+	$scope.modalInfo.title = 'Edycja kategorii';
+	$scope.modalInfo.buttonText = 'Zatwierdź zmiany';
+	$scope.modalInfo.op = '1';
 }
 
 $scope.UpdateCategory=function($id)
@@ -449,29 +462,6 @@ $scope.UpdateCategory=function($id)
 });
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
- 
- 
 app.controller('TagController', function($scope, $http) { 
 
 	$scope.listOfTags = [];
@@ -613,6 +603,8 @@ app.controller('GroupController', function($scope, $http) {
 	$scope.groups = [];
 	$scope.groupForModal = null;
 
+	$scope.modalInfo = {'title': '', 'buttonText': '', 'op' : ''};
+
 	$scope.getGroups  = function()
 	{
 		GetGroups($scope, $http);
@@ -681,14 +673,6 @@ $scope.removeSelected=function(){
 	}
 };
 
-$scope.invertSelection=function()
-{
-	for (var tagIndex in $scope.listOfTags)
-	{
-		$scope.toggleSelection($scope.listOfTags[tagIndex].id)
-	}
-}
-
 //$scope.groupForModal = null;
 
 $scope.SetGroupForModal=function($id)
@@ -696,34 +680,39 @@ $scope.SetGroupForModal=function($id)
 	//console.log($scope.groups);
 
 	$scope.groupForModal = $scope.GetIndexOfGroupById($id);
+	$scope.modalInfo.title = 'Edycja grupy';
+	$scope.modalInfo.buttonText = 'Zatwierdź zmiany';
+	$scope.modalInfo.op = '1';
 	//console.log($scope.groupForModal);
 	// var idx = $scope.GetIndexOfGroupById($id);
 	// $scope.groupForModal = jQuery.extend(true, {}, $scope.groups[idx]);
 }
 
-$scope.UpdateGroup=function($id)
-{
-	UpdateGroup($scope, $http, $id);
-}
-
-$scope.CreateNewTag=function()
-{
-	$scope.tagForModal = {
-		id: -1,
-      name:  "",
-      description: ""
-   };
-}
+// $scope.UpdateGroup=function($id)
+// {
+// 	UpdateGroup($scope, $http, $id);
+// }
 
 $scope.CreateNewGroup=function()
 {
 	$scope.groupForModal = {'name': '', 'description': ''};
+	$scope.modalInfo.title = 'Dodawanie grupy';
+	$scope.modalInfo.buttonText = 'Dodaj';
+	$scope.modalInfo.op = '0';
 }
 
-$scope.AddNewGroup=function()
-{
-	AddNewGroup($scope, $http);
+$scope.addOrUpdate = function(operation, $id) {
+	if(operation == 0) {
+		AddNewGroup($scope, $http);
+	} else if (operation == 1) {
+		UpdateGroup($scope, $http, $id);
+	}
 }
+
+// $scope.AddNewGroup=function()
+// {
+// 	AddNewGroup($scope, $http);
+// }
 
   // toggle selection for a given fruit by name
   $scope.toggleSelection = function toggleSelection(id) {
@@ -1027,6 +1016,7 @@ $scope.SetCategoryForModal = function($id)
 {
 	console.log($scope.GetCategoryById($id));
 	$scope.categoryForModal = $scope.GetCategoryById($id);
+	console.log($scope.categoryForModal);
 }
 
 $scope.UpdateCategory=function($id)
