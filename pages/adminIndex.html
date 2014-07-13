@@ -385,17 +385,19 @@ $scope.getListOfElementsByParent=function(id)
 	return arr;
 }
 
-	$scope.deleteCategory  = function(id)
+	$scope.deleteCategory = function(id)
 	{
 		DeleteCategory(id ,$scope, $http);
 	};
 
-	$scope.CreateNewCategory=function()
+	$scope.CreateNewCategory = function(parent)
 	{
-		$scope.categoryForModal = {'name': '', 'description': '', 'parent' : ''};
+		$scope.categoryForModal = {'name': '', 'description': '', 'parent' : parent};
 		$scope.modalInfo.title = 'Dodawanie kategorii';
 		$scope.modalInfo.buttonText = 'Dodaj';
 		$scope.modalInfo.op = '0';
+
+		console.log($scope.categoryForModal);
 	}
 
 	$scope.addOrUpdate = function(op, id) {
