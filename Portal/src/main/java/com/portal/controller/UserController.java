@@ -4,6 +4,11 @@ import com.portal.dao.interfaces.UserDAOI;
 import com.portal.entity.Group;
 import com.portal.entity.User;
 import com.portal.init.ClassUser;
+import com.portal.init.MailMail;
+
+import org.springframework.mail.MailSender;
+import org.springframework.mail.SimpleMailMessage;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -22,6 +27,9 @@ public class UserController {
 	
 	@Autowired
 	private UserDAOI userDAO;
+	
+	@Autowired
+	private MailSender mailSender;
 	
 //	@RequestMapping(value={"/", "/index", "/home", "portal"}, method=RequestMethod.GET)
 //	public String homePage() {
@@ -126,7 +134,7 @@ public class UserController {
     	
         try {
             response.setStatus(HttpServletResponse.SC_CREATED);     
-            userDAO.addUser(user);
+            userDAO.addUser(user, true);
         } catch(Exception e){
             System.out.println(e.getMessage());         
             response.setStatus(HttpServletResponse.SC_NO_CONTENT);
@@ -174,6 +182,19 @@ public class UserController {
 	public @ResponseBody boolean emailExists(@RequestBody User email, HttpServletResponse response){
 		
 		return userDAO.emailExists(email);
+	}
+	
+	@RequestMapping(value = "/send", method = RequestMethod.POST)
+	public void sendMail(HttpServletResponse response){
+		
+		SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+
+		            simpleMailMessage.setFrom("Mati");
+		            simpleMailMessage.setTo("gwaukcje@gmail.com");
+		            simpleMailMessage.setSubject("Temacik");
+		            simpleMailMessage.setText("Wiadomość");
+		            mailSender.send(simpleMailMessage);
+
 	}
 	
 }

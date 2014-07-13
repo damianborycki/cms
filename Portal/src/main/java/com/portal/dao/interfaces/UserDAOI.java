@@ -9,7 +9,7 @@ public interface UserDAOI {
 
     public User getUser(String login);    
 
-    public User addUser(User user);
+    public User addUser(User user, boolean withActivation);
 
     public void setUserGroup(String login, Long groupId);
     
