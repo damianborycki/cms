@@ -23,6 +23,8 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.mail.MailSender;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Repository;
 
@@ -35,10 +37,9 @@ public class UserDAOImpl implements UserDAOI {
 	
 	@Autowired
 	private SessionFactory sessionFactory;
-
-//	private Session openSession() {
-//			return sessionFactory.openSession();
-//	}
+	
+	@Autowired
+	private MailSender mailSender;
 	
 	public User getUser(String login) {
 		List<User> users = new ArrayList<User>();
@@ -245,7 +246,7 @@ public class UserDAOImpl implements UserDAOI {
 		
     }
 
-    public User addUser(User user) {
+    public User addUser(User user, boolean withActivation) {
     	
         Session session = sessionFactory.openSession();       
              
@@ -253,7 +254,7 @@ public class UserDAOImpl implements UserDAOI {
         user.setAvatar(null);
         user.setInfo(null);
         
-        Group userGroup = (Group) session.load(Group.class, 3l);
+        Group userGroup = (Group) session.load(Group.class, 4l);
         user.setGroup(userGroup);   
         
         MessageDigest messageDigest;
@@ -280,6 +281,39 @@ public class UserDAOImpl implements UserDAOI {
         
         try {
         	userToReturn = (User) session.load(User.class, session.save(user));
+        	
+        	MessageDigest messageDigest2;
+            String activationCode = "";
+            
+    		try {
+    			
+    			String nanos = ((Long) System.nanoTime()).toString();
+    			
+    			messageDigest2 = MessageDigest.getInstance("MD5");
+    			messageDigest2.update(nanos.getBytes(), 0, nanos.length());  
+    			activationCode = new BigInteger(1, messageDigest2.digest()).toString(16);  
+    	        
+    	        if (activationCode.length() < 32) {
+    	        	activationCode = "0" + activationCode; 
+    	        }
+    	        
+    	        user.setCode(activationCode);
+    	        
+    		} catch (NoSuchAlgorithmException e1) {
+    			e1.printStackTrace();
+    		}  
+        	
+        	
+        	
+        	SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+
+            simpleMailMessage.setFrom("portal@portal.uj.edu.pl");
+            simpleMailMessage.setTo(user.getEmail());
+            simpleMailMessage.setSubject("Aktywacja konta w serwisie Portal UJ");
+            simpleMailMessage.setText("Aby aktywować swoje konto kliknij w poniższy odnośnik:\n\n" + 
+            "http://localhost:8080/pages?code=" + activationCode);
+            
+            mailSender.send(simpleMailMessage);
             
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -381,5 +415,24 @@ public class UserDAOImpl implements UserDAOI {
 			return false;
 		
 		return true;
+	}
+	
+	@Override
+	public void activateAccount(String code) {
+		
+		Session session = sessionFactory.openSession();
+		
+		List<User> u = new ArrayList<User>();
+		Criteria criteria = session.createCriteria(User.class);
+		criteria.add(Restrictions.eq("code", code));
+		u = criteria.list();
+		
+		User usr = u.get(0);
+		
+		Group groupToSet = (Group) session.load(Group.class, 3l);
+		usr.setGroup(groupToSet);
+		
+		session.merge(usr);
+		session.flush();
 	}
 }

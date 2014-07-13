@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.view.JstlView;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 import javax.annotation.Resource;
 import javax.sql.DataSource;
@@ -64,7 +65,7 @@ public class WebAppConfig {
 		properties.put(PROPERTY_NAME_HIBERNATE_SHOW_SQL, env.getRequiredProperty(PROPERTY_NAME_HIBERNATE_SHOW_SQL));
 
         //TODO odkomentowac --> application.properties:::: validate=waliduje czy tabele w bazie sa poprawne, create=dropuje i tworzy nowe tabelki
-        properties.put(PROPERTY_NAME_HIBERNATE_HBM2DDL_AUTO, env.getRequiredProperty(PROPERTY_NAME_HIBERNATE_HBM2DDL_AUTO));
+        //properties.put(PROPERTY_NAME_HIBERNATE_HBM2DDL_AUTO, env.getRequiredProperty(PROPERTY_NAME_HIBERNATE_HBM2DDL_AUTO));
 
         properties.put(CURRENT_SESSION_CONTEXT_CLASS, env.getRequiredProperty(CURRENT_SESSION_CONTEXT_CLASS));
 
@@ -92,4 +93,25 @@ public class WebAppConfig {
 	public CorsFilter corsFilter() {
 		return new CorsFilter();
 	}
+	
+	@Bean
+	public JavaMailSenderImpl mailSender() {
+		
+		JavaMailSenderImpl ms = new JavaMailSenderImpl();
+		
+		ms.setHost("smtp.gmail.com");
+		ms.setPort(587);
+		ms.setUsername("pz.exams@gmail.com");
+		ms.setPassword("optymalnehaslo1337");
+		
+		Properties mailProperties = new Properties();
+		mailProperties.put("mail.smtp.auth", true);
+		mailProperties.put("mail.smtp.starttls.enable", true);
+		mailProperties.put("mail.smtp.ssl.trust", "smtp.gmail.com");
+		
+		ms.setJavaMailProperties(mailProperties);
+		
+		return ms;
+	}
+
 }

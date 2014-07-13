@@ -97,6 +97,9 @@ public class User {
 
     @Column(name = "info", nullable = true, length = 200)
     private String info;
+    
+    @Column(name = "code", nullable = true, length = 32)
+    private String code;
 
 	public Long getId() {
 		return id;
@@ -202,6 +205,14 @@ public class User {
 
     public void setInfo(String info) {
         this.info = info;
+    }
+    
+    public String getCode() {
+    	return code;
+    }
+    
+    public void setCode(String code) {
+    	this.code = code;
     }
     
     public String toString() {
