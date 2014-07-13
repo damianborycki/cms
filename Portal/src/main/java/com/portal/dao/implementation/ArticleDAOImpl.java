@@ -128,7 +128,16 @@ public class ArticleDAOImpl implements ArticleDAOI {
 
 	@Override
 	public Article getById(long id) {
-		Article art = (Article) openSession().load(Article.class, id);
+		Session session = sessionFactory.openSession();
+		
+		Article art = (Article) session.load(Article.class, id);
+		
+		System.out.println(art.getViews());
+		
+		art.setViews(art.getViews()+1);
+		session.update(art);
+		session.flush();
+		
         return art;
 	}
 
