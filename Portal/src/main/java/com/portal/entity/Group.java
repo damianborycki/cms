@@ -26,6 +26,10 @@ public class Group {
 //		this.description = description;
 //	}
 	
+	public Group(Long id) {
+		this.id = id;
+	}
+	
 	public Group() {}
 	
 	@Id

@@ -183,16 +183,10 @@ public class UserController {
 		return userDAO.emailExists(email);
 	}
 	
-	@RequestMapping(value = "/send", method = RequestMethod.POST)
-	public void sendMail(HttpServletResponse response){
+	@RequestMapping(value = "/activate", method = RequestMethod.PATCH)
+	public void sendMail(@RequestParam("code") String code, HttpServletResponse response){
 		
-		SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-
-		            simpleMailMessage.setFrom("Mati");
-		            simpleMailMessage.setTo("gwaukcje@gmail.com");
-		            simpleMailMessage.setSubject("Temacik");
-		            simpleMailMessage.setText("Wiadomość");
-		            mailSender.send(simpleMailMessage);
+		userDAO.activateAccount(code);
 
 	}
 	

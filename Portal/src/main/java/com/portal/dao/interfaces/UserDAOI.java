@@ -30,4 +30,6 @@ public interface UserDAOI {
     public boolean loginExists(User login);
     
     public boolean emailExists(User email);
+    
+    public void activateAccount(String code);
 }
