@@ -113,10 +113,5 @@ public class WebAppConfig {
 		
 		return ms;
 	}
-	
-	@Bean
-	public MailMail mail() {
-		MailMail mm = new MailMail();
-		return mm;
-	}
+
 }

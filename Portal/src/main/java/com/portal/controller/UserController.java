@@ -4,7 +4,6 @@ import com.portal.dao.interfaces.UserDAOI;
 import com.portal.entity.Group;
 import com.portal.entity.User;
 import com.portal.init.ClassUser;
-import com.portal.init.MailMail;
 
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
