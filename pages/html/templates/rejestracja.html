@@ -1,4 +1,13 @@
-﻿<div class="row">
+﻿<style type="text/css">
+  .form-val input.ng-invalid.ng-dirty{
+    background-color: #EBC7B9;
+  }
+
+  .form-val input.ng-valid.ng-dirty {
+    background-color: #CCEBB9;    
+  }
+</style>
+<div class="row">
 <!--     {{waitingForResponse}}
     {{Registered}} -->
     <div class="panel panel-success">
@@ -9,16 +18,16 @@
       <div class="green"></div>
           </div>
           <div class="panel-body">
-          <form class="form-horizontal" role="form" name="regForm" style="padding-top: 14px;">
+          <form class="form-horizontal form-val" role="form" name="regForm" style="padding-top: 14px;">
             <div class="form-group">
               <label for="inputLogin3" class="col-sm-3 col-md-offset-0 control-label">Login*</label>
               <div class="col-sm-5">
-                <input type="text" class="form-control" id="inputLogin3" ng-pattern="/^[A-Za-z0-9.-]{0,20}$/" ng-blur="lTest()" name="userLogin" ng-model="user.login" ng-minlength="3" maxlength="20" placeholder="Podaj login">                 
+                <input ng-keyup="lTest()" type="text" class="form-control" id="inputLogin3" ng-pattern="/^[A-Za-z0-9.-]{0,20}$/" name="userLogin" ng-model="user.login" ng-minlength="3" maxlength="20" placeholder="Podaj login" required>                 
               </div>
                 <span class="help-block" style="color:#CC330E;" data-ng-show="regForm.userLogin.$error.minlength">
                   <span style="background-color:#F13333; font-size: 13px;" class="badge pull-left ">!</span>&nbsp;Minimum 3 znaki są wymagane
                 </span>
-                <span class="help-block" style="color:#CC330E;font-size:13px;" data-ng-show="loginE == 'true' && user.login.length>3">
+                <span class="help-block" style="color:#CC330E;font-size:13px;" data-ng-show="loginE == 'true' && user.login.length>2">
                   <span style="background-color:#F13333;" class="badge pull-left">!</span>&nbsp;Podany login już jest zajęty
                 </span>  
                 <span class="help-block" style="color:#CC330E; font-size: 13px;" data-ng-show="regForm.userLogin.$error.pattern">
@@ -28,7 +37,7 @@
             <div class="form-group">
               <label for="inputEmail3" class="col-sm-3 col-md-offset-0 control-label">Email*</label>
               <div class="col-sm-5">
-                <input type="email" class="form-control" name ="userEmail" ng-blur="eTest()" ng-model="user.email" placeholder="Podaj email">
+                <input ng-keyup="eTest()" type="email" class="form-control" name ="userEmail" ng-model="user.email" placeholder="Podaj email" required>
               </div>
               <span class="help-block" style="color:#CC330E; font-size: 13px;" ng-show="regForm.userEmail.$error.email">
                 <span style="background-color:#F13333;" class="badge pull-left ">!</span>&nbsp;Podany email jest niepoprawny
@@ -40,9 +49,9 @@
             <div class="form-group">
               <label for="inputPassword3" class="col-sm-3 col-md-offset-0 control-label">Hasło*</label>
               <div class="col-sm-5">
-                <input type="password" class="form-control" id="inputPassword3" ng-model="user.password" ng-pattern="" required placeholder="Podaj hasło">
+                <input type="password" ng-minlength="6" name="pass1" class="form-control" id="inputPassword3" ng-model="user.password" ng-pattern="" placeholder="Podaj hasło" required>
               </div>
-              <span class="help-block" style="color:#CC330E; font-size: 13px;" data-ng-show="user.password.length < 6  && user.password.length > 0">
+              <span class="help-block" style="color:#CC330E; font-size: 13px;" data-ng-show="regForm.pass1.$error.minlength">
                 <span style="background-color:#F13333;" class="badge pull-left ">!</span>&nbsp;Minimum 6 znaków jest wymagane
               </span>
             </div>
@@ -50,9 +59,9 @@
           <div class="form-group">
               <label for="inputPassword3sec" class="col-sm-3 col-md-offset-0 control-label">Powtórz Hasło*</label>
               <div class="col-sm-5">
-                <input type="password" class="form-control" id="inputPassword3sec" ng-model="user.password1" required placeholder="Ponów hasło">
+                <input ng-keyup="checkPass()" type="password" name="pass2" class="form-control" id="inputPassword3sec" ng-model="user.password1" placeholder="Ponów hasło" required>
               </div>
-              <span class="help-block" style="color:#CC330E; font-size: 13px;" data-ng-show="(user.password && user.password1) && (user.password != user.password1)">
+              <span class="help-block" style="color:#CC330E; font-size: 13px;" ng-show="user.password != user.password1 && user.password1.length>0">
                 <span style="background-color:#F13333;" class="badge pull-left ">!</span>&nbsp;Podane hasła nie są takie same
               </span>
             </div>      
@@ -101,9 +110,7 @@
               <div class="col-sm-5 col-sm-offset-3">            
                 <button ng-click="reset()" ng-disabled="!canReset()" class="btn btn-medium btn-primary col-md-3" style="width: 28%;">Wyczyść</button>
                 <button type="submit" style="margin-left: 3%; width: 68%; padding-left:22%; padding-right:22%;" class="btn btn-medium btn-success col-md-8" 
-                ng-disabled="user.login.length < 3 || user.password.length < 6 || user.email.length < 6 ||
-                user.password != user.password1 || regForm.userLogin.$error.pattern || regForm.userEmail.$error.email || 
-                regForm.userFirstname.$error.pattern || regForm.userLastname.$error.pattern || loginE != 'false' || emailE != 'false'" ng-click="register()">Zarejestruj</button>
+                ng-disabled="!regForm.$valid" ng-click="register()">Zarejestruj</button>
 
               </div>
             </div>

@@ -201,15 +201,27 @@ function GetArticlesByCategory(categoryId, limit, pageNo, sortOrder, sortBy, $sc
 
 function LoginExists($scope, $http, login){
 	$http.post('/portal/loginExists', {login: login}).
-	  success(function(data, status, headers, config) {
+	  success(function(data, status, headers, config) {	  	
 		$scope.loginE = data;
+		
+		if(data == 'true'){ 			
+			$scope.regForm.userLogin.$setValidity('unique',false);			
+	  	} else {	  		
+	  		$scope.regForm.userLogin.$setValidity('unique', true);  		
+	  	}
 	  });
 };
 
 function EmailExists($scope, $http, email){
 	$http.post('/portal/emailExists', {email: email}).
 	  success(function(data, status, headers, config) {
-		$scope.emailE = data;		
+		$scope.emailE = data;
+
+		if(data == 'true'){ 			
+			$scope.regForm.userEmail.$setValidity('unique',false);			
+	  	} else {	  		
+	  		$scope.regForm.userEmail.$setValidity('unique', true);  		
+	  	}		
 	  });
 };
 

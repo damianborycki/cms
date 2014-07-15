@@ -689,15 +689,23 @@ $scope.user =
   var input = document.getElementById('city');
   var autocomplete = new google.maps.places.Autocomplete(input, options);
 
- $scope.lTest = function(){
+ $scope.lTest = function(){    
     if($scope.user.login != undefined)
-    if($scope.user.login.trim() != '')
-      LoginExists($scope, $http, $scope.user.login);
+    if($scope.user.login.trim() != ''){
+      LoginExists($scope, $http, $scope.user.login);     
+    }
   };
   $scope.eTest = function(){
     if($scope.user.email != undefined)
     if($scope.user.email.trim() != '')
       EmailExists($scope, $http, $scope.user.email);
+  };
+
+  $scope.checkPass = function(){    
+    if($scope.user.password != $scope.user.password1)
+      $scope.regForm.pass2.$setValidity('identical',false);
+    else
+      $scope.regForm.pass2.$setValidity('identical',true);    
   };
   
 	$scope.user = 
