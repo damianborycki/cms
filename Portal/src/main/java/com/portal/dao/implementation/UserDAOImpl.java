@@ -9,6 +9,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -248,6 +250,23 @@ public class UserDAOImpl implements UserDAOI {
 
     public User addUser(User user, boolean withActivation) {
     	
+    	String emailPattern = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+    	String loginPattern = "^[A-Za-z0-9.-]{3,20}$";
+    	
+    	Pattern patternEmail = Pattern.compile(emailPattern);
+    	Pattern patternLogin = Pattern.compile(loginPattern);
+    	
+    	Matcher matcherEmail = patternEmail.matcher(user.getEmail().trim());
+    	Matcher matcherLogin = patternLogin.matcher(user.getLogin().trim());
+    	
+    	if (!matcherEmail.matches()) return null;
+    	if (!matcherLogin.matches()) return null;
+    	
+        if (user.getPassword() == null || user.getPassword().length() < 6) return null;
+        
+        if (user.getGender() != null && !user.getGender().trim().equalsIgnoreCase("K") && !user.getGender().trim().equalsIgnoreCase("M"))
+        	return null;
+    	
         Session session = sessionFactory.openSession();       
              
         user.setDateOfLastLogIn(null);
@@ -313,7 +332,7 @@ public class UserDAOImpl implements UserDAOI {
             simpleMailMessage.setText("Aby aktywować swoje konto kliknij w poniższy odnośnik:\n\n" + 
             "http://localhost:8080/pages?code=" + activationCode);
             
-            mailSender.send(simpleMailMessage);
+            //mailSender.send(simpleMailMessage);
             
         } catch (Exception e) {
             System.out.println(e.getMessage());

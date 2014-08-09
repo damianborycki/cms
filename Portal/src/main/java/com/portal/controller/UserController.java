@@ -133,7 +133,10 @@ public class UserController {
     	
         try {
             response.setStatus(HttpServletResponse.SC_CREATED);     
-            userDAO.addUser(user, true);
+            User u = userDAO.addUser(user, true);
+            
+            if (u != null) response.setStatus(HttpServletResponse.SC_CREATED);
+            else response.setStatus(HttpServletResponse.SC_NO_CONTENT);
         } catch(Exception e){
             System.out.println(e.getMessage());         
             response.setStatus(HttpServletResponse.SC_NO_CONTENT);

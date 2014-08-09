@@ -51,16 +51,15 @@ public class User {
 
     @NotNull
     @Column(name = "login", unique = true, nullable = false, length = 45)
-	@Size(max = 45)
+	@Size(min = 3, max = 45)
     private String login;
 
     @NotNull
-    @Column(name = "password", nullable = false, length = 45)
-	@Size(max = 45)
+    @Column(name = "password", nullable = false, length = 32)
     private String password;
 
     @NotNull
-    @Column(name = "email", nullable = false, length = 120)
+    @Column(name = "email", unique = true, nullable = false, length = 120)
     @Size(max = 120)
     private String email;
 
@@ -84,7 +83,8 @@ public class User {
     @Column(name = "last_login_date", nullable = true)
     private Date dateOfLastLogIn;
 
-    @Column(name = "gender", nullable = true, length = 120)
+    @Column(name = "gender", nullable = true, length = 1)
+    @Size(max = 1)
     private String gender;
 
     @NotNull
