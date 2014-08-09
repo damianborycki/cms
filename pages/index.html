@@ -1,7 +1,10 @@
-﻿<!doctype html>
+<!doctype html>
 <html ng-app="studentInfoApp">
 <head>
 <title>Student Info</title>
+
+<meta charset="utf-8"/>
+
 <script src="js/lib/jQuerry/jquery-1.11.0.min.js"></script>
 <script src="js/lib/angular/angular.js"></script>
 <script src="js/lib/angular/angular-sanitize.js"></script>
@@ -769,6 +772,9 @@ $scope.addListener();
   
 	$scope.register = function()
 	{
+
+    $scope.removeCountry();
+
 		Register($scope.user.login, $scope.user.password, $scope.user.email, $scope.user.firstname, $scope.user.lastname, $scope.user.city, $scope.user.gender, $scope, $http);
 	}
 	$scope.waitingForResponse = false;
@@ -1013,7 +1019,7 @@ $scope.article = null;
       </div>
       </div>
       </div>
-      <div class="foot">
+      <difov class="foot">
       <a href='#'> O stronie </a> | <a href='#'> Kontakt </a> | <a href='#'> Regulamin </a>
       </div>
 </div>

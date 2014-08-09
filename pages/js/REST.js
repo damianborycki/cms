@@ -36,13 +36,17 @@ function Register(login, pass, email, firstname, lastname, city, gender, $scope,
 	  success(function(data, status, headers, config) {
 		$scope.Registered = status == "201";
 		$scope.waitingForResponse = false;
+
+		alert("Rejestracja zakończona powodzeniem! W ciągu najbliższych kilku minut powinieneś otrzymać na podany w rejestracji adres e-mail link aktywacyjny."); 
+		window.location.href = '/pages';
 	  }).
 	  error(function(data, status, headers, config) {
 		$scope.waitingForResponse = false;
 		$scope.Registered = false;
+
+		alert("Ups, coś poszło nie tak. Zostaniesz przekierowany na stronę główną."); 
+		window.location.href = '/pages';
 	});
-	alert("Rejestracja zakończona powodzeniem! Możesz teraz już przejść do logowania."); 
-	window.location.href = '/pages';
 };
 
 function EditUser($scope, $http, login, userData){
