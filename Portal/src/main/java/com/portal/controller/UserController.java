@@ -77,8 +77,10 @@ public class UserController {
 	public void setUserGroup(@PathVariable("login") String login, @RequestBody Group group, HttpServletResponse response) {
 		
 		try {
-			userDAO.setUserGroup(login, group.getId());
-			response.setStatus(HttpServletResponse.SC_ACCEPTED);
+			boolean result = userDAO.setUserGroup(login, group.getId());
+
+			if(result) response.setStatus(HttpServletResponse.SC_ACCEPTED);
+			else response.setStatus(HttpServletResponse.SC_NO_CONTENT);
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			response.setStatus(HttpServletResponse.SC_NO_CONTENT);
@@ -116,8 +118,10 @@ public class UserController {
 		
 		if(userDAO.getLoggedUser().getLogin().trim().equals(login.trim())) {
 			try {
-				userDAO.setUserData(user);
-				response.setStatus(HttpServletResponse.SC_OK);
+				boolean result = userDAO.setUserData(user);
+				
+				if(result) response.setStatus(HttpServletResponse.SC_OK);
+				else response.setStatus(HttpServletResponse.SC_NO_CONTENT);
 			} catch (Exception e) {
 				System.out.println(e.getMessage());
 				response.setStatus(HttpServletResponse.SC_NO_CONTENT);

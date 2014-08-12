@@ -11,9 +11,9 @@ public interface UserDAOI {
 
     public User addUser(User user, boolean withActivation);
 
-    public void setUserGroup(String login, Long groupId);
+    public boolean setUserGroup(String login, Long groupId);
     
-    public void setUserData(User user);
+    public boolean setUserData(User user);
     
     public User getLoggedUser();
 

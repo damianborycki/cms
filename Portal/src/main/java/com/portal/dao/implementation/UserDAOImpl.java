@@ -81,7 +81,7 @@ public class UserDAOImpl implements UserDAOI {
 		
 	}
 	
-	public void setUserGroup(String login, Long groupId) {
+	public boolean setUserGroup(String login, Long groupId) {
 		
 		Session session = sessionFactory.openSession();
 		
@@ -89,7 +89,7 @@ public class UserDAOImpl implements UserDAOI {
 		groupQuery.setParameter("groupId", groupId);
 		
 		List<Group> groups = groupQuery.list();
-		
+
 		try {
 			if (groups != null && groups.size() > 0) {
 				
@@ -99,15 +99,38 @@ public class UserDAOImpl implements UserDAOI {
 				query.setParameter("login", login);
 				query.setParameter("groupToSet", groupToSet);
 				query.executeUpdate();
+				
+				return true;
 			}
+		} catch (Exception e) {
+			return false;
 		} finally {
 			if (session != null)
 				session.close();
 		}
+		
+		return false;
 
 	}
 	
-	public void setUserData(User user) {
+	public boolean setUserData(User user) {
+		
+    	String emailPattern = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+    	String loginPattern = "^[A-Za-z0-9.-]{3,20}$";
+    	
+    	Pattern patternEmail = Pattern.compile(emailPattern);
+    	Pattern patternLogin = Pattern.compile(loginPattern);
+    	
+    	Matcher matcherEmail = patternEmail.matcher(user.getEmail().trim());
+    	Matcher matcherLogin = patternLogin.matcher(user.getLogin().trim());
+    	
+    	if (!matcherEmail.matches()) return false;
+    	if (!matcherLogin.matches()) return false;
+    	
+        if (user.getPassword() == null || user.getPassword().length() < 6) return false;
+        
+        if (user.getGender() != null && !user.getGender().trim().equalsIgnoreCase("K") && !user.getGender().trim().equalsIgnoreCase("M"))
+        	return false;
 		
 		Session session = sessionFactory.openSession();
 		
@@ -139,6 +162,8 @@ public class UserDAOImpl implements UserDAOI {
 			try {
 				session.merge(userToUpdate);
 				
+				return true;
+				
 			} catch (Exception e) {
 				System.out.println(e.getMessage());
 				
@@ -150,6 +175,8 @@ public class UserDAOImpl implements UserDAOI {
 		
 		if (session != null)
 			session.close();
+		
+		return false;
 	}
 	
 	public User getLoggedUser() {
