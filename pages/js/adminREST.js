@@ -215,6 +215,7 @@ function GetGroups($scope, $http) {
 	$http({method: 'GET', url: '/portal/group'}).
 	  success(function(data, status, headers, config) {
 	  	$scope.groups = data;
+	  	console.log($scope.groups);
 	  }); 
 }
 
@@ -254,7 +255,13 @@ function GetUsers($scope, $http, pageNO){
 		success(function(data, status, headers, config) {
 			$scope.listOfUsers = data.users;
 			$scope.totalUsers = data.size;
-			$scope.usersPage = pageNO;				
+			$scope.usersPage = pageNO;		
+
+			for(var i = 0; i < $scope.listOfUsers.length; i++) {
+				$scope.listOfUsers[i].group.selected = $scope.listOfUsers[i].group.id;
+			}	
+
+			console.log($scope.listOfUsers);	
 		});			
 }
 
@@ -273,10 +280,14 @@ function DeleteUser($scope, $http, login){
 		});
 }
 
-function SetUserGroup($scope, $http, login, group){
-	$http({method: 'PATCH', url: '/portal/setUserGroup/' + login, 
-			data: group}).
-	  success(function(data, status, headers, config) {		
+function SetUserGroup($scope, $http, user){
+	$http({method: 'PATCH', url: '/portal/setUserGroup/' + user.login, 
+			data: {id : user.group.selected}}).
+	  success(function(data, status, headers, config) {	
+	  console.log($scope.getUserPosById(user.id));	
+	  	console.log($scope.listOfUsers[$scope.getUserPosById(user.id)].group.id + ' '+ $scope.listOfUsers[$scope.getUserPosById(user.id)].group.selected);
+	  	$scope.listOfUsers[$scope.getUserPosById(user.id)].group.id = $scope.listOfUsers[$scope.getUserPosById(user.id)].group.selected;
+
 	  }); 
 }
 

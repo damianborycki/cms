@@ -1598,15 +1598,15 @@ app.controller('UsersController', function($scope, $http) {
 	$scope.setUpdateStatus = function($status){
 		$scope.UpdateStatus = $status;
 	};
-	
-	
 
 	$scope.getlistOfUsers = function($pageNO) {
 		// if($scope.listOfUsers.length != 0)
 		// return $scope.listOfUsers;		
 		GetUsers($scope, $http, $pageNO);		
 	};
+	
 	$scope.getlistOfUsers(0);
+
 
 	$scope.ChangePage = function(page)
 	{	
@@ -1623,25 +1623,35 @@ app.controller('UsersController', function($scope, $http) {
 		DeleteUser($scope, $http, $login);
 	};
 
-	
+	$scope.getUserPosById = function(userId) {
+		for(var i = 0; i < $scope.listOfUsers.length; i++) {
+			if ($scope.listOfUsers[i].id == userId) return i;
+		}
 
+		return null;
+	};
 
-});
-
-app.controller("groupChange", function($scope, $http) {
-	
-	 for (i = 0; i < $scope.groups.length; i++) { 
-     	if($scope.groups[i].name == $scope.user.group.name)
-     		$scope.groupChange = $scope.groups[i].id;     		     	
-	 }
-
-	$scope.ChangeGroup = function() {		
-		SetUserGroup($scope, $http, $scope.user.login, $scope.groups[$scope.groupChange-1]);
-		$scope.user.group.id = $scope.groupChange;		
+	$scope.ChangeGroup = function(user) {		
+		SetUserGroup($scope, $http, user);
+				
 	};	
 
-
 });
+
+// app.controller("groupChange", function($scope, $http) {
+	
+// 	 for (i = 0; i < $scope.groups.length; i++) { 
+//      	if($scope.groups[i].name == $scope.user.group.name)
+//      		$scope.groupChange = $scope.groups[i].id;     		     	
+// 	 }
+
+// 	$scope.ChangeGroup = function() {		
+// 		SetUserGroup($scope, $http, $scope.user.login, $scope.groups[$scope.groupChange-1]);
+// 		$scope.user.group.id = $scope.groupChange;		
+// 	};	
+
+
+// });
 
 function onFileSelected(event) {
   var selectedFile = event.target.files[0];
