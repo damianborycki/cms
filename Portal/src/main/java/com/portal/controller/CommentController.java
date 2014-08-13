@@ -30,12 +30,13 @@ public class CommentController {
 	@RequestMapping(value="/comment", method=RequestMethod.POST)
 	public void addComment(@RequestBody Comment comment, HttpServletResponse response) {
 		
-		commentDAO.add(comment.getUser().getLogin(), 
+		boolean result = commentDAO.add(comment.getUser().getLogin(), 
 					   comment.getContent(),
 					   comment.getParent().getId(), 
 					   comment.getArticle().getId());
-			
-		response.setStatus(HttpServletResponse.SC_CREATED);
+		
+		if (result) response.setStatus(HttpServletResponse.SC_CREATED);
+		else response.setStatus(HttpServletResponse.SC_NO_CONTENT);
 	}
 	
 	@RequestMapping(value="/setCommentStatus", method=RequestMethod.PATCH)

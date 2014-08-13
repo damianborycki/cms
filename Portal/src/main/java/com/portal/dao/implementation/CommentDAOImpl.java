@@ -163,53 +163,78 @@ public class CommentDAOImpl implements CommentDAOI {
 	}
 
 	@Override
-	public void add(String login, String content, Long parent, long articleId) {
+	public boolean add(String login, String content, Long parent, long articleId) {
 		Comment comment = new Comment();
 		
 		Session session = sessionFactory.openSession();
 
 		Criteria criteria = session.createCriteria(User.class);
 		criteria.add(Restrictions.eq("login", login));
-
-		User u = (User) criteria.list().get(0);
+		
+		User u = null;
+		
+		if(criteria.list().size() > 0)
+			u = (User) criteria.list().get(0);
+		else return false;
 
 		comment.setUser(u);
+		
+		if(u.getGroup().getId() > 3) return false;
 
 		if (parent != null) {
-
-			Comment p = (Comment) session.load(Comment.class, parent);
-			comment.setParent(p);
-
-			Query incrResponses = session.createQuery("update Comment c set c.responsesNumber = :resp where c.id = :id");
-			incrResponses.setParameter("resp", p.getResponsesNumber() + 1);
-			incrResponses.setParameter("id", parent);
-			incrResponses.executeUpdate();
-
-			comment.setResponsesNumber(p.getResponsesNumber() + 1);
-
-			List<Comment> children = children(p);
-
-			for (Comment child : children) {
-				Query incrResponses2 = session.createQuery("update Comment c set c.responsesNumber = :resp where c.id = :id");
-				incrResponses2.setParameter("resp", child.getResponsesNumber() + 1);
-				incrResponses2.setParameter("id", child.getId());
-				incrResponses2.executeUpdate();
+			
+			try {
+				Comment p = (Comment) session.load(Comment.class, parent);
+				if (p.getParent() != null) return false;
+				comment.setParent(p);
+	
+				Query incrResponses = session.createQuery("update Comment c set c.responsesNumber = :resp where c.id = :id");
+				incrResponses.setParameter("resp", p.getResponsesNumber() + 1);
+				incrResponses.setParameter("id", parent);
+				incrResponses.executeUpdate();
+	
+				comment.setResponsesNumber(p.getResponsesNumber() + 1);
+	
+				List<Comment> children = children(p);
+	
+				for (Comment child : children) {
+					Query incrResponses2 = session.createQuery("update Comment c set c.responsesNumber = :resp where c.id = :id");
+					incrResponses2.setParameter("resp", child.getResponsesNumber() + 1);
+					incrResponses2.setParameter("id", child.getId());
+					incrResponses2.executeUpdate();
+				}
+			} catch (Exception e) {
+				if (session != null)
+					session.close();
+				
+				return false;
+			}
+		} else {
+		
+			try {
+	
+				Article a = (Article) session.load(Article.class, articleId);
+				comment.setArticle(a);
+		
+				comment.setContent(content);
+				CommentState cs = (CommentState) session.load(CommentState.class, 1l);
+				comment.setState(cs);
+				comment.setDate(new Date());
+		
+				session.save(comment);
+			
+			} catch(Exception e) {
+				if (session != null)
+					session.close();
+				
+				return false;
 			}
 		}
-
-		Article a = (Article) session.load(Article.class, articleId);
-		comment.setArticle(a);
-
-		comment.setContent(content);
-		CommentState cs = (CommentState) session.load(CommentState.class,
-				1l);
-		comment.setState(cs);
-		comment.setDate(new Date());
-
-		session.save(comment);
 		
 		if (session != null)
 			session.close();
+		
+		return true;
 	}
 
 	@Override

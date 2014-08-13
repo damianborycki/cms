@@ -2,6 +2,7 @@ package com.portal.entity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import org.codehaus.jackson.annotate.JsonBackReference;
 import org.codehaus.jackson.annotate.JsonCreator;
@@ -61,6 +62,7 @@ public class Comment {
     private User user;
 
     @NotNull
+    @Size(min = 5, max = 255)
     @Column(name = "content", nullable = false)
     private String content;
 

@@ -21,7 +21,7 @@ public interface CommentDAOI {
 
     public List<Comment> getApprovedByUser(long userId);
 
-    public void add(String login, String content, Long parent, long articleId);
+    public boolean add(String login, String content, Long parent, long articleId);
 
     public void deleteCascade(long comment_id);
 
