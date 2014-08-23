@@ -1,0 +1,44 @@
+﻿<style>
+#comment_table th, td#center {
+	text-align: center;
+}
+
+ul.pagination {
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+</style>
+
+<div ng-show="listOfCommentsWithStatus.length > 0 || listOfCommentsWithStatus != undefined">
+	<div class="row row2">
+
+		<table class="table" id="comment_table">
+			<th class="col-md-1 col-md"><input type="checkbox" ng-checked="!selectAll" ng-click="invertSelection()"></th>
+			<th class="col-md-2 col-md">Użytkownik</th>
+			<th class="col-md-5 col-md">Treść</th>
+			<th class="col-md-2 col-md">Data dodania</th>
+			<th class="col-md-2 col-md">Akcje</th>
+			<tr ng-repeat="comment in listOfCommentsWithStatus" ng-class="['odd', 'even'][$index %2]">
+				<td class="col-md-1" id="center"><input type="checkbox" ng-click="toggleSelection(comment.id)" ng-checked="selectedComments.indexOf(comment.id) > -1"/> </td>
+				<td>{{comment.user.login}}</td>
+				<td>{{comment.content}}</td>
+				<td>{{comment.date}}</td>
+				<td><button class="btn btn-success btn-p btn-sm" ng-click="acceptSingle(comment.id)"> Akceptuj</button><a class="btn btn-danger btn-p btn-sm" ng-click="rejectSingle(comment.id)"> Odrzuć</a></td>
+			</tr>
+		</table>
+		
+	</div>
+	<div class="row btn-d">
+	<div class="col-md-6">
+		<a class="btn btn-danger btnb" ng-click="rejectSelected()">Odrzuć zaznaczone</a>
+		<a class="btn btn-success btnb" ng-click="acceptSelected()">Akceptuj zaznaczone</a></div>
+	<!-- 	<a class="btn btn-primary btnb" ng-click="invertSelection()">Odwróć</a> -->
+	<div class="col-md-5 pull-right" style="height: 100%;" paging page="commentsPage" page-size="commentsLimit" total="total" show-prev-next="true" adjacent="1" paging-action="ChangePage(page)" ng-init="page=0"></div>
+	</div>
+
+</div>
+<div ng-hide="listOfCommentsWithStatus.length > 0 || listOfCommentsWithStatus != undefined">
+	<h3 style="text-align: center;">Brak komentarzy do moderacji</h3>
+</div>
+
+</span>

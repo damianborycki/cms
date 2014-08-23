@@ -21,6 +21,9 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
+
 @Controller
 public class UserController {
 	
@@ -29,16 +32,6 @@ public class UserController {
 	
 	@Autowired
 	private MailSender mailSender;
-	
-//	@RequestMapping(value={"/", "/index", "/home", "portal"}, method=RequestMethod.GET)
-//	public String homePage() {
-//		return "/index.html";
-//	}
-
-    @RequestMapping(value={"/admin"}, method=RequestMethod.GET)
-	public String adminPage() {
-		return "adminIndex";
-	}
 	
 	@RequestMapping(value="/user/{login:.+}", method=RequestMethod.GET)
 	public @ResponseBody User getUserData(@PathVariable("login") String login, HttpServletResponse response) {
@@ -92,7 +85,11 @@ public class UserController {
 	public @ResponseBody User userPage(HttpServletResponse response, HttpServletRequest request) {
 		
 		try {
-			return userDAO.getLoggedUser();
+			
+			User u = userDAO.getLoggedUser();
+			System.out.println(u.getLogin());
+			
+			return u;
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);

@@ -1,0 +1,27 @@
+
+.col-md{
+background-color:gray;
+color:white;
+padding:10px;
+}
+.btn-p{
+margin:3px;
+}
+.btn-d{
+padding:15px;
+
+}
+.row-table{
+padding:10px;
+}
+
+.row2{
+margin-left:1px;
+margin-right:1px;
+}
+.btnb{
+border: 1px solid black;
+}
+.btnb:hover{
+border: 1px solid black;
+}

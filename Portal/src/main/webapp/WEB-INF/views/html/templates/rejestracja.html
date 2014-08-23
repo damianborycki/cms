@@ -1,0 +1,121 @@
+﻿<style type="text/css">
+  .form-val input.ng-invalid.ng-dirty{
+    background-color: #EBC7B9;
+  }
+
+  .form-val input.ng-valid.ng-dirty {
+    background-color: #CCEBB9;    
+  }
+</style>
+<div class="row">
+<!--     {{waitingForResponse}}
+    {{Registered}} -->
+    <div class="panel panel-success">
+          <div class="navbar2" >
+      <div style="padding-left: 10px;">
+            <h3 class="rejestracja-tytul" >Rejestracja</h3>
+      </div>
+      <div class="green"></div>
+          </div>
+          <div class="panel-body">
+          <form class="form-horizontal form-val" role="form" name="regForm" style="padding-top: 14px;">
+            <div class="form-group">
+              <label for="inputLogin3" class="col-sm-3 col-md-offset-0 control-label">Login*</label>
+              <div class="col-sm-5">
+                <input ng-keyup="lTest()" type="text" class="form-control" id="inputLogin3" ng-pattern="/^[A-Za-z0-9.-]{0,20}$/" name="userLogin" ng-model="user.login" ng-minlength="3" maxlength="20" placeholder="Podaj login" required>                 
+              </div>
+                <span class="help-block" style="color:#CC330E;" data-ng-show="regForm.userLogin.$error.minlength">
+                  <span style="background-color:#F13333; font-size: 13px;" class="badge pull-left ">!</span>&nbsp;Minimum 3 znaki są wymagane
+                </span>
+                <span class="help-block" style="color:#CC330E;font-size:13px;" data-ng-show="loginE == 'true' && user.login.length>2">
+                  <span style="background-color:#F13333;" class="badge pull-left">!</span>&nbsp;Podany login już jest zajęty
+                </span>  
+                <span class="help-block" style="color:#CC330E; font-size: 13px;" data-ng-show="regForm.userLogin.$error.pattern">
+                  <span style="background-color:#F13333;" class="badge pull-left" ng-model="loginError">!</span>&nbsp;Wprowadzono niedozwolone znaki
+                </span>
+            </div> 
+            <div class="form-group">
+              <label for="inputEmail3" class="col-sm-3 col-md-offset-0 control-label">Email*</label>
+              <div class="col-sm-5">
+                <input ng-keyup="eTest()" type="email" class="form-control" name ="userEmail" ng-model="user.email" placeholder="Podaj email" required>
+              </div>
+              <span class="help-block" style="color:#CC330E; font-size: 13px;" ng-show="regForm.userEmail.$error.email">
+                <span style="background-color:#F13333;" class="badge pull-left ">!</span>&nbsp;Podany email jest niepoprawny
+              </span>
+              <span class="help-block" style="color:#CC330E; font-size: 13px;" ng-show="emailE == 'true' && user.email.length > 0">
+                <span style="background-color:#F13333;" class="badge pull-left ">!</span>&nbsp;Podany email jest już zajęty
+              </span>
+            </div>
+            <div class="form-group">
+              <label for="inputPassword3" class="col-sm-3 col-md-offset-0 control-label">Hasło*</label>
+              <div class="col-sm-5">
+                <input type="password" ng-minlength="6" name="pass1" class="form-control" id="inputPassword3" ng-model="user.password" ng-pattern="" placeholder="Podaj hasło" required>
+              </div>
+              <span class="help-block" style="color:#CC330E; font-size: 13px;" data-ng-show="regForm.pass1.$error.minlength">
+                <span style="background-color:#F13333;" class="badge pull-left ">!</span>&nbsp;Minimum 6 znaków jest wymagane
+              </span>
+            </div>
+      
+          <div class="form-group">
+              <label for="inputPassword3sec" class="col-sm-3 col-md-offset-0 control-label">Powtórz Hasło*</label>
+              <div class="col-sm-5">
+                <input ng-keyup="checkPass()" type="password" name="pass2" class="form-control" id="inputPassword3sec" ng-model="user.password1" placeholder="Ponów hasło" required>
+              </div>
+              <span class="help-block" style="color:#CC330E; font-size: 13px;" ng-show="user.password != user.password1 && user.password1.length>0">
+                <span style="background-color:#F13333;" class="badge pull-left ">!</span>&nbsp;Podane hasła nie są takie same
+              </span>
+            </div>      
+
+            <div class="form-group" style="margin-top: 4%;">
+              <label for="inputFirstName3" class="col-sm-3 col-md-offset-0 control-label">Imię</label>
+              <div class="col-sm-5">
+                <input type="text" class="form-control" id="inputFirstName3" ng-pattern="/^[A-Za-z'\-żźćńółęąśŻŹĆĄŚĘŁÓŃ]{1,20}$/"  name="userFirstname" ng-model="user.firstname" placeholder="Podaj imię">
+              </div>
+              <span class="help-block" style="color:#CC330E; font-size: 13px;" data-ng-show="regForm.userFirstname.$error.pattern">
+                <span style="background-color:#F13333;" class="badge pull-left ">!</span>&nbsp;Wprowadzono nieprawidłowe znaki
+                </span>
+            </div>
+
+            <div class="form-group">
+              <label for="inputSurname3" class="col-sm-3 col-md-offset-0 control-label">Nazwisko</label>
+              <div class="col-sm-5">
+                <input type="text" class="form-control" id="inputSurname3" ng-pattern="/^[A-Za-z'\-żźćńółęąśŻŹĆĄŚĘŁÓŃ]{1,20}$/"  name="userLastname" ng-model="user.lastname" placeholder="Podaj nazwisko">
+              </div>
+              <span class="help-block" style="color:#CC330E;" data-ng-show="regForm.userLastname.$error.pattern">
+                <span style="background-color:#F13333;" class="badge pull-left ">!</span>&nbsp;Wprowadzono nieprawidłowe znaki
+              </span>
+            </div>
+
+            <div class="form-group">
+              <label for="inputGender3" class="col-sm-3 col-md-offset-0 control-label">Płeć</label>
+              <div class="col-sm-5">
+                <select class="form-control" ng-model="user.gender">
+                  <option value="">- Wybierz płeć -</option>                  
+                  <option value="K">kobieta</option>
+                  <option value="M">mężczyzna</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="inputCity3" class="col-sm-3 col-md-offset-0 control-label">Miasto</label>
+              <div class="col-sm-5">
+              <!-- <input id="town" placeholder="Miasto" class="form-control" type="text" ng-model="user.town"> -->
+                <input ng-blur="removeCountry()" ng-change="removeCountry()" type="text" class="form-control" id="city" ng-model="user.city" placeholder="Podaj miasto">
+              </div>              
+            </div>
+            <span class="col-md-offset-5" style="margin-left: 46%;">* - pola obowiązkowe</span>
+            <div class="form-group">
+            <br/>
+              <div class="col-sm-5 col-sm-offset-3">            
+                <a ng-click="reset()" ng-disabled="!canReset()" class="btn btn-medium btn-primary col-md-3" style="width: 28%;">Wyczyść</a>
+
+                <a style="margin-left: 3%; width: 68%; padding-left:22%; padding-right:22%;" class="btn btn-medium btn-success col-md-8" 
+                ng-disabled="!regForm.$valid" ng-click="register()">Zarejestruj</a>
+
+              </div>
+            </div>
+          </form>
+    </div>
+  </div>  
+</div>

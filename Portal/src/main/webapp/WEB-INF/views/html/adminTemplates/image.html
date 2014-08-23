@@ -1,0 +1,69 @@
+
+    <div clas="row">
+    
+        <div class="col-md-8">
+        
+        
+ <!--   <img-cropped src="http://localhost:8080/portal/image?id=default&width=800&height=600" selected='selected(cords)'/> -->
+          <img-cropped src="http://placehold.it/700x500" selected='selected(cords)'/>  
+        </div>     
+        
+	<div class="col-md-4">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="col-md-12">
+					<div class="form-group">
+						<label for="istniejacy"  style="color:black">Edytuj istniejący:</label>
+						<button class="btn btn-block btn-success btnb" data-animation="am-fade-and-scale" id="istniejacy">Edytuj istniejący</button>
+					</div>
+				</div>	
+				<form method="POST" action="http://localhost:8080/portal/service/add_image" enctype="multipart/form-data" >
+					<div class="col-md-12">
+						<div class="form-group">
+							<label for="file" style="color:black">Wczytaj plik:</label>
+							<input class="form-control btn-success btnb" type="file" name="file" id="file" onchange="onFileSelected(event)"/>
+						</div>
+					</div>
+
+				    	<div class="col-md-12">
+						<div class="form-group">
+							<label for="author" style="color:black">Autor:</label>
+							<input class="form-control" type="text" name="author" placeholder="Dodaj autora..."/>
+						</div>
+					</div>
+					<div class="col-md-12">
+						<div class="form-group">
+							<label for="description" style="color:black">Opis:</label>
+							<input class="form-control" type="text" name="description" placeholder="Dodaj opis..." id="description"/>
+						</div>
+					</div>
+					<div class="col-md-12">
+						<div class="form-group">
+							<label for="tags" style="color:black">Tagi:</label>
+							<input class="form-control" type="text" name="tags" placeholder="Dodaj tagi..." id="tags"/>
+						</div>
+					</div>
+					<div class="col-md-12">
+					    <div class="form-group">
+					        <div class="col-md-4">
+                                <label style="color:black">X1 <input style="color:black" type="text" name="x1" id="x1" size="3"/></label>
+                                <label style="color:black">Y1 <input style="color:black" type="text" name="y1" id="y1" size="3"/></label>
+                            </div>
+                            <div class="col-md-4">
+                                <label style="color:black">X2 <input style="color:black" type="text" name="x2" id="x2" size="3"/></label>
+                                <label style="color:black">Y2 <input style="color:black" type="text" name="y2" id="y2" size="3"/></label>
+                            </div>
+                            <div class="col-md-4">                                
+                                <label style="color:black">W <input style="color:black" type="text" name="w" id="w" size="3"/></label>
+                                <label style="color:black">H <input style="color:black" type="text" name="h" id="h" size="3"/></label>
+                            </div>    
+                        </div>
+                    </div>					
+					<div class="col-md-12">
+				    		<input class="btn btn-block btn-success btnb" type="submit" value="Zapisz" name="Upload" id="upload" />
+					</div>
+				</form>
+			</div>
+		</div>
+        </div>    
+    </div>

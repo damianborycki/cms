@@ -1,0 +1,1745 @@
+<!doctype html>
+<html ng-app="studentInfoApp">
+<head>
+	<script src="js/lib/jQuerry/jquery-1.11.0.min.js"></script>
+<script src="js/lib/angular/angular.js"></script>
+<script src="js/lib/angular/angular-sanitize.js"></script>
+<script src="js/lib/angular/angular-animate.js"></script>
+<script src="js/lib/angular/angular-route.js"></script>
+<script src="js/lib/angularstrap/angular-strap.min.js"></script>
+<script src="js/lib/angularstrap/angular-strap.tpl.min.js"></script>
+<!-- <script src="jQuerry/jquery-1.11.0.min.js"></script> -->
+    <script src="js/lib/angular/paging.js"></script>
+<script src="js/lib/jQuerry/jquery.Jcrop.js"></script>
+<script src="js/lib/bootstrap/bootstrap.js"></script>
+<script src="js/collapseMe.js"></script>
+<script src="js/plugins/ckeditor/ckeditor.js"></script>
+<script src="js/plugins/ckeditor/ng-ckeditor.js"></script>
+<script src="js/adminREST.js"></script>
+    <script src="js/plugins/tagInput/ng-tags-input.min.js"></script>
+    <link rel="stylesheet" href="js/plugins/tagInput/ng-tags-input.min.css" />
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="css/collapsingMenu.css" rel="stylesheet">
+<link href="css/modal.css" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css" >
+<link rel="stylesheet" href="css/styles-admin.css" >
+<link rel="stylesheet" href="css/jcrop.css" >
+<link href="css/ng-ckeditor.css" rel="stylesheet">
+
+
+<script type="text/javascript" src="js/plugins/angular-tree-control/angular-tree-control.js"></script>
+<!-- link for CSS when using the tree as a Dom element -->
+<link rel="stylesheet" type="text/css" href="js/plugins/angular-tree-control/css/tree-control.css">
+<!-- link for CSS when using the tree as an attribute -->
+<link rel="stylesheet" type="text/css" href="js/plugins/angular-tree-control/css/tree-control-attribute.css">
+
+
+
+<style>
+	.odd {
+		background-color: #EEE;
+	}
+	.even {
+		background-color: #FFF;
+	}
+	table {
+	  border-collapse: collapse;
+	  border: 1;
+	  text-color: #000;
+	}
+	table td, table th {
+	  border: 1px solid black;
+	}
+	ul.hier-ul {
+		position: relative;
+		text-indent: -1.5em;
+		border-left: .25em solid gray;
+		list-style: none;
+		left: 1em;
+	}
+
+	li.hier-li:before {
+		content: "";
+		display: inline-block;
+		width: 3em;
+		height: 2.25em;
+		position: relative;
+		left: -0.5em;
+		border-bottom: .25em solid gray;
+	}
+	ul.hier-ul ul:before, li.hier-li:after {
+		content: '';
+		display: block;
+		width: 1.5em;
+		height: 1.5em;
+		position: absolute;
+		background: salmon;
+		border: .25em solid white;
+		top: -1.75em;
+		left: -1em;
+	}
+</style>
+<script type="text/ng-template"  id="tree_item_renderer.html">
+
+	<span>
+    {{data.name}}
+    <button class="btn btn-success" data-animation="am-fade-and-scale" data-template="html/modal/categoryModal.html" bs-modal="modal" ng-click="SetCategoryForModal(data.id)"> Edytuj</button>
+    <button class="btn btn-danger" ng-click="remove(data.id)" ng-show="getListOfElementsByParent(data.id).length == 0">Usuñ</button>
+    <ul class="hier-ul">
+        <li class="hier-li" ng-repeat="data in getListOfElementsByParent(data.id)" ng-include="'tree_item_renderer.html'"></li>
+    </ul>
+</span>
+</script>
+<script>
+
+var servicesContext = '/portal/service';
+
+Date.prototype.yyyymmdd = function() {         
+                                
+        var yyyy = this.getFullYear().toString();                                    
+        var mm = (this.getMonth()+1).toString(); // getMonth() is zero-based         
+        var dd  = this.getDate().toString();             
+                            
+        return yyyy + '-' + (mm[1]?mm:"0"+mm[0]) + '-' + (dd[1]?dd:"0"+dd[0]);
+   };
+   
+Date.prototype.yyyymmddhhmmss = function() {         
+                                
+        var yyyy = this.getFullYear().toString();                                    
+        var mm = (this.getMonth()+1).toString(); // getMonth() is zero-based         
+        var dd  = this.getDate().toString();   
+		
+        var hh = this.getHours().toString();                                  
+        var min = this.getMinutes().toString();
+        var ss  = this.getSeconds().toString();          
+                            
+        return yyyy + '-' + (mm[1]?mm:"0"+mm[0]) + '-' + (dd[1]?dd:"0"+dd[0]) + ' ' + (hh[1]?hh:"0"+hh[0]) + ':' + (min[1]?min:"0"+min[0]) + ':' + (ss[1]?ss:"0"+ss[0]);
+   };
+   
+function parseDate(input)
+{
+	var parts = input.split(' ');
+	var date = parts[0].split('-');
+	var time = parts[1].split(':');
+	
+	return new Date(date[2], date[0]-1, date[1], time[0], time[1], time[2]);
+}
+   
+var app = angular.module('studentInfoApp', ['ngSanitize', 'ngRoute', 'mgcrea.ngStrap', 'ngCkeditor', 'ngTagsInput', 'paging', 'treeControl']);
+
+app.filter('unsafe', function($sce) {
+    return function(val) {
+        return $sce.trustAsHtml(val);
+    }; });
+
+app.config(['$routeProvider',
+  function($routeProvider) {
+    $routeProvider.
+      when('/tag', {
+        templateUrl: 'html/adminTemplates/adminTag.html',
+        controller: 'TagController'
+      }).
+      when('/tagTypes', {
+        templateUrl: 'html/adminTemplates/adminTagType.html',
+        controller: 'TagTypeController'
+      }).
+      when('/groups', {
+        templateUrl: 'html/adminTemplates/adminGroups.html',
+        controller: 'GroupController'
+      }).
+      // when('/category', {
+      //   templateUrl: 'html/adminTemplates/adminCategory.html',
+      //   controller: 'CategoryController'
+      // }).
+      when('/articles', {
+        templateUrl: 'html/adminTemplates/adminArticles.html',
+        controller: 'ArticleController'
+      }).
+      when('/editArticle/:articleId', {
+        templateUrl: 'html/adminTemplates/adminEditArticle.html',
+        controller: 'EditArticleController'
+      }).
+      when('/editArticle', {
+        templateUrl: 'html/adminTemplates/adminEditArticle.html',
+        controller: 'EditArticleController'
+      }).
+      when('/articleRank', {
+        templateUrl: 'html/adminTemplates/adminArticleRank.html',
+        controller: 'ArticleRankController'
+      }).
+      when('/image', {
+        templateUrl: 'html/adminTemplates/image.html',
+        controller: 'ImageController'
+      }).
+      when('/imageModeration', {
+        templateUrl: 'html/adminTemplates/imageModeration.html',
+        controller: 'ImageModerationController'
+      }).
+      when('/gallery', {
+        templateUrl: 'html/adminTemplates/gallery.html',
+        controller: 'GalleryController'
+      }).
+      when('/commentModeration', {
+        templateUrl: 'html/adminTemplates/commentModeration.html',
+        controller: 'CommentModerationController'
+      }).
+      when('/users', {
+      	templateUrl: 'html/adminTemplates/adminUsers.html',
+      	controller: 'UsersController'
+      }).
+      when('/category', {
+      	templateUrl: 'html/adminTemplates/adminCat.html',
+      	controller: 'CatController'
+      });
+      // otherwise({
+      //   redirectTo: '/groups'
+      // });
+  }]);
+
+'use strict';
+
+app.config(function($modalProvider) {
+  angular.extend($modalProvider.defaults, {
+    html: true
+  });
+})
+
+app.controller('topAndSideContrler', function($scope, $location, $http) {
+
+	$scope.currentUserGroup;
+	GetCurrentUserLogin($scope, $http);
+
+	$scope.isActive = function(route) {
+        return route === $location.path();
+    }
+
+    $scope.isAdmin = function() {
+    	return $scope.currentUserGroup == 1;
+    }
+
+});
+
+app.service('tags', function($q) {
+  
+  this.load = function(tags) {
+    var deferred = $q.defer();
+    deferred.resolve(tags);
+    return deferred.promise;
+  };
+});
+
+app.controller('ImageController', function($scope) {
+   $scope.selected = function(cords) {
+     $scope.cropped=true;
+         var rx = 150 / cords.w;
+         var ry = 150 / cords.h;
+            
+            $('#preview').css({
+             width: Math.round(rx * boundx) + 'px',
+             height: Math.round(ry * boundy) + 'px',
+             marginLeft: '-' + Math.round(rx * cords.x) + 'px',
+             marginTop: '-' + Math.round(ry * cords.y) + 'px'
+         });
+   };
+ });
+
+app.directive('imgCropped', function() {
+   return {
+     restrict: 'E',
+     replace: true,
+     scope: { src:'@', selected:'&' },
+     link: function(scope,element, attr) {
+       var myImg;
+       var clear = function() {
+         if (myImg) {
+           myImg.next().remove();
+           myImg.remove();
+           myImg = undefined;
+         }
+       };
+       scope.$watch('src', function(nv) {        
+         clear();
+         if (nv) {
+           element.after('<img />');
+           myImg = element.next();     
+           myImg.attr('src',nv);
+           $(myImg).Jcrop({
+             trackDocument: true,  
+             onSelect: function(c) {              
+             		jQuery('#x1').val(c.x);
+ 		            jQuery('#y1').val(c.y);
+ 		            jQuery('#x2').val(c.x2);
+ 		            jQuery('#y2').val(c.y2);
+ 		            jQuery('#w').val(c.w);
+ 		            jQuery('#h').val(c.h);
+             }
+           },
+            function () {
+                         // Use the API to get the real image size  
+                         var bounds = this.getBounds();
+                         boundx = bounds[0];
+                         boundy = bounds[1];
+                     });
+         }
+       });
+       
+       scope.$on('$destroy', clear);
+     }
+   };
+ });
+
+app.controller('CatController', function($scope, $http) { 
+
+
+$scope.listOfCategories = [];
+$scope.modalInfo = {'title' : '', 'buttonText' : '', 'op' : ''};
+
+$scope.getlistOfCategories = function()
+	{
+		if ($scope.listOfCategories.Length > 0)
+		{
+			return;
+		}
+			GetCategories($scope, $http);
+
+
+	};
+
+$scope.getlistOfCategories();
+
+$scope.treeOptions = {
+    nodeChildren: "children",
+    dirSelectable: false,
+    injectClasses: {
+        ul: "a1",
+        // li: "a2",
+        // liSelected: "a7",
+        // iExpanded: "a3",
+        // iCollapsed: "a4",
+        // iLeaf: "a5",
+        // label: "a6",
+        // labelSelected: "a8"
+    }
+}
+
+$scope.GetIndexOfCategoryById=function($id)
+{
+	for (var tagIndex in $scope.listOfCategories)
+	{
+		if ($scope.listOfCategories[tagIndex].id == $id)
+		{
+			return tagIndex;
+		}
+	}
+	
+	return -1;
+};
+
+
+$scope.getFlatCategoryListRecurrency = function(arr)
+{
+	var out = [];
+	for (var index in arr)
+	{
+		out.push(arr[index]);
+		if (arr[index].children != null && arr[index].children.length > 0)
+		{
+			var out2 = $scope.getFlatCategoryListRecurrency(arr[index].children);
+			
+			if (out2 != null && out.length > 0)
+			{
+				for (var index2 in out2)
+				{
+					out.push(out2[index2]);
+				}
+			}
+		}
+	}
+	
+	return out;
+}
+
+$scope.getChildrenArrayRecurrency = function(id, arr)
+{
+	for (var index in arr)
+	{
+		if (arr[index].id == id)
+		{
+			return arr[index].children;
+		}
+		else if (arr[index].children != null && arr[index].children.length > 0)
+		{
+			var out = $scope.getChildrenArrayRecurrency(id, arr[index].children);
+			
+			if (out != null && out.length > 0)
+				return out;
+		}
+	}
+	
+	return [];
+}
+
+$scope.getListOfElementsByParent=function(id)
+{
+	var arr = [];
+	
+	arr = $scope.getChildrenArrayRecurrency(id, $scope.listOfCategories);
+	return arr;
+}
+
+	$scope.deleteCategory = function(id)
+	{
+		DeleteCategory(id ,$scope, $http);
+	};
+
+	$scope.CreateNewCategory = function(parent)
+	{
+		$scope.categoryForModal = {'name': '', 'description': '', 'parent' : parent};
+		$scope.modalInfo.title = 'Dodawanie kategorii';
+		$scope.modalInfo.buttonText = 'Dodaj';
+		$scope.modalInfo.op = '0';
+
+		console.log($scope.categoryForModal);
+	}
+
+	$scope.addOrUpdate = function(op, id) {
+		if (op == 0) {
+			console.log($scope.categoryForModal.name);
+			AddCategory($scope, $http);
+		} else if (op == 1) {
+			console.log(op);
+			console.log(id);
+			EditCategory(id, $scope.categoryForModal.name ,$scope.categoryForModal.description, $scope.categoryForModal.parent ,$scope, $http);
+		}
+	}
+
+	$scope.remove=function($id){ 
+		DeleteCategory($id, $scope, $http);
+	};
+
+
+//$scope.categoryForModal = null;
+
+$scope.getCategoryRecurrency = function(id, arr)
+{
+	for (var index in arr)
+	{
+		if (arr[index].id == id)
+		{
+			return arr[index];
+		}
+		else if (arr[index].children != null && arr[index].children.length > 0)
+		{
+			var out = $scope.getCategoryRecurrency(id, arr[index].children);
+			
+			if (out != null)
+				return out;
+		}
+	}
+	
+	return null;
+}
+
+$scope.GetCategoryById = function($id)
+{
+	var out = null;
+	out = $scope.getCategoryRecurrency($id, $scope.listOfCategories);
+	
+	return out;
+};
+
+
+$scope.getFlatList = function() {
+	return $scope.getFlatCategoryListRecurrency($scope.listOfCategories);
+}
+
+$scope.SetCategoryForModal = function($id)
+{
+	//console.log($scope.GetCategoryById($id));
+	$scope.categoryForModal = $scope.GetCategoryById($id);
+
+	//console.log($scope.categoryForModal);
+
+	$scope.modalInfo.title = 'Edycja kategorii';
+	$scope.modalInfo.buttonText = 'ZatwierdŸ zmiany';
+	$scope.modalInfo.op = '1';
+
+	console.log($scope.getFlatList());
+}
+
+$scope.UpdateCategory=function($id)
+{
+	$scope.editCategory($id);
+}
+
+});
+
+
+app.controller('TagController', function($scope, $http) { 
+
+	$scope.listOfTags = [];
+
+	$scope.getListOfTags = function()
+	{
+		GetTags($scope, $http);
+	};
+
+	$scope.getListOfTags();
+
+	$scope.listOfTagsTypes = [];
+
+	$scope.getListOfTagsTypes  = function(len)
+	{
+		GetTagTypes($scope, $http);
+	};
+	
+	$scope.getListOfTagsTypes();
+
+$scope.GetIndexOfTagTypeById=function($id)
+{
+	for (var tagIndex in $scope.listOfTagsTypes)
+	{
+		if ($scope.listOfTagsTypes[tagIndex].id == $id)
+		{
+			return tagIndex;
+		}
+	}
+	
+	return -1;
+};
+
+$scope.GetIndexOfTagById=function($id)
+{
+	for (var tagIndex in $scope.listOfTags)
+	{
+		if ($scope.listOfTags[tagIndex].id == $id)
+		{
+			return tagIndex;
+		}
+	}
+	
+	return -1;
+};
+
+$scope.GetTagType=function($id)
+{
+	return $scope.listOfTagsTypes[$scope.GetIndexOfTagTypeById($id)];
+};
+
+   
+$scope.selection = [];
+
+$scope.remove=function($id){ 
+	DeleteTag($id,$scope,$http);
+	
+	idx = $scope.selection.indexOf($id);
+	
+	if (idx > -1) {
+	  $scope.selection.splice(idx, 1);
+	}  
+};
+
+$scope.removeSelected=function(){
+	if ($scope.selection.length != 0)
+	{
+		for (var id in $scope.selection)
+		{
+			DeleteTag($scope.selection[id]);
+		}
+		$scope.selection = [];
+	}
+};
+
+$scope.invertSelection=function()
+{
+	for (var tagIndex in $scope.listOfTags)
+	{
+		$scope.toggleSelection($scope.listOfTags[tagIndex].id)
+	}
+}
+
+$scope.tagForModal = null;
+
+$scope.SetTagForModal=function($id)
+{
+	var idx = $scope.GetIndexOfTagById($id);
+	$scope.tagForModal = jQuery.extend(true, {}, $scope.listOfTags[idx]);
+}
+
+$scope.UpdateTag=function($id)
+{
+	EditTag($id, $scope.tagForModal.name, $scope.tagForModal.description, $scope.tagForModal.type, $scope,$http);
+}
+
+$scope.CreateNewTag=function()
+{
+	$scope.tagForModal = {
+		id: -1,
+      name:  "",
+      description: "",
+      type: 1
+   };
+}
+
+$scope.AddNewTag=function()
+{
+	AddTag($scope.tagForModal.name, $scope.tagForModal.description, $scope.tagForModal.type, $scope,$http);
+}
+
+  // toggle selection for a given fruit by name
+  $scope.toggleSelection = function toggleSelection(id) {
+    var idx = $scope.selection.indexOf(id);
+
+    // is currently selected
+    if (idx > -1) {
+      $scope.selection.splice(idx, 1);
+    }
+
+    // is newly selected
+    else {
+      $scope.selection.push(id);
+    }
+  };
+  
+  $scope.getImage = function(id, width, height){
+    return 'http://placehold.it/' + width + 'x' + height;
+  };
+  
+$scope.orderProp = '';
+  
+});
+
+
+
+app.controller('GroupController', function($scope, $http) { 
+
+	$scope.groups = [];
+	$scope.groupForModal = null;
+
+	$scope.modalInfo = {'title': '', 'buttonText': '', 'op' : ''};
+
+	$scope.getGroups  = function()
+	{
+		GetGroups($scope, $http);
+	};
+
+
+
+$scope.GetIndexOfGroupById=function($id)
+{
+	var arr = $scope.groups;
+	
+	for (var i = 0; i < arr.length; i++)
+	{
+		if (arr[i].id == $id)
+		{
+			return arr[i];
+		}
+	}
+	
+	return -1;
+};
+
+$scope.getGroups();
+   
+$scope.selection = [];
+
+$scope.removeSingle = function($id) {
+	RemoveGroup($scope, $http, $id);
+}
+
+$scope.remove=function($id){ 
+	var idx = $scope.GetIndexOfTagTypeById($id);
+
+	if (idx > -1) {
+		$scope.listOfTagsTypes.splice(idx,1);  
+	} 
+	
+	idx = $scope.selection.indexOf($id);
+	
+	if (idx > -1) {
+	  $scope.selection.splice(idx, 1);
+	}  
+};
+
+$scope.removeSelected=function(){
+	if ($scope.selection.length != 0)
+	{
+		for (var id in $scope.selection)
+		{
+			var idx = -1;
+			
+			for (var tagIndex in $scope.listOfTagsTypes)
+			{
+				if ($scope.listOfTagsTypes[tagIndex].id == $scope.selection[id])
+				{
+					idx = tagIndex;
+				}
+			}
+			
+			if (idx > -1)
+			{
+				$scope.listOfTagsTypes.splice(idx,1); 
+			}
+		}
+		$scope.selection = [];
+	}
+};
+
+//$scope.groupForModal = null;
+
+$scope.SetGroupForModal=function($id)
+{
+	//console.log($scope.groups);
+
+	$scope.groupForModal = $scope.GetIndexOfGroupById($id);
+	$scope.modalInfo.title = 'Edycja grupy';
+	$scope.modalInfo.buttonText = 'ZatwierdŸ zmiany';
+	$scope.modalInfo.op = '1';
+	//console.log($scope.groupForModal);
+	// var idx = $scope.GetIndexOfGroupById($id);
+	// $scope.groupForModal = jQuery.extend(true, {}, $scope.groups[idx]);
+}
+
+// $scope.UpdateGroup=function($id)
+// {
+// 	UpdateGroup($scope, $http, $id);
+// }
+
+$scope.CreateNewGroup=function()
+{
+	$scope.groupForModal = {'name': '', 'description': ''};
+	$scope.modalInfo.title = 'Dodawanie grupy';
+	$scope.modalInfo.buttonText = 'Dodaj';
+	$scope.modalInfo.op = '0';
+}
+
+$scope.addOrUpdate = function(operation, $id) {
+	if(operation == 0) {
+		AddNewGroup($scope, $http);
+	} else if (operation == 1) {
+		UpdateGroup($scope, $http, $id);
+	}
+}
+
+// $scope.AddNewGroup=function()
+// {
+// 	AddNewGroup($scope, $http);
+// }
+
+  // toggle selection for a given fruit by name
+  $scope.toggleSelection = function toggleSelection(id) {
+    var idx = $scope.selection.indexOf(id);
+
+    // is currently selected
+    if (idx > -1) {
+      $scope.selection.splice(idx, 1);
+    }
+
+    // is newly selected
+    else {
+      $scope.selection.push(id);
+    }
+  };
+  
+  $scope.getImage = function(id, width, height){
+    return 'http://placehold.it/' + width + 'x' + height;
+  };
+  
+$scope.orderProp = '';
+  
+});
+
+
+
+
+app.controller('TagTypeController', function($scope, $http) {  
+
+	$scope.listOfTagsTypes = [];
+
+	$scope.getListOfTagsTypes  = function()
+	{
+	GetTagTypes($scope, $http);
+};
+
+$scope.getListOfTagsTypes();
+
+$scope.GetIndexOfTagTypeById=function($id)
+{	
+	for (var tagIndex in $scope.listOfTagsTypes)
+	{
+		if ($scope.listOfTagsTypes[tagIndex].id == $id)
+		{
+			return tagIndex;
+		}
+	}
+	
+	return -1;
+};
+   
+$scope.selection = [];
+
+$scope.remove=function($id){ 
+
+	DeleteTagType($id, $scope, $http); 
+	
+	idx = $scope.selection.indexOf($id);
+	
+	if (idx > -1) {
+	  $scope.selection.splice(idx, 1);
+	}  
+};
+
+$scope.removeSelected=function(){
+	if ($scope.selection.length != 0)
+	{
+		for (var id in $scope.selection)
+		{
+			DeleteTagType($scope.selection[id], $scope, $http); 
+		}
+		$scope.selection = [];
+	}
+};
+
+$scope.invertSelection=function()
+{
+	for (var tagIndex in $scope.listOfTags)
+	{
+		$scope.toggleSelection($scope.listOfTags[tagIndex].id)
+	}
+}
+
+$scope.tagForModal = null;
+
+$scope.SetTagForModal=function($id)
+{
+	var idx = $scope.GetIndexOfTagTypeById($id);
+	$scope.tagForModal = jQuery.extend(true, {}, $scope.listOfTagsTypes[idx]);
+}
+
+$scope.UpdateTag=function($id)
+{
+	EditTagType($id, $scope.tagForModal.name, $scope.tagForModal.description, $scope, $http);
+}
+
+$scope.CreateNewTag=function()
+{
+	$scope.tagForModal = {
+		id: -1,
+      name:  "",
+      description: ""
+   };
+}
+
+$scope.AddNewTag=function()
+{
+	AddTagType($scope.tagForModal.name, $scope.tagForModal.description, $scope, $http);
+}
+
+  // toggle selection for a given fruit by name
+  $scope.toggleSelection = function toggleSelection(id) {
+    var idx = $scope.selection.indexOf(id);
+
+    // is currently selected
+    if (idx > -1) {
+      $scope.selection.splice(idx, 1);
+    }
+
+    // is newly selected
+    else {
+      $scope.selection.push(id);
+    }
+  };
+  
+  $scope.getImage = function(id, width, height){
+    return 'http://placehold.it/' + width + 'x' + height;
+  };
+  
+$scope.orderProp = '';
+  
+});
+
+
+
+app.controller('CategoryController', function($scope, $http) {  
+
+	$scope.listOfCategories = [];
+	//$scope.categoryForModal = null;
+$scope.categoryForModal = {'name': '', 'description': '', 'parent':''};
+	$scope.getlistOfCategories = function()
+	{
+		if ($scope.listOfCategories.Length > 0)
+		{
+			return;
+		}
+			GetCategories($scope, $http);
+
+
+	};
+
+	$scope.getlistOfCategories();
+
+
+	// $scope.addParents() = function() {
+	// 	for(var cat in $scope.listOfCategories) {
+	// 			cat["parent"] = null;
+	// 		}
+	// }
+
+	// $scope.addParents();
+
+	console.log($scope.listOfCategories);
+
+	$scope.addCategory = function()
+	{
+
+		console.log($scope.categoryForModal.name);
+		AddCategory($scope, $http);
+	};
+
+	$scope.editCategory  = function(id)
+	{
+		EditCategory(id, $scope.categoryForModal.name ,$scope.categoryForModal.description, $scope.categoryForModal.parent ,$scope, $http);
+	};
+
+	$scope.deleteCategory  = function(id)
+	{
+		DeleteCategory(id ,$scope, $http);
+	};
+
+	$scope.CreateNewCategory=function()
+	{
+		$scope.groupForModal = {'name': '', 'description': '', 'parent' : ''};
+	}
+	
+
+$scope.getListOfElementsByParent=function(id)
+{
+	var arr = [];
+	
+	arr = $scope.getChildrenArrayRecurrency(id, $scope.listOfCategories);
+	return arr;
+}
+
+$scope.getChildrenArrayRecurrency = function(id, arr)
+{
+	for (var index in arr)
+	{
+		if (arr[index].id == id)
+		{
+			return arr[index].children;
+		}
+		else if (arr[index].children != null && arr[index].children.length > 0)
+		{
+			var out = $scope.getChildrenArrayRecurrency(id, arr[index].children);
+			
+			if (out != null && out.length > 0)
+				return out;
+		}
+	}
+	
+	return [];
+}
+
+$scope.flatListOfCategories = [];
+
+$scope.GetFlatCategoriesList=function()
+{
+	if ($scope.flatListOfCategories.length != 0)
+		return $scope.flatListOfCategories;
+	
+	$scope.flatListOfCategories = $scope.getFlatCategoryListRecurrency($scope.listOfCategories);
+	return $scope.flatListOfCategories;
+};
+
+$scope.getFlatCategoryListRecurrency = function(arr)
+{
+	var out = [];
+	for (var index in arr)
+	{
+		out.push(arr[index]);
+		if (arr[index].children != null && arr[index].children.length > 0)
+		{
+			var out2 = $scope.getFlatCategoryListRecurrency(arr[index].children);
+			
+			if (out2 != null && out.length > 0)
+			{
+				for (var index2 in out2)
+				{
+					out.push(out2[index2]);
+				}
+			}
+		}
+	}
+	
+	return out;
+}
+
+$scope.GetIndexOfCategoryById=function($id)
+{
+	for (var tagIndex in $scope.listOfCategories)
+	{
+		if ($scope.listOfCategories[tagIndex].id == $id)
+		{
+			return tagIndex;
+		}
+	}
+	
+	return -1;
+};
+
+$scope.GetCategoryById = function($id)
+{
+	var out = null;
+	out = $scope.getCategoryRecurrency($id, $scope.listOfCategories);
+	
+	return out;
+};
+
+$scope.getCategoryRecurrency = function(id, arr)
+{
+	for (var index in arr)
+	{
+		if (arr[index].id == id)
+		{
+			return arr[index];
+		}
+		else if (arr[index].children != null && arr[index].children.length > 0)
+		{
+			var out = $scope.getCategoryRecurrency(id, arr[index].children);
+			
+			if (out != null)
+				return out;
+		}
+	}
+	
+	return null;
+}
+
+$scope.remove=function($id){ 
+
+	DeleteCategory($id, $scope, $http);
+
+};
+
+
+//$scope.categoryForModal = null;
+
+$scope.SetCategoryForModal = function($id)
+{
+	console.log($scope.GetCategoryById($id));
+	$scope.categoryForModal = $scope.GetCategoryById($id);
+	console.log($scope.categoryForModal);
+}
+
+$scope.UpdateCategory=function($id)
+{
+	$scope.editCategory($id);
+}
+
+// $scope.CreateNewTag=function()
+// {
+// 	$scope.tagForModal = {
+// 		id: -1,
+//       name:  "",
+//       parent: "null"
+//    };
+// }
+
+// $scope.AddNewTag=function()
+// {
+// 	$scope.addCategory();
+// }
+  
+//   $scope.getImage = function(id, width, height){
+//     return 'http://placehold.it/' + width + 'x' + height;
+//   };
+  
+//$scope.orderProp = '';
+  
+});
+
+
+app.controller('GalleryController', function($scope, $http) {  
+
+	$scope.listOfImages = [];
+
+	$scope.getlistOfImages  = function()
+	{
+	if ($scope.listOfImages.length != 0)
+		return $scope.listOfImages;
+		
+		GetImages($scope, $http);
+	};
+	$scope.getlistOfImages();
+	
+	$scope.toggleSelection = function toggleSelection(images) {
+    var idx = $scope.selection.indexOf(images);
+
+    // is currently selected
+    if (idx > -1) {
+      $scope.selection.splice(idx, 1);
+    }
+
+    // is newly selected
+    else {
+      $scope.selection.push(images);
+    }
+  };
+});
+
+
+app.controller('ArticleController', function($scope, $http) {  
+
+	$scope.listOfArticles = [];
+
+	$scope.getlistOfArticles  = function()
+	{
+	if ($scope.listOfArticles.length != 0)
+		return $scope.listOfArticles;
+		
+		GetArticles($scope, $http);
+	};
+	$scope.getlistOfArticles();
+
+$scope.GetIndexOfArticleById=function($id)
+{
+	for (var articleIndex in $scope.listOfArticles)
+	{
+		if ($scope.listOfArticles[articleIndex].id == $id)
+		{
+			return articleIndex;
+		}
+	}
+	
+	return -1;
+};
+   
+$scope.selection = [];
+
+$scope.remove=function($id){ 
+	var idx = $scope.GetIndexOfArticleById($id);
+
+	if (idx > -1) {
+		$scope.listOfArticles.splice(idx,1);  
+	} 
+	
+	idx = $scope.selection.indexOf($id);
+	
+	if (idx > -1) {
+	  $scope.selection.splice(idx, 1);
+	}  
+};
+
+$scope.removeSelected=function(){
+	if ($scope.selection.length != 0)
+	{
+		for (var id in $scope.selection)
+		{
+			var idx = -1;
+			
+			for (var articleIndex in $scope.listOfArticles)
+			{
+				if ($scope.listOfArticles[articleIndex].id == $scope.selection[id])
+				{
+					idx = articleIndex;
+				}
+			}
+			
+			if (idx > -1)
+			{
+				$scope.listOfArticles.splice(idx,1); 
+			}
+		}
+		$scope.selection = [];
+	}
+};
+
+$scope.invertSelection=function()
+{
+	for (var articleIndex in $scope.listOfTags)
+	{
+		$scope.toggleSelection($scope.listOfTags[articleIndex].id)
+	}
+}
+
+$scope.articleForModal = null;
+
+$scope.SetArticleForModal=function($id)
+{
+	var idx = $scope.GetIndexOfArticleById($id);
+	$scope.articleForModal = jQuery.extend(true, {}, $scope.listOfArticles[idx]);
+}
+
+$scope.UpdateArticle=function($id)
+{
+	var idx = $scope.GetIndexOfArticleById($id);
+	$scope.listOfArticles[idx] = $scope.articleForModal;
+}
+
+$scope.CreateNewArticle=function()
+{
+	$scope.articleForModal = {
+		id: -1,
+      name:  "",
+      description: ""
+   };
+}
+
+$scope.AddNewArticle=function()
+{
+	$scope.articleForModal.id = $scope.listOfArticles[$scope.listOfArticles.length - 1].id + 1;
+	$scope.listOfArticles.push($scope.articleForModal);
+}
+
+  // toggle selection for a given fruit by name
+  $scope.toggleSelection = function toggleSelection(id) {
+    var idx = $scope.selection.indexOf(id);
+
+    // is currently selected
+    if (idx > -1) {
+      $scope.selection.splice(idx, 1);
+    }
+
+    // is newly selected
+    else {
+      $scope.selection.push(id);
+    }
+  };
+  
+  $scope.getImage = function(id, width, height){
+    return 'http://placehold.it/' + width + 'x' + height;
+  };
+  
+$scope.orderProp = '';
+
+$scope.startDate = new Date();
+$scope.endDate = new Date();
+  
+});
+
+
+
+
+app.controller('EditArticleController', function($scope, $routeParams, $sanitize, $http, tags) {  
+	
+  $scope.getTags = function()
+  {
+	GetTags($scope, $http);
+  }
+
+$scope.selectedTags = [];
+$scope.listOfTags;
+$scope.getTags();
+
+$scope.loadTags = function(query) {
+    return tags.load($scope.listOfTags);
+  };
+  
+  $scope.getSelectedTagIds = function()
+  {
+	var arr = [];
+	for (var i in $scope.selectedTags)
+	{
+		arr.push($scope.selectedTags[i].id);
+	}
+	return arr;
+  }
+
+
+$scope.articleId = $routeParams.articleId;
+$scope.newArticle = null;
+		
+$scope.GetArticle=function(id)
+{
+	if ($scope.newArticle != null)
+		return $scope.newArticle;
+	
+	if (typeof id === 'undefined')
+	{
+	$scope.newArticle = {
+		id: -1,
+		title: "",
+		description: "",
+		content: "",
+		publication_date: new Date(),
+		expiration_date: new Date(),
+		views:0,
+		image: 1,
+		tag: [],
+		rank: {id: 1},  
+		category_id: {id: 1}, 
+		commntCount: 0
+		};
+	}
+	else
+	{
+		GetArticle(id, $scope, $http);
+	}
+}
+
+$scope.GetArticle($scope.articleId);
+  
+ $scope.getImage = function(id, width, height){
+    return servicesContext + '/image?id=' + id;
+  };
+  
+  $scope.listOfArticleRanks = [];
+
+	$scope.getlistOfArticleRanks  = function()
+	{
+		GetArticleRank($scope, $http);
+	}
+  $scope.getlistOfArticleRanks();
+
+$scope.startDate = new Date();
+$scope.endDate = new Date();
+ 
+
+	$scope.listOfCategories = [];
+
+	$scope.getlistOfCategories  = function()
+	{
+		GetCategories($scope, $http);
+	};
+	
+$scope.currentUserLogin = "";
+$scope.GetCurrentUserName = function()
+{
+	GetCurrentUserLogin($scope, $http);
+}
+$scope.GetCurrentUserName();
+	
+	$scope.getlistOfCategories();
+
+	$scope.addArticle = function()
+	{
+		AddArticle($scope.newArticle.title, $scope.newArticle.description, $scope.newArticle.content, $scope.newArticle.category_id.id, $scope.currentUserLogin, $scope.newArticle.publication_date.getTime(), $scope.newArticle.expiration_date.getTime(), $scope.getSelectedTagIds(), $scope.newArticle.rank.id, 1, new Date().getTime(), null, $scope, $http);
+	}
+	
+	$scope.editArticle = function()
+	{
+		EditArticle($routeParams.articleId, $scope.newArticle.title, $scope.newArticle.description, $scope.newArticle.content, $scope.newArticle.category_id.id, $scope.currentUserLogin, $scope.newArticle.publication_date.getTime(), $scope.newArticle.expiration_date.getTime(), $scope.getSelectedTagIds(), $scope.newArticle.rank.id, 1, new Date().getTime(), null, $scope, $http);
+	}
+	
+$scope.editorOptions = {
+    language: 'pl'
+};
+});
+
+
+
+
+app.controller('ArticleRankController', function($scope) {  
+
+	$scope.listOfArticleRanks = [];
+
+	$scope.getlistOfArticleRanks  = function(len)
+	{
+	if ($scope.listOfArticleRanks.length != 0)
+		return $scope.listOfArticleRanks;
+
+	var arr = [];
+	for (var i=0;i<len;i++)
+	{
+	arr.push({
+		id: (i + 1),
+		name: "NEW",
+		description: "New, not confirmed rank."
+	});
+	}
+
+	$scope.listOfArticleRanks = arr;
+	return arr;
+};
+
+$scope.GetIndexOfArticleRankById=function($id)
+{
+	var arr = $scope.getlistOfArticleRanks(4);
+	
+	for (var articleRankIndex in arr)
+	{
+		if (arr[articleRankIndex].id == $id)
+		{
+			return articleRankIndex;
+		}
+	}
+	
+	return -1;
+};
+   
+$scope.selection = [];
+
+$scope.remove=function($id){ 
+	var idx = $scope.GetIndexOfArticleRankById($id);
+
+	if (idx > -1) {
+		$scope.listOfArticleRanks.splice(idx,1);  
+	} 
+	
+	idx = $scope.selection.indexOf($id);
+	
+	if (idx > -1) {
+	  $scope.selection.splice(idx, 1);
+	}  
+};
+
+$scope.removeSelected=function(){
+	if ($scope.selection.length != 0)
+	{
+		for (var id in $scope.selection)
+		{
+			var idx = -1;
+			
+			for (var articleRankIndex in $scope.listOfArticleRanks)
+			{
+				if ($scope.listOfArticleRanks[articleRankIndex].id == $scope.selection[id])
+				{
+					idx = articleRankIndex;
+				}
+			}
+			
+			if (idx > -1)
+			{
+				$scope.listOfArticleRanks.splice(idx,1); 
+			}
+		}
+		$scope.selection = [];
+	}
+};
+
+$scope.invertSelection=function()
+{
+	for (var articleRankIndex in $scope.listOfTags)
+	{
+		$scope.toggleSelection($scope.listOfTags[articleRankIndex].id)
+	}
+}
+
+$scope.articleRankForModal = null;
+
+$scope.SetarticleRankForModal=function($id)
+{
+	var idx = $scope.GetIndexOfArticleRankById($id);
+	$scope.articleRankForModal = jQuery.extend(true, {}, $scope.listOfArticleRanks[idx]);
+}
+
+$scope.UpdateArticleRank=function($id)
+{
+	var idx = $scope.GetIndexOfArticleRankById($id);
+	$scope.listOfArticleRanks[idx] = $scope.articleRankForModal;
+}
+
+$scope.CreateNewArticleRank=function()
+{
+	$scope.articleRankForModal = {
+		id: -1,
+      name:  "",
+      description: ""
+   };
+}
+
+$scope.AddNewArticleRank=function()
+{
+	$scope.articleRankForModal.id = $scope.listOfArticleRanks[$scope.listOfArticleRanks.length - 1].id + 1;
+	$scope.listOfArticleRanks.push($scope.articleRankForModal);
+}
+
+  // toggle selection for a given fruit by name
+  $scope.toggleSelection = function toggleSelection(id) {
+    var idx = $scope.selection.indexOf(id);
+
+    // is currently selected
+    if (idx > -1) {
+      $scope.selection.splice(idx, 1);
+    }
+
+    // is newly selected
+    else {
+      $scope.selection.push(id);
+    }
+  };
+  
+  $scope.getImage = function(id, width, height){
+    return 'http://placehold.it/' + width + 'x' + height;
+  };
+  
+$scope.orderProp = '';
+  
+});
+
+
+app.controller('CommentModerationController', function($scope, $http) { 
+
+	$scope.listOfCommentsWithStatus = [];
+	$scope.selectedComments = [];
+	$scope.selectAll = true;
+
+	$scope.page = 0;
+
+	$scope.commentsPage = 1;
+	$scope.commentsLimit = 5;
+	$scope.total = 1;
+
+	$scope.getCommentsWithStatus = function(page) {
+	// if ($scope.listOfCommentsWithStatus.length != 0)
+	// 	return $scope.listOfCommentsWithStatus;
+
+		GetCommentsWithStatus($scope, $http, page);
+	};
+
+	$scope.ChangePage = function(page)
+	{
+		$scope.page = page;
+		$scope.commentsPage = page;
+		$scope.getCommentsWithStatus(page);
+	}
+
+$scope.getCommentsWithStatus();
+
+$scope.acceptSingle = function(id) {
+	SetCommentState($scope, $http, [{'id' : id, 'state' : {'id' : 2} }]);
+}
+
+$scope.rejectSingle = function(id) {
+	SetCommentState($scope, $http, [{'id' : id, 'state' : {'id' : 3} }]);
+}
+
+$scope.acceptSelected = function() {
+
+	for (var i = 0; i < $scope.selectedComments.length; i++) {
+		$scope.selectedComments[i] = {'id' : $scope.selectedComments[i], 'state' : {'id' : 2} }
+	}
+
+	SetCommentState($scope, $http, $scope.selectedComments);
+
+	$scope.selectedComments = [];
+}
+
+$scope.rejectSelected = function() {
+
+	for (var i = 0; i < $scope.selectedComments.length; i++) {
+		$scope.selectedComments[i] = {'id' : $scope.selectedComments[i], 'state' : {'id' : 3} }
+	}
+
+	SetCommentState($scope, $http, $scope.selectedComments);
+
+	$scope.selectedComments = [];
+}
+
+$scope.getListOfElementsByParent=function(id)
+{
+	$scope.listOfCommentsWithStatus();
+	var arr = [];
+	
+	arr = $scope.getChildrenArrayRecurrency(id, $scope.listOfCommentsWithStatus);
+	return arr;
+}
+
+$scope.getIndexOfCommentById=function($id) {
+	var arr = $scope.listOfCommentsWithStatus;
+	
+	for (var i in arr)
+	{
+		if (arr[i].id == $id)
+		{
+			return i;
+		}
+	}
+	
+	return -1;
+};
+
+$scope.toggleSelection = function($id) {
+
+	var index = $scope.selectedComments.indexOf($id);
+
+		if (index > -1) {
+			$scope.selectedComments.splice(index, 1);
+		} else {
+			$scope.selectedComments.push($id);
+		}
+}
+
+$scope.invertSelection = function() {
+
+	if ($scope.selectAll) {
+
+		for (var i = 0; i < $scope.listOfCommentsWithStatus.length; i++) {
+			$scope.selectedComments.push($scope.listOfCommentsWithStatus[i].id);
+		}
+
+		$scope.selectAll = false;
+
+	} else {
+		$scope.selectedComments = [];
+		$scope.selectAll = true;
+	}
+}
+  
+});
+
+app.controller('UsersController', function($scope, $http) { 
+	$scope.listOfUsers = [];
+	$scope.userForModal = null;
+	$scope.user = [];
+	$scope.UpdateStatus = 0;
+
+	$scope.page = 1;
+	$scope.usersPage = 1;
+	$scope.usersLimit = 15;
+	
+	$scope.userID = 0;
+	
+	GetGroups($scope, $http);
+	
+	$scope.test = function(){
+		//$scope.userID = $scope.userID + 1;
+	};
+
+	$scope.setUpdateStatus = function($status){
+		$scope.UpdateStatus = $status;
+	};
+
+	$scope.getlistOfUsers = function($pageNO) {
+		// if($scope.listOfUsers.length != 0)
+		// return $scope.listOfUsers;		
+		GetUsers($scope, $http, $pageNO);		
+	};
+	
+	$scope.getlistOfUsers(0);
+
+
+	$scope.ChangePage = function(page)
+	{	
+		$scope.page = page;
+		$scope.usersPage = page;
+		$scope.getlistOfUsers(page);		
+	}
+
+	$scope.setUserForModal = function($login){
+		GetUserByLogin($scope, $http, $login);	
+	};
+
+	$scope.deleteUser = function($login){
+		DeleteUser($scope, $http, $login);
+	};
+
+	$scope.getUserPosById = function(userId) {
+		for(var i = 0; i < $scope.listOfUsers.length; i++) {
+			if ($scope.listOfUsers[i].id == userId) return i;
+		}
+
+		return null;
+	};
+
+	$scope.ChangeGroup = function(user) {		
+		SetUserGroup($scope, $http, user);
+				
+	};	
+
+});
+
+// app.controller("groupChange", function($scope, $http) {
+	
+// 	 for (i = 0; i < $scope.groups.length; i++) { 
+//      	if($scope.groups[i].name == $scope.user.group.name)
+//      		$scope.groupChange = $scope.groups[i].id;     		     	
+// 	 }
+
+// 	$scope.ChangeGroup = function() {		
+// 		SetUserGroup($scope, $http, $scope.user.login, $scope.groups[$scope.groupChange-1]);
+// 		$scope.user.group.id = $scope.groupChange;		
+// 	};	
+
+
+// });
+
+function onFileSelected(event) {
+  var selectedFile = event.target.files[0];
+  var reader = new FileReader();
+
+  var imgTab = document.getElementsByTagName("img");
+
+
+  reader.onload = function(event) {
+
+      for(var i=0; i<imgTab.length; i++)
+      {
+          imgTab[i].src = event.target.result;
+      }
+  };
+
+  reader.readAsDataURL(selectedFile);
+};
+
+</script>
+</head>
+<body>
+
+<div class="bs-docs-section" ng-controller="topAndSideContrler">
+  
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="navbar1 navbar-default navbar-inverse">
+            <div class="navbar-header">
+              <a class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </a>
+              <a href="#" class="navbar-brand visible-xs">Menu</a>
+            </div>
+            <div class="navbar-collapse collapse">
+              <ul class="nav navbar-nav nav-collapsing" id="topMenu">
+<!--                 <li ng-class="{active:isActive('/groups')}"><a href="#groups">Grupa</a>
+                </li> -->
+                <li><a style="font-size:1.3em; margin-left:-15px;" title="Strona glowna" href="index.html#/main"><i class="glyphicon glyphicon-home"></i></a></li>
+                <li ng-class="{active:isActive('/category')}"><a href="#category">Kategorie</a>
+                </li>
+                <li ng-class="{active:isActive('/tag')}"><a href="#tag">Tag</a>
+                </li>
+                <li ng-class="{active:isActive('/tagTypes')}"><a href="#tagTypes">Rodzaj Tagu</a>
+                </li>
+<!--                 <li ng-class="{active:isActive('/category')}"><a href="#category">Kategoria</a>
+                </li> -->
+                <li ng-class="{active:isActive('/articles')}"><a href="#articles">Artyku³</a>
+                </li>
+                <li ng-class="{active:isActive('/articleRank')}"><a href="#articleRank">Ranga Artyku³u</a>
+                </li>             
+                <li ng-class="{active:isActive('/commentModeration')}"><a href="#commentModeration">Komentarze</a>
+                </li>
+                <li ng-class="{active:isActive('/image')}"><a href="#image">Obrazki</a>
+                </li>
+                <li ng-class="{active:isActive('/imageModeration')}"><a href="#imageModeration">Moderacja obrazków</a>
+                </li> 
+                <li ng-class="{active:isActive('/gallery')}"><a href="#gallery">Galerie</a>
+                </li>
+                
+                <li ng-show="isAdmin()" ng-class="{active:isActive('/groups')}"><a href="#groups">Grupa</a>
+                </li>
+				<li ng-show="isAdmin()" ng-class="{active:isActive('/users')}"><a href="#users">U¿ytkownicy</a>
+                </li>
+            	
+                
+
+
+
+                <li><a class="dropdown-toggle" data-toggle="dropdown" href="">
+                    Wiêcej <i class="glyphicon glyphicon-chevron-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-right" id="collapsed"></ul>
+                </li>
+              </ul>
+            </div>
+          </div>
+		   <div class="green"></div>
+        </div>
+    </div>
+    <div class="ng-view"></div>
+  </div>
+</div>
+ 
+</body>
+</html>

@@ -1,0 +1,12 @@
+
+      <div class="row btn-d">
+		<button class="btn btn-success btnb" data-animation="am-fade-and-scale" data-template="html/modal/categoryModalAdd.html" bs-modal="modal" ng-click="CreateNewCategory()">Dodaj kategorię</button>
+
+      </div>
+      <div class="row btn-d">
+	  </br>
+    <ul class="hier-ul">
+		 <li class="hier-li" ng-repeat="data in listOfCategories" ng-include="'tree_item_renderer.html'"></li>
+		 
+    </ul>
+      </div>

@@ -1,0 +1,23 @@
+﻿
+      <div class="row btn-d">
+		<button class="btn btn-success btnb" data-animation="am-fade-and-scale" data-template="html/modal/articleRankModalAdd.html" bs-modal="modal" ng-click="CreateNewArticleRank()">Dodaj nowy</button>
+
+      </div>
+      <div class="row row2">
+		 <table>
+		 <th class="col-md-1 col-md"></th>
+		 <th class="col-md-2 col-md">Nazwa</th>
+		 <th class="col-md-6 col-md">Opis</th>
+		 <th class="col-md-2 col-md">Akcje</th>
+		<tr ng-repeat="tag in getlistOfArticleRanks(4)" ng-class="['odd', 'even'][$index %2]">
+		<td class="col-md-1">  <input type="checkbox" value="{{tag.id}}" ng-checked="selection.indexOf(tag.id) > -1" ng-click="toggleSelection(tag.id)"> </td>
+		<td class="col-md-2">{{tag.name}}</td>
+		<td class="col-md-6">{{tag.description}}</td>
+		<td class="col-md-2"><button class="btn btn-success btn-p" data-animation="am-fade-and-scale" data-template="html/modal/articleRankModal.html" bs-modal="modal" ng-click="SetarticleRankForModal(tag.id)"> Edytuj</button><a class="btn btn-danger btn-p" ng-click="remove(tag.id)"> Usuń</a></td>
+		</tr>
+		</table>
+      </div>
+      <div class="row btn-d">
+		<a class="btn btn-danger btnb" ng-click="removeSelected()">Usuń zaznaczone</a>
+		<a class="btn btn-primary btnb" ng-click="invertSelection()">Odwróć</a>
+      </div>

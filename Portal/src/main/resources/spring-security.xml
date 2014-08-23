@@ -9,7 +9,7 @@
 	<http entry-point-ref="authEntryPoint">
 	
 		<intercept-url pattern="/getCurrentUser" access="ROLE_USER" />
-		<intercept-url pattern="/user/{login}" access="ROLE_ADMIN" method="GET"/>	
+		<intercept-url pattern="/user/{login}" access="ROLE_ADMIN" method="GET"/>
 		<intercept-url pattern="/setUserGroup/{login}" access="ROLE_ADMIN" method="PATCH"/>
 		
 		<intercept-url pattern="/setCommentStatus" method="PATCH" access="ROLE_MODERATOR"/>

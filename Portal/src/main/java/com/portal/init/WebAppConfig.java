@@ -80,14 +80,14 @@ public class WebAppConfig {
 		return transactionManager;
 	}
 
-	@Bean
-	public UrlBasedViewResolver setupViewResolver() {
-		UrlBasedViewResolver resolver = new UrlBasedViewResolver();
-		resolver.setPrefix("/WEB-INF/pages/");
-		resolver.setSuffix(".html");
-		resolver.setViewClass(JstlView.class);
-		return resolver;
-	}
+//	@Bean
+//	public UrlBasedViewResolver setupViewResolver() {
+//		UrlBasedViewResolver resolver = new UrlBasedViewResolver();
+//		resolver.setPrefix("/WEB-INF/views/");
+//		resolver.setSuffix(".jsp");
+//		resolver.setViewClass(JstlView.class);
+//		return resolver;
+//	}
 
 	@Bean
 	public CorsFilter corsFilter() {
