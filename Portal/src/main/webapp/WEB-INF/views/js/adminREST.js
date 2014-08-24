@@ -282,13 +282,13 @@ function DeleteUser($scope, $http, login){
 		});
 }
 
-function SetUserGroup($scope, $http, user){
+function SetUserGroup($scope, $http, user, groupId){
 	$http({method: 'PATCH', url: servicesContext + '/setUserGroup/' + user.login, 
-			data: {id : user.group.selected}}).
+			data: {id : groupId}}).
 	  success(function(data, status, headers, config) {	
-	  console.log($scope.getUserPosById(user.id));	
-	  	console.log($scope.listOfUsers[$scope.getUserPosById(user.id)].group.id + ' '+ $scope.listOfUsers[$scope.getUserPosById(user.id)].group.selected);
-	  	$scope.listOfUsers[$scope.getUserPosById(user.id)].group.id = $scope.listOfUsers[$scope.getUserPosById(user.id)].group.selected;
+	  	//console.log($scope.getUserPosById(user.id));	
+	  	//console.log($scope.listOfUsers[$scope.getUserPosById(user.id)].group.id + ' '+ $scope.listOfUsers[$scope.getUserPosById(user.id)].group.selected);
+	  	$scope.listOfUsers[$scope.getUserPosById(user.id)].group.id = groupId;
 
 	  }); 
 }
@@ -306,4 +306,29 @@ function GetCurrentUserLogin($scope, $http){
 		$scope.userLoggedIn = false;
 		window.location.href = '/portal';
 	}); 
+};
+function LoginExists($scope, $http, login){
+	$http.post(servicesContext + '/portal/loginExists', {login: login}).
+	  success(function(data, status, headers, config) {	  	
+		$scope.loginE = data;		
+		if(data == 'true'){
+			$scope.uniqueL = false;		
+			alert($scope.uniqueL);
+	  	} else {	  		
+	  		$scope.uniqueL = true;			  		
+	  	}
+	  });
+};
+
+function EmailExists($scope, $http, email){
+	$http.post(servicesContext + '/portal/emailExists', {email: email}).
+	  success(function(data, status, headers, config) {
+		$scope.emailE = data;
+
+		if(data == 'true'){
+			$scope.uniqueE = false;		
+	  	} else {	  		
+	  		$scope.uniqueE = true;
+	  	}		
+	  });
 };

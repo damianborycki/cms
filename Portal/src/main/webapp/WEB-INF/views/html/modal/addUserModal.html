@@ -1,0 +1,60 @@
+<div class="modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" ng-click="$hide()">&times;</button>
+        <h4 class="modal-title"><div class="navbar2" >
+      <div style="padding-left: 10px;">
+            <h3 class="rejestracja-tytul" >Dodaj użytkownika</h3>
+      </div>
+      <div class="green"></div>
+          </div></h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">          
+          
+            <form class="form-horizontal" role="form" name="regForm" style="padding-top: 14px;">
+              <div class="form-group">
+                <label for="inputLogin3" class="col-sm-2 col-md-offset-0 control-label">Login</label>
+                <div class="col-sm-5">                  
+                  <input ng-keyup="lTest()" type="text" class="form-control" id="inputLogin3" ng-pattern="/^[A-Za-z0-9.-]{0,20}$/" name="userLogin" ng-model="user.login" ng-minlength="3" maxlength="20" placeholder="Podaj login" required>               
+                </div>
+                  <span class="help-block" style="color:#CC330E;" data-ng-show="regForm.userLogin.$error.minlength">
+                  <span style="background-color:#F13333; font-size: 13px;" class="badge pull-left ">!</span>&nbsp;Minimum 3 znaki są wymagane
+                </span>
+                <span class="help-block" style="color:#CC330E;font-size:13px;" data-ng-show="loginE == 'true' && user.login.length>2">
+                  <span style="background-color:#F13333;" class="badge pull-left">!</span>&nbsp;Podany login już jest zajęty
+                </span>  
+                <span class="help-block" style="color:#CC330E; font-size: 13px;" data-ng-show="regForm.userLogin.$error.pattern">
+                  <span style="background-color:#F13333;" class="badge pull-left" ng-model="loginError">!</span>&nbsp;Wprowadzono niedozwolone znaki
+                </span>
+              </div> 
+              <div class="form-group">
+                <label for="inputEmail3" class="col-sm-2 col-md-offset-0 control-label">Email</label>
+                <div class="col-sm-5">
+                <input ng-keyup="eTest()" type="email" class="form-control" name ="userEmail" ng-model="user.email" placeholder="Podaj email" required>
+              </div>
+              <span class="help-block" style="color:#CC330E; font-size: 13px;" ng-show="regForm.userEmail.$error.email">
+                <span style="background-color:#F13333;" class="badge pull-left ">!</span>&nbsp;Podany email jest niepoprawny
+              </span>
+              <span class="help-block" style="color:#CC330E; font-size: 13px;" ng-show="emailE == 'true' && user.email.length > 0">
+                <span style="background-color:#F13333;" class="badge pull-left ">!</span>&nbsp;Podany email jest już zajęty
+              </span>
+              </div>                          
+            </form>
+
+        </div>
+        <div class="form-group">
+                <label style="font-weight:normal; font-size:0.8em;" class="col-sm-12 col-md-offset-0 control-label">*na podany adres email zostanie wysłane wygenerowane losowo hasło</label>        
+        </div>
+      </div> 
+    
+      <div class="modal-footer">
+                <button type="submit" style="margin-left: 3%; " class="btn btn-medium btn-success col-md-3 pull-right" 
+                ng-disabled="!regForm.$valid || !uniqueL || !uniqueE">Zarejestruj</button>                 
+        <button type="button" class="btn btn-default pull-left" ng-click="$hide()">Zamknij</button>
+        
+      </div>
+    </div>
+  </div>
+</div>

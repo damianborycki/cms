@@ -1580,6 +1580,7 @@ $scope.invertSelection = function() {
 });
 
 app.controller('UsersController', function($scope, $http) { 
+	$scope.btnVal = 'Zaznacz wszystkich';
 	$scope.listOfUsers = [];
 	$scope.userForModal = null;
 	$scope.user = [];
@@ -1593,8 +1594,30 @@ app.controller('UsersController', function($scope, $http) {
 	
 	GetGroups($scope, $http);
 	
-	$scope.test = function(){
-		//$scope.userID = $scope.userID + 1;
+ 	$scope.lTest = function(){    
+	    if($scope.user.login != undefined)
+	    if($scope.user.login.trim() != ''){
+    	  	LoginExists($scope, $http, $scope.user.login);     
+    	}
+  	};
+  	$scope.eTest = function(){
+	    if($scope.user.email != undefined)
+	    if($scope.user.email.trim() != '')
+    	  	EmailExists($scope, $http, $scope.user.email);
+  	};
+
+  	$scope.checkAll = function(){
+		$scope.checkboxV = !$scope.checkboxV;
+		if(!$scope.checkboxV)
+			$scope.btnVal = 'Zaznacz wszystkich';
+		else
+			$scope.btnVal = 'Odznacz wszystkich';
+	};
+
+	$scope.test = function(abc){
+		alert(abc);
+		user.group.selected = 1;
+		
 	};
 
 	$scope.setUpdateStatus = function($status){
@@ -1634,9 +1657,28 @@ app.controller('UsersController', function($scope, $http) {
 	};
 
 	$scope.ChangeGroup = function(user) {		
-		SetUserGroup($scope, $http, user);
-				
-	};	
+		SetUserGroup($scope, $http, user, user.group.selected);
+	};
+
+	$scope.BanUser = function(user){
+		SetUserGroup($scope, $http, user, 5);				
+		user.group.name = "zablokowany";
+		user.group.selected = 5;
+	};
+	$scope.UnbanUser = function(user){
+		SetUserGroup($scope, $http, user, 3);
+		user.group.name = "odblokowany";
+		user.group.selected = 3;
+	};
+	
+	$scope.BanListOfUsers = function(){
+
+	};
+
+	$scope.clearModal = function(){
+		$scope.user.login = "";
+		$scope.user.email = "";
+	}; 
 
 });
 

@@ -2,27 +2,49 @@
 #comment_table th, td#center {
 	text-align: center;
 }
+.usr {
+	background-color: #E2AB79;
+}
+.banned {
+	background-color: red;
+	font-weight: bold;
+}
+.detailsU {
+	margin-left:41%;	
+}
+.unbanned {
+	background-color:none;
+	font-weight:normal;
+}
 </style>
+	<span class="row">
+		<button class="btn btn-success" data-template="html/modal/addUserModal.html" ng-click="clearModal()" bs-modal="modal">Dodaj użytkownika</button>
+	</span>
+	<span class="row">
 	Szukaj loginu: <input type="text" ng-model="search.login">
 	Grupy:
  	<select ng-model="search.group">
  		<option value="">- Wybierz grupę -</option>
 		<option ng-repeat="group in groups" value="{{group.name}}">{{group.name}}</option>
-	</select> 
+	</select>
+	</span> 
  <div class="row btn-d">
 
     	<div class="row row2">
 			<table>
-				<th class="col-md-1 col-md">#</th>
+				<!-- <th class="col-md-1 col-md">#</th> -->
+				<th class="col-md-1 col-md"></th>
 		 		<th class="col-md-2 col-md">Login</th>
-		 		<th class="col-md-4 col-md">email</th>
+		 		<th class="col-md-3 col-md">email</th>
 		 		<th class="col-md-2 col-md">Grupa</th>
-		 		<th class="col-md-1 col-md">Operacje</th>
+		 		<th class="col-md-2 col-md">Operacje</th>
 
-				<tr ng-repeat="user in listOfUsers | filter:{login:search.login} | filter:search.group">				
-					<td class="col-md-1">{{$index + 1 + (page-1)*usersLimit}}</td>
+				<!-- <tr ng-repeat="user in listOfUsers | filter:{login:search.login} | filter:search.group" ng-class="{'usr':user.login==currentUserLogin, 'banned' user.group.name == 'zablokowany'}" > -->	
+				<tr ng-repeat="user in listOfUsers | filter:{login:search.login} | filter:search.group" ng-class="{'usr':user.login==currentUserLogin, 'banned' : user.group.name == 'zablokowany', 'unbanned' : user.group.name == 'odblokowany'}" >
+					<!-- <td class="col-md-1">{{$index + 1 + (page-1)*usersLimit}}</td> -->
+					<td  class="col-md-1" style="text-align:center;"><input ng-hide="user.login == currentUserLogin" ng-checked="checkboxV" type="checkbox"></td>
 					<td class="col-md-2">{{user.login}}</td>
-					<td class="col-md-4">{{user.email}}</td>
+					<td class="col-md-3">{{user.email}}</td>
 					<td class="col-md-2">
 					
 					<!-- <div ng-controller="groupChange"> -->
@@ -32,15 +54,20 @@
 								<option ng-repeat="group in groups" ng-selected="user.group.selected == group.id" value="{{group.id}}">{{group.name}}</option>
 							</select>
 
-							<a class="btn btn-danger btn-p"  ng-show="user.group.selected != user.group.id" ng-click="ChangeGroup(user)">Zmień</a>
+							<a class="btn btn-danger btn-sm"  ng-show="user.group.selected != user.group.id" ng-click="ChangeGroup(user)">Zmień</a>
 						</span>
 					<!-- </div> -->
 					</td>
-					<td class="col-md-1"><button class="btn btn-success btn-p" data-animation="am-fade-and-scale" data-template="html/modal/userModal.html" bs-modal="modal" ng-click="setUserForModal(user.login)">Szczegóły</button>
+					<td class="col-md-2" >
+						<button class="btn btn-info btn-sm" data-animation="am-fade-and-scale" data-template="html/modal/userModal.html" bs-modal="modal" ng-click="setUserForModal(user.login)" style="margin:2px 0 2px 0;">Szczegóły</button>
+						<button class="btn btn-sm btn-danger "  ng-click="BanUser(user)" ng-hide="currentUserLogin == user.login || user.group.name == 'zablokowany'">Zablokuj</button>
+						<button class="btn btn-sm btn-success "  ng-click="UnbanUser(user)" ng-hide="currentUserLogin == user.login || user.group.name != 'zablokowany'">Odblokuj</button>
 				
 					</td>
 				</tr>
 			</table>
       </div>
+      <button class="btn btn-sm" ng-click="checkAll()" ng-model="selectAll">{{btnVal}}</button>
+      <button class="btn btn-sm">Zablokuj zaznaczonych</button>
       <div class="col-md-4 pull-right" style="height: 100%;" paging page="usersPage" page-size="usersLimit" total="totalUsers" show-prev-next="true" adjacent="1" paging-action="ChangePage(page)" ng-init="page=1"></div>
 </div>
