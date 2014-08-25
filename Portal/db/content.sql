@@ -1,8 +1,9 @@
 INSERT INTO `groups` (`id`, `description`, `name`) VALUES
 (1, 'Administrator serwisu', 'admin'),
 (2, 'Moderator serwisu', 'moderator'),
-(3, 'Użytkownik serwisu', 'user');
-
+(3, 'Użytkownik serwisu', 'user'),
+(4, 'Użytkownik nieaktywny', 'nieaktywny'),
+(5, 'Użytkownik zablokowany', 'zablokowany');
 INSERT INTO `comment_state` (`id`, `description`, `name`) VALUES
 (1, 'Oczekujący', 'pending'),
 (2, 'Zaakceptowany', 'accepted'),
