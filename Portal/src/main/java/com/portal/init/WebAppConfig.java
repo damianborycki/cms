@@ -10,6 +10,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.view.JstlView;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import com.portal.util.CorsFilter;
 
 import javax.annotation.Resource;
 import javax.sql.DataSource;
@@ -79,15 +80,6 @@ public class WebAppConfig {
 		transactionManager.setSessionFactory(sessionFactory().getObject());
 		return transactionManager;
 	}
-
-//	@Bean
-//	public UrlBasedViewResolver setupViewResolver() {
-//		UrlBasedViewResolver resolver = new UrlBasedViewResolver();
-//		resolver.setPrefix("/WEB-INF/views/");
-//		resolver.setSuffix(".jsp");
-//		resolver.setViewClass(JstlView.class);
-//		return resolver;
-//	}
 
 	@Bean
 	public CorsFilter corsFilter() {

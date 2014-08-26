@@ -398,17 +398,12 @@ $scope.getListOfElementsByParent=function(id)
 		$scope.modalInfo.title = 'Dodawanie kategorii';
 		$scope.modalInfo.buttonText = 'Dodaj';
 		$scope.modalInfo.op = '0';
-
-		console.log($scope.categoryForModal);
 	}
 
 	$scope.addOrUpdate = function(op, id) {
 		if (op == 0) {
-			console.log($scope.categoryForModal.name);
 			AddCategory($scope, $http);
 		} else if (op == 1) {
-			console.log(op);
-			console.log(id);
 			EditCategory(id, $scope.categoryForModal.name ,$scope.categoryForModal.description, $scope.categoryForModal.parent ,$scope, $http);
 		}
 	}
@@ -455,16 +450,11 @@ $scope.getFlatList = function() {
 
 $scope.SetCategoryForModal = function($id)
 {
-	//console.log($scope.GetCategoryById($id));
 	$scope.categoryForModal = $scope.GetCategoryById($id);
-
-	//console.log($scope.categoryForModal);
 
 	$scope.modalInfo.title = 'Edycja kategorii';
 	$scope.modalInfo.buttonText = 'Zatwierdü zmiany';
 	$scope.modalInfo.op = '1';
-
-	console.log($scope.getFlatList());
 }
 
 $scope.UpdateCategory=function($id)
@@ -686,25 +676,14 @@ $scope.removeSelected=function(){
 	}
 };
 
-//$scope.groupForModal = null;
-
 $scope.SetGroupForModal=function($id)
 {
-	//console.log($scope.groups);
-
 	$scope.groupForModal = $scope.GetIndexOfGroupById($id);
 	$scope.modalInfo.title = 'Edycja grupy';
 	$scope.modalInfo.buttonText = 'Zatwierdü zmiany';
 	$scope.modalInfo.op = '1';
-	//console.log($scope.groupForModal);
-	// var idx = $scope.GetIndexOfGroupById($id);
-	// $scope.groupForModal = jQuery.extend(true, {}, $scope.groups[idx]);
 }
 
-// $scope.UpdateGroup=function($id)
-// {
-// 	UpdateGroup($scope, $http, $id);
-// }
 
 $scope.CreateNewGroup=function()
 {
@@ -879,21 +858,8 @@ $scope.categoryForModal = {'name': '', 'description': '', 'parent':''};
 
 	$scope.getlistOfCategories();
 
-
-	// $scope.addParents() = function() {
-	// 	for(var cat in $scope.listOfCategories) {
-	// 			cat["parent"] = null;
-	// 		}
-	// }
-
-	// $scope.addParents();
-
-	console.log($scope.listOfCategories);
-
 	$scope.addCategory = function()
 	{
-
-		console.log($scope.categoryForModal.name);
 		AddCategory($scope, $http);
 	};
 
@@ -1023,39 +989,15 @@ $scope.remove=function($id){
 };
 
 
-//$scope.categoryForModal = null;
-
 $scope.SetCategoryForModal = function($id)
 {
-	console.log($scope.GetCategoryById($id));
 	$scope.categoryForModal = $scope.GetCategoryById($id);
-	console.log($scope.categoryForModal);
 }
 
 $scope.UpdateCategory=function($id)
 {
 	$scope.editCategory($id);
 }
-
-// $scope.CreateNewTag=function()
-// {
-// 	$scope.tagForModal = {
-// 		id: -1,
-//       name:  "",
-//       parent: "null"
-//    };
-// }
-
-// $scope.AddNewTag=function()
-// {
-// 	$scope.addCategory();
-// }
-  
-//   $scope.getImage = function(id, width, height){
-//     return 'http://placehold.it/' + width + 'x' + height;
-//   };
-  
-//$scope.orderProp = '';
   
 });
 

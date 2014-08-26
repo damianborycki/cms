@@ -1,6 +1,7 @@
-package com.portal.init;
+package com.portal.util;
 
 import java.util.List;
+
 
 public class ClassParentComment {
 

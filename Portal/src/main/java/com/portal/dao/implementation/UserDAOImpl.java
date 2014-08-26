@@ -5,8 +5,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -15,7 +13,6 @@ import java.util.regex.Pattern;
 import javax.servlet.http.HttpServletResponse;
 
 import com.portal.dao.interfaces.UserDAOI;
-import com.portal.init.ClassUser;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.hibernate.Criteria;
@@ -30,9 +27,10 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Repository;
 
-import com.portal.entity.Comment;
 import com.portal.entity.Group;
 import com.portal.entity.User;
+import com.portal.util.ClassUser;
+import com.portal.util.HashcodeGenerator;
 
 @Repository
 public class UserDAOImpl implements UserDAOI {
@@ -301,25 +299,15 @@ public class UserDAOImpl implements UserDAOI {
         user.setInfo(null);
         
         Group userGroup = (Group) session.load(Group.class, 4l);
-        user.setGroup(userGroup);   
+        user.setGroup(userGroup);
         
-        MessageDigest messageDigest;
-        String hashedPass = "";
-        
-		try {
-			messageDigest = MessageDigest.getInstance("MD5");
-			messageDigest.update(user.getPassword().getBytes(), 0, user.getPassword().length());  
-	        hashedPass = new BigInteger(1, messageDigest.digest()).toString(16);  
-	        
-	        if (hashedPass.length() < 32) {
-	           hashedPass = "0" + hashedPass; 
-	        }
-	        
-	        user.setPassword(hashedPass);
-	        
-		} catch (NoSuchAlgorithmException e1) {
-			e1.printStackTrace();
-		}  
+        try {
+			user.setPassword(HashcodeGenerator.getMD5(user.getPassword()));
+		} catch (NoSuchAlgorithmException e2) {
+			e2.printStackTrace();
+			
+			return null;
+		}
 
         User userToReturn = null;
         

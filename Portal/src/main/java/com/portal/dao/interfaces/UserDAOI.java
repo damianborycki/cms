@@ -1,7 +1,7 @@
 package com.portal.dao.interfaces;
 
 import com.portal.entity.User;
-import com.portal.init.ClassUser;
+import com.portal.util.ClassUser;
 
 import java.util.List;
 

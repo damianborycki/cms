@@ -7,9 +7,9 @@ import com.portal.entity.Article;
 import com.portal.entity.Comment;
 import com.portal.entity.CommentState;
 import com.portal.entity.User;
-import com.portal.init.ParentComment;
-import com.portal.init.ClassParentComment;
-import com.portal.init.ClassComment;
+import com.portal.util.ClassComment;
+import com.portal.util.ClassParentComment;
+import com.portal.util.ParentComment;
 
 import java.lang.reflect.Field;
 import java.util.*;

@@ -1,4 +1,4 @@
-package com.portal.init;
+package com.portal.util;
 
 import java.util.ArrayList;
 import java.util.List;

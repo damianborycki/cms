@@ -2,8 +2,8 @@ package com.portal.dao.interfaces;
 
 
 import com.portal.entity.Comment;
-import com.portal.init.ClassParentComment;
-import com.portal.init.ClassComment;
+import com.portal.util.ClassComment;
+import com.portal.util.ClassParentComment;
 
 import java.util.ArrayList;
 import java.util.List;

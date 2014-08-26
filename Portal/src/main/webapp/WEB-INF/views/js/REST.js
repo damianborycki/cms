@@ -63,10 +63,9 @@ function EditUser($scope, $http, login, userData){
 function GetCurrentUserLogin($scope, $http){
 	$http.get(servicesContext + '/getCurrentUser').
 	  success(function(data, status, headers, config) {
-		  console.log(data);
 		$scope.userLoggedIn = true;
 		$scope.currentUserName.data = data.login;
-			console.log($scope.currentUserName.data);
+
 		if (data.group)
 		$scope.currentUserGroup = data.group.id;
 	  }).
@@ -208,6 +207,7 @@ function GetArticlesByCategory(categoryId, limit, pageNo, sortOrder, sortBy, $sc
 };
 
 function LoginExists($scope, $http, login){
+	
 	$http.post(servicesContext + '/loginExists', {login: login}).
 	  success(function(data, status, headers, config) {	  	
 		$scope.loginE = data;

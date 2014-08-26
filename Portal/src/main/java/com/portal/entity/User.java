@@ -4,7 +4,7 @@ import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
-import com.portal.init.JsonDateSerializer;
+import com.portal.util.JsonDateSerializer;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;

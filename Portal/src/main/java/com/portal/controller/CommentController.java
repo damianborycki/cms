@@ -3,8 +3,8 @@ package com.portal.controller;
 import com.portal.dao.interfaces.CommentDAOI;
 import com.portal.dao.interfaces.UserDAOI;
 import com.portal.entity.Comment;
-import com.portal.init.ClassComment;
-import com.portal.init.ClassParentComment;
+import com.portal.util.ClassComment;
+import com.portal.util.ClassParentComment;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

@@ -87,8 +87,6 @@ $http({method: 'GET', url: servicesContext + '/category'}).
 					$scope.listOfCategories[i].children[j]["parent"] = $scope.listOfCategories[i].id;
 				}
 		}
-
-		console.log($scope.listOfCategories);
 	  }); 
 	};
 	
@@ -99,8 +97,6 @@ var parent = $scope.categoryForModal.parent;
 var descr = $scope.categoryForModal.description;
 
 if (parent == "null") parent = null;
-
-console.log(parent);
 
 $http({method: 'POST', url: servicesContext + '/category', data: {name: name, description: descr, parentId: parent}}).
 	  success(function(data, status, headers, config) {
@@ -217,7 +213,6 @@ function GetGroups($scope, $http) {
 	$http({method: 'GET', url: servicesContext + '/group'}).
 	  success(function(data, status, headers, config) {
 	  	$scope.groups = data;
-	  	console.log($scope.groups);
 	  }); 
 }
 
@@ -263,7 +258,6 @@ function GetUsers($scope, $http, pageNO){
 				$scope.listOfUsers[i].group.selected = $scope.listOfUsers[i].group.id;
 			}	
 
-			console.log($scope.listOfUsers);	
 		});			
 }
 
@@ -286,10 +280,7 @@ function SetUserGroup($scope, $http, user, groupId){
 	$http({method: 'PATCH', url: servicesContext + '/setUserGroup/' + user.login, 
 			data: {id : groupId}}).
 	  success(function(data, status, headers, config) {	
-	  	//console.log($scope.getUserPosById(user.id));	
-	  	//console.log($scope.listOfUsers[$scope.getUserPosById(user.id)].group.id + ' '+ $scope.listOfUsers[$scope.getUserPosById(user.id)].group.selected);
 	  	$scope.listOfUsers[$scope.getUserPosById(user.id)].group.id = groupId;
-
 	  }); 
 }
 
@@ -308,7 +299,8 @@ function GetCurrentUserLogin($scope, $http){
 	}); 
 };
 function LoginExists($scope, $http, login){
-	$http.post(servicesContext + '/portal/loginExists', {login: login}).
+	
+	$http.post(servicesContext + '/loginExists', {login: login}).
 	  success(function(data, status, headers, config) {	  	
 		$scope.loginE = data;		
 		if(data == 'true'){
@@ -321,7 +313,7 @@ function LoginExists($scope, $http, login){
 };
 
 function EmailExists($scope, $http, email){
-	$http.post(servicesContext + '/portal/emailExists', {email: email}).
+	$http.post(servicesContext + '/emailExists', {email: email}).
 	  success(function(data, status, headers, config) {
 		$scope.emailE = data;
 
