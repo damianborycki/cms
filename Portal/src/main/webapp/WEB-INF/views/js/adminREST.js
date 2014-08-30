@@ -304,8 +304,7 @@ function LoginExists($scope, $http, login){
 	  success(function(data, status, headers, config) {	  	
 		$scope.loginE = data;		
 		if(data == 'true'){
-			$scope.uniqueL = false;		
-			alert($scope.uniqueL);
+			$scope.uniqueL = false;
 	  	} else {	  		
 	  		$scope.uniqueL = true;			  		
 	  	}

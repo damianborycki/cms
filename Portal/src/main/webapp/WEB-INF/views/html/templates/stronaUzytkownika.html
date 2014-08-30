@@ -5,20 +5,36 @@
             </div>
 		
 	  <div class="col-md-12" style="color: #000; ">
-              <div class="col-md-3">&nbsp;<img src="{{getImage(searchedUser.avatar, 150, 150)}}" class="img-responsive"/> <br>
-			   <a class="btn btn btn-primary" style="width:150px;" ng-show="searchedUser.login == currentUserName.data"> Zmień avatar</a>
+              <div class="col-md-3" style="margin-top:27px; padding-left:0px;"><img src="{{getImage(searchedUser.avatar, 150, 150)}}" class="img-responsive" style="width:100%;"/> <br>
+			   <a class="btn btn btn-primary" style="width:100%" ng-show="searchedUser.login == currentUserName.data"> Zmień avatar</a>
+			   <a class="btn btn btn-danger" style="width:100%; margin-top:10px;" ng-show="searchedUser.login == currentUserName.data" ng-click="click6()"> Zmień hasło</a>
+			   <span ng-show="showEditPass">
+			     <form name="editPassForm" style="display:inline;">
+			   		<input type="password" ng-minlength="6" required class="form-control" style="margin-top:5px;" ng-model="searchedUser.pass" placeholder="Aktualne hasło"/>
+			   		<input type="password" name="pass1" ng-minlength="6" required ng-maxlenght="20" class="form-control" style="margin-top:5px;" ng-model="searchedUser.pass1" placeholder="Nowe hasło"/>
+			   		<input type="password" name="pass2" ng-minlength="6" required ng-maxlenght="20" class="form-control" style="margin-top:5px; margin-bottom:5px;" ng-model="searchedUser.pass2" placeholder="Powtórz nowe hasło"/>
+			   			<a class="btn btn-sm btn-primary pull-right" style="margin:2px;" ng-click="click6()"  ng-show="searchedUser.login == currentUserName.data" >Anuluj</a>
+					 	<button class="btn btn-sm btn-success pull-left " type="submit" ng-disabled="!editPassForm.$valid || editPassForm.pass1.$error.minlength || editPassForm.pass2.$error.minlength" style="margin:2px;" ng-click="editPass()"> Zapisz</button>
+			   	 </form>
+			   </span>
 			  </div>
 
 			  <div class="tytul1" style="text-align: center; font-size: 20px; font-weight:bold;">Dane użytkownika</div>
 			  
 			  <div class=" col-md-9" style="font-size:14px; color: black; background-color:#C0C0C0; padding-top:5px; padding-bottom:5px; margin-bottom:5px;">
-			  	<span ><span style="font-weight:bold; ">Imię: </span><span ng-show="showEditName" style="font-weight:normal;">{{searchedUser.name}}</span>
+			  	<span ><span style="font-weight:bold; ">Imię: </span>
+			  		<span ng-show="showEditName" style="font-weight:normal;">
+			  			<span ng-show="searchedUser.name==''">Nie podano</span>
+			  			  	{{searchedUser.name}}
+			  		</span>
 			  	<span ng-show="!showEditName" style="">
+			  		<form name="editNameForm" style="display:inline;">
 			  			<a class="btn btn-sm btn-primary pull-right" style="margin:2px;" ng-click="click1()"  ng-show="searchedUser.login == currentUserName.data">Anuluj</a>
-					 	<a class="btn btn-sm btn-success pull-right " style="margin:2px;" ng-click="editName()"> Zapisz</a>
+					 	<button class="btn btn-sm btn-success pull-right " type="submit" ng-disabled="!editNameForm.$valid" style="margin:2px;" ng-click="editName()"> Zapisz</button>
 			  			<span class="col-md-4 pull-right">			  			
-							<input type="text" class="form-control"  placeholder="Podaj imię..." required="" ng-model="searchedUser.name"/>
+							<input type="text" class="form-control"  ng-pattern="/^[A-Za-z'\-żźćńółęąśŻŹĆĄŚĘŁÓŃ]{0,20}$/" placeholder="Podaj imię..." ng-model="searchedUser.name2"/>
 						</span>
+					</form>
               	</span>
 			  	</span>
 			  	<a class="btn btn-sm btn-warning pull-right"  ng-click="click1()" style="width:120px;"  ng-show="searchedUser.login == currentUserName.data && showEditName" > Zmień imię</a>
@@ -28,13 +44,19 @@
 			  
 			  <div class=" col-md-9 pull-right" style="font-size:14px; color: black; background-color:#C0C0C0; padding-top:5px; padding-bottom:5px;  margin-bottom:5px;">
 
-			  	<span ><span style="font-weight:bold; ">Nazwisko: </span><span ng-show="showEditSurname" style="font-weight:normal;">{{searchedUser.surname}}</span>
+			  	<span ><span style="font-weight:bold; ">Nazwisko: </span>
+			  		<span ng-show="showEditSurname" style="font-weight:normal;">
+			  			<span ng-show="searchedUser.surname==''">Nie podano</span>
+			  			{{searchedUser.surname}}
+			  		</span>
 			  	<span ng-show="!showEditSurname" style="">
+			  		<form name="editSurnameForm" style="display:inline;">
 			  			<a class="btn btn-sm btn-primary pull-right" style="margin:2px;" ng-click="click2()"  ng-show="searchedUser.login == currentUserName.data">Anuluj</a>
-					 	<a class="btn btn-sm btn-success pull-right " style="margin:2px;" ng-click="editSurname()"> Zapisz</a>
+					 	<button class="btn btn-sm btn-success pull-right " type="submit" ng-disabled="!editSurnameForm.$valid" style="margin:2px;" ng-click="editSurname()"> Zapisz</button>
 			  			<span class="col-md-4 pull-right">			  			
-							<input type="text" class="form-control"  placeholder="Podaj nazwisko..." required="" ng-model="searchedUser.surname"/>
+							<input type="text" class="form-control" ng-pattern="/^[A-Za-z'\-żźćńółęąśŻŹĆĄŚĘŁÓŃ]{0,20}$/" placeholder="Podaj nazwisko..." ng-model="searchedUser.surname2"/>
 						</span>
+					</form>
               	</span>
 			  	</span>
 			  	<a class="btn btn-sm btn-warning pull-right"  ng-click="click2()" style="width:120px;"  ng-show="searchedUser.login == currentUserName.data && showEditSurname" > Zmień nazwisko</a>
@@ -42,13 +64,19 @@
 			  </div>
 
 			  <div class=" col-md-9 pull-right" style="font-size:14px; color: black; background-color:#C0C0C0; padding-top:5px; padding-bottom:5px; margin-bottom:5px;">
-			  	<span ><span style="font-weight:bold; ">Miasto: </span><span ng-show="showEditCity" style="font-weight:normal;">{{searchedUser.city}}</span>
+			  	<span ><span style="font-weight:bold; ">Miasto: </span>
+			  	<span ng-show="showEditCity" style="font-weight:normal;">
+			  		<span ng-show="searchedUser.city==''">Nie podano</span>
+			  		{{searchedUser.city}}
+			  	</span>
 			  	<span ng-show="!showEditCity" style="">
+			  		<form name="editCityForm" style="display:inline;">
 			  			<a class="btn btn-sm btn-primary pull-right" style="margin:2px;" ng-click="click3()"  ng-show="searchedUser.login == currentUserName.data">Anuluj</a>
-					 	<a class="btn btn-sm btn-success pull-right " style="margin:2px;" ng-click="editCity()"> Zapisz</a>
+					 	<button class="btn btn-sm btn-success pull-right " type="submit" ng-disabled="!editCityForm.$valid" style="margin:2px;" ng-click="editCity()"> Zapisz</button>
 			  			<span class="col-md-4 pull-right">			  			
-							<input type="text" class="form-control"  placeholder="Podaj miasto..." required="" ng-model="searchedUser.city"/>
+							<input type="text" class="form-control" placeholder="Podaj miasto..." ng-model="searchedUser.city2"/>
 						</span>
+					</form>
               	</span>
 			  	</span>
 			  	<a class="btn btn-sm btn-warning pull-right"  ng-click="click3()" style="width:120px;"  ng-show="searchedUser.login == currentUserName.data && showEditCity" > Zmień Miasto</a>
@@ -60,11 +88,13 @@
               	<span ><span style="font-weight:bold; ">Płeć: </span>
               		<span style="font-weight:normal;" ng-show="searchedUser.gender == 'M'">Mężczyzna</span>
 			  		<span style="font-weight:normal;" ng-show="searchedUser.gender == 'K'">Kobieta</span>
+			  		<span style="font-weight:normal; text-decoration:underline;" ng-show="searchedUser.gender == ''">Nie podano</span>
+			  		
 			  	<span ng-show="!showEditGender" style="">
 			  			<a class="btn btn-sm btn-primary pull-right" style="margin:2px;" ng-click="click4()"  ng-show="searchedUser.login == currentUserName.data">Anuluj</a>
 					 	<a class="btn btn-sm btn-success pull-right " style="margin:2px;" ng-click="editGender()"> Zapisz</a>
 			  			<span class="col-md-4 pull-right">
-			  				<select class="form-control" ng-model="searchedUser.gender">
+			  				<select class="form-control" ng-model="searchedUser.gender2">
                   				<option value="">-wybierz płec-</option>                  
                   				<option value="K">kobieta</option>
                   				<option value="M">mężczyzna</option>
@@ -81,11 +111,13 @@
 
 			  	<span ><span style="font-weight:bold; ">Email: </span><span ng-show="showEditEmail" style="font-weight:normal;">{{searchedUser.email}}</span>
 			  	<span ng-show="!showEditEmail" style="">
+			  		<form name="editEmailForm" style="display:inline;">
 			  			<a class="btn btn-sm btn-primary pull-right" style="margin:2px;" ng-click="click5()"  ng-show="searchedUser.login == currentUserName.data">Anuluj</a>
-					 	<a class="btn btn-sm btn-success pull-right " style="margin:2px;" ng-click="editEmail()"> Zapisz</a>
+					 	<button class="btn btn-sm btn-success pull-right " type="submit" ng-disabled="!editEmailForm.$valid" style="margin:2px;" ng-click="editEmail()"> Zapisz</button>
 			  			<span class="col-md-4 pull-right">			  			
-							<input type="email" class="form-control"  placeholder="Podaj email..." required="" ng-model="searchedUser.email"/>
+							<input type="email" name="email" class="form-control" placeholder="Podaj email..." required ng-model="searchedUser.email2" value="test@email.com"/>
 						</span>
+					</form>
               	</span>
 			  	</span>
 			  	<a class="btn btn-sm btn-warning pull-right"  ng-click="click5()" style="width:120px;"  ng-show="searchedUser.login == currentUserName.data && showEditEmail" > Zmień Email</a>			  
@@ -100,25 +132,47 @@
 			  </div>
 			  	
 			  <div class="col-md-9 pull-right" style="font-size:14px; color: black; background-color:#C0C0C0; padding-top:5px; padding-bottom:5px; margin-bottom:5px; text-align:left;">	
-			  <!-- <p style="height:100px; white-space:nowrap;">Informacje: <span style="font-weight:normal;">{{searchedUser.info}}</span></p>			   -->
-			  <p style="font-weight:bold;">Informacje: <span style="font-weight:normal;">{{searchedUser.info}}</span></p>
+			  <!-- <p style="height:100px; white-space:nowrap;">Informacje: <span style="font-weight:normal;">{{searchedUser.info}}</span></p>			   -->			  
+			  <p style="font-weight:bold;">
+			  	Informacje:			  	
+			  	<span style="font-weight:normal;">{{searchedUser.info}}</span>
+			  	<span ng-show="searchedUser.info == ''" style="font-weight:normal;">Brak opisu</span>
+			  </p>
 			  	<div class="przycisk1" style="text-align:right">
 			  	<a class="btn btn-sm btn-warning"  ng-click="click()" style="margin-bottom:5px; width:120px;"  ng-show="searchedUser.login == currentUserName.data && showEditDesc" > Zmień opis</a>
 
 			  	<div ng-show="!showEditDesc" style="margin-top:10px;">
-					 <div class="row" style="min-height:250px;">
+			  		Pozostało znaków: {{150-searchedUser.info2.length}}
+			  		<form name="editDescForm" style="display:inline;">
+					 <div class="row" style="min-height:250px; border-color:#C0C0C0;">
 						<div class="column">
-						<textarea class="span-6" rows="9" placeholder="Napisz opis..." required="" ng-model="searchedUser.info"
-						style="margin: 15px; height: 180px; width: 95%; resize:vertical; font-weight:normal;"></textarea>
-						<a class="btn btn-sm btn-primary pull-left" style="margin-top:10px; margin-left:10px;" ng-click="click()"  ng-show="searchedUser.login == currentUserName.data">Anuluj</a>
-						<a class="btn btn-sm btn-success pull-right" style="margin-top:10px; margin-right:10px;" ng-click="editDescription()"> Zapisz</a>
+							<textarea class="span-6" rows="9" placeholder="Napisz opis..." maxlength="150" ng-model="searchedUser.info2"
+							style="margin: 15px; height: 180px; width: 95%; resize:vertical; font-weight:normal;"></textarea>
+							<a class="btn btn-sm btn-primary pull-left" style="margin-top:10px; margin-left:10px;" ng-click="click()"  ng-show="searchedUser.login == currentUserName.data">Anuluj</a>
+							<a class="btn btn-sm btn-success pull-right" style="margin-top:10px; margin-right:10px;" ng-click="editDescription()"> Zapisz</a>
 						</div>
 					 </div>
-					</div>
+					</form>
+				</div>					
               	</div>
               </div>
-			  
-
+              <div ng-show="!editNameForm.$valid || !editSurnameForm.$valid || !editEmailForm.$valid || editPassFormError" class=" col-md-9 pull-right" style="font-size:14px; color: black; background-color:#C0C0C0; padding-top:5px; padding-bottom:5px;  margin-bottom:5px;">
+              	<span class="help-block" style="color:#CC330E; font-size: 13px;" data-ng-show="!editNameForm.$valid">
+                  <span style="background-color:#F13333;" class="badge pull-left" >!</span>&nbsp;Wprowadzono niedozwolone znaki w <b>imieniu</b>
+                </span>              
+                <span class="help-block" style="color:#CC330E; font-size: 13px;" data-ng-show="!editSurnameForm.$valid">
+                  <span style="background-color:#F13333;" class="badge pull-left" >!</span>&nbsp;Wprowadzono niedozwolone znaki w <b>nazwisku</b>
+                </span>
+                <span class="help-block" style="color:#CC330E; font-size: 13px;" data-ng-show="!editEmailForm.$valid">
+                  <span style="background-color:#F13333;" class="badge pull-left" >!</span>&nbsp;Wprowadzono niepoprawny adres <b>email</b> lub jest on już używany
+                </span>
+                <span class="help-block" style="color:#CC330E; font-size: 13px;" data-ng-show="editPassFormError">
+                  <span style="background-color:#F13333;" class="badge pull-left" >!</span>&nbsp;Wprowadzono nieprawidłowe hasło lub nowe hasła się nie zgadzają
+                </span>
+                <span class="help-block" style="color:#CC330E; font-size: 13px;" data-ng-show="editPassForm.pass1.$error.minlength || editPassForm.pass2.$error.minlength">
+                <span style="background-color:#F13333;" class="badge pull-left ">!</span>&nbsp;Minimum 6 znaków jest wymagane
+              </span>
+              </div>
 			  
 			</div>
 			<div class="col-md-12">
@@ -129,25 +183,22 @@
         
 	  <div class="col-md-12" style="color: #000">
 		<div class="tytul2" style="text-align: left; font-size: 20px;">Komentarze użytkownika</div><br>
-		
-				<div paging page="commentsPage" page-size="commentsLimit" total="total" show-prev-next="true" adjacent="1" paging-action="ChangePage(page)"></div>	
+			<div paging page="commentsPage" page-size="commentsLimit" total="total" show-prev-next="true" adjacent="1" paging-action="ChangePage(page)"></div>
+				<hr style="margin: 5px 5px 5px 5px;" ng-hide="$last">
 	<ul class="list-group">
-            <li class="list-group-item list1" ng-repeat="komentarz in userComments">
-              <div class="row">
-                <div class="col-md-2">
-				  <h3>  <div class="komentarz_login">{{searchedUser.login}}</div></h3>
+            <li class="list-group-item list1" ng-repeat="komentarz in userComments" style="padding:0px 15px;">
+              <div class="row" style="padding-bottom:0px;">
+                <div class="col-md-2" style="">
+				  <h5>  <div class="komentarz_login">{{searchedUser.login}}</div></h5>
                   <!--<h3 contenteditable="true"> {{komentarz.userId}}</h3>-->
-				  <p> {{milisecToDate(komentarz.date)}}</p> 
+				  <p style="font-size:0.7em;"> {{milisecToDate(komentarz.date)}}</p> 
                 </div>
-                <div class="col-md-10">
-                  <p class="text-justify commentText" ng-class="{show: show && komentarz.content.length > 100}">{{komentarz.content}}</p>
+                <div class="col-md-10" style="border-left: 1px solid #eee;">
+                  <p class="text-justify commentText" ng-class="{show: show && komentarz.content.length > 100}" style="margin-top:10px; font-size:13px; font-weight:normal;">{{komentarz.content}}</p>
 					<a ng-click="show = true" ng-hide="show || komentarz.content.length <= 100">Pokaż całość</a>
 					<a ng-click="show = false" ng-show="show && komentarz.content.length > 100">Ukryj</a>
-                </div>
-				<div class="col-md-10 text-right">
-					<a class="btn btn-success btn-p" href="#article/{{komentarz.article.id}}">Pokaż artykuł</a>
-					
-				</div>
+					<a class="btn btn-success btn-p btn-sm pull-right" href="#article/{{komentarz.article.id}}">Pokaż artykuł</a>
+                </div>				
 			</div>
 			<hr style="margin: 5px 5px 5px 5px;" ng-hide="$last">
 		</li>

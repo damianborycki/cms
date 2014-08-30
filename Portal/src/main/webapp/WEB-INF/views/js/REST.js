@@ -116,7 +116,8 @@ function GetCategoriesForBreadCrumbs(id, $scope, $http){
 function GetUser(name, $scope, $http){
 	$http.get(servicesContext + '/userProfile/' + name).
 	  success(function(data, status, headers, config) {
-		$scope.searchedUser = data;
+		$scope.searchedUser = data;		
+		$scope.searchedUser.email2 = "test@email.com";		
 	  }).
 	  error(function(data, status, headers, config) {
 
@@ -220,15 +221,24 @@ function LoginExists($scope, $http, login){
 	  });
 };
 
-function EmailExists($scope, $http, email){
+function EmailExists($scope, $http, email, isRegistration){
 	$http.post(servicesContext + '/emailExists', {email: email}).
 	  success(function(data, status, headers, config) {
 		$scope.emailE = data;
 
-		if(data == 'true'){ 			
-			$scope.regForm.userEmail.$setValidity('unique',false);			
-	  	} else {	  		
-	  		$scope.regForm.userEmail.$setValidity('unique', true);  		
+		if(data == 'true'){ 
+			if(isRegistration){
+				$scope.regForm.userEmail.$setValidity('unique',false);
+			}else{
+				$scope.editEmailForm.email.$setValidity('unique',false);
+			}				
+	  	} else {
+	  		if(isRegistration){
+	  			$scope.regForm.userEmail.$setValidity('unique', true);	
+	  		} else{
+	  			$scope.editEmailForm.email.$setValidity('unique',true);
+	  			EditUser($scope, $http, $scope.userName, {'login': $scope.userName, 'email': $scope.searchedUser.email2});
+	  		}	
 	  	}		
 	  });
 };
