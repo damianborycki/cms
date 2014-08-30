@@ -281,10 +281,12 @@ public class CommentDAOImpl implements CommentDAOI {
 		Criteria criteria = session.createCriteria(Comment.class);
 		criteria.add(Restrictions.eq("parent", comment));
 		
+		List<Comment> comments = criteria.list();
+		
 		if (session != null)
 			session.close();
 		
-		return criteria.list();
+		return comments;
 	}
 
 	@Override
