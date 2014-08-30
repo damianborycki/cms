@@ -119,13 +119,19 @@ public class UserDAOImpl implements UserDAOI {
     	Pattern patternEmail = Pattern.compile(emailPattern);
     	Pattern patternLogin = Pattern.compile(loginPattern);
     	
-    	Matcher matcherEmail = patternEmail.matcher(user.getEmail().trim());
+    	Matcher matcherEmail = null;
+    	
+    	if(user.getEmail() != null) {
+    		matcherEmail = patternEmail.matcher(user.getEmail().trim());
+    		
+    		if (!matcherEmail.matches()) return false;
+    	}
+    	
     	Matcher matcherLogin = patternLogin.matcher(user.getLogin().trim());
     	
-    	if (!matcherEmail.matches()) return false;
     	if (!matcherLogin.matches()) return false;
     	
-        if (user.getPassword() == null || user.getPassword().length() < 6) return false;
+        if (user.getPassword() != null && user.getPassword().length() < 6) return false;
         
         if (user.getGender() != null && !user.getGender().trim().equalsIgnoreCase("K") && !user.getGender().trim().equalsIgnoreCase("M"))
         	return false;
