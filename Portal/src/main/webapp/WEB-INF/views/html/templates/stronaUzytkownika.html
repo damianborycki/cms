@@ -1,4 +1,9 @@
-﻿
+﻿<style>
+	.noChar{
+		font-weight:bold;
+		color:red;
+	}
+</style>
 	  <div class="row" >
 		  <div class="badge page-header" style="padding-top:15px; padding-bottom:15px; width:100%; color: black; background-color: #C0C0C0; font-size:2em; " >
               &nbsp;Użytkownik:&nbsp;<b style="font-weight:bold;" class="nazwa_uzytk">{{searchedUser.login}}</b>              
@@ -142,14 +147,16 @@
 			  	<a class="btn btn-sm btn-warning"  ng-click="click()" style="margin-bottom:5px; width:120px;"  ng-show="searchedUser.login == currentUserName.data && showEditDesc" > Zmień opis</a>
 
 			  	<div ng-show="!showEditDesc" style="margin-top:10px;">
-			  		Pozostało znaków: {{200-searchedUser.info2.length}}
+			  		<span ng-class="{'noChar': searchedUser.info2.length == 200}">
+			  			Pozostało znaków: {{200-searchedUser.info2.length}}
+			  		</span>
 			  		<form name="editDescForm" style="display:inline;">
 					 <div class="row" style="min-height:250px; border-color:#C0C0C0;">
 						<div class="column">
-							<textarea class="span-6" rows="9" placeholder="Napisz opis..." maxlength="200" ng-model="searchedUser.info2"
+							<textarea class="span-6 form-control" rows="9" placeholder="Napisz opis..." maxlength="200" ng-model="searchedUser.info2"
 							style="margin: 15px; height: 180px; width: 95%; resize:vertical; font-weight:normal;"></textarea>
-							<a class="btn btn-sm btn-primary pull-left" style="margin-top:10px; margin-left:10px;" ng-click="click()"  ng-show="searchedUser.login == currentUserName.data">Anuluj</a>
-							<a class="btn btn-sm btn-success pull-right" style="margin-top:10px; margin-right:10px;" ng-click="editDescription()"> Zapisz</a>
+							<a class="btn btn-sm btn-primary pull-left" style="margin-top:10px; margin-left:15px;" ng-click="click()"  ng-show="searchedUser.login == currentUserName.data">Anuluj</a>
+							<a class="btn btn-sm btn-success pull-right" style="margin-top:10px; margin-right:15px;" ng-click="editDescription()"> Zapisz</a>
 						</div>
 					 </div>
 					</form>
@@ -188,12 +195,12 @@
 	<ul class="list-group">
             <li class="list-group-item list1" ng-repeat="komentarz in userComments" style="padding:0px 15px;">
               <div class="row" style="padding-bottom:0px;">
-                <div class="col-md-2" style="">
+                <div class="col-md-3" style="">
 				  <h5>  <div class="komentarz_login">{{searchedUser.login}}</div></h5>
                   <!--<h3 contenteditable="true"> {{komentarz.userId}}</h3>-->
 				  <p style="font-size:0.7em;"> {{milisecToDate(komentarz.date)}}</p> 
                 </div>
-                <div class="col-md-10" style="border-left: 1px solid #eee;">
+                <div class="col-md-9" style="border-left: 1px solid #eee;">
                   <p class="text-justify commentText " ng-class="{show: show && komentarz.content.length > 100}" style="margin-top:10px; font-size:13px; font-weight:normal;">{{komentarz.content}}</p>
 					<a ng-click="show = true" ng-hide="show || komentarz.content.length <= 100">Pokaż całość</a>
 					<a ng-click="show = false" ng-show="show && komentarz.content.length > 100">Ukryj</a>										
