@@ -364,12 +364,11 @@ public class CommentDAOImpl implements CommentDAOI {
 			com.setUser(user);
 			com.setContent(c.getContent());
 			com.setDate(c.getDate());
-			com.setResponsesNumber(c.getResponsesNumber());
-			com.setArticle(article);
+			com.setResponsesNumber(c.getResponsesNumber());			
 			com.setParent(parent);
 			// com.setState(state);
 
-			comments.add(com);
+			comments.add(com);						
 		}
 
 		ClassComment classComment = new ClassComment();

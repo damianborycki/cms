@@ -228,6 +228,7 @@ $scope.loadTags = function(query) {
 
 app.controller('GlownaController', function($scope, SharedData, $http, $location) {
 
+$('html,body').scrollTop(0);
 if ($location.$$absUrl.split('code=')[1] != undefined) {
   $scope.code = $location.$$absUrl.split('code=')[1].substring(0,32);
 }
@@ -314,7 +315,9 @@ $scope.getImage = function(id, width, height){
 
 
 app.controller('ArticleController', function($scope, $http, SharedData, $routeParams) {
-
+ 
+ $('html,body').scrollTop(0);
+ 
  $scope.getImage = function(id, width, height){
     return servicesContext + '/image?id=' + id + '&width=' + width + '&height=' + height;
   };
@@ -489,7 +492,7 @@ $scope.getTagString = function() {
 
 
 app.controller('ListaArtykolowControler', function($scope, $http, $location) {
-  
+  $('html,body').scrollTop(0);
   $scope.getImage = function(id, width, height){
     return servicesContext + '/image?id=' + id + '&width=' + width + '&height=' + height;
   };
@@ -529,7 +532,7 @@ $scope.getListOfArticles();
 
 
 app.controller('StronaUzytkownikaController', function($scope, $http, $routeParams, SharedData) {
-
+$('html,body').scrollTop(0);
 //$scope.currentUserName = SharedData.currentUserName;
 GetCurrentUserLogin($scope, $http);
 $scope.userName = $routeParams.userName;
@@ -701,7 +704,7 @@ $scope.getUserComments($scope.userName);
 
 
 app.controller('RejestracjaController', function($scope, $http) {
-
+$('html,body').scrollTop(0);
 $scope.user = 
   {'login': '',
   'email': '',

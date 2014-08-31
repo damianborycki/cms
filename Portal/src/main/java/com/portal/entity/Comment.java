@@ -80,8 +80,7 @@ public class Comment {
     private Comment parent;
     
     @ManyToOne
-    @JoinColumn(name = "article_id", nullable = true)
-    @JsonBackReference
+    @JoinColumn(name = "article_id", nullable = true)    
     private Article article;
     
 	@NotNull
