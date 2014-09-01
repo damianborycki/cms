@@ -534,6 +534,7 @@ $scope.getListOfArticles();
 app.controller('StronaUzytkownikaController', function($scope, $http, $routeParams, SharedData) {
 $('html,body').scrollTop(0);
 //$scope.currentUserName = SharedData.currentUserName;
+
 GetCurrentUserLogin($scope, $http);
 $scope.userName = $routeParams.userName;
 
@@ -803,9 +804,12 @@ $scope.addListener();
   
 	$scope.register = function()
 	{
-
-    $scope.removeCountry();
-
+    	$scope.removeCountry();
+    	if($scope.user.firstname == "") $scope.user.firstname = null;
+    	if($scope.user.lastname == "") $scope.user.lastname = null;
+    	if($scope.user.city == "") $scope.user.city = null;
+    	if($scope.user.gender == "") $scope.user.gender = null;
+    
 		Register($scope.user.login, $scope.user.password, $scope.user.email, $scope.user.firstname, $scope.user.lastname, $scope.user.city, $scope.user.gender, $scope, $http);
 	}
 	$scope.waitingForResponse = false;

@@ -1598,8 +1598,8 @@ app.controller('UsersController', function($scope, $http) {
 		return null;
 	};
 
-	$scope.ChangeGroup = function(user) {		
-		SetUserGroup($scope, $http, user, user.group.selected);
+	$scope.ChangeGroup = function(user) {
+		SetUserGroup($scope, $http, user, user.group.selected);		
 	};
 
 	$scope.BanUser = function(user){
@@ -1620,7 +1620,11 @@ app.controller('UsersController', function($scope, $http) {
 	$scope.clearModal = function(){
 		$scope.user.login = "";
 		$scope.user.email = "";
-	}; 
+	};
+	
+	$scope.register = function(){
+		Register($scope.user.login, null, $scope.user.email, null, null, null, null, $scope, $http);
+	};
 
 });
 

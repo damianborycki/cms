@@ -33,21 +33,22 @@ function Logout($scope, $http){
 };
 
 function Register(login, pass, email, firstname, lastname, city, gender, $scope, $http){
+	
 	$scope.waitingForResponse = true;
 	$http.post(servicesContext + '/user', {login: login, password: pass, email: email, firstname: firstname, city: city, gender: gender}).
 	  success(function(data, status, headers, config) {
 		$scope.Registered = status == "201";
 		$scope.waitingForResponse = false;
 
-		alert("Rejestracja zakończona powodzeniem! W ciągu najbliższych kilku minut powinieneś otrzymać na podany w rejestracji adres e-mail link aktywacyjny."); 
-		window.location.href = '/';
+		alert("Rejestracja zakończona powodzeniem! W ciągu najbliższych kilku minut powinieneś otrzymać na podany w rejestracji adres e-mail link aktywacyjny.");
+		window.location.href = '/portal';
 	  }).
 	  error(function(data, status, headers, config) {
 		$scope.waitingForResponse = false;
 		$scope.Registered = false;
 
-		alert("Ups, coś poszło nie tak. Zostaniesz przekierowany na stronę główną."); 
-		window.location.href = '/';
+		alert("Ups, coś poszło nie tak. Zostaniesz przekierowany na stronę główną.");
+		window.location.href = '/portal';
 	});
 };
 
