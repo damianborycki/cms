@@ -1,4 +1,4 @@
-ï»¿<style type="text/css">
+<style type="text/css">
   .form-val input.ng-invalid.ng-dirty{
     background-color: #EBC7B9;
   }
@@ -25,13 +25,13 @@
                 <input ng-keyup="lTest()" type="text" class="form-control" id="inputLogin3" ng-pattern="/^[A-Za-z0-9.-]{0,20}$/" name="userLogin" ng-model="user.login" ng-minlength="3" maxlength="20" placeholder="Podaj login" required>                 
               </div>
                 <span class="help-block" style="color:#CC330E;" data-ng-show="regForm.userLogin.$error.minlength">
-                  <span style="background-color:#F13333; font-size: 13px;" class="badge pull-left ">!</span>&nbsp;Minimum 3 znaki sÄ… wymagane
+                  <span style="background-color:#F13333; font-size: 13px;" class="badge pull-left ">!</span>&nbsp;Minimum 3 znaki s¹ wymagane
                 </span>
                 <span class="help-block" style="color:#CC330E;font-size:13px;" data-ng-show="loginE == 'true' && user.login.length>2">
-                  <span style="background-color:#F13333;" class="badge pull-left">!</span>&nbsp;Podany login juÅ¼ jest zajÄ™ty
+                  <span style="background-color:#F13333;" class="badge pull-left">!</span>&nbsp;Podany login ju¿ jest zajêty
                 </span>  
                 <span class="help-block" style="color:#CC330E; font-size: 13px;" data-ng-show="regForm.userLogin.$error.pattern">
-                  <span style="background-color:#F13333;" class="badge pull-left" ng-model="loginError">!</span>&nbsp;Wprowadzono niedozwolone znaki
+                  <span style="background-color:#F13333;" class="badge pull-left">!</span>&nbsp;Wprowadzono niedozwolone znaki
                 </span>
             </div> 
             <div class="form-group">
@@ -43,56 +43,56 @@
                 <span style="background-color:#F13333;" class="badge pull-left ">!</span>&nbsp;Podany email jest niepoprawny
               </span>
               <span class="help-block" style="color:#CC330E; font-size: 13px;" ng-show="emailE == 'true' && user.email.length > 0">
-                <span style="background-color:#F13333;" class="badge pull-left ">!</span>&nbsp;Podany email jest juÅ¼ zajÄ™ty
+                <span style="background-color:#F13333;" class="badge pull-left ">!</span>&nbsp;Podany email jest ju¿ zajêty
               </span>
             </div>
             <div class="form-group">
-              <label for="inputPassword3" class="col-sm-3 col-md-offset-0 control-label">HasÅ‚o*</label>
+              <label for="inputPassword3" class="col-sm-3 col-md-offset-0 control-label">Has³o*</label>
               <div class="col-sm-5">
-                <input type="password" ng-minlength="6" name="pass1" class="form-control" id="inputPassword3" ng-model="user.password" ng-pattern="" placeholder="Podaj hasÅ‚o" required>
+                <input type="password" ng-minlength="6" name="pass1" class="form-control" id="inputPassword3" ng-model="user.password" ng-pattern="" placeholder="Podaj has³o" required>
               </div>
               <span class="help-block" style="color:#CC330E; font-size: 13px;" data-ng-show="regForm.pass1.$error.minlength">
-                <span style="background-color:#F13333;" class="badge pull-left ">!</span>&nbsp;Minimum 6 znakÃ³w jest wymagane
+                <span style="background-color:#F13333;" class="badge pull-left ">!</span>&nbsp;Minimum 6 znaków jest wymagane
               </span>
             </div>
       
           <div class="form-group">
-              <label for="inputPassword3sec" class="col-sm-3 col-md-offset-0 control-label">PowtÃ³rz HasÅ‚o*</label>
+              <label for="inputPassword3sec" class="col-sm-3 col-md-offset-0 control-label">Powtórz Has³o*</label>
               <div class="col-sm-5">
-                <input ng-keyup="checkPass()" type="password" name="pass2" class="form-control" id="inputPassword3sec" ng-model="user.password1" placeholder="PonÃ³w hasÅ‚o" required>
+                <input ng-keyup="checkPass()" type="password" name="pass2" class="form-control" id="inputPassword3sec" ng-model="user.password1" placeholder="Ponów has³o" required>
               </div>
               <span class="help-block" style="color:#CC330E; font-size: 13px;" ng-show="user.password != user.password1 && user.password1.length>0">
-                <span style="background-color:#F13333;" class="badge pull-left ">!</span>&nbsp;Podane hasÅ‚a nie sÄ… takie same
+                <span style="background-color:#F13333;" class="badge pull-left ">!</span>&nbsp;Podane has³a nie s¹ takie same
               </span>
             </div>      
 
             <div class="form-group" style="margin-top: 4%;">
-              <label for="inputFirstName3" class="col-sm-3 col-md-offset-0 control-label">ImiÄ™</label>
+              <label for="inputFirstName3" class="col-sm-3 col-md-offset-0 control-label">Imiê</label>
               <div class="col-sm-5">
-                <input type="text" class="form-control" id="inputFirstName3" ng-pattern="/^[A-Za-z'\-Å¼ÅºÄ‡Å„Ã³Å‚Ä™Ä…Å›Å»Å¹Ä†Ä„ÅšÄ˜ÅÃ“Åƒ]{1,20}$/"  name="userFirstname" ng-model="user.firstname" placeholder="Podaj imiÄ™">
+                <input type="text" class="form-control" id="inputFirstName3" ng-pattern="/^[A-Za-z'\-¿Ÿæñó³ê¹œ¯Æ¥ŒÊ£ÓÑ]{1,20}$/"  name="userFirstname" ng-model="user.firstname" placeholder="Podaj imiê">
               </div>
               <span class="help-block" style="color:#CC330E; font-size: 13px;" data-ng-show="regForm.userFirstname.$error.pattern">
-                <span style="background-color:#F13333;" class="badge pull-left ">!</span>&nbsp;Wprowadzono nieprawidÅ‚owe znaki
+                <span style="background-color:#F13333;" class="badge pull-left ">!</span>&nbsp;Wprowadzono nieprawid³owe znaki
                 </span>
             </div>
 
             <div class="form-group">
               <label for="inputSurname3" class="col-sm-3 col-md-offset-0 control-label">Nazwisko</label>
               <div class="col-sm-5">
-                <input type="text" class="form-control" id="inputSurname3" ng-pattern="/^[A-Za-z'\-Å¼ÅºÄ‡Å„Ã³Å‚Ä™Ä…Å›Å»Å¹Ä†Ä„ÅšÄ˜ÅÃ“Åƒ]{1,20}$/"  name="userLastname" ng-model="user.lastname" placeholder="Podaj nazwisko">
+                <input type="text" class="form-control" id="inputSurname3" ng-pattern="/^[A-Za-z'\-¿Ÿæñó³ê¹œ¯Æ¥ŒÊ£ÓÑ]{1,20}$/"  name="userLastname" ng-model="user.lastname" placeholder="Podaj nazwisko">
               </div>
               <span class="help-block" style="color:#CC330E;" data-ng-show="regForm.userLastname.$error.pattern">
-                <span style="background-color:#F13333;" class="badge pull-left ">!</span>&nbsp;Wprowadzono nieprawidÅ‚owe znaki
+                <span style="background-color:#F13333;" class="badge pull-left ">!</span>&nbsp;Wprowadzono nieprawid³owe znaki
               </span>
             </div>
 
             <div class="form-group">
-              <label for="inputGender3" class="col-sm-3 col-md-offset-0 control-label">PÅ‚eÄ‡</label>
+              <label for="inputGender3" class="col-sm-3 col-md-offset-0 control-label">P³eæ</label>
               <div class="col-sm-5">
                 <select class="form-control" ng-model="user.gender">
-                  <option value="">- Wybierz pÅ‚eÄ‡ -</option>                  
+                  <option value="">- Wybierz p³eæ -</option>                  
                   <option value="K">kobieta</option>
-                  <option value="M">mÄ™Å¼czyzna</option>
+                  <option value="M">mê¿czyzna</option>
                 </select>
               </div>
             </div>
@@ -104,11 +104,11 @@
                 <input ng-blur="removeCountry()" ng-change="removeCountry()" type="text" class="form-control" id="city" ng-model="user.city" placeholder="Podaj miasto">
               </div>              
             </div>
-            <span class="col-md-offset-5" style="margin-left: 46%;">* - pola obowiÄ…zkowe</span>
+            <span class="col-md-offset-5" style="margin-left: 46%;">* - pola obowi¹zkowe</span>
             <div class="form-group">
             <br/>
               <div class="col-sm-5 col-sm-offset-3">            
-                <a ng-click="reset()" ng-disabled="!canReset()" class="btn btn-medium btn-primary col-md-3" style="width: 28%;">WyczyÅ›Ä‡</a>
+                <a ng-click="reset()" ng-disabled="!canReset()" class="btn btn-medium btn-primary col-md-3" style="width: 28%;">Wyczyœæ</a>
 
                 <a style="margin-left: 3%; width: 68%; padding-left:22%; padding-right:22%;" class="btn btn-medium btn-success col-md-8" 
                 ng-disabled="!regForm.$valid" ng-click="register()">Zarejestruj</a>

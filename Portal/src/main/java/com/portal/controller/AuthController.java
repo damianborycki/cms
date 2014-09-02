@@ -31,28 +31,34 @@ public class AuthController {
 	@RequestMapping(value = "/login", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, headers = {"content-type=application/json"})
 	public void createSession(@RequestBody com.portal.entity.User user, HttpServletRequest request, HttpServletResponse response) {
 		
-	    Authentication authenticationToken = new UsernamePasswordAuthenticationToken(user.getLogin(), user.getPassword());
-	    
-	    try {
-
-	        Authentication authentication = authenticationManager.authenticate(authenticationToken);
-
-	        SecurityContext securityContext = SecurityContextHolder.getContext();
-
-	        securityContext.setAuthentication(authentication);
-
-	        HttpSession session = request.getSession(true);
-	        session.setAttribute("SPRING_SECURITY_CONTEXT", securityContext);
-	        
-	        userDAO.setLastLoginDate(user.getLogin());
-	        
-	        response.setStatus(HttpServletResponse.SC_CREATED);
-
-	    } catch (AuthenticationException ex) {
-	    	
-	    	response.setStatus(HttpServletResponse.SC_NO_CONTENT);
-	    	
-	    }
+		com.portal.entity.User u = userDAO.getUser(user.getLogin());
+		
+		if(u.getGroup().getId() < 4l) {
+		
+		    Authentication authenticationToken = new UsernamePasswordAuthenticationToken(user.getLogin(), user.getPassword());
+		    
+		    try {
+	
+		        Authentication authentication = authenticationManager.authenticate(authenticationToken);
+	
+		        SecurityContext securityContext = SecurityContextHolder.getContext();
+	
+		        securityContext.setAuthentication(authentication);
+	
+		        HttpSession session = request.getSession(true);
+		        session.setAttribute("SPRING_SECURITY_CONTEXT", securityContext);
+		        
+		        userDAO.setLastLoginDate(user.getLogin());
+		        
+		        response.setStatus(HttpServletResponse.SC_CREATED);
+	
+		    } catch (AuthenticationException ex) {
+		    	
+		    	response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+		    }
+		} else {
+			response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+		}
 	    
 	}
 	

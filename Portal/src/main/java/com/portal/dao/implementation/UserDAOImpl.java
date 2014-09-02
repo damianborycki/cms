@@ -121,6 +121,8 @@ public class UserDAOImpl implements UserDAOI {
     	
     	Matcher matcherEmail = null;
     	
+    	
+    	
     	if(user.getEmail() != null) {
     		matcherEmail = patternEmail.matcher(user.getEmail().trim());
     		
@@ -326,25 +328,13 @@ public class UserDAOImpl implements UserDAOI {
             String activationCode = "";
             
     		try {
-    			
     			String nanos = ((Long) System.nanoTime()).toString();
-    			
-    			messageDigest2 = MessageDigest.getInstance("MD5");
-    			messageDigest2.update(nanos.getBytes(), 0, nanos.length());  
-    			activationCode = new BigInteger(1, messageDigest2.digest()).toString(16);  
-    	        
-    	        if (activationCode.length() < 32) {
-    	        	activationCode = "0" + activationCode; 
-    	        }
-    	        
+    			activationCode = HashcodeGenerator.getMD5(nanos);
     	        user.setCode(activationCode);
-    	        
     		} catch (NoSuchAlgorithmException e1) {
     			e1.printStackTrace();
     		}  
-        	
-        	
-        	
+
         	SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
 
             simpleMailMessage.setFrom("portal@portal.uj.edu.pl");
@@ -360,7 +350,6 @@ public class UserDAOImpl implements UserDAOI {
             
         } finally {
             transaction.commit();
-            
         }
         
         if (session != null)

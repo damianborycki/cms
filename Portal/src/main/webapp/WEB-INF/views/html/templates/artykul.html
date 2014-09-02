@@ -1,4 +1,9 @@
-
+<style>
+	.noChar{
+		font-weight:bold;
+		color:red;
+	}
+</style>
 			<div class="row containerm">
 			<div style="padding: 10px 5px 0px 15px;"><p><a href="#main">Strona Główna </a> > <span ng-repeat="tag in categoriesForBreadcrumbs"> <a href="#articleList?category={{tag.id}}">{{tag.name}}</a> <span> > </span></span> <span>{{article.title}}</span></p></div>
           <div class="well list1">
@@ -29,67 +34,85 @@
 					</div>
 				</slick>
 			</div>
-			<p class="art-tagi">Wyświetlenia: {{article.views}} | Ranga: {{article.rank.name}}</p>
-			<p>Tagi:<a href="#articleList?search={{tag.id}}" ng-repeat="tag in article.tag"> {{tag.name}}</a> </p>
+			<p class="art-tagi" style="margin-top:45px;">
+				<span style="font-weight:bold;">Wyświetlenia:</span> {{article.views}} |<span style="font-weight:bold;"> Ranga: </span>{{article.rank.name}}
+				</p>
+			<p>
+				<span style="font-weight:bold;">Tagi:</span><a href="#articleList?search={{tag.id}}" ng-repeat="tag in article.tag"> {{tag.name}}</a> 
+			</p>
           </div>
           </div>
       
-		 <div class="row containerm">
-          <div class="column" style="margin: 5px 5px 5px 5px;" ng-hide="currentUserName.data == ''">
-            <textarea class="span6" rows="9" placeholder="Napisz komentarz..." required="" 
-			style="margin: 0px; height: 180px; width: 100%; resize:vertical;" ng-model="commentContent"></textarea>
-            <a class="btn btn-success btn-p" ng-disabled="commentContent == ''" ng-click="addComment()">KOMENTUJ</a>
+		 <div class="row containerm" >
+          <div class="column" style="margin: 5px 5px 5px 5px; margin-left:15%; width:70%;" ng-hide="currentUserName.data == ''">
+          <!-- ng-class="{'usr':user.login==currentUserLogin, -->
+          	<span ng-class="{'noChar': commentContent.length == 250}">Pozostało znaków: {{250-commentContent.length}}</span>
+          	
+            <textarea class="span6 form-control" rows="6" placeholder="Napisz komentarz..." required="" maxlength="250"
+			style="margin: 0px; max-height: 130px; resize:vertical;" ng-model="commentContent"></textarea>
+            <button class="btn btn-success btn-p btn-sm" style="margin-top:10px;" ng-disabled="commentContent.trim().length == 0" ng-click="addComment()">KOMENTUJ</button>
 			
           </div>
-		  <div class="column" style="margin: 5px 5px 5px 5px;">
-		   <h3 class="c1">Komentarze</h3>
+		  <div class="column" style="margin: 5px 5px 5px 5px; margin-left:10%; width:80%;">
+		   <h3 class="c1" style="font-weight:bold;">Komentarze</h3>
           <ul class="list-group ">
-            <li class="list-group-item list1" ng-repeat="komentarz in articleComments">
+            <li class="list-group-item list1" ng-repeat="komentarz in articleComments" style="padding-bottom: 0px;
+            ">
               <div class="row ">
-                <div class="col-md-2">
+                <div class="col-md-3" style="border-right: 1px solid #eee;">
 				<a href="#userPage/{{komentarz.user.login}}">
                   <img ng-src="{{getUserAvatar(komentarz.user.id)}}" class="img-responsive">
                   <h5> {{komentarz.user.login}}</h5>
 				  </a>
 				  <p style="font-size:0.6em;"> {{komentarz.date}}</p> 
                 </div>
-                <div class="col-md-10">
+                <div class="col-md-9">
                   <p class="text-justify commentText" style="font-weight:normal; font-size:1.1em;" ng-class="{show: show && komentarz.content.length > 100}">{{komentarz.content}}</p>
 					<a ng-click="show = true" ng-hide="show || komentarz.content.length <= 100">Pokaż całość</a>
 					<a ng-click="show = false" ng-show="show && komentarz.content.length > 100">Ukryj</a>
+					<p>
+						<button class="btn btn-success btn-p btn-sm pull-right" ng-click="clickComment(komentarz.id)" ng-hide="currentUserName.data == ''">Odpowiedz</button>
+					</p>
                 </div>
-				<div class="col-md-10 text-right">
-					 <a class="btn btn-success btn-p" ng-if="komentarz.replies.length>0" ng-click="click(komentarz.id)" >Pokaz odpowiedzi ({{komentarz.replies.length}})</a>
+                
+				<div class="col-md-9 col-md-offset-3">
+					
+					 <a class="btn btn-warning" style="" ng-if="komentarz.replies.length>0" ng-click="click(komentarz.id)" >Pokaz odpowiedzi ({{komentarz.replies.length}})</a>
+					
 					 <div ng-show="showButton(komentarz.id)">
-						<div class="containerm" style="margin-left: auto; margin-right: auto; border-radius: 16px; padding: 6px; margin-top: 10px; margin-bottom: 5px;">
+						<div class="" style="margin-left: auto; margin-right: auto; border-radius: 16px; padding: 6px; margin-top: 10px; margin-bottom: 5px;">
 						<ul class="list-group" style="margin-bottom: 0px;">
-							<li class="list-group-item list1" ng-repeat="odpowiedzi in komentarz.replies">
-							  <div class="row">
-								<div class="col-md-3 text-left">
+							<li class="list-group-item " ng-repeat="odpowiedzi in komentarz.replies" style="padding-bottom: 0px;
+							">
+							  <div class="row" >
+								<div class="col-md-3" style="border-right: 1px solid #eee;">
 								<a href="#userPage/{{odpowiedzi.user.login}}">
 								  <img ng-src="{{getUserAvatar(odpowiedzi.user.id)}}" class="img-responsive">
 								  <h5> {{odpowiedzi.user.login}}</h5>
 								</a>
 								  <p style="font-size:0.6em;"> {{odpowiedzi.date}}</p> 
 								</div>
-								<div class="col-md-9">
+								<div class="col-md-9" >
 								  <p class="text-justify commentText" style="font-weight:normal; font-size:1.1em;" ng-class="{show: show && odpowiedzi.content.length > 100}">{{odpowiedzi.content}}</p>
 									<a ng-click="show = true" ng-hide="show || odpowiedzi.content.length <= 100">Pokaż całość</a>
 									<a ng-click="show = false" ng-show="show && odpowiedzi.content.length > 100">Ukryj</a>
 								</div>
 							</div>
-							<hr style="margin: 5px 5px 5px 5px;" ng-hide="$last">
+							<!-- <hr style="margin: 5px 5px 5px 5px;" ng-hide="$last"> -->
 						</li>
 						</ul>
-						</div>
-					 </div>
-					<div class="btn btn-success btn-p" ng-click="clickComment(komentarz.id)" ng-hide="currentUserName.data == ''">Odpowiedz</div>
-					<div ng-show="showCommentButton(komentarz.id)">
-					 <div class="row">
+						</div>						
+					 </div>		
+					 			
+					<div ng-show="showCommentButton(komentarz.id)" style="margin-right:15px;">
+					 <div class="row col-md-offset-3">
 						<div class="column">
-						<textarea class="span6" rows="9" placeholder="Napisz komentarz..." required="" 
-						style="margin: 0px; height: 180px; width: 100%; resize:vertical;" ng-model="replyComment[komentarz.id]"></textarea>
-						<a class="btn btn-success btn-p" ng-disabled="replyComment[komentarz.id] == ''" ng-click="addReplyComment(komentarz.id)">DODAJ</a>
+						<span ng-class="{'noChar': replyComment[komentarz.id].length == 250}">
+							Pozostało znaków:{{250-replyComment[komentarz.id].length}}
+						</span>
+						<textarea class="span6 form-control" rows="6" placeholder="Napisz komentarz..." required="" maxlength="250" 
+						style="margin: 0px; height: 140px; resize:vertical;" ng-model="replyComment[komentarz.id]"></textarea>
+						<button class="btn btn-success btn-p btn-sm" style="margin-top:10px;" ng-disabled="replyComment[komentarz.id] == ''" ng-click="addReplyComment(komentarz.id)">DODAJ</button>
 						</div>
 					 </div>
 					</div>
@@ -98,7 +121,7 @@
 			<hr style="margin: 5px 5px 5px 5px;" ng-hide="$last">
 		</li>
 		</ul>
-            <a class="btn1 btn-lg btn-primary" href="#comments/{{articleId}}">Pokaż wszystkie komentarze</a>
+            <a class="btn btn-lg btn-primary pull-right" href="#comments/{{articleId}}">Pokaż wszystkie komentarze</a>
 		</div>
 		</div>
 	  

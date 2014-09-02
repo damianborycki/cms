@@ -78,6 +78,15 @@ app.config(['$routeProvider',
         templateUrl: 'html/templates/komentarze.html',
         controller: 'CommentsController'
       }).
+      when('/kontaktPage', {
+        templateUrl: 'html/templates/kontakt.html'
+      }).
+      when('/ostroniePage', {
+          templateUrl: 'html/templates/ostronie.html'
+      }).
+      when('/regulaminPage', {
+          templateUrl: 'html/templates/regulamin.html'
+      }).
       otherwise({
         redirectTo: '/main'
       });
@@ -120,7 +129,8 @@ app.directive('onLastRepeat', function() {
 app.controller('topAndSideContrler', function($scope, $http, SharedData, tags) {
 
  $scope.listOfArticles = [];
- $scope.loginError = false;
+ //$scope.loginError = false;
+ $scope.loginError = 0;
  
     $scope.getListOfArticles = function(len)
   {
@@ -164,7 +174,7 @@ $scope.currentUserGroup = null;
 $scope.LogIn = function(login, pass)
 {
 	Login(login, pass, $scope, $http);
-  console.log($scope.loginError);
+
 }
 
 $scope.LogOut = function()
@@ -244,6 +254,7 @@ $scope.loadTags = function(query) {
 
 app.controller('GlownaController', function($scope, SharedData, $http, $location) {
 
+$('html,body').scrollTop(0);
 if ($location.$$absUrl.split('code=')[1] != undefined) {
   $scope.code = $location.$$absUrl.split('code=')[1].substring(0,32);
 }
@@ -330,7 +341,9 @@ $scope.getImage = function(id, width, height){
 
 
 app.controller('ArticleController', function($scope, $http, SharedData, $routeParams) {
-
+ 
+ $('html,body').scrollTop(0);
+ 
  $scope.getImage = function(id, width, height){
     return servicesContext + '/image?id=' + id + '&width=' + width + '&height=' + height;
   };
@@ -505,7 +518,7 @@ $scope.getTagString = function() {
 
 
 app.controller('ListaArtykolowControler', function($scope, $http, $location) {
-  
+  $('html,body').scrollTop(0);
   $scope.getImage = function(id, width, height){
     return servicesContext + '/image?id=' + id + '&width=' + width + '&height=' + height;
   };
@@ -545,8 +558,9 @@ $scope.getListOfArticles();
 
 
 app.controller('StronaUzytkownikaController', function($scope, $http, $routeParams, SharedData) {
-
+$('html,body').scrollTop(0);
 //$scope.currentUserName = SharedData.currentUserName;
+
 GetCurrentUserLogin($scope, $http);
 $scope.userName = $routeParams.userName;
 
@@ -717,7 +731,7 @@ $scope.getUserComments($scope.userName);
 
 
 app.controller('RejestracjaController', function($scope, $http) {
-
+$('html,body').scrollTop(0);
 $scope.user = 
   {'login': '',
   'email': '',
@@ -816,9 +830,12 @@ $scope.addListener();
   
 	$scope.register = function()
 	{
-
-    $scope.removeCountry();
-
+    	$scope.removeCountry();
+    	if($scope.user.firstname == "") $scope.user.firstname = null;
+    	if($scope.user.lastname == "") $scope.user.lastname = null;
+    	if($scope.user.city == "") $scope.user.city = null;
+    	if($scope.user.gender == "") $scope.user.gender = null;
+    
 		Register($scope.user.login, $scope.user.password, $scope.user.email, $scope.user.firstname, $scope.user.lastname, $scope.user.city, $scope.user.gender, $scope, $http);
 	}
 	$scope.waitingForResponse = false;
@@ -984,8 +1001,12 @@ $scope.article = null;
 					  <input class="form-control" id="exampleInputPassword1" placeholder="Hasło" type="password" ng-model="pass">
 					</div>
 
-          <span class="help-block" style="color:#CC330E; font-size: 13px;" data-ng-show="loginError">
-                  <span style="background-color:#F13333;" class="badge pull-left" ng-model="loginError">!</span>&nbsp;Błędny login lub hasło
+          		<span class="help-block" style="color:#CC330E; font-size: 13px;" data-ng-show="loginError == 1">
+                  <span style="background-color:#F13333;" class="badge pull-left">!</span>&nbsp;Błędny login lub hasło
+                </span>
+                
+                <span class="help-block" style="color:#CC330E; font-size: 13px;" data-ng-show="loginError == 2">
+                  <span style="background-color:#F13333;" class="badge pull-left">!</span>&nbsp;Konto użytkownika jest nieaktywne
                 </span>
 
 					<button type="submit" class="btn btn-primary pull-right" ng-click="LogIn(login, pass)">Zaloguj</button>
@@ -1064,8 +1085,9 @@ $scope.article = null;
       </div>
       </div>
       <div class="foot">
-      <a href='#'> O stronie </a> | <a href='#'> Kontakt </a> | <a href='#'> Regulamin </a>
+      <a href='#ostroniePage'> O stronie </a> | <a href='#kontaktPage'> Kontakt </a> | <a href='#regulaminPage'> Regulamin </a>
       </div>
+      <div style="height: 100px"></div>
 </div>
 
 </body>
