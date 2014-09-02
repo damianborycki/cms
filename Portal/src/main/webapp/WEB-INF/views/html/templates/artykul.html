@@ -15,9 +15,8 @@
             <div class="col-md-5">
 				<p class="art-opis" style="font-weight:bold;"> {{article.description}}</p>
             </div>
-            <p class="art-tresc" style="line-height:200%;">
-				{{article.content}}
-            </p>
+            <p class="art-tresc" ng-bind-html="article.content | unsafe">
+						</p>
 			<div style="width: 550px; margin-left: auto; margin-right: auto; background-color: rgba(0,0,0,0.1); border-radius: 32px; padding: 20px 30px 10px 30px; margin-top: 20px; margin-bottom: 10px;" ng-hide="gallery == null">
 				<slick ng-transclude settings="slickConfig" control="slickHandle" style="width: 490px;">
 					<div ng-repeat="zajawka in getListOfArticles(3)">
