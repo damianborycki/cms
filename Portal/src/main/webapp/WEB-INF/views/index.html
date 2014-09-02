@@ -74,6 +74,15 @@ app.config(['$routeProvider',
         templateUrl: 'html/templates/komentarze.html',
         controller: 'CommentsController'
       }).
+      when('/kontaktPage', {
+        templateUrl: 'html/templates/kontakt.html'
+      }).
+      when('/ostroniePage', {
+          templateUrl: 'html/templates/ostronie.html'
+      }).
+      when('/regulaminPage', {
+          templateUrl: 'html/templates/regulamin.html'
+      }).
       otherwise({
         redirectTo: '/main'
       });
@@ -535,6 +544,7 @@ $scope.getListOfArticles();
 app.controller('StronaUzytkownikaController', function($scope, $http, $routeParams, SharedData) {
 $('html,body').scrollTop(0);
 //$scope.currentUserName = SharedData.currentUserName;
+
 GetCurrentUserLogin($scope, $http);
 $scope.userName = $routeParams.userName;
 
@@ -804,9 +814,12 @@ $scope.addListener();
   
 	$scope.register = function()
 	{
-
-    $scope.removeCountry();
-
+    	$scope.removeCountry();
+    	if($scope.user.firstname == "") $scope.user.firstname = null;
+    	if($scope.user.lastname == "") $scope.user.lastname = null;
+    	if($scope.user.city == "") $scope.user.city = null;
+    	if($scope.user.gender == "") $scope.user.gender = null;
+    
 		Register($scope.user.login, $scope.user.password, $scope.user.email, $scope.user.firstname, $scope.user.lastname, $scope.user.city, $scope.user.gender, $scope, $http);
 	}
 	$scope.waitingForResponse = false;
@@ -1056,8 +1069,9 @@ $scope.article = null;
       </div>
       </div>
       <div class="foot">
-      <a href='#'> O stronie </a> | <a href='#'> Kontakt </a> | <a href='#'> Regulamin </a>
+      <a href='#ostroniePage'> O stronie </a> | <a href='#kontaktPage'> Kontakt </a> | <a href='#regulaminPage'> Regulamin </a>
       </div>
+      <div style="height: 100px"></div>
 </div>
 
 </body>
