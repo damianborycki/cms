@@ -3,10 +3,10 @@
 	text-align: center;
 }
 .usr {
-	background-color: #E2AB79;
+	background-color: #9CA9FF;
 }
 .banned {
-	background-color: red;
+	background-color: #FF4A4A;
 	font-weight: bold;
 }
 .detailsU {
@@ -40,7 +40,7 @@
 		 		<th class="col-md-2 col-md">Operacje</th>
 
 				<!-- <tr ng-repeat="user in listOfUsers | filter:{login:search.login} | filter:search.group" ng-class="{'usr':user.login==currentUserLogin, 'banned' user.group.name == 'zablokowany'}" > -->	
-				<tr ng-repeat="user in listOfUsers | filter:{login:search.login} | filter:search.group" ng-class="{'usr':user.login==currentUserLogin, 'banned' : user.group.name == 'zablokowany', 'unbanned' : user.group.name == 'odblokowany'}" >
+				<tr ng-repeat="user in listOfUsers | filter:{login:search.login} | filter:search.group" ng-class="{'usr':user.login==currentUserLogin, 'banned' : user.group.id == '5', 'unbanned' : user.group.id != '5'}" >
 					<!-- <td class="col-md-1">{{$index + 1 + (page-1)*usersLimit}}</td> -->
 					<td  class="col-md-1" style="text-align:center;"><input ng-hide="user.login == currentUserLogin" ng-checked="checkboxV" type="checkbox"></td>
 					<td class="col-md-2">{{user.login}}</td>

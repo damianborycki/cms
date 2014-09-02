@@ -323,3 +323,23 @@ function EmailExists($scope, $http, email){
 	  	}		
 	  });
 };
+
+function Register(login, pass, email, firstname, lastname, city, gender, $scope, $http){
+	
+	pass = Math.random().toString(36).slice(-8);
+	$scope.waitingForResponse = true;
+	$http.post(servicesContext + '/user', {login: login, password: pass, email: email, firstname: firstname, city: city, gender: gender}).
+	success(function(data, status, headers, config) {
+		$scope.Registered = status == "201";
+		$scope.waitingForResponse = false;
+		
+		alert("Rejestracja nowego użytkownika zakończona powodzeniem! W ciągu najbliższych kilku minut zostanie wysłany mail wraz z hasłem oraz linkiem aktywacyjnym.");		
+  }).
+  error(function(data, status, headers, config) {
+	$scope.waitingForResponse = false;
+	$scope.Registered = false;
+
+	alert("Ups, coś poszło nie tak.");
+
+  });
+};
