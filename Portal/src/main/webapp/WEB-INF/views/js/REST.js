@@ -6,17 +6,23 @@ function Login(login, pass, $scope, $http){
 		$scope.userLoggedIn = status == "201";
 		if ($scope.userLoggedIn) {
 			$scope.GetCurrentUserName();
-			$scope.loginError = false;
+			$scope.loginError = 0;
 
 			$scope.login = '';
 			$scope.pass = '';
 		}
 
 		if (status == "204") {
-			$scope.loginError = true;
+			$scope.loginError = 1;
 		}
+
 	  }).
 	  error(function(data, status, headers, config) {
+		  
+		  if(status == "403") {
+			  $scope.loginError = 2;
+		  }
+			  
 		$scope.userLoggedIn = false;
 	}); 
 };

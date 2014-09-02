@@ -121,6 +121,8 @@ public class UserDAOImpl implements UserDAOI {
     	
     	Matcher matcherEmail = null;
     	
+    	
+    	
     	if(user.getEmail() != null) {
     		matcherEmail = patternEmail.matcher(user.getEmail().trim());
     		

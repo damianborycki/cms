@@ -108,7 +108,8 @@ app.service('tags', function($q) {
 app.controller('topAndSideContrler', function($scope, $http, SharedData, tags) {
 
  $scope.listOfArticles = [];
- $scope.loginError = false;
+ //$scope.loginError = false;
+ $scope.loginError = 0;
  
     $scope.getListOfArticles = function(len)
   {
@@ -152,7 +153,7 @@ $scope.currentUserGroup = null;
 $scope.LogIn = function(login, pass)
 {
 	Login(login, pass, $scope, $http);
-  console.log($scope.loginError);
+
 }
 
 $scope.LogOut = function()
@@ -971,8 +972,12 @@ $scope.article = null;
 					  <input class="form-control" id="exampleInputPassword1" placeholder="Hasło" type="password" ng-model="pass">
 					</div>
 
-          <span class="help-block" style="color:#CC330E; font-size: 13px;" data-ng-show="loginError">
-                  <span style="background-color:#F13333;" class="badge pull-left" ng-model="loginError">!</span>&nbsp;Błędny login lub hasło
+          		<span class="help-block" style="color:#CC330E; font-size: 13px;" data-ng-show="loginError == 1">
+                  <span style="background-color:#F13333;" class="badge pull-left">!</span>&nbsp;Błędny login lub hasło
+                </span>
+                
+                <span class="help-block" style="color:#CC330E; font-size: 13px;" data-ng-show="loginError == 2">
+                  <span style="background-color:#F13333;" class="badge pull-left">!</span>&nbsp;Konto użytkownika jest nieaktywne
                 </span>
 
 					<button type="submit" class="btn btn-primary pull-right" ng-click="LogIn(login, pass)">Zaloguj</button>
