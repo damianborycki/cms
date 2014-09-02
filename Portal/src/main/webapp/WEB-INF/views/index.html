@@ -74,6 +74,15 @@ app.config(['$routeProvider',
         templateUrl: 'html/templates/komentarze.html',
         controller: 'CommentsController'
       }).
+      when('/kontaktPage', {
+        templateUrl: 'html/templates/kontakt.html'
+      }).
+      when('/ostroniePage', {
+          templateUrl: 'html/templates/ostronie.html'
+      }).
+      when('/regulaminPage', {
+          templateUrl: 'html/templates/regulamin.html'
+      }).
       otherwise({
         redirectTo: '/main'
       });
@@ -1055,8 +1064,9 @@ $scope.article = null;
       </div>
       </div>
       <div class="foot">
-      <a href='#'> O stronie </a> | <a href='#'> Kontakt </a> | <a href='#'> Regulamin </a>
+      <a href='#ostroniePage'> O stronie </a> | <a href='#kontaktPage'> Kontakt </a> | <a href='#regulaminPage'> Regulamin </a>
       </div>
+      <div style="height: 100px"></div>
 </div>
 
 </body>
