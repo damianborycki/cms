@@ -91,10 +91,10 @@ public class WebAppConfig {
 		
 		JavaMailSenderImpl ms = new JavaMailSenderImpl();
 		
-		ms.setHost("smtp.gmail.com");
-		ms.setPort(587);
-		ms.setUsername("pz.exams@gmail.com");
-		ms.setPassword("optymalnehaslo1337");
+		ms.setHost(env.getProperty("sender.host"));
+		ms.setPort(Integer.parseInt(env.getProperty("sender.port")));
+		ms.setUsername(env.getProperty("sender.username"));
+		ms.setPassword(env.getProperty("sender.password"));
 		
 		Properties mailProperties = new Properties();
 		mailProperties.put("mail.smtp.auth", true);
