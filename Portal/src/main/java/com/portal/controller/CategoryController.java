@@ -1,5 +1,6 @@
 package com.portal.controller;
 
+import com.portal.dao.interfaces.ArticleDAOI;
 import com.portal.dao.interfaces.CategoryDAOI;
 import com.portal.entity.Category;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,9 @@ public class CategoryController {
 
     @Autowired
     private CategoryDAOI categoryDAO;
+
+    @Autowired
+    private ArticleDAOI articleDAO;
 
     @RequestMapping(value="category/{id}", method= RequestMethod.GET)
     @ResponseBody
@@ -65,13 +69,13 @@ public class CategoryController {
 
     @RequestMapping(value="category/{id}", method= RequestMethod.DELETE)
     public @ResponseBody
-    ResponseEntity<Object> delete(@PathVariable Long id){
-        categoryDAO.delete(id);
-        return new ResponseEntity<Object>(null, HttpStatus.ACCEPTED);
+    ResponseEntity<Object> delete(@PathVariable Long id) {
+        if (articleDAO.existsForCategory(categoryDAO.get(id))) {
+            return new ResponseEntity<Object>(null, HttpStatus.CONFLICT);
+        } else {
+            categoryDAO.delete(id);
+            return new ResponseEntity<Object>(null, HttpStatus.ACCEPTED);
+        }
     }
-
-
-
-
 
 }

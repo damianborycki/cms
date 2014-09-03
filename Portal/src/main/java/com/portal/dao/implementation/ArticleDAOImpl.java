@@ -4,7 +4,6 @@ package com.portal.dao.implementation;
 import com.portal.dao.interfaces.ArticleDAOI;
 import com.portal.entity.*;
 import org.hibernate.Criteria;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
@@ -203,6 +202,15 @@ public class ArticleDAOImpl implements ArticleDAOI {
     @Override
     public Long countAll() {
         return ((BigInteger) openSession().createSQLQuery("SELECT Count(*) FROM articles").uniqueResult()).longValue();
+    }
+
+    @Override
+    public boolean existsForCategory(Category category) {
+        Session session = openSession();
+        Criteria criteria = session.createCriteria(Article.class);
+        criteria.add(Restrictions.eq("category_id", category));
+
+        return !criteria.list().isEmpty();
     }
 
 }

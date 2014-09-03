@@ -47,7 +47,7 @@ public class ArticleRankController {
 
     @RequestMapping(value="articleRank/{id}", method= RequestMethod.DELETE)
     public @ResponseBody
-    ResponseEntity<Object> delete(@PathVariable Long id){
+    ResponseEntity<Object> delete(@PathVariable Long id) {
         articleRankDAO.delete(id);
         return new ResponseEntity<Object>(null, HttpStatus.ACCEPTED);
     }
