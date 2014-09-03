@@ -47,6 +47,10 @@ Date.prototype.yyyymmddhhmmss = function() {
    
 var app = angular.module('studentInfoApp', ['ngSanitize', 'ngRoute', 'mgcrea.ngStrap', 'ngTagsInput', 'bardo.directives', 'paging']);
 
+app.filter('unsafe', function($sce) {
+    return function(val) {
+        return $sce.trustAsHtml(val);
+    }; });
 app.config(['$routeProvider',
   function($routeProvider) {
     $routeProvider.
@@ -113,6 +117,14 @@ app.service('tags', function($q) {
     return deferred.promise;
   };
 }); 
+
+app.directive('onLastRepeat', function() {
+	return function(scope, element, attrs) {
+		if (scope.$last) setTimeout(function(){
+			scope.$emit('onRepeatLast', element, attrs);
+		}, 1);
+	};
+})
 
 app.controller('topAndSideContrler', function($scope, $http, SharedData, tags) {
 
@@ -233,6 +245,10 @@ $scope.loadTags = function(query) {
   };
   
   $scope.getUserAvatar(0);
+  
+	$scope.$on('onRepeatLast', function(scope, element, attrs){
+		$('#topMenu').collapseMe();
+	});
 });
 
 
@@ -1014,7 +1030,7 @@ $scope.article = null;
            
             <div class="navbar-collapse collapse">
               <ul class="nav navbar-nav nav-collapsing" id="topMenu">
-                <li ng_repeat="category in mainCategories.data"><a href="#articleList?category={{category.id}}"><b>{{category.name}}</b></a>
+                <li ng_repeat="category in mainCategories.data" on-last-repeat><a href="#articleList?category={{category.id}}"><b>{{category.name}}</b></a>
                 </li>
                 <li><a class="dropdown-toggle" data-toggle="dropdown">
                     Więcej <i class="glyphicon glyphicon-chevron-down"></i>

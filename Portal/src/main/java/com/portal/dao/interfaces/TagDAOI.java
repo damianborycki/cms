@@ -18,5 +18,6 @@ public interface TagDAOI {
     public void create(Tag tag);
     public void edit(Long id, Tag template);
     public void delete(Long id);
+    public boolean existsForType(TagType tagType);
 
 }

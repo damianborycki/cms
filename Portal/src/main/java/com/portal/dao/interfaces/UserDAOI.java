@@ -1,5 +1,6 @@
 package com.portal.dao.interfaces;
 
+import com.portal.entity.Group;
 import com.portal.entity.User;
 import com.portal.util.ClassUser;
 
@@ -32,4 +33,6 @@ public interface UserDAOI {
     public boolean emailExists(User email);
     
     public void activateAccount(String code);
+
+    public boolean existsForGroup(Group group);
 }

@@ -1,6 +1,7 @@
 package com.portal.controller;
 
 import com.portal.dao.interfaces.GroupDAOI;
+import com.portal.dao.interfaces.UserDAOI;
 import com.portal.entity.Group;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,9 @@ public class GroupController {
 
     @Autowired
     private GroupDAOI groupDAO;
+
+    @Autowired
+    private UserDAOI userDAO;
 
     @RequestMapping(value = "group", method = RequestMethod.GET)
     @ResponseBody
@@ -48,8 +52,12 @@ public class GroupController {
 
     @RequestMapping(value="group/{id}", method= RequestMethod.DELETE)
     public ResponseEntity<Object> delete(@PathVariable("id") long id) {
-        groupDAO.delete(id);
-        return new ResponseEntity<Object>(HttpStatus.ACCEPTED);
+        if (userDAO.existsForGroup(groupDAO.get(id))) {
+            return new ResponseEntity<Object>(HttpStatus.CONFLICT);
+        } else {
+            groupDAO.delete(id);
+            return new ResponseEntity<Object>(HttpStatus.ACCEPTED);
+        }
     }
 
 }
