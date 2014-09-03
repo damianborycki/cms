@@ -108,9 +108,7 @@ public class Category {
             setDescription(template.getDescription());
         }
 
-        if (template.getParent() != null) {
-            setParent(template.getParent());
-        }
+        setParent(template.getParent());
 
         if (template.getChildren() != null){
             setChildren(template.getChildren());
