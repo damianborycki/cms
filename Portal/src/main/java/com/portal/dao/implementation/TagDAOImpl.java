@@ -2,8 +2,11 @@ package com.portal.dao.implementation;
 
 import com.portal.dao.interfaces.TagDAOI;
 import com.portal.entity.Tag;
+import com.portal.entity.TagType;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -65,5 +68,14 @@ public class TagDAOImpl implements TagDAOI {
         Tag tag = (Tag) session.get(Tag.class, id);
         session.delete(tag);
         session.flush();
+    }
+
+    @Override
+    public boolean existsForType(TagType tagType) {
+        Session session = openSession();
+        Criteria criteria = session.createCriteria(Tag.class);
+        criteria.add(Restrictions.eq("type", tagType));
+
+        return !criteria.list().isEmpty();
     }
 }

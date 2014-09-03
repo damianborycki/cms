@@ -1,6 +1,19 @@
 package com.portal.dao.implementation;
 
-import java.math.BigInteger;
+import com.portal.dao.interfaces.UserDAOI;
+import com.portal.entity.Group;
+import com.portal.entity.User;
+import com.portal.util.ClassUser;
+import com.portal.util.HashcodeGenerator;
+import org.hibernate.*;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailSender;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Repository;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -9,28 +22,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import javax.servlet.http.HttpServletResponse;
-
-import com.portal.dao.interfaces.UserDAOI;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.hibernate.Criteria;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Restrictions;
-import org.springframework.mail.MailSender;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Repository;
-
-import com.portal.entity.Group;
-import com.portal.entity.User;
-import com.portal.util.ClassUser;
-import com.portal.util.HashcodeGenerator;
 
 @Repository
 public class UserDAOImpl implements UserDAOI {
@@ -464,4 +455,15 @@ public class UserDAOImpl implements UserDAOI {
 		session.merge(usr);
 		session.flush();
 	}
+
+    @Override
+    public boolean existsForGroup(Group group) {
+        Session session = sessionFactory.openSession();
+        Criteria criteria = session.createCriteria(User.class);
+        criteria.add(Restrictions.eq("group", group));
+
+        return !criteria.list().isEmpty();
+    }
+
+
 }
