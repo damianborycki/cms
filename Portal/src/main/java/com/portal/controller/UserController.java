@@ -4,6 +4,7 @@ import com.portal.dao.interfaces.UserDAOI;
 import com.portal.entity.Group;
 import com.portal.entity.User;
 import com.portal.util.ClassUser;
+import com.portal.util.ClassPassword;
 
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
@@ -192,6 +193,12 @@ public class UserController {
 		
 		userDAO.activateAccount(code);
 
+	}
+	
+	@RequestMapping(value = "/changePassword", method = RequestMethod.POST)
+	public @ResponseBody boolean changePassword(@RequestBody ClassPassword passwords, HttpServletResponse response){
+	
+		return userDAO.changPassword(passwords);
 	}
 	
 }

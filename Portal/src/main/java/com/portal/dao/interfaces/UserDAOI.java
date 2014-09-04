@@ -3,6 +3,7 @@ package com.portal.dao.interfaces;
 import com.portal.entity.Group;
 import com.portal.entity.User;
 import com.portal.util.ClassUser;
+import com.portal.util.ClassPassword;
 
 import java.util.List;
 
@@ -35,4 +36,6 @@ public interface UserDAOI {
     public void activateAccount(String code);
 
     public boolean existsForGroup(Group group);
+    
+    public boolean changPassword(ClassPassword passwords);
 }

@@ -14,7 +14,7 @@
 			   <a class="btn btn btn-primary" style="width:100%" ng-show="searchedUser.login == currentUserName.data"> Zmień avatar</a>
 			   <a class="btn btn btn-danger" style="width:100%; margin-top:10px;" ng-show="searchedUser.login == currentUserName.data" ng-click="click6()"> Zmień hasło</a>
 			   <span ng-show="showEditPass">
-			     <form name="editPassForm" style="display:inline;">
+			     <form name="editPassForm" style="display:inline;" class="editPassForm">
 			   		<input type="password" ng-minlength="6" required class="form-control" style="margin-top:5px;" ng-model="searchedUser.pass" placeholder="Aktualne hasło"/>
 			   		<input type="password" name="pass1" ng-minlength="6" required ng-maxlenght="20" class="form-control" style="margin-top:5px;" ng-model="searchedUser.pass1" placeholder="Nowe hasło"/>
 			   		<input type="password" name="pass2" ng-minlength="6" required ng-maxlenght="20" class="form-control" style="margin-top:5px; margin-bottom:5px;" ng-model="searchedUser.pass2" placeholder="Powtórz nowe hasło"/>
@@ -163,7 +163,7 @@
 				</div>					
               	</div>
               </div>
-              <div ng-show="!editNameForm.$valid || !editSurnameForm.$valid || !editEmailForm.$valid || editPassFormError" class=" col-md-9 pull-right" style="font-size:14px; color: black; background-color:#C0C0C0; padding-top:5px; padding-bottom:5px;  margin-bottom:5px;">
+              <div ng-show="!editNameForm.$valid || !editSurnameForm.$valid || !editEmailForm.$valid || editPassFormError || changePassError || editPassFormError2" class=" col-md-9 pull-right" style="font-size:14px; color: black; background-color:#C0C0C0; padding-top:5px; padding-bottom:5px;  margin-bottom:5px;">
               	<span class="help-block" style="color:#CC330E; font-size: 13px;" data-ng-show="!editNameForm.$valid">
                   <span style="background-color:#F13333;" class="badge pull-left" >!</span>&nbsp;Wprowadzono niedozwolone znaki w <b>imieniu</b>
                 </span>              
@@ -174,11 +174,41 @@
                   <span style="background-color:#F13333;" class="badge pull-left" >!</span>&nbsp;Wprowadzono niepoprawny adres <b>email</b> lub jest on już używany
                 </span>
                 <span class="help-block" style="color:#CC330E; font-size: 13px;" data-ng-show="editPassFormError">
-                  <span style="background-color:#F13333;" class="badge pull-left" >!</span>&nbsp;Wprowadzono nieprawidłowe hasło lub nowe hasła się nie zgadzają
+                  <span style="background-color:#F13333;" class="badge pull-left" >!</span>&nbsp;Hasła się nie zgadzają
+                </span>                
+                <span class="help-block" style="color:#CC330E; font-size: 13px;" data-ng-show="editPassFormError2">
+                  <span style="background-color:#F13333;" class="badge pull-left" >!</span>&nbsp;Nie można zmienić na takie samo hasło
                 </span>
                 <span class="help-block" style="color:#CC330E; font-size: 13px;" data-ng-show="editPassForm.pass1.$error.minlength || editPassForm.pass2.$error.minlength">
-                <span style="background-color:#F13333;" class="badge pull-left ">!</span>&nbsp;Minimum 6 znaków jest wymagane
-              </span>
+                	<span style="background-color:#F13333;" class="badge pull-left ">!</span>&nbsp;Minimum 6 znaków jest wymagane
+              	</span>
+              	
+              	<span class="help-block" style="color:#CC330E; font-size: 13px;" data-ng-show="changePassError">
+                	<span style="background-color:#F13333;" class="badge pull-left ">!</span>&nbsp;Wprowadzono niepoprawne hasło {{changePassError}}
+              	</span>
+              </div>
+              <div class=" col-md-9 pull-right success" style="font-size:14px; color: black;  background-color:#C0C0C0; padding-top:5px; padding-bottom:5px;  margin-bottom:5px;">
+              	<span class="help-block name" style="color:#47a447; " ng-show="changeNameSuccess" >
+                  <span class="glyphicon glyphicon-ok"></span>&nbsp;Zmiana <b>imienia</b> zakończona sukcesem
+                </span>              
+                <span class="help-block surname" style="color:#47a447;padding-top:5px; padding-bottom:5px; " ng-show="changeSurnameSuccess" >
+                  <span class="glyphicon glyphicon-ok"></span>&nbsp;Zmiana <b>nazwiska</b> zakończona sukcesem
+                </span>
+                <span class="help-block city" style="color:#47a447; padding-top:5px; padding-bottom:5px; " ng-show="changeCitySuccess" >
+                  <span class="glyphicon glyphicon-ok"></span>&nbsp;Zmiana <b>miasta</b> zakończona sukcesem
+                </span>      
+                <span class="help-block gender" style="color:#47a447; padding-top:5px; padding-bottom:5px; " ng-show="changeGenderSuccess" >
+                  <span class="glyphicon glyphicon-ok"></span>&nbsp;Zmiana <b>płci</b> zakończona sukcesem
+                </span>
+                <span class="help-block email" style="color:#47a447; padding-top:5px; padding-bottom:5px; " ng-show="changeEmailSuccess" >
+                  <span class="glyphicon glyphicon-ok"></span>&nbsp;Zmiana <b>adresu email</b> zakończona sukcesem
+                </span>
+                <span class="help-block info" style="color:#47a447; ;padding-top:5px; padding-bottom:5px; "ng-show="changeInfoSuccess"  >
+                  <span class="glyphicon glyphicon-ok"></span>&nbsp;Zmiana <b>informacji o użytkowniku</b> zakończona sukcesem
+                </span>
+                <span class="help-block pass" style="color:#47a447; padding-top:5px; padding-bottom:5px; "ng-show="changePassSuccess"  >
+                  <span class="glyphicon glyphicon-ok"></span>&nbsp;Zmiana <b>hasła</b> zakończona sukcesem
+                </span>
               </div>
 			  
 			</div>

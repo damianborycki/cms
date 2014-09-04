@@ -558,169 +558,186 @@ $scope.getListOfArticles();
 
 
 app.controller('StronaUzytkownikaController', function($scope, $http, $routeParams, SharedData) {
-$('html,body').scrollTop(0);
-//$scope.currentUserName = SharedData.currentUserName;
+  $('html,body').scrollTop(0);
+	//$scope.currentUserName = SharedData.currentUserName;
+  GetCurrentUserLogin($scope, $http);
+  $scope.userName = $routeParams.userName;
 
-GetCurrentUserLogin($scope, $http);
-$scope.userName = $routeParams.userName;
+  $scope.searchedUser =null;
+  $scope.showEditName = true;
+  $scope.showEditSurname = true;
+  $scope.showEditCity = true;
+  $scope.showEditGender = true;
+  $scope.showEditEmail = true;
+  $scope.showEditDesc = true;
+  $scope.changePassSuccess = false;
+	
+  $scope.click = function(){
+    $scope.showEditDesc = !$scope.showEditDesc;
+    $scope.searchedUser.info2 = $scope.searchedUser.info;
+  }
 
-$scope.searchedUser =null;
-
-$scope.showEditName = true;
-$scope.showEditSurname = true;
-$scope.showEditCity = true;
-$scope.showEditGender = true;
-$scope.showEditEmail = true;
-$scope.showEditDesc = true;
-
-$scope.click = function(){
-  $scope.showEditDesc = !$scope.showEditDesc;
-  $scope.searchedUser.info2 = $scope.searchedUser.info;
-}
-
-$scope.click1 = function(){
-  $scope.showEditName = !$scope.showEditName;
-  $scope.searchedUser.name2 = $scope.searchedUser.name;
-};
-
-$scope.click2 = function(){
-  $scope.showEditSurname = !$scope.showEditSurname;
-  $scope.searchedUser.surname2 = $scope.searchedUser.surname;
-};
-
-$scope.click3 = function(){
-  $scope.showEditCity = !$scope.showEditCity;
-  $scope.searchedUser.city2 = $scope.searchedUser.city;
-};
-
-$scope.click4 = function(){
-  $scope.showEditGender = !$scope.showEditGender;
-  $scope.searchedUser.gender2 = $scope.searchedUser.gender;
-};
-
-$scope.click5 = function(){
-  $scope.showEditEmail = !$scope.showEditEmail;
-  $scope.searchedUser.email2 = $scope.searchedUser.email;
-};
-
-$scope.click6 = function(){
-	  $scope.showEditPass = !$scope.showEditPass;
-
-};
-$scope.eTest = function(){
-    if($scope.searchedUser.email2 != undefined)
-    if($scope.searchedUser.email2.trim() != '')
-      EmailExists($scope, $http, $scope.searchedUser.email2, false);
+  $scope.click1 = function(){
+    $scope.showEditName = !$scope.showEditName;
+    $scope.searchedUser.name2 = $scope.searchedUser.name;
   };
-$scope.editName = function()
-{
-  EditUser($scope, $http, $scope.userName, {'login': $scope.userName, 'name': $scope.searchedUser.name2});
-  $scope.click1();
-}
 
-$scope.editSurname = function()
-{
-  EditUser($scope, $http, $scope.userName, {'login': $scope.userName, 'surname': $scope.searchedUser.surname2});
-  $scope.click2();
-}
+  $scope.click2 = function(){
+    $scope.showEditSurname = !$scope.showEditSurname;
+    $scope.searchedUser.surname2 = $scope.searchedUser.surname;
+  };
 
-$scope.editCity = function()
-{
-  EditUser($scope, $http, $scope.userName, {'login': $scope.userName, 'city': $scope.searchedUser.city2});
-  $scope.click3();
-}
+  $scope.click3 = function(){
+    $scope.showEditCity = !$scope.showEditCity;
+    $scope.searchedUser.city2 = $scope.searchedUser.city;
+  };
 
-$scope.editGender = function()
-{
-  EditUser($scope, $http, $scope.userName, {'login': $scope.userName, 'gender': $scope.searchedUser.gender2});
-  $scope.click4();
-}
+  $scope.click4 = function(){
+    $scope.showEditGender = !$scope.showEditGender;
+    $scope.searchedUser.gender2 = $scope.searchedUser.gender;
+  };
 
-$scope.editEmail = function()
-{
-  if($scope.searchedUser.email != $scope.searchedUser.email2)
-  	$scope.eTest();  
-  $scope.click5();
-}
+  $scope.click5 = function(){
+    $scope.showEditEmail = !$scope.showEditEmail;
+    $scope.searchedUser.email2 = $scope.searchedUser.email;
+  };
 
-$scope.editDescription = function()
-{
-   EditUser($scope, $http, $scope.userName, {'login': $scope.userName, 'info': $scope.searchedUser.info2});
-   $scope.click();
-}
+  $scope.click6 = function(){
+	$scope.searchedUser.pass = '';
+	$scope.searchedUser.pass1 = '';
+	$scope.searchedUser.pass2 = '';
+	$scope.showEditPass = !$scope.showEditPass;
+  };
+  $scope.eTest = function(){
+	if($scope.searchedUser.email2 != undefined)
+		if($scope.searchedUser.email2.trim() != '')
+		EmailExists($scope, $http, $scope.searchedUser.email2, false);
+  };
+  
+  $scope.editName = function()
+  { 
+	if($scope.searchedUser.name2 != $scope.searchedUser.name){
+	  EditUser($scope, $http, $scope.userName, {'login': $scope.userName, 'name': $scope.searchedUser.name2});
+	  $scope.changeNameSuccess = true;
+	  $('.success .name').fadeIn().delay(3000).fadeOut(3000);  
+	}  
+	$scope.click1();
+  }
 
-$scope.editPass = function()
-{
-	if($scope.searchedUser.pass1 != $scope.searchedUser.pass2)
-	      $scope.editPassForm.pass2.$setValidity('identical',false);
-	else
-	      $scope.editPassForm.pass2.$setValidity('identical',true);
-	
-	
-	$scope.editPassFormError = ((!$scope.editPassForm.$valid) ? true : false);	
-		
-	$scope.click6();	
-}
-$scope.getUser = function(name)
-{
-	GetUser(name, $scope, $http);
-}
-
-$scope.getUser($scope.userName);
-
-
-$scope.userComments = null;
-
-$scope.commentsPage = 0;
-$scope.commentsLimit = 20;
-$scope.total = 0;
-
-$scope.getUserComments = function(userId)
-{
-	GetUserComments(userId, $scope.commentsPage, $scope.commentsLimit, $scope, $http);
-}
-
-$scope.getUserComments($scope.userName);
-
-	$scope.ChangePage = function(page)
-	{
-		$scope.commentsPage = page;
-		$scope.getUserComments(1);
+  $scope.editSurname = function()
+  {
+    if($scope.searchedUser.surname2 != $scope.searchedUser.surname){	
+	  EditUser($scope, $http, $scope.userName, {'login': $scope.userName, 'surname': $scope.searchedUser.surname2});
+	  $scope.changeSurnameSuccess = true;
+	  $('.success .surname').fadeIn().delay(3000).fadeOut(3000);
 	}
-  
- $scope.listOfArticles = [];
- 
-  $scope.getListOfArticles = function(len)
+	$scope.click2();
+  }
+
+  $scope.editCity = function()
   {
-  if ($scope.listOfArticles.length != 0)
+	if($scope.searchedUser.city2 != $scope.searchedUser.city){
+	  EditUser($scope, $http, $scope.userName, {'login': $scope.userName, 'city': $scope.searchedUser.city2});
+	  $scope.changeCitySuccess = true;
+	  $('.success .city').fadeIn().delay(3000).fadeOut(3000);
+	}
+	$scope.click3();
+  }
+
+  $scope.editGender = function()
+  {
+	if($scope.searchedUser.gender2 != $scope.searchedUser.gender){
+	  	EditUser($scope, $http, $scope.userName, {'login': $scope.userName, 'gender': $scope.searchedUser.gender2});
+	  	$scope.changeGenderSuccess = true;
+	  	$('.success .gender').fadeIn().delay(3000).fadeOut(3000);
+	}
+	$scope.click4();
+  }
+
+  $scope.editEmail = function()
+  {
+	if($scope.searchedUser.email != $scope.searchedUser.email2){
+		$scope.eTest();	  
+	} 	
+	$scope.click5();
+  }
+
+  $scope.editDescription = function()
+  {
+	if($scope.searchedUser.info != $scope.searchedUser.info2){
+	   	EditUser($scope, $http, $scope.userName, {'login': $scope.userName, 'info': $scope.searchedUser.info2});
+	   	$scope.changeInfoSuccess = true;
+	   	$('.success .info').fadeIn().delay(3000).fadeOut(3000);
+	}
+	$scope.click();
+  }
+
+  $scope.editPass = function()
+  {
+	$scope.editPassFormError = (($scope.searchedUser.pass1 != $scope.searchedUser.pass2) ? true : false);
+	if($scope.searchedUser.pass != $scope.searchedUser.pass1){
+		$scope.editPassFormError2 = false;
+		if(!$scope.editPassFormError){
+			ChangePassword($scope, $http, $scope.userName, $scope.searchedUser.pass, $scope.searchedUser.pass2);		
+			$scope.click6();	
+		}	
+	} else {
+		$scope.editPassFormError2 = true;
+	}
+			
+  }
+
+  $scope.getUser = function(name)
+  {
+	GetUser(name, $scope, $http);
+  }
+
+  $scope.getUser($scope.userName);
+
+  $scope.userComments = null;
+
+  $scope.commentsPage = 0;
+  $scope.commentsLimit = 20;
+  $scope.total = 0;
+
+  $scope.getUserComments = function(userId)
+  {
+	GetUserComments(userId, $scope.commentsPage, $scope.commentsLimit, $scope, $http);
+  }
+
+  $scope.getUserComments($scope.userName);
+
+  $scope.ChangePage = function(page)
+  {
+	$scope.commentsPage = page;
+	$scope.getUserComments(1);
+  }
+	  
+  $scope.listOfArticles = [];
+	 
+  $scope.getListOfArticles = function(len){
+	if ($scope.listOfArticles.length != 0)
 		return $scope.listOfArticles;
-		
-  var arr = getListOfArticles(len);
+			
+	var arr = getListOfArticles(len);
+	$scope.listOfArticles = arr;	  
+	return $scope.listOfArticles;
+  }
 
-  $scope.listOfArticles = arr;
-  
-  return $scope.listOfArticles;
-}
-
- $scope.listOfComments = [];
-    $scope.getListOfCommentsMadeByUser = function(userId, len)
-  {
-  if ($scope.listOfComments.length != 0)
-		return $scope.listOfComments;
-		
-  var arr = getListOfCommentsMadeByUser(userId, len);
-
-  $scope.listOfComments = arr;
-
-  return arr;
-}
-
+  $scope.listOfComments = [];
+  $scope.getListOfCommentsMadeByUser = function(userId, len) {
+	  if ($scope.listOfComments.length != 0)
+			return $scope.listOfComments;
+			
+	  var arr = getListOfCommentsMadeByUser(userId, len);
+	  $scope.listOfComments = arr;
+	  return arr;
+  }
+	    
   $scope.getImage = function(id, width, height){
     return servicesContext + '/image?id=' + id + '&width=' + width + '&height=' + height;
   };
-  
-  
-   
+	  
   $scope.milisecToDate = function(miliseconds)
   {
 	 return new Date(miliseconds).yyyymmddhhmmss();

@@ -228,6 +228,7 @@ function LoginExists($scope, $http, login){
 	  });
 };
 
+
 function EmailExists($scope, $http, email, isRegistration){
 	$http.post(servicesContext + '/emailExists', {email: email}).
 	  success(function(data, status, headers, config) {
@@ -244,7 +245,9 @@ function EmailExists($scope, $http, email, isRegistration){
 	  			$scope.regForm.userEmail.$setValidity('unique', true);	
 	  		} else{
 	  			$scope.editEmailForm.email.$setValidity('unique',true);
-	  			EditUser($scope, $http, $scope.userName, {'login': $scope.userName, 'email': $scope.searchedUser.email2});
+	  			EditUser($scope, $http, $scope.userName, {'login': $scope.userName, 'email': email});
+	  			$scope.changeEmailSuccess = true;
+	  			$('.success .email').fadeIn().delay(3000).fadeOut(3000);
 	  		}	
 	  	}		
 	  });
@@ -256,4 +259,23 @@ function ActivateUserAccount($scope, $http, code) {
 	  success(function(data, status, headers, config) {
 	  		alert('Twoje konto jest już aktywne.')
 	  }); 
+}
+
+function ChangePassword($scope, $http, login, userOldPass, userNewPass){
+	$http.post(servicesContext + '/changePassword', {login: login, oldPassword: userOldPass, newPassword: userNewPass}).
+		success(function(data, status, headers, config){
+			$scope.changeStatus = data;
+			console.log(data);
+			if(data == 'true'){	
+				$scope.changePassSuccess = true;
+				$scope.changePassError = false;				
+				$('.success .pass').fadeIn().delay(3000).fadeOut(3000);
+			} else {				
+				$scope.changePassError = true;
+			}
+			console.log($scope.changePassError);
+		}).
+		error(function(data, status, headers, config){
+			alert("Coś poszło nie tak...");
+		});
 }

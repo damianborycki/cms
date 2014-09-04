@@ -4,6 +4,7 @@ import com.portal.dao.interfaces.UserDAOI;
 import com.portal.entity.Group;
 import com.portal.entity.User;
 import com.portal.util.ClassUser;
+import com.portal.util.ClassPassword;
 import com.portal.util.HashcodeGenerator;
 import org.hibernate.*;
 import org.hibernate.criterion.Order;
@@ -102,7 +103,7 @@ public class UserDAOImpl implements UserDAOI {
 
 	}
 	
-	public boolean setUserData(User user) {
+public boolean setUserData(User user) {
 		
     	String emailPattern = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
     	String loginPattern = "^[A-Za-z0-9.-]{3,20}$";
@@ -145,7 +146,18 @@ public class UserDAOImpl implements UserDAOI {
 			Transaction transaction = session.beginTransaction();
 			
 			userToUpdate.setEmail(user.getEmail() != null ? user.getEmail() : tempUser.getEmail());
-			userToUpdate.setPassword(user.getPassword() != null ? user.getPassword() : tempUser.getPassword());
+			if(user.getPassword() != null){
+				try {
+					userToUpdate.setPassword(HashcodeGenerator.getMD5(user.getPassword()));
+				} catch (NoSuchAlgorithmException e2) {
+					e2.printStackTrace();
+					System.out.println("FALSE1");
+					return false;
+				}
+			} else {
+				userToUpdate.setPassword(tempUser.getPassword());
+			}
+					  
 			userToUpdate.setCity(user.getCity() != null ? user.getCity() : tempUser.getCity());
 			userToUpdate.setGender(user.getGender() != null ? user.getGender() : tempUser.getGender());
 			userToUpdate.setInfo(user.getInfo() != null ? user.getInfo() : tempUser.getInfo());
@@ -314,8 +326,7 @@ public class UserDAOImpl implements UserDAOI {
         
         try {
         	userToReturn = (User) session.load(User.class, session.save(user));
-        	
-        	MessageDigest messageDigest2;
+        	        	
             String activationCode = "";
             
     		try {
@@ -464,6 +475,35 @@ public class UserDAOImpl implements UserDAOI {
 
         return !criteria.list().isEmpty();
     }
+    
+	@Override
+	public boolean changPassword(ClassPassword userPasswords){
+		User user = getUser(userPasswords.getLogin());
+		
+		try {
+			userPasswords.setOldPassword(HashcodeGenerator.getMD5(userPasswords.getOldPassword()));
+		} catch (NoSuchAlgorithmException e2) {
+			e2.printStackTrace();
+			System.out.println("FALSE1");
+			return false;
+		}
+		if(!user.getPassword().equals(userPasswords.getOldPassword())){
+		
+			System.out.println(user.getPassword());
+			System.out.println(userPasswords.getOldPassword());
+			System.out.println("FALSE2");
+			return false;
+		}
+		 
+		User finalUser = new User();
+		finalUser.setLogin(userPasswords.getLogin());
+		finalUser.setPassword(userPasswords.getNewPassword());
+		
+		System.out.println(user.getPassword());
+		System.out.println(userPasswords.getOldPassword());
+		
+		return setUserData(finalUser);		
+	}
 
 
 }
