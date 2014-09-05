@@ -16,6 +16,12 @@
 	background-color:none;
 	font-weight:normal;
 }
+.pagination {
+
+
+margin: 0px 0;
+
+}
 </style>
 	<span class="row">
 		<button class="btn btn-success" data-template="html/modal/addUserModal.html" ng-click="clearModal()" bs-modal="modal">Dodaj użytkownika</button>
@@ -60,8 +66,8 @@
 					</td>
 					<td class="col-md-2" >
 						<button class="btn btn-info btn-sm" data-animation="am-fade-and-scale" data-template="html/modal/userModal.html" bs-modal="modal" ng-click="setUserForModal(user.login)" style="margin:2px 0 2px 0;">Szczegóły</button>
-						<button class="btn btn-sm btn-danger "  ng-click="BanUser(user)" ng-hide="currentUserLogin == user.login || user.group.name == 'zablokowany'">Zablokuj</button>
-						<button class="btn btn-sm btn-success "  ng-click="UnbanUser(user)" ng-hide="currentUserLogin == user.login || user.group.name != 'zablokowany'">Odblokuj</button>
+						<button class="btn btn-sm btn-danger "  ng-click="BanUser(user)" ng-hide="currentUserLogin == user.login || user.group.id == '5'">Zablokuj</button>
+						<button class="btn btn-sm btn-success "  ng-click="UnbanUser(user)" ng-hide="currentUserLogin == user.login || user.group.id != '5'">Odblokuj</button>
 				
 					</td>
 				</tr>
@@ -69,5 +75,20 @@
       </div>
       <button class="btn btn-sm" ng-click="checkAll()" ng-model="selectAll">{{btnVal}}</button>
       <button class="btn btn-sm">Zablokuj zaznaczonych</button>
-      <div class="col-md-4 pull-right" style="height: 100%;" paging page="usersPage" page-size="usersLimit" total="totalUsers" show-prev-next="true" adjacent="1" paging-action="ChangePage(page)" ng-init="page=1"></div>
+      
+      {{userLimit}}
+      <div class="pull-right" style="" paging page="usersPage" page-size="usersLimit" total="totalUsers" show-prev-next="true" adjacent="1" paging-action="ChangePage(page)" ng-init="page=1">      	
+      </div>
+      <span class="col-md-1 pull-right" style="padding:0px;">
+      	<button class="btn btn-sm" ng-click="ChangePage(0)" style="padding:8px 10px;">Zmień</button>
+      </span>
+      <span class="col-md-1 pull-right" style="">
+      	<select ng-model="usersLimit" class="form-control" style="padding:6px 10px;">
+      		<option>15</option>
+      		<option>30</option>
+      		<option>50</option>
+      	</select>      	      	
+      </span>
+      
+      
 </div>

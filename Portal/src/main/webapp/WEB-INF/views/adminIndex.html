@@ -84,7 +84,7 @@
 	<span>
     {{data.name}}
     <button class="btn btn-success" data-animation="am-fade-and-scale" data-template="html/modal/categoryModal.html" bs-modal="modal" ng-click="SetCategoryForModal(data.id)"> Edytuj</button>
-    <button class="btn btn-danger" ng-click="remove(data.id)" ng-show="getListOfElementsByParent(data.id).length == 0">Usu�</button>
+    <button class="btn btn-danger" ng-click="remove(data.id)" ng-show="getListOfElementsByParent(data.id).length == 0">Usuń</button>
     <ul class="hier-ul">
         <li class="hier-li" ng-repeat="data in getListOfElementsByParent(data.id)" ng-include="'tree_item_renderer.html'"></li>
     </ul>
@@ -453,7 +453,7 @@ $scope.SetCategoryForModal = function($id)
 	$scope.categoryForModal = $scope.GetCategoryById($id);
 
 	$scope.modalInfo.title = 'Edycja kategorii';
-	$scope.modalInfo.buttonText = 'Zatwierd� zmiany';
+	$scope.modalInfo.buttonText = 'Zatwierdź zmiany';
 	$scope.modalInfo.op = '1';
 }
 
@@ -680,7 +680,7 @@ $scope.SetGroupForModal=function($id)
 {
 	$scope.groupForModal = $scope.GetIndexOfGroupById($id);
 	$scope.modalInfo.title = 'Edycja grupy';
-	$scope.modalInfo.buttonText = 'Zatwierd� zmiany';
+	$scope.modalInfo.buttonText = 'Zatwierdź zmiany';
 	$scope.modalInfo.op = '1';
 }
 
@@ -1557,7 +1557,8 @@ app.controller('UsersController', function($scope, $http) {
 	$scope.getlistOfUsers = function($pageNO) {
 		// if($scope.listOfUsers.length != 0)
 		// return $scope.listOfUsers;		
-		GetUsers($scope, $http, $pageNO);		
+		console.log($scope.usersLimit);
+		GetUsers($scope, $http, $scope.usersLimit,$pageNO);		
 	};
 	
 	$scope.getlistOfUsers(0);
@@ -1680,22 +1681,22 @@ function onFileSelected(event) {
                 </li>
 <!--                 <li ng-class="{active:isActive('/category')}"><a href="#category">Kategoria</a>
                 </li> -->
-                <li ng-class="{active:isActive('/articles')}"><a href="#articles">Artyku�</a>
+                <li ng-class="{active:isActive('/articles')}"><a href="#articles">Artykuły</a>
                 </li>
-                <li ng-class="{active:isActive('/articleRank')}"><a href="#articleRank">Ranga Artyku�u</a>
+                <li ng-class="{active:isActive('/articleRank')}"><a href="#articleRank">Ranga Artykułu</a>
                 </li>             
                 <li ng-class="{active:isActive('/commentModeration')}"><a href="#commentModeration">Komentarze</a>
                 </li>
                 <li ng-class="{active:isActive('/image')}"><a href="#image">Obrazki</a>
                 </li>
-                <li ng-class="{active:isActive('/imageModeration')}"><a href="#imageModeration">Moderacja obrazk�w</a>
+                <li ng-class="{active:isActive('/imageModeration')}"><a href="#imageModeration">Moderacja obrazków</a>
                 </li> 
                 <li ng-class="{active:isActive('/gallery')}"><a href="#gallery">Galerie</a>
                 </li>
                 
                 <li ng-show="isAdmin()" ng-class="{active:isActive('/groups')}"><a href="#groups">Grupa</a>
                 </li>
-				<li ng-show="isAdmin()" ng-class="{active:isActive('/users')}"><a href="#users">U�ytkownicy</a>
+				<li ng-show="isAdmin()" ng-class="{active:isActive('/users')}"><a href="#users">Użytkownicy</a>
                 </li>
             	
                 
@@ -1703,7 +1704,7 @@ function onFileSelected(event) {
 
 
                 <li><a class="dropdown-toggle" data-toggle="dropdown" href="">
-                    Wi�cej <i class="glyphicon glyphicon-chevron-down"></i>
+                    Więcej <i class="glyphicon glyphicon-chevron-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-right" id="collapsed"></ul>
                 </li>

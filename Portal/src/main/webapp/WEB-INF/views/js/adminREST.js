@@ -247,8 +247,8 @@ function RemoveGroup($scope, $http, id) {
 	  }); 
 }
 
-function GetUsers($scope, $http, pageNO){
-	$http.get(servicesContext + '/user?limit=15&pageNo=' + pageNO + '&sortBy=id&sortOrder=ASC').
+function GetUsers($scope, $http, limit, pageNO){
+	$http.get(servicesContext + '/user?limit=' + limit + '&pageNo=' + pageNO + '&sortBy=id&sortOrder=ASC').
 		success(function(data, status, headers, config) {
 			$scope.listOfUsers = data.users;
 			$scope.totalUsers = data.size;
@@ -281,6 +281,8 @@ function SetUserGroup($scope, $http, user, groupId){
 			data: {id : groupId}}).
 	  success(function(data, status, headers, config) {	
 	  	$scope.listOfUsers[$scope.getUserPosById(user.id)].group.id = groupId;
+	  	
+	  	alert("Użytkownik został przeniesiony do grupy: "+$scope.groups[groupId-1].name);
 	  }); 
 }
 
