@@ -151,7 +151,6 @@ public boolean setUserData(User user) {
 					userToUpdate.setPassword(HashcodeGenerator.getMD5(user.getPassword()));
 				} catch (NoSuchAlgorithmException e2) {
 					e2.printStackTrace();
-					System.out.println("FALSE1");
 					return false;
 				}
 			} else {
@@ -484,23 +483,15 @@ public boolean setUserData(User user) {
 			userPasswords.setOldPassword(HashcodeGenerator.getMD5(userPasswords.getOldPassword()));
 		} catch (NoSuchAlgorithmException e2) {
 			e2.printStackTrace();
-			System.out.println("FALSE1");
 			return false;
 		}
 		if(!user.getPassword().equals(userPasswords.getOldPassword())){
-		
-			System.out.println(user.getPassword());
-			System.out.println(userPasswords.getOldPassword());
-			System.out.println("FALSE2");
 			return false;
 		}
 		 
 		User finalUser = new User();
 		finalUser.setLogin(userPasswords.getLogin());
 		finalUser.setPassword(userPasswords.getNewPassword());
-		
-		System.out.println(user.getPassword());
-		System.out.println(userPasswords.getOldPassword());
 		
 		return setUserData(finalUser);		
 	}

@@ -31,10 +31,11 @@ function Logout($scope, $http){
 	$http.delete(servicesContext + '/logout').
 	  success(function(data, status, headers, config) {
 		$scope.userLoggedIn = false;
-		$scope.currentUserName.data = "";
+		$scope.currentUserName.data = null;
+		window.location.href = '/portal';
 	  }).
 	  error(function(data, status, headers, config) {
-		$scope.userLoggedIn = true;
+		//$scope.userLoggedIn = true;
 	}); 
 };
 
@@ -71,6 +72,8 @@ function GetCurrentUserLogin($scope, $http){
 	$http.get(servicesContext + '/getCurrentUser').
 	  success(function(data, status, headers, config) {
 		$scope.userLoggedIn = true;
+		console.log("GetCurrentUserLogin...");
+		console.log(data);
 		$scope.currentUserName.data = data.login;
 
 		if (data.group)

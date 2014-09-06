@@ -33,31 +33,36 @@ public class AuthController {
 		
 		com.portal.entity.User u = userDAO.getUser(user.getLogin());
 		
-		if(u.getGroup().getId() < 4l) {
+		if(u != null) {
 		
-		    Authentication authenticationToken = new UsernamePasswordAuthenticationToken(user.getLogin(), user.getPassword());
-		    
-		    try {
-	
-		        Authentication authentication = authenticationManager.authenticate(authenticationToken);
-	
-		        SecurityContext securityContext = SecurityContextHolder.getContext();
-	
-		        securityContext.setAuthentication(authentication);
-	
-		        HttpSession session = request.getSession(true);
-		        session.setAttribute("SPRING_SECURITY_CONTEXT", securityContext);
-		        
-		        userDAO.setLastLoginDate(user.getLogin());
-		        
-		        response.setStatus(HttpServletResponse.SC_CREATED);
-	
-		    } catch (AuthenticationException ex) {
-		    	
-		    	response.setStatus(HttpServletResponse.SC_NO_CONTENT);
-		    }
+			if(u.getGroup().getId() < 4l) {
+			
+			    Authentication authenticationToken = new UsernamePasswordAuthenticationToken(user.getLogin(), user.getPassword());
+			    
+			    try {
+		
+			        Authentication authentication = authenticationManager.authenticate(authenticationToken);
+		
+			        SecurityContext securityContext = SecurityContextHolder.getContext();
+		
+			        securityContext.setAuthentication(authentication);
+		
+			        HttpSession session = request.getSession(true);
+			        session.setAttribute("SPRING_SECURITY_CONTEXT", securityContext);
+			        
+			        userDAO.setLastLoginDate(user.getLogin());
+			        
+			        response.setStatus(HttpServletResponse.SC_CREATED);
+		
+			    } catch (AuthenticationException ex) {
+			    	
+			    	response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+			    }
+			} else {
+				response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+			}
 		} else {
-			response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+			response.setStatus(HttpServletResponse.SC_NO_CONTENT);
 		}
 	    
 	}

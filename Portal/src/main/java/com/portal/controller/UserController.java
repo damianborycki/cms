@@ -88,6 +88,7 @@ public class UserController {
 		try {
 			
 			User u = userDAO.getLoggedUser();
+			
 			System.out.println(u.getLogin());
 			
 			return u;
