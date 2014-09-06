@@ -13,6 +13,7 @@ $http({method: 'GET', url: servicesContext + '/tag'}).
 		$scope.getListOfTags();
 	  }).
 	  error(function(data, status, headers, config) {
+		alert("Błąd " + status);
 	}); 
 	};
 	
@@ -22,6 +23,7 @@ $http.put(servicesContext + '/tag/' + id, {name: name, description: description,
 		$scope.getListOfTags();
 	  }).
 	  error(function(data, status, headers, config) {
+		alert("Błąd " + status);
 	}); 
 	};
 	
@@ -31,6 +33,7 @@ $http.delete(servicesContext + '/tag/' + id).
 		$scope.getListOfTags();
 	  }).
 	  error(function(data, status, headers, config) {
+		alert("Błąd " + status);
 	}); 
 	};
 	
@@ -47,6 +50,7 @@ function AddTagType(name, description, $scope, $http){
 		$scope.getListOfTagsTypes();
 	  }).
 	  error(function(data, status, headers, config) {
+		alert("Błąd " + status);
 	}); 
 };
 	
@@ -56,6 +60,7 @@ $http.put(servicesContext + '/type/' + id, {name: name, description: description
 		$scope.getListOfTagsTypes();
 	  }).
 	  error(function(data, status, headers, config) {
+		alert("Błąd " + status);
 	}); 
 };
 
@@ -65,6 +70,7 @@ $http.delete(servicesContext + '/type/' + id).
 		$scope.getListOfTagsTypes();
 	  }).
 	  error(function(data, status, headers, config) {
+		alert("Błąd " + status);
 	}); 
 };
 
@@ -101,7 +107,10 @@ if (parent == "null") parent = null;
 $http({method: 'POST', url: servicesContext + '/category', data: {name: name, description: descr, parentId: parent}}).
 	  success(function(data, status, headers, config) {
 		$scope.getlistOfCategories();
-	  }); 
+	  }).
+	  error(function(data, status, headers, config) {
+		alert("Błąd " + status);
+		});
 	};
 	
 function EditCategory(id, name, description, parent, $scope, $http){
@@ -111,7 +120,10 @@ if (parent == "null") parent = null;
 $http({method: 'PUT', url: servicesContext + '/category/' + id, data: {name: name, description: description, parentId: parent}}).
 	  success(function(data, status, headers, config) {
 		$scope.getlistOfCategories();
-	  }); 
+	  }).
+	  error(function(data, status, headers, config) {
+		alert("Błąd " + status);
+	});
 	};
 	
 function DeleteCategory(id, $scope, $http){
@@ -195,16 +207,20 @@ function GetArticle(articleId, $scope, $http){
 function AddArticle(title, description, content, category_id, user, expiration_date, publication_date, tags, rank, image, galery, date, $scope, $http){
 	$http.post(servicesContext + '/article', {title: title, description: description, content: content, categoryId: category_id, userId: 1, expirationDate: expiration_date, publicationDate: publication_date, tags: tags, rankId: rank, imageId: image}).
 	  success(function(data, status, headers, config) {
+		alert("Zapisano artykuł");
 	  }).
 	  error(function(data, status, headers, config) {
+		alert("Błąd " + status);
 	}); 
 };
 
 function EditArticle(id, title, description, content, category_id, user, expiration_date, publication_date, tags, rank, image, galery, date, $scope, $http){
 	$http.put(servicesContext + '/article/' + id, {title: title, description: description, content: content, categoryId: category_id, userId: 1, expirationDate: expiration_date, publicationDate: publication_date, tags: tags, rankId: rank, imageId: image}).
 	  success(function(data, status, headers, config) {
+		alert("Zapisano artykuł");
 	  }).
 	  error(function(data, status, headers, config) {
+		alert("Błąd " + status);
 	}); 
 };
 
@@ -221,7 +237,10 @@ function AddNewGroup($scope, $http) {
 			data: {'name' : $scope.groupForModal.name, 'description' : $scope.groupForModal.description} }).
 	  success(function(data, status, headers, config) {
 	  	$scope.groups.push(data);
-	  }); 
+	  }).
+	  error(function(data, status, headers, config) {
+		alert("Błąd " + status);
+	});
 }
 
 function UpdateGroup($scope, $http, id) {
@@ -232,7 +251,10 @@ function UpdateGroup($scope, $http, id) {
 	  	$scope.groups(ix).id = data[id];
 	  	$scope.groups(ix).name = data[name];
 	  	$scope.groups(ix).description = data[description];
-	  });
+	  }).
+	  error(function(data, status, headers, config) {
+		alert("Błąd " + status);
+	});
 }
 
 function RemoveGroup($scope, $http, id) {

@@ -1,6 +1,6 @@
 			<div class="row containerm">
 				<div class="col-md-8">
-				<slick ng-transclude settings="slickConfig" control="slickHandle">
+				<slick ng-transclude settings="slickConfig" control="slickHandle" on-directive-init="slickInit">
 					<div ng-repeat="zajawka in articlesForRanks[1]">
 					<a href="#article/{{zajawka.id}}">
 						<img ng-src="{{getImage(1, 560, 300)}}">

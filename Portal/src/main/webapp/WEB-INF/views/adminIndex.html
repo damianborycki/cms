@@ -1,6 +1,7 @@
 <!doctype html>
 <html ng-app="studentInfoApp">
 <head>
+<meta charset="utf-8"/>
 	<script src="js/lib/jQuerry/jquery-1.11.0.min.js"></script>
 <script src="js/lib/angular/angular.js"></script>
 <script src="js/lib/angular/angular-sanitize.js"></script>
@@ -16,6 +17,7 @@
 <script src="js/plugins/ckeditor/ckeditor.js"></script>
 <script src="js/plugins/ckeditor/ng-ckeditor.js"></script>
 <script src="js/adminREST.js"></script>
+
     <script src="js/plugins/tagInput/ng-tags-input.min.js"></script>
     <link rel="stylesheet" href="js/plugins/tagInput/ng-tags-input.min.css" />
 <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -25,6 +27,7 @@
 <link rel="stylesheet" href="css/styles-admin.css" >
 <link rel="stylesheet" href="css/jcrop.css" >
 <link href="css/ng-ckeditor.css" rel="stylesheet">
+<link href='http://fonts.googleapis.com/css?family=Lato&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
 
 
 <script type="text/javascript" src="js/plugins/angular-tree-control/angular-tree-control.js"></script>
@@ -204,6 +207,15 @@ app.config(function($modalProvider) {
   });
 })
 
+
+app.directive('onLastRepeat', function() {
+	return function(scope, element, attrs) {
+		if (scope.$last) setTimeout(function(){
+			scope.$emit('onRepeatLast', element, attrs);
+		}, 1);
+	};
+});
+
 app.controller('topAndSideContrler', function($scope, $location, $http) {
 
 	$scope.currentUserGroup;
@@ -217,6 +229,9 @@ app.controller('topAndSideContrler', function($scope, $location, $http) {
     	return $scope.currentUserGroup == 1;
     }
 
+	$scope.$on('onRepeatLast', function(scope, element, attrs){
+		$('#topMenu').collapseMe();
+	});
 });
 
 app.service('tags', function($q) {
@@ -227,6 +242,7 @@ app.service('tags', function($q) {
     return deferred.promise;
   };
 });
+
 
 app.controller('ImageController', function($scope) {
    $scope.selected = function(cords) {
