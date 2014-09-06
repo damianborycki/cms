@@ -28,6 +28,8 @@
 <script src="js/mocki.js"></script>
 <script src="js/REST.js"></script>
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;sensor=false&amp;libraries=places"></script>
+
+
 <script>
 
 var servicesContext = '/portal/service';
@@ -45,7 +47,7 @@ Date.prototype.yyyymmddhhmmss = function() {
         return yyyy + '-' + (mm[1]?mm:"0"+mm[0]) + '-' + (dd[1]?dd:"0"+dd[0]) + ' ' + (hh[1]?hh:"0"+hh[0]) + ':' + (min[1]?min:"0"+min[0]) + ':' + (ss[1]?ss:"0"+ss[0]);
    };
    
-var app = angular.module('studentInfoApp', ['ngSanitize', 'ngRoute', 'mgcrea.ngStrap', 'ngTagsInput', 'bardo.directives', 'paging']);
+var app = angular.module('studentInfoApp', ['ngSanitize', 'ngRoute', 'mgcrea.ngStrap', 'ngTagsInput', 'bardo.directives', 'paging', 'ngAnimate']);
 
 app.filter('unsafe', function($sce) {
     return function(val) {
@@ -126,7 +128,7 @@ app.directive('onLastRepeat', function() {
 	};
 })
 
-app.controller('topAndSideContrler', function($scope, $http, SharedData, tags) {
+app.controller('topAndSideContrler', function($scope, $http, SharedData, tags, $timeout) {
 
  $scope.listOfArticles = [];
  //$scope.loginError = false;
@@ -173,7 +175,7 @@ $scope.currentUserGroup = null;
 
 $scope.LogIn = function(login, pass)
 {
-	Login(login, pass, $scope, $http);
+	Login(login, pass, $scope, $http, $timeout);
 
 }
 
@@ -252,7 +254,7 @@ $scope.loadTags = function(query) {
 });
 
 
-app.controller('GlownaController', function($scope, SharedData, $http, $location) {
+app.controller('GlownaController', function($scope, SharedData, $http, $location, $timeout) {
 
 $('html,body').scrollTop(0);
 if ($location.$$absUrl.split('code=')[1] != undefined) {
@@ -262,6 +264,7 @@ if ($location.$$absUrl.split('code=')[1] != undefined) {
 if ($scope.code != undefined && $scope != '') {
   ActivateUserAccount($scope, $http, $scope.code);
 }
+
 
 $scope.articlesForRanks = {};
 
@@ -1019,12 +1022,12 @@ $scope.article = null;
 					  <input class="form-control input-sm" id="exampleInputPassword1" placeholder="Hasło" type="password" ng-model="pass">
 					</div>
 
-          		<span class="help-block" style="color:#CC330E; font-size: 12px;" data-ng-show="loginError == 1">
+          		<span class="help-block loginErrorMessage" style="color:#CC330E; font-size: 12px;" data-ng-show="loginError == 1">
                   Błędny login lub hasło
                 </span>
                 
-                <span class="help-block" style="color:#CC330E; font-size: 12px;" data-ng-show="loginError == 2">
-                  Konto użytkownika jest nieaktywne
+                <span class="help-block loginErrorMessage" style="color:#CC330E; font-size: 12px;" ng-show='loginError == 2'>
+                  <span>Konto użytkownika jest nieaktywne</span>
                 </span>
 
 					<button type="submit" class="btn btn-primary btn-sm pull-right" ng-click="LogIn(login, pass)">Zaloguj</button>

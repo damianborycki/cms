@@ -1,6 +1,6 @@
 var servicesContext = '/portal/service';
 
-function Login(login, pass, $scope, $http){
+function Login(login, pass, $scope, $http, $timeout){
 	$http.post(servicesContext + '/login', {login: login, password: pass}).
 	  success(function(data, status, headers, config) {
 		$scope.userLoggedIn = status == "201";
@@ -13,14 +13,25 @@ function Login(login, pass, $scope, $http){
 		}
 
 		if (status == "204") {
-			$scope.loginError = 1;
+			if($scope.loginError != 1) {
+				$scope.loginError = 1;
+				$('.loginErrorMessage').fadeIn();
+				$('.loginErrorMessage').delay(2500).fadeOut();
+				$timeout(function(){$scope.loginError = 0}, 2600);
+			}
+			
 		}
 
 	  }).
 	  error(function(data, status, headers, config) {
 		  
 		  if(status == "403") {
-			  $scope.loginError = 2;
+			  if($scope.loginError != 2) {
+				  $scope.loginError = 2;
+				  $('.loginErrorMessage').fadeIn();
+				  $('.loginErrorMessage').delay(2500).fadeOut();
+				  $timeout(function(){$scope.loginError = 0}, 2600);
+			  }
 		  }
 			  
 		$scope.userLoggedIn = false;
@@ -72,8 +83,6 @@ function GetCurrentUserLogin($scope, $http){
 	$http.get(servicesContext + '/getCurrentUser').
 	  success(function(data, status, headers, config) {
 		$scope.userLoggedIn = true;
-		console.log("GetCurrentUserLogin...");
-		console.log(data);
 		$scope.currentUserName.data = data.login;
 
 		if (data.group)
