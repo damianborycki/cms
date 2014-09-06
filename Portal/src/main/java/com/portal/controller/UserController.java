@@ -147,6 +147,22 @@ public class UserController {
             
     }
     
+    @RequestMapping(value="/createUser", method=RequestMethod.POST)
+    public void createUserViaPanel(@RequestBody User user, HttpServletResponse response){
+    	
+        try {
+            response.setStatus(HttpServletResponse.SC_CREATED);     
+            User u = userDAO.addUser(user, false);
+            
+            if (u != null) response.setStatus(HttpServletResponse.SC_CREATED);
+            else response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+        } catch(Exception e){
+            System.out.println(e.getMessage());         
+            response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+        }
+            
+    }
+    
     @RequestMapping(value = "/totalUsers", method = RequestMethod.GET)
     public @ResponseBody int totalUsers(HttpServletResponse response){    	
     	try {

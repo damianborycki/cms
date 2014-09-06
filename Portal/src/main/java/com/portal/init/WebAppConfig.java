@@ -99,7 +99,6 @@ public class WebAppConfig {
 		Properties mailProperties = new Properties();
 		mailProperties.put("mail.smtp.auth", true);
 		mailProperties.put("mail.smtp.starttls.enable", true);
-		mailProperties.put("mail.smtp.ssl.trust", "smtp.gmail.com");
 		
 		ms.setJavaMailProperties(mailProperties);
 		

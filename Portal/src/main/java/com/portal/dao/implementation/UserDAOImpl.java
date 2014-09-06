@@ -299,6 +299,8 @@ public boolean setUserData(User user) {
     	
         if (user.getPassword() == null || user.getPassword().length() < 6) return null;
         
+        String notHashedPW = user.getPassword();
+        
         if (user.getGender() != null && !user.getGender().trim().equalsIgnoreCase("K") && !user.getGender().trim().equalsIgnoreCase("M"))
         	return null;
     	
@@ -306,9 +308,9 @@ public boolean setUserData(User user) {
              
         user.setDateOfLastLogIn(null);
         user.setAvatar(null);
-        user.setInfo(null);
-        
-        Group userGroup = (Group) session.load(Group.class, 4l);
+        user.setInfo(null);    
+
+        Group userGroup = (Group) session.load(Group.class, withActivation ? 4l : 3l);
         user.setGroup(userGroup);
         
         try {
@@ -328,23 +330,34 @@ public boolean setUserData(User user) {
         	        	
             String activationCode = "";
             
-    		try {
-    			String nanos = ((Long) System.nanoTime()).toString();
-    			activationCode = HashcodeGenerator.getMD5(nanos);
-    	        user.setCode(activationCode);
-    		} catch (NoSuchAlgorithmException e1) {
-    			e1.printStackTrace();
-    		}  
+            if(withActivation) {
+	    		try {
+	    			String nanos = ((Long) System.nanoTime()).toString();
+	    			activationCode = HashcodeGenerator.getMD5(nanos);
+	    	        user.setCode(activationCode);
+	    		} catch (NoSuchAlgorithmException e1) {
+	    			e1.printStackTrace();
+	    		}  
+            } else {
+            	user.setCode(null);
+            }
 
         	SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
 
             simpleMailMessage.setFrom("portal@portal.uj.edu.pl");
             simpleMailMessage.setTo(user.getEmail());
-            simpleMailMessage.setSubject("Aktywacja konta w serwisie Portal UJ");
-            simpleMailMessage.setText("Aby aktywować swoje konto kliknij w poniższy odnośnik:\n\n" + 
-            "http://localhost:8080/pages?code=" + activationCode);
+            simpleMailMessage.setSubject("Konto w serwisie Portal UJ");
             
-            //mailSender.send(simpleMailMessage);
+            simpleMailMessage.setText("Zarejestrowano konto na poniższe dane:\n\nLogin: " + user.getLogin() + "\nHasło: " + notHashedPW);
+            
+            if(withActivation) {
+            	simpleMailMessage.setText(simpleMailMessage.getText() + "\n\nAby aktywować swoje konto kliknij w poniższy odnośnik:\n" + 
+            "http://localhost:8080/portal?code=" + activationCode);
+            }
+            
+            simpleMailMessage.setText(simpleMailMessage.getText() + "\n\n_______\n\nZespół Portal UJ");
+            
+            mailSender.send(simpleMailMessage);
             
         } catch (Exception e) {
             System.out.println(e.getMessage());

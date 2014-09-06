@@ -16,8 +16,8 @@ function Login(login, pass, $scope, $http, $timeout){
 			if($scope.loginError != 1) {
 				$scope.loginError = 1;
 				$('.loginErrorMessage').fadeIn();
-				$('.loginErrorMessage').delay(2500).fadeOut();
-				$timeout(function(){$scope.loginError = 0}, 2600);
+				$('.loginErrorMessage').delay(2500).fadeOut(500);
+				$timeout(function(){$scope.loginError = 0;}, 3000);
 			}
 			
 		}
@@ -29,8 +29,8 @@ function Login(login, pass, $scope, $http, $timeout){
 			  if($scope.loginError != 2) {
 				  $scope.loginError = 2;
 				  $('.loginErrorMessage').fadeIn();
-				  $('.loginErrorMessage').delay(2500).fadeOut();
-				  $timeout(function(){$scope.loginError = 0}, 2600);
+				  $('.loginErrorMessage').delay(2500).fadeOut(500);
+				  $timeout(function(){$scope.loginError = 0;}, 3000);
 			  }
 		  }
 			  
