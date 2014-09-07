@@ -172,11 +172,22 @@ function GetArticle(articleId, $scope, $http){
 	  success(function(data, status, headers, config) {
 		$scope.article = data;
 		$scope.getArticles();
+		$scope.getGalery(data.galery);
 	$scope.getCategoryByChild($scope.article.category_id.id);
 	  }).
 	  error(function(data, status, headers, config) {
 
 	}); 
+};
+
+function GetGallery(id, $scope, $http){
+	$http.get(servicesContext + '/gallery?id=' + id).
+	  success(function(data, status, headers, config) {
+		$scope.gallery = data;
+	  }).
+	  error(function(data, status, headers, config) {
+
+	});
 };
 
 function CommentArticle(login, articleId, content, parent, $scope, $http){
@@ -221,6 +232,15 @@ function GetArticlesByCategory(categoryId, limit, pageNo, sortOrder, sortBy, $sc
 	$http.get(servicesContext + '/articlesByCategory/' + categoryId + '?limit=' + limit + '&pageNo=' + pageNo + '&sortOrder=' + sortOrder + '&sortBy=' + sortBy).
 	  success(function(data, status, headers, config) {
 		$scope.listOfArticles = data;
+	  }).
+	  error(function(data, status, headers, config) {
+	}); 
+};
+
+function GetImageMetadata(id, $scope, $http){
+	$http.get(servicesContext + '/metadata?id=' + id ).
+	  success(function(data, status, headers, config) {
+		$scope.mainImageMetadata = data;
 	  }).
 	  error(function(data, status, headers, config) {
 	}); 

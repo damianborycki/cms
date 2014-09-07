@@ -143,7 +143,7 @@ public class ArticleDAOImpl implements ArticleDAOI {
 	@Override
 	public void create(String title, Category category, String description,
 			String content, User user, Date expiration_date,
-			Date publication_date, long galery, long image, List<Tag> tags,
+			Date publication_date, long galery, String image, List<Tag> tags,
 			String article_owner, ArticleRank rank) {
 		
 		Article art = new Article();
@@ -172,7 +172,7 @@ public class ArticleDAOImpl implements ArticleDAOI {
 	public void edit(long id, String title, Category category,
 			String description, String content, User user,
 			Date expiration_date, Date publication_date, Long galery,
-			Long image, List<Tag> tags, String article_owner, ArticleRank rank) {
+			String image, List<Tag> tags, String article_owner, ArticleRank rank) {
 		
 		Article art = this.getById(id);
 		

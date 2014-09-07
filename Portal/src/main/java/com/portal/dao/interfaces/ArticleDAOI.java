@@ -51,7 +51,7 @@ public interface ArticleDAOI {
                 Date expiration_date,
                 Date publication_date,
                 long galery,
-                long image,
+                String image,
                 List<Tag> tags,
                 String article_owner,
                 ArticleRank rank);
@@ -65,7 +65,7 @@ public interface ArticleDAOI {
               Date expiration_date,
               Date publication_date,
               Long galery,
-              Long image,
+              String image,
               List<Tag> tags,
               String article_owner,
               ArticleRank rank);

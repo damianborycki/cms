@@ -35,7 +35,16 @@
 				</div>
 
 				<div>
+				Obrazek:
+				<input ng-model="newArticle.image" placeholder="Id obrazka">
+				</div>
 				
+				<div>
+				Galeria:
+				<input ng-model="newArticle.galery" placeholder="Id galerii">
+				</div>
+
+				<div>
 				Kategoria:
 				<select ng-model="newArticle.category_id.id">
 				<option ng-selected="{{category.id == newArticle.category_id.id}}" ng-repeat="category in listOfCategories" value="{{category.id}}">{{category.name}}</option>

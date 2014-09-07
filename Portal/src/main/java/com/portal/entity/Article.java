@@ -41,7 +41,7 @@ public class Article {
     			@JsonProperty("categoryId") long categoryId,
     			@JsonProperty("rankId") long rankId,
     			@JsonProperty("tags") List<Long> tagIds,
-    			@JsonProperty("imageId") long imageId
+    			@JsonProperty("imageId") String imageId
     			)
 
 	{
@@ -142,7 +142,7 @@ public class Article {
 
     @NotNull
     @Column(name = "image")
-    private Long image;
+    private String image;
 
     @Column(name = "views", columnDefinition="bigint default 0")
     private Long views;
@@ -262,11 +262,11 @@ public class Article {
         this.comments = comments;
     }
 
-    public Long getImage() {
+    public String getImage() {
         return image;
     }
 
-    public void setImage(Long image) {
+    public void setImage(String image) {
         this.image = image;
     }
 

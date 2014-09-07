@@ -146,7 +146,7 @@ public class ImageController {
 
     private String getImagesDirectory()
     {
-        return System.getProperty("catalina.base") + slash + "webapps" +slash + "images" + slash;
+        return System.getProperty("catalina.base") + slash + "webapps" + slash + "portal" + slash + "WEB-INF" +slash + "images" + slash;
     }
 
     private String getNewImagePath(MultipartFile file, String id)

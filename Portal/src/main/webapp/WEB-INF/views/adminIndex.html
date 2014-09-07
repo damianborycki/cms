@@ -1223,7 +1223,8 @@ $scope.GetArticle=function(id)
 		publication_date: new Date(),
 		expiration_date: new Date(),
 		views:0,
-		image: 1,
+		image: null,
+		galery: null,
 		tag: [],
 		rank: {id: 1},  
 		category_id: {id: 1}, 
@@ -1272,12 +1273,12 @@ $scope.GetCurrentUserName();
 
 	$scope.addArticle = function()
 	{
-		AddArticle($scope.newArticle.title, $scope.newArticle.description, $scope.newArticle.content, $scope.newArticle.category_id.id, $scope.currentUserLogin, $scope.newArticle.publication_date.getTime(), $scope.newArticle.expiration_date.getTime(), $scope.getSelectedTagIds(), $scope.newArticle.rank.id, 1, new Date().getTime(), null, $scope, $http);
+		AddArticle($scope.newArticle.title, $scope.newArticle.description, $scope.newArticle.content, $scope.newArticle.category_id.id, $scope.currentUserLogin, $scope.newArticle.publication_date.getTime(), $scope.newArticle.expiration_date.getTime(), $scope.getSelectedTagIds(), $scope.newArticle.rank.id, $scope.newArticle.image, $scope.newArticle.galery, new Date().getTime(), $scope, $http);
 	}
 	
 	$scope.editArticle = function()
 	{
-		EditArticle($routeParams.articleId, $scope.newArticle.title, $scope.newArticle.description, $scope.newArticle.content, $scope.newArticle.category_id.id, $scope.currentUserLogin, $scope.newArticle.publication_date.getTime(), $scope.newArticle.expiration_date.getTime(), $scope.getSelectedTagIds(), $scope.newArticle.rank.id, 1, new Date().getTime(), null, $scope, $http);
+		EditArticle($routeParams.articleId, $scope.newArticle.title, $scope.newArticle.description, $scope.newArticle.content, $scope.newArticle.category_id.id, $scope.currentUserLogin, $scope.newArticle.publication_date.getTime(), $scope.newArticle.expiration_date.getTime(), $scope.getSelectedTagIds(), $scope.newArticle.rank.id, $scope.newArticle.image, $scope.newArticle.galery, new Date().getTime(), $scope, $http);
 	}
 	
 $scope.editorOptions = {

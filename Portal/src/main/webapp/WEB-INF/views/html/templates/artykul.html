@@ -12,9 +12,9 @@
 			<p class="art-data">{{article.publication_date}}</p>
             <div class="col-md-7">
 				<div style="margin-left: -10px; background-color: #FFF; border-radius: 16px; padding: 10px 10px 10px 10px; width: 470px; margin-top: 10px;">
-					<img ng-src="{{getImage(artykuly[0].image, 560, 300)}}" class="img-responsive">
-					<p>Opis opis</p>
-					<p>Autor: </p>
+					<img ng-src="{{getImage(article.image, 560, 300)}}" class="img-responsive">
+					<p ng-hide="mainImageMetadata.description == null">Opis: {{mainImageMetadata.description}}</p>
+					<p ng-hide="mainImageMetadata.author == null">Autor: {{mainImageMetadata.author}}</p>
 				</div>
             </div>
             <div class="col-md-5">
@@ -24,12 +24,12 @@
 						</p>
 			<div style="width: 550px; margin-left: auto; margin-right: auto; background-color: rgba(0,0,0,0.1); border-radius: 32px; padding: 20px 30px 10px 30px; margin-top: 20px; margin-bottom: 10px;" ng-hide="gallery == null">
 				<slick ng-transclude settings="slickConfig" control="slickHandle" style="width: 490px;" on-directive-init="slickInit">
-					<div ng-repeat="zajawka in getListOfArticles(3)" on-last-repeat>
+					<div ng-repeat="pic in gallery" on-last-repeat>
 						<p style="margin-left: auto; margin-right: auto; background-color: #FFF; border-radius: 16px; padding: 10px 10px 10px 10px; width: 470px">
-							<img ng-src="{{getImage(zajawka.image, 560, 300)}}" class="img-responsive">
-							Opis:
-							</br>
-							Autor:
+							<img ng-src="{{getImage(pic.image, 560, 300)}}" class="img-responsive">
+							
+						<p ng-hide="pic.description == null">Opis: {{pic.description}}</p>
+						<p ng-hide="pic.author == null">Autor: {{pic.author}}</p>
 						</p>
 					</div>
 				</slick>

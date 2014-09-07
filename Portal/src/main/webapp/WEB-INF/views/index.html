@@ -356,6 +356,32 @@ app.controller('ArticleController', function($scope, $http, SharedData, $routePa
     return servicesContext + '/image?id=' + id + '&width=' + width + '&height=' + height;
   };
   
+  $scope.mainImageMetadata = null;
+  $scope.getMainImageMetadata = function(id)
+  {
+	if ($scope.mainImageMetadata == null)
+	{
+		GetImageMetadata(id, $scope, $http);
+	}
+  }
+  
+  $scope.getMainImageMetadata('a');
+  
+  $scope.gallery = null;
+  
+  $scope.getGalery = function(id)
+  {
+  if (typeof id !== 'undefined' && id != '') {
+	if ($scope.gallery == null)
+	{
+		GetGallery(id, $scope, $http);
+	console.log("Gallery " + id);
+	}
+	console.log("Gallery " + id);
+	}
+	console.log("Gallery " + id);
+  };
+  
 $scope.getUserAvatar = function(id){
 	return servicesContext + "/avatar?id=" + id;
   };

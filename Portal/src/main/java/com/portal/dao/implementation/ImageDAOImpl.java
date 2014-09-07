@@ -98,15 +98,14 @@ public class ImageDAOImpl implements ImageDAOI {
     public ImageMetadata getImageMetadata(String id)
     {
         Image image = getFirstImage(id);
+
+
+
         if(image == null)
             return null;
-        
-        String authorUserName = image.getAuthor();
-
-        User author = userDAO.getUser(authorUserName);
 
         ImageMetadata result = new ImageMetadata();
-        result.setAuthor(author.getName() + " " + author.getSurname());
+        result.setAuthor(image.getAuthor());
         result.setDescription(image.getDescription());
         return result;
     }
