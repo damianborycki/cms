@@ -1,4 +1,11 @@
 ﻿
+<style>
+    table tr, table td {
+        border: none !important;
+        padding: 5px;
+    }
+</style>
+
 		<div class="row containerm">
 		<div class="col-md-12" style="color: #000">
 			<input ng-model="newArticle.title" placeholder="Tytuł">
@@ -9,24 +16,34 @@
 			
 			<span class="form-help">{{newArticle.content.length}} znaków</span>
 			<form name="timepickerForm" class="form-inline" role="form">
+
+
 			<div class="form-group">
-				Data publikacji:
-				<div class="form-group">
-				  <input size="10" class="form-control" ng-model="newArticle.publication_date" data-autoclose="1" placeholder="Date" data-date-format="yyyy-MM-dd" bs-datepicker type="text">
-				</div>
-				<div class="form-group">
-				  <input size="8" class="form-control" ng-model="newArticle.publication_date" data-autoclose="1" placeholder="Time" data-time-format="HH:mm:ss" bs-timepicker type="text">
-				</div>
-				
-				<div>
-				Data zakończenia:
-				<div class="form-group">
-				  <input size="10" class="form-control" ng-model="newArticle.expiration_date" data-autoclose="1" placeholder="Date" data-date-format="yyyy-MM-dd" bs-datepicker type="text">
-				</div>
-				<div class="form-group">
-				  <input size="8" class="form-control" ng-model="newArticle.expiration_date" data-autoclose="1" placeholder="Time" data-time-format="HH:mm:ss" bs-timepicker type="text">
-				</div>
-				
+                <table>
+                    <tr>
+                        <td>Data publikacji:</td>
+                        <td>
+                            <div class="form-group">
+                              <input size="10" class="form-control" ng-model="newArticle.publication_date" data-autoclose="1" placeholder="Date" data-date-format="yyyy-MM-dd" bs-datepicker type="text">
+                            </div>
+                            <div class="form-group">
+                              <input size="8" class="form-control" ng-model="newArticle.publication_date" data-autoclose="1" placeholder="Time" data-time-format="HH:mm:ss" bs-timepicker type="text">
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Data zakończenia:</td>
+                        <td>
+                            <div class="form-group">
+                              <input size="10" class="form-control" ng-model="newArticle.expiration_date" data-autoclose="1" placeholder="Date" data-date-format="yyyy-MM-dd" bs-datepicker type="text">
+                            </div>
+                            <div class="form-group">
+                              <input size="8" class="form-control" ng-model="newArticle.expiration_date" data-autoclose="1" placeholder="Time" data-time-format="HH:mm:ss" bs-timepicker type="text">
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+
 				<div>
 				Tagi:
 					 <tags-input ng-model="selectedTags" display-property="name" add-on-enter="false" placeholder="Dodaj tag">
@@ -34,31 +51,38 @@
 					</tags-input>
 				</div>
 
-				<div>
-				Obrazek:
-				<input ng-model="newArticle.image" placeholder="Id obrazka">
-				</div>
+                <table>
+                    <tr>
+                        <td>Obrazek:</td>
+                        <td><input ng-model="newArticle.image" placeholder="Id obrazka"></td>
+                    </tr>
 				
-				<div>
-				Galeria:
-				<input ng-model="newArticle.galery" placeholder="Id galerii">
-				</div>
+				<tr>
+                    <td>Galeria:</td>
+                    <td><input ng-model="newArticle.galery" placeholder="Id galerii"></td>
+				</tr>
 
-				<div>
-				Kategoria:
-				<select ng-model="newArticle.category_id.id">
-				<option ng-selected="{{category.id == newArticle.category_id.id}}" ng-repeat="category in listOfCategories" value="{{category.id}}">{{category.name}}</option>
-				</select>
-				</div>
-				<div>
-				
-				Ranga:
-				<select ng-model="newArticle.rank.id">
-				<option ng-selected="{{tagType.id == newArticle.rank.id}}" ng-repeat="tagType in listOfArticleRanks" value="{{tagType.id}}">{{tagType.name}}</option>
-				</select>
-				</div>
+				<tr>
+                    <td>Kategoria:</td>
+                    <td>
+                        <select ng-model="newArticle.category_id.id">
+                            <option ng-selected="{{category.id == newArticle.category_id.id}}" ng-repeat="category in listOfCategories" value="{{category.id}}">{{category.name}}</option>
+                        </select>
+                    </td>
+				</tr>
+
+				<tr>
+                    <td>Ranga:</td>
+                    <td>
+                        <select ng-model="newArticle.rank.id">
+                            <option ng-selected="{{tagType.id == newArticle.rank.id}}" ng-repeat="tagType in listOfArticleRanks" value="{{tagType.id}}">{{tagType.name}}</option>
+                        </select>
+                    </td>
+				</tr>
+                </table>
 			</div>
-			</div>
+
+
 		</form>
 		<a type="button" class="btn btn-primary" href="#articles">Zamknij</a>
 		<a type="button" class="btn btn-success" ng-show="newArticle.id == -1" ng-click="addArticle()">Dodaj</a>
