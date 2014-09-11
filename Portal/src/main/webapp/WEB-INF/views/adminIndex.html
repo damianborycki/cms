@@ -570,6 +570,7 @@ $scope.SetTagForModal=function($id)
 {
 	var idx = $scope.GetIndexOfTagById($id);
 	$scope.tagForModal = jQuery.extend(true, {}, $scope.listOfTags[idx]);
+	$scope.tagForModal.type = $scope.tagForModal.type.id;
 }
 
 $scope.UpdateTag=function($id)
@@ -1318,11 +1319,7 @@ $scope.GetIndexOfArticleRankById=function($id)
 $scope.selection = [];
 
 $scope.remove=function($id){ 
-	var idx = $scope.GetIndexOfArticleRankById($id);
-
-	if (idx > -1) {
-		$scope.listOfArticleRanks.splice(idx,1);  
-	} 
+	DeleteArticleRank($id, $scope, $http);
 	
 	idx = $scope.selection.indexOf($id);
 	
@@ -1336,20 +1333,7 @@ $scope.removeSelected=function(){
 	{
 		for (var id in $scope.selection)
 		{
-			var idx = -1;
-			
-			for (var articleRankIndex in $scope.listOfArticleRanks)
-			{
-				if ($scope.listOfArticleRanks[articleRankIndex].id == $scope.selection[id])
-				{
-					idx = articleRankIndex;
-				}
-			}
-			
-			if (idx > -1)
-			{
-				$scope.listOfArticleRanks.splice(idx,1); 
-			}
+			DeleteArticleRank($scope.selection[id], $scope, $http); 
 		}
 		$scope.selection = [];
 	}
@@ -1373,8 +1357,7 @@ $scope.SetarticleRankForModal=function($id)
 
 $scope.UpdateArticleRank=function($id)
 {
-	var idx = $scope.GetIndexOfArticleRankById($id);
-	$scope.listOfArticleRanks[idx] = $scope.articleRankForModal;
+	EditArticleRank($id, $scope.articleRankForModal.name, $scope.articleRankForModal.description, $scope,$http);
 }
 
 $scope.CreateNewArticleRank=function()
@@ -1388,8 +1371,7 @@ $scope.CreateNewArticleRank=function()
 
 $scope.AddNewArticleRank=function()
 {
-	$scope.articleRankForModal.id = $scope.listOfArticleRanks[$scope.listOfArticleRanks.length - 1].id + 1;
-	$scope.listOfArticleRanks.push($scope.articleRankForModal);
+	AddArticleRank($scope.articleRankForModal.name, $scope.articleRankForModal.description, $scope,$http);
 }
 
   // toggle selection for a given fruit by name

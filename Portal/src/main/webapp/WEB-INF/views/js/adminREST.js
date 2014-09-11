@@ -81,6 +81,36 @@ $http({method: 'GET', url: servicesContext + '/articleRank'}).
 	  }); 
 	};
 	
+function AddArticleRank(name, description, $scope, $http){
+	$http.post(servicesContext + '/articleRank', {name: name, description: description}).
+	  success(function(data, status, headers, config) {
+		$scope.getlistOfArticleRanks();
+	  }).
+	  error(function(data, status, headers, config) {
+		alert("Błąd " + status);
+	}); 
+};
+	
+function EditArticleRank(id, name, description, $scope, $http){
+$http.put(servicesContext + '/articleRank/' + id, {name: name, description: description}).
+	  success(function(data, status, headers, config) {
+		$scope.getlistOfArticleRanks();
+	  }).
+	  error(function(data, status, headers, config) {
+		alert("Błąd " + status);
+	}); 
+};
+
+function DeleteArticleRank(id, $scope, $http){
+$http.delete(servicesContext + '/articleRank/' + id).
+	  success(function(data, status, headers, config) {
+		$scope.getlistOfArticleRanks();
+	  }).
+	  error(function(data, status, headers, config) {
+		alert("Błąd " + status);
+	}); 
+};
+	
 function GetCategories($scope, $http){
 $http({method: 'GET', url: servicesContext + '/category'}).
 	  success(function(data, status, headers, config) {

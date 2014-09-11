@@ -339,8 +339,18 @@ $scope.getImage = function(id, width, height){
 	$scope.slickHandle = {
 	};
 	
+	$scope.slickInitialized = false;
+	
+	$scope.slickInit = function()
+	{
+		$scope.slickInitialized = true;
+	}
+	
 	$scope.$on('onRepeatLast', function(scope, element, attrs){
-		$scope.slickHandle.slickGoTo(2);
+		if ($scope.slickInitialized)
+		{
+			$scope.slickHandle.slickPlay();
+		}
 	});
 });
 
