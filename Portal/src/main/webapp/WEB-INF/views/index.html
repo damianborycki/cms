@@ -809,12 +809,12 @@ $scope.user =
   'city': ''};
 
 
-  var options = {    
-    types: ['(cities)'],    
-    componentRestrictions: {country: "pl"}
-  };
-  var input = document.getElementById('city');
-  var autocomplete = new google.maps.places.Autocomplete(input, options);
+//   var options = {    
+//     types: ['(cities)'],    
+//     componentRestrictions: {country: "pl"}
+//   };
+//   var input = document.getElementById('city');
+//   var autocomplete = new google.maps.places.Autocomplete(input, options);
 
  $scope.lTest = function(){    
     if($scope.user.login != undefined)
@@ -859,24 +859,24 @@ $scope.user =
     return !angular.equals($scope.user, original);
   };
 
-  $scope.addListener = function() {
-    google.maps.event.addListener(autocomplete, 'place_changed', function() {
+//   $scope.addListener = function() {
+//     google.maps.event.addListener(autocomplete, 'place_changed', function() {
 
-      var places = autocomplete.getPlace();
+//       var places = autocomplete.getPlace();
 
-      var city = places.adr_address.split('>')[1];
-      city = city.split('<')[0];
+//       var city = places.adr_address.split('>')[1];
+//       city = city.split('<')[0];
 
-      input.value = "siem";
-      $scope.user.city = city;
+//       input.value = "siem";
+//       $scope.user.city = city;
 
-      setTimeout(function(){
-          input.value = $scope.user.city;    
-      },1);
-  });
-  }
+//       setTimeout(function(){
+//           input.value = $scope.user.city;    
+//       },1);
+//   });
+//   }
 
-$scope.addListener();
+// $scope.addListener();
 
 	  $scope.getAddress = function(viewValue) {
 		var params = {address: viewValue, sensor: false};
@@ -886,17 +886,17 @@ $scope.addListener();
 		});
 	  };
 
-    $scope.removeCountry = function() {
+//     $scope.removeCountry = function() {
 
-      if($scope.user.city.indexOf(',') !== -1)
-      {
-        $scope.user.city = $scope.user.city.split(',')[0];
-      }
-    }
+//       if($scope.user.city.indexOf(',') !== -1)
+//       {
+//         $scope.user.city = $scope.user.city.split(',')[0];
+//       }
+//     }
   
 	$scope.register = function()
 	{
-    	$scope.removeCountry();
+    	//$scope.removeCountry();
     	if($scope.user.firstname == "") $scope.user.firstname = null;
     	if($scope.user.lastname == "") $scope.user.lastname = null;
     	if($scope.user.city == "") $scope.user.city = null;
