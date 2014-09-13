@@ -1,6 +1,14 @@
 ﻿
 <style>
-    table tr, table td {
+    table {
+        width: 340px;
+    }
+    table tr {
+        border: none !important;
+        width: 100%;
+        padding: 5px;
+    }
+    table td {
         border: none !important;
         padding: 5px;
     }
@@ -44,7 +52,7 @@
                     </tr>
                 </table>
 
-				<div>
+				<div style="width: 340px; padding: 5px">
 				Tagi:
 					 <tags-input ng-model="selectedTags" display-property="name" add-on-enter="false" placeholder="Dodaj tag">
 						<auto-complete source="loadTags($query)" max-results-to-show="3"></auto-complete>
@@ -54,18 +62,18 @@
                 <table>
                     <tr>
                         <td>Obrazek:</td>
-                        <td><input ng-model="newArticle.image" placeholder="Id obrazka"></td>
+                        <td><input ng-model="newArticle.image" placeholder="Id obrazka" style="width: 100%;"></td>
                     </tr>
 				
 				<tr>
                     <td>Galeria:</td>
-                    <td><input ng-model="newArticle.galery" placeholder="Id galerii"></td>
+                    <td><input ng-model="newArticle.galery" placeholder="Id galerii" style="width: 100%;"></td>
 				</tr>
 
 				<tr>
                     <td>Kategoria:</td>
                     <td>
-                        <select ng-model="newArticle.category_id.id">
+                        <select ng-model="newArticle.category_id.id"  style="width: 100%;">
                             <option ng-selected="{{category.id == newArticle.category_id.id}}" ng-repeat="category in listOfCategories" value="{{category.id}}">{{category.name}}</option>
                         </select>
                     </td>
@@ -74,7 +82,7 @@
 				<tr>
                     <td>Ranga:</td>
                     <td>
-                        <select ng-model="newArticle.rank.id">
+                        <select ng-model="newArticle.rank.id"  style="width: 100%;">
                             <option ng-selected="{{tagType.id == newArticle.rank.id}}" ng-repeat="tagType in listOfArticleRanks" value="{{tagType.id}}">{{tagType.name}}</option>
                         </select>
                     </td>
