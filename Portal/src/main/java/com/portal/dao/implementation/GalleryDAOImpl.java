@@ -23,7 +23,7 @@ public class GalleryDAOImpl implements GalleryDAOI {
     private SessionFactory sessionFactory;
 
     private Session openSession() {
-        return sessionFactory.getCurrentSession();
+        return sessionFactory.openSession();
     }
 
     public Gallery getGallery(Long id) {

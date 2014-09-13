@@ -3,6 +3,7 @@ package com.portal.dao.implementation;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.sql.Date;
 
@@ -123,8 +124,31 @@ public class ImageDAOImpl implements ImageDAOI {
     @Override
     public List<Image> getAll() {
 
-        List<Image> ids = openSession().createQuery("FROM Image i WHERE i.id <> 'default'").list();
-        return ids;
+        List<Image> images = openSession().createQuery("FROM Image i WHERE i.id <> 'default'").list();
+        List<Image> uniqueImages = new ArrayList<Image>();
+        Set<String> imageIds = new HashSet<String>();
+        
+        for(Image image : images)
+        {
+        	String id = image.getId();
+        	boolean idFound = false;
+        	for( String i : imageIds )
+        	{
+        		if( i.equals(id))
+        		{
+        			idFound = true;
+        			break;
+        		}
+        	}
+        	
+        	if( idFound == false )
+        	{
+        		uniqueImages.add(image);
+        		imageIds.add(id);
+        	}
+        }
+        
+        return uniqueImages;
     }
 
     public List<String> getImageIds(long userId, Date startDate, Date endDate)
