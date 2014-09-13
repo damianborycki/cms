@@ -154,7 +154,11 @@ $scope.getArticleByRankId = function(id)
 {
 	if ($scope.articlesForRanks[id] == null)
 	{
-		GetArticlesByRankForSide(id, 3, 0, 1, 'publication_date', $scope, $http);
+    if(id != 2) {
+		  GetArticlesByRankForSide(id, 3, 0, 1, 'publication_date', $scope, $http);
+    } else {
+      GetArticlesCriteria(id, 3, 0, false, 'views', $scope, $http);
+    }
 	}
 }
 
@@ -273,7 +277,7 @@ $scope.getArticleByRankId = function(id)
 {
 	if ($scope.articlesForRanks[id] == null)
 	{
-		GetArticlesByRankForSide(id, 3, 0, 1, 'publication_date', $scope, $http);
+		  GetArticlesByRankForSide(id, 3, 0, 1, 'publication_date', $scope, $http);
 	}
 }
 
@@ -1143,7 +1147,7 @@ $scope.article = null;
           <ul class="list-group">
             <li class="list-group-item list1" ng-repeat="zajawka in articlesForRanks[2]">
               <a href="#article/{{zajawka.id}}">
-                <img ng-src="{{getImage(artykul.image, 300, 200)}}" class="img-responsive">
+                <img ng-src="{{getImage(zajawka.image, 300, 200)}}" class="img-responsive">
                 <h4 class="zajawka-title">{{zajawka.title}}</h4> 
                 <div class="caption">
                   <p class="zajawka-text-justify">{{zajawka.description}}</p>
@@ -1156,7 +1160,7 @@ $scope.article = null;
           <ul class="list-group">
             <li class="list-group-item list1" ng-repeat="zajawka in articlesForRanks[1]">
               <a href="#article/{{zajawka.id}}">
-                <img ng-src="{{getImage(artykul.image, 300, 200)}}" class="img-responsive">
+                <img ng-src="{{getImage(zajawka.image, 300, 200)}}" class="img-responsive">
                 <h4 class="zajawka-title">{{zajawka.title}}</h4> 
                 <div class="caption">
                   <p class="zajawka-text-justify">{{zajawka.description}}</p>

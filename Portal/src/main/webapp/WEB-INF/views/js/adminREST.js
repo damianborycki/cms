@@ -11,6 +11,7 @@ $http({method: 'GET', url: servicesContext + '/tag'}).
 	$http.post(servicesContext + '/tag', {name: name, description: description, type: {id:type}}).
 	  success(function(data, status, headers, config) {
 		$scope.getListOfTags();
+		alert("Dodano tag");
 	  }).
 	  error(function(data, status, headers, config) {
 		alert("Błąd " + status);
@@ -21,16 +22,32 @@ $http({method: 'GET', url: servicesContext + '/tag'}).
 $http.put(servicesContext + '/tag/' + id, {name: name, description: description, type: {id:type}}).
 	  success(function(data, status, headers, config) {
 		$scope.getListOfTags();
+		alert("Edytowano tag");
 	  }).
 	  error(function(data, status, headers, config) {
 		alert("Błąd " + status);
 	}); 
 	};
 	
-	function DeleteTag(id, $scope, $http){
+	function DeleteTag(id, showAlert, $scope, $http){
 $http.delete(servicesContext + '/tag/' + id).
 	  success(function(data, status, headers, config) {
-		$scope.getListOfTags();
+		$scope.deleteTagSuccess += 1;
+		
+		if (showAlert)
+		{
+			$scope.getListOfTags();
+			if ($scope.deleteTagSuccess == 1)
+			{
+				alert("Usunięto tag");
+			}
+			else
+			{
+				alert("Usunięto tagi");
+			}
+				
+			$scope.deleteTagSuccess = 0;
+		}
 	  }).
 	  error(function(data, status, headers, config) {
 		alert("Błąd " + status);
@@ -48,6 +65,7 @@ function AddTagType(name, description, $scope, $http){
 	$http.post(servicesContext + '/type', {name: name, description: description}).
 	  success(function(data, status, headers, config) {
 		$scope.getListOfTagsTypes();
+		alert("Dodano typ tagu");
 	  }).
 	  error(function(data, status, headers, config) {
 		alert("Błąd " + status);
@@ -58,16 +76,32 @@ function EditTagType(id, name, description, $scope, $http){
 $http.put(servicesContext + '/type/' + id, {name: name, description: description}).
 	  success(function(data, status, headers, config) {
 		$scope.getListOfTagsTypes();
+		alert("Edytowano typ tagu");
 	  }).
 	  error(function(data, status, headers, config) {
 		alert("Błąd " + status);
 	}); 
 };
 
-function DeleteTagType(id, $scope, $http){
+function DeleteTagType(id, showAlert, $scope, $http){
 $http.delete(servicesContext + '/type/' + id).
 	  success(function(data, status, headers, config) {
-		$scope.getListOfTagsTypes();
+		$scope.deleteTagTypeSuccess += 1;
+		
+		if (showAlert)
+		{
+			$scope.getListOfTagsTypes();
+			if ($scope.deleteTagTypeSuccess == 1)
+			{
+				alert("Usunięto tag");
+			}
+			else
+			{
+				alert("Usunięto tagi");
+			}
+				
+			$scope.deleteTagTypeSuccess = 0;
+		}
 	  }).
 	  error(function(data, status, headers, config) {
 		alert("Błąd " + status);
@@ -85,6 +119,7 @@ function AddArticleRank(name, description, $scope, $http){
 	$http.post(servicesContext + '/articleRank', {name: name, description: description}).
 	  success(function(data, status, headers, config) {
 		$scope.getlistOfArticleRanks();
+		alert("Dodano rangę artykułu");
 	  }).
 	  error(function(data, status, headers, config) {
 		alert("Błąd " + status);
@@ -95,16 +130,32 @@ function EditArticleRank(id, name, description, $scope, $http){
 $http.put(servicesContext + '/articleRank/' + id, {name: name, description: description}).
 	  success(function(data, status, headers, config) {
 		$scope.getlistOfArticleRanks();
+		alert("Edytowano rangę artykułu");
 	  }).
 	  error(function(data, status, headers, config) {
 		alert("Błąd " + status);
 	}); 
 };
 
-function DeleteArticleRank(id, $scope, $http){
+function DeleteArticleRank(id, showAlert, $scope, $http){
 $http.delete(servicesContext + '/articleRank/' + id).
 	  success(function(data, status, headers, config) {
-		$scope.getlistOfArticleRanks();
+		$scope.deleteArticleRankSuccess += 1;
+		
+		if (showAlert)
+		{
+			$scope.getlistOfArticleRanks();
+			if ($scope.deleteArticleRankSuccess == 1)
+			{
+				alert("Usunięto rangę artykułu");
+			}
+			else
+			{
+				alert("Usunięto rangi artykułu");
+			}
+				
+			$scope.deleteArticleRankSuccess = 0;
+		}
 	  }).
 	  error(function(data, status, headers, config) {
 		alert("Błąd " + status);
@@ -137,6 +188,7 @@ if (parent == "null") parent = null;
 $http({method: 'POST', url: servicesContext + '/category', data: {name: name, description: descr, parentId: parent}}).
 	  success(function(data, status, headers, config) {
 		$scope.getlistOfCategories();
+		alert("Dodano kategorię");
 	  }).
 	  error(function(data, status, headers, config) {
 		alert("Błąd " + status);
@@ -150,6 +202,7 @@ if (parent == "null") parent = null;
 $http({method: 'PUT', url: servicesContext + '/category/' + id, data: {name: name, description: description, parentId: parent}}).
 	  success(function(data, status, headers, config) {
 		$scope.getlistOfCategories();
+		alert("Edytowano kategorię");
 	  }).
 	  error(function(data, status, headers, config) {
 		alert("Błąd " + status);
@@ -167,6 +220,7 @@ $http({method: 'DELETE', url: servicesContext + '/category/' + id}).
 		}
 
 		$scope.getlistOfCategories();
+		alert("Usunięto kategorię");
 	  }); 
 	};
 
@@ -182,8 +236,12 @@ $http({method: 'GET', url: servicesContext + '/comment?status=1&limit=' + $scope
 	};
 
 function SetCommentState($scope, $http, commentList){
+	
+	var listWrapper = {comments: null};
+	listWrapper.comments = commentList;
+	
 	$http({method: 'PATCH', url: servicesContext + '/setCommentStatus', 
-			data: commentList}).
+			data: listWrapper}).
 	  success(function(data, status, headers, config) {
 
 		for (var i = 0; i < commentList.length; i++) {
@@ -197,7 +255,7 @@ function SetCommentState($scope, $http, commentList){
 }
 
 function GetArticles($scope, $http) {
-	$http.get(servicesContext + '/articles').
+	$http.get(servicesContext + '/articlesAll').
 	  success(function(data, status, headers, config) {
 	  	$scope.listOfArticles = data;
 	  }); 
@@ -267,6 +325,7 @@ function AddNewGroup($scope, $http) {
 			data: {'name' : $scope.groupForModal.name, 'description' : $scope.groupForModal.description} }).
 	  success(function(data, status, headers, config) {
 	  	$scope.groups.push(data);
+		alert("Dodano grupę");
 	  }).
 	  error(function(data, status, headers, config) {
 		alert("Błąd " + status);
@@ -281,6 +340,7 @@ function UpdateGroup($scope, $http, id) {
 	  	$scope.groups(ix).id = data[id];
 	  	$scope.groups(ix).name = data[name];
 	  	$scope.groups(ix).description = data[description];
+		alert("Edytowano grupę");
 	  }).
 	  error(function(data, status, headers, config) {
 		alert("Błąd " + status);
@@ -296,6 +356,7 @@ function RemoveGroup($scope, $http, id) {
 				if (i > -1) {
 					$scope.groups.splice(i, 1);
 				}
+				alert("usunięto grupę");
 	  }); 
 }
 
@@ -325,6 +386,7 @@ function DeleteUser($scope, $http, login){
 	$http.delete(servicesContext + '/user/' + login).
 		success(function(data, status, headers, config) {
 			$scope.getlistOfUsers(1);
+			alert("Usunięto użytkownika");
 		});
 }
 

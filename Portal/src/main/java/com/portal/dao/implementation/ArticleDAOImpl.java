@@ -58,22 +58,29 @@ public class ArticleDAOImpl implements ArticleDAOI {
     	for (Article art : a) {
     		art.setComments(null);
     	}
-    	
-    	return a;
+
+        sessionFactory.getCurrentSession().close();
+        return a;
     }
 
     @Override
 	public List<Article> get(int num, int pageNum, String sortBy,
 			boolean ascOrder) {
 		Criteria c = this.getCriteria(num, pageNum, sortBy, ascOrder);
-		return c.list();
+
+        List<Article> articles = c.list();
+        sessionFactory.getCurrentSession().close();
+		return articles;
 	}
 
     @Override
     public List<Article> get(int num, int pageNum, String sortBy, boolean ascOrder, ArticleRank articleRank) {
         Criteria c = this.getCriteria(num, pageNum, sortBy, ascOrder);
         c.add(Restrictions.in("rank", new ArticleRank[]{articleRank}));
-        return c.list();
+
+        List<Article> articles = c.list();
+        sessionFactory.getCurrentSession().close();
+        return articles;
     }
 
     @Override
@@ -83,7 +90,7 @@ public class ArticleDAOImpl implements ArticleDAOI {
     	List<Article> articles = new ArrayList<Article>();		
 		Criteria criteria = openSession().createCriteria(Article.class);			
 		criteria.add(Restrictions.eq("category_id.id", categoryID));		
-		criteria.setFirstResult(num*(pageNum-1));
+		criteria.setFirstResult(num * (pageNum - 1));
 		criteria.setMaxResults(num);
 		if(ascOrder){
 			criteria.addOrder(Order.asc(sortBy));	
@@ -96,7 +103,10 @@ public class ArticleDAOImpl implements ArticleDAOI {
 			u.setLogin(art.getUser().getLogin());
 			art.setUser(u);
 	    	art.setComments(null);
-	    }	
+	    }
+
+
+        sessionFactory.getCurrentSession().close();
 		return articles;
     }
 
@@ -113,7 +123,11 @@ public class ArticleDAOImpl implements ArticleDAOI {
         c.createAlias("tag", "t");
         c.add(Restrictions.in("t.id", tagIds));
 
-        return c.list();
+
+        List<Article> articles = c.list();
+
+        sessionFactory.getCurrentSession().close();
+        return articles;
     }
 
     @Override
@@ -122,7 +136,11 @@ public class ArticleDAOImpl implements ArticleDAOI {
 		Criteria c = this.getCriteria(num, pageNum, sortBy, ascOrder);
 		c.add(Restrictions.idEq(category));
 		c.add(Restrictions.in("tag", new Tag[]{tag}));
-		return c.list();
+
+        List<Article> articles = c.list();
+
+        sessionFactory.getCurrentSession().close();
+		return articles;
 	}
 
 	@Override
@@ -131,12 +149,12 @@ public class ArticleDAOImpl implements ArticleDAOI {
 		
 		Article art = (Article) session.load(Article.class, id);
 		
-		System.out.println(art.getViews());
-		
 		art.setViews(art.getViews()+1);
 		session.update(art);
 		session.flush();
-		
+
+
+        sessionFactory.getCurrentSession().close();
         return art;
 	}
 
@@ -166,6 +184,8 @@ public class ArticleDAOImpl implements ArticleDAOI {
 		art.setDate(Calendar.getInstance().getTime());
 		
 		this.openSession().save(art);
+
+        sessionFactory.getCurrentSession().close();
 	}
 
 	@Override
@@ -192,16 +212,21 @@ public class ArticleDAOImpl implements ArticleDAOI {
 		art.setArticle_owner(article_owner);
 		art.setRank(rank);
 		this.openSession().merge(art);
-		
+
+        sessionFactory.getCurrentSession().close();
 	}
 	
 	public void createNew(Article a) {
 		openSession().save(a);
+
+        sessionFactory.getCurrentSession().close();
 	}
 
     @Override
     public Long countAll() {
-        return ((BigInteger) openSession().createSQLQuery("SELECT Count(*) FROM articles").uniqueResult()).longValue();
+        Long count = ((BigInteger) openSession().createSQLQuery("SELECT Count(*) FROM articles").uniqueResult()).longValue();
+        sessionFactory.getCurrentSession().close();
+        return count;
     }
 
     @Override
@@ -210,7 +235,9 @@ public class ArticleDAOImpl implements ArticleDAOI {
         Criteria criteria = session.createCriteria(Article.class);
         criteria.add(Restrictions.eq("category_id", category));
 
-        return !criteria.list().isEmpty();
+        List list = criteria.list();
+        sessionFactory.getCurrentSession().close();
+        return !list.isEmpty();
     }
 
 }

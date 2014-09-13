@@ -353,10 +353,10 @@ public class CommentDAOImpl implements CommentDAOI {
 
 			Comment parent = new Comment();
 
-			try {
+			if(c.getParent() != null){
 				parent.setId(c.getParent().getId());
-			} catch (Exception e) {
-				parent.setId(0L);
+			} else {
+				parent.setId(null);
 			}
 
 			com.setId(c.getId());

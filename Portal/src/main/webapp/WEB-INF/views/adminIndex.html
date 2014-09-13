@@ -534,9 +534,9 @@ $scope.GetTagType=function($id)
 
    
 $scope.selection = [];
-
+$scope.deleteTagSuccess = 0;
 $scope.remove=function($id){ 
-	DeleteTag($id,$scope,$http);
+	DeleteTag($id,true,$scope,$http);
 	
 	idx = $scope.selection.indexOf($id);
 	
@@ -550,7 +550,7 @@ $scope.removeSelected=function(){
 	{
 		for (var id in $scope.selection)
 		{
-			DeleteTag($scope.selection[id]);
+			DeleteTag($scope.selection[id], id == $scope.selection.length - 1 , $scope, $http);
 		}
 		$scope.selection = [];
 	}
@@ -774,10 +774,10 @@ $scope.GetIndexOfTagTypeById=function($id)
 };
    
 $scope.selection = [];
-
+$scope.deleteTagTypeSuccess = 0;
 $scope.remove=function($id){ 
 
-	DeleteTagType($id, $scope, $http); 
+	DeleteTagType($id, true, $scope, $http); 
 	
 	idx = $scope.selection.indexOf($id);
 	
@@ -791,7 +791,7 @@ $scope.removeSelected=function(){
 	{
 		for (var id in $scope.selection)
 		{
-			DeleteTagType($scope.selection[id], $scope, $http); 
+			DeleteTagType($scope.selection[id], id == $scope.selection.length - 1, $scope, $http); 
 		}
 		$scope.selection = [];
 	}
@@ -1317,9 +1317,10 @@ $scope.GetIndexOfArticleRankById=function($id)
 };
    
 $scope.selection = [];
+$scope.deleteArticleRankSuccess = 0;
 
 $scope.remove=function($id){ 
-	DeleteArticleRank($id, $scope, $http);
+	DeleteArticleRank($id, true, $scope, $http);
 	
 	idx = $scope.selection.indexOf($id);
 	
@@ -1333,7 +1334,7 @@ $scope.removeSelected=function(){
 	{
 		for (var id in $scope.selection)
 		{
-			DeleteArticleRank($scope.selection[id], $scope, $http); 
+			DeleteArticleRank($scope.selection[id], id == $scope.selection.length - 1, $scope, $http); 
 		}
 		$scope.selection = [];
 	}

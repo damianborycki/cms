@@ -237,6 +237,14 @@ function GetArticlesByCategory(categoryId, limit, pageNo, sortOrder, sortBy, $sc
 	}); 
 };
 
+function GetArticlesCriteria(rankId, limit, pageNo, sortOrder, sortBy, $scope, $http) {	
+	
+	$http.get(servicesContext + '/articles/?limit=' + limit + '&pageNo=' + pageNo + '&sortOrder=' + sortOrder + '&sortBy=' + sortBy).
+	  success(function(data, status, headers, config) {
+		  $scope.articlesForRanks[rankId] = data;
+	  }); 
+}
+
 function GetImageMetadata(id, $scope, $http){
 	$http.get(servicesContext + '/metadata?id=' + id ).
 	  success(function(data, status, headers, config) {

@@ -7,6 +7,7 @@ import com.portal.util.ClassComment;
 import com.portal.util.ClassParentComment;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
@@ -27,8 +29,8 @@ public class CommentController {
 	@Autowired
 	private CommentDAOI commentDAO;
 	
-	@RequestMapping(value="/comment", method=RequestMethod.POST)
-	public void addComment(@RequestBody Comment comment, HttpServletResponse response) {
+	@RequestMapping(value = "/comment", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, headers = {"content-type=application/json"})
+	public void addComment(@RequestBody Comment comment, HttpServletRequest request, HttpServletResponse response) {
 		
 		boolean result = commentDAO.add(comment.getUser().getLogin(), 
 					   comment.getContent(),
@@ -37,12 +39,13 @@ public class CommentController {
 		
 		if (result) response.setStatus(HttpServletResponse.SC_CREATED);
 		else response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+
 	}
 	
 	@RequestMapping(value="/setCommentStatus", method=RequestMethod.PATCH)
-	public void setCommentStatus(@RequestBody List<Comment> comments, HttpServletResponse response) {
+	public void setCommentStatus(@RequestBody ClassComment commentWrapper, HttpServletResponse response) {
 		
-		commentDAO.setStates(comments);
+		commentDAO.setStates(commentWrapper.getComments());
 			
 		response.setStatus(HttpServletResponse.SC_OK);
 	}
@@ -63,7 +66,9 @@ public class CommentController {
 			HttpServletResponse response){
 		response.setStatus(HttpServletResponse.SC_OK);
 		
-		return commentDAO.getUserComments(login, limit, pageNO, sortOrder);
+		ClassComment cc = commentDAO.getUserComments(login, limit, pageNO, sortOrder);
+		
+		return cc;
 	}
 	
 	@RequestMapping(value="/articleComments/{articleId}", method=RequestMethod.GET)
