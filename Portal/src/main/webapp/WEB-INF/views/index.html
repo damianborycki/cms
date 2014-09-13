@@ -154,7 +154,11 @@ $scope.getArticleByRankId = function(id)
 {
 	if ($scope.articlesForRanks[id] == null)
 	{
-		GetArticlesByRankForSide(id, 3, 0, 1, 'publication_date', $scope, $http);
+    if(id != 2) {
+		  GetArticlesByRankForSide(id, 3, 0, 1, 'publication_date', $scope, $http);
+    } else {
+      GetArticlesCriteria(id, 3, 0, false, 'views', $scope, $http);
+    }
 	}
 }
 
@@ -273,7 +277,7 @@ $scope.getArticleByRankId = function(id)
 {
 	if ($scope.articlesForRanks[id] == null)
 	{
-		GetArticlesByRankForSide(id, 3, 0, 1, 'publication_date', $scope, $http);
+		  GetArticlesByRankForSide(id, 3, 0, 1, 'publication_date', $scope, $http);
 	}
 }
 

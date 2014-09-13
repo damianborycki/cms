@@ -149,8 +149,6 @@ public class ArticleDAOImpl implements ArticleDAOI {
 		
 		Article art = (Article) session.load(Article.class, id);
 		
-		System.out.println(art.getViews());
-		
 		art.setViews(art.getViews()+1);
 		session.update(art);
 		session.flush();

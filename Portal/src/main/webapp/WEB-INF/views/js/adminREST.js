@@ -201,7 +201,7 @@ function SetCommentState($scope, $http, commentList){
 }
 
 function GetArticles($scope, $http) {
-	$http.get(servicesContext + '/articles').
+	$http.get(servicesContext + '/articlesAll').
 	  success(function(data, status, headers, config) {
 	  	$scope.listOfArticles = data;
 	  }); 

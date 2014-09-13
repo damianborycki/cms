@@ -32,8 +32,6 @@ public class CommentController {
 	@RequestMapping(value = "/comment", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, headers = {"content-type=application/json"})
 	public void addComment(@RequestBody Comment comment, HttpServletRequest request, HttpServletResponse response) {
 		
-		System.out.println("Komentuje...");
-		
 		boolean result = commentDAO.add(comment.getUser().getLogin(), 
 					   comment.getContent(),
 					   comment.getParent().getId(), 
@@ -70,12 +68,7 @@ public class CommentController {
 		
 		ClassComment cc = commentDAO.getUserComments(login, limit, pageNO, sortOrder);
 		
-		
-		for(Comment c : cc.getComments()) {
-			System.out.println(c.getArticle().getId());
-		}
-		
-		return commentDAO.getUserComments(login, limit, pageNO, sortOrder);
+		return cc;
 	}
 	
 	@RequestMapping(value="/articleComments/{articleId}", method=RequestMethod.GET)

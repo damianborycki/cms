@@ -59,10 +59,21 @@ public class ArticleController {
         response.setStatus(HttpServletResponse.SC_OK);
     }
 
-    @RequestMapping(value="/articles", method=RequestMethod.GET)
+    @RequestMapping(value="/articlesAll", method=RequestMethod.GET)
     public @ResponseBody List<Article> getArticles(HttpServletResponse response) {
         response.setStatus(HttpServletResponse.SC_OK);
         return articleDAO.getAll();
+    }
+    
+    @RequestMapping(value="/articles", method=RequestMethod.GET)
+    public @ResponseBody List<Article> getArticlesAll(@RequestParam("limit") int limit,
+            @RequestParam("pageNo") int pageNO,
+            @RequestParam("sortBy") String sortBy,
+            @RequestParam("sortOrder") Boolean sortOrder,
+            HttpServletResponse response) {
+    	
+        response.setStatus(HttpServletResponse.SC_OK);
+        return articleDAO.get(limit, pageNO, sortBy, sortOrder);
     }
 
     @RequestMapping(value="/articlesByTag/{tagIds}", method=RequestMethod.GET)

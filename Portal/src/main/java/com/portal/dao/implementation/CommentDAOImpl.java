@@ -293,9 +293,6 @@ public class CommentDAOImpl implements CommentDAOI {
 	public void setStates(List<Comment> comments) {
 		
 		Session session = sessionFactory.openSession();
-		
-		System.out.println(comments.getClass());
-		System.out.println(comments.get(0).getState());
 
 		for (Comment c : comments) {
 			Query query = session.createQuery("update Comment c set c.state = :state where c.id = :id");
