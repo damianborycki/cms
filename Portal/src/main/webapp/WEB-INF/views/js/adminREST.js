@@ -182,8 +182,12 @@ $http({method: 'GET', url: servicesContext + '/comment?status=1&limit=' + $scope
 	};
 
 function SetCommentState($scope, $http, commentList){
+	
+	var listWrapper = {comments: null};
+	listWrapper.comments = commentList;
+	
 	$http({method: 'PATCH', url: servicesContext + '/setCommentStatus', 
-			data: commentList}).
+			data: listWrapper}).
 	  success(function(data, status, headers, config) {
 
 		for (var i = 0; i < commentList.length; i++) {

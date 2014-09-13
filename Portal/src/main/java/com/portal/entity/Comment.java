@@ -18,7 +18,7 @@ import java.util.Date;
  * Created by Mateusz on 23.03.14.
  */
 @Entity
-@JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
+//@JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
 @Table(name = "comments")
 public class Comment {
 	
@@ -80,6 +80,7 @@ public class Comment {
     private Comment parent;
     
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "article_id", nullable = true)    
     private Article article;
     

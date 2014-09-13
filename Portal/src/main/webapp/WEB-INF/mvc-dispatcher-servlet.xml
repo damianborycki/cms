@@ -10,23 +10,20 @@
     http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd"
 	>
 
-
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
         <property name="maxUploadSize" value="50000000"/>
     </bean>
     
 
     <!-- W tym pakiecie beda wyszukiwane DAO -->
-    <context:component-scan base-package="com.portal.dao.implementation" />
+    <!--  --><context:component-scan base-package="com.portal.dao.implementation" />
 
     <!-- W tym pakiecie będę wyszukiwane kontrolery -->
 	<context:component-scan base-package="com.portal.controller" />
+	<context:component-scan base-package="com.portal.util" />
 
     <mvc:resources mapping="/**" location="/WEB-INF/views/"/>
-    <!--<mvc:resources mapping="angular/**" location="WEB-INF/pages/angular/"/>-->
-    <!--<mvc:resources mapping="js/**" location="WEB-INF/pages/js/"/>-->
+
     <mvc:annotation-driven />
     
-
-
 </beans>
