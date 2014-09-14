@@ -74,7 +74,7 @@
                     <td>Kategoria:</td>
                     <td>
                         <select ng-model="newArticle.category_id.id"  style="width: 100%;">
-                            <option ng-selected="{{category.id == newArticle.category_id.id}}" ng-repeat="category in listOfCategories" value="{{category.id}}">{{category.name}}</option>
+                            <option ng-selected="{{category.id == newArticle.category_id.id}}" ng-repeat="category in getFlatList()" value="{{category.id}}">{{category.depth}} {{category.name}}</option>
                         </select>
                     </td>
 				</tr>

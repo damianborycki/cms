@@ -27,7 +27,7 @@
 				<select ng-model="categoryForModal.parent">
 
 				<option value="null" ng-selected="categoryForModal.parent == null || categoryForModal.parent == ''">- Brak -</option>
-				<option ng-repeat="category in getFlatList()" ng-selected="{{category.id == categoryForModal.parent}} && categoryForModal.parent != null" value="{{category.id}}">{{category.name}}</option>
+				<option ng-repeat="category in getFlatList()" ng-selected="{{category.id == categoryForModal.parent}} && categoryForModal.parent != null" value="{{category.id}}">{{category.depth}} {{category.name}}</option>
 				</select>
 			</div>
 		</div>

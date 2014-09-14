@@ -352,15 +352,40 @@ $scope.GetIndexOfCategoryById=function($id)
 };
 
 
-$scope.getFlatCategoryListRecurrency = function(arr)
+$scope.getFlatCategoryListRecurrency = function(arr, depth)
 {
 	var out = [];
 	for (var index in arr)
 	{
+		var temp = arr[index];
+		var tempDepth = depth;
+		
+		if (arr[index].id == arr[arr.length -1].id)
+		{
+			tempDepth = tempDepth.slice(0, -1) + String.fromCharCode(160);
+		}
+		
+		temp.depth = tempDepth;
+		
+		if (arr[index].children.length == 0)
+		{
+			temp.depth += "---";
+		}
+		else
+		{
+			temp.depth += "--|";
+		}
+		
+		//temp.depth = depth + "---";
 		out.push(arr[index]);
 		if (arr[index].children != null && arr[index].children.length > 0)
 		{
-			var out2 = $scope.getFlatCategoryListRecurrency(arr[index].children);
+			var tempDepth2 = tempDepth;
+			
+			tempDepth2 += String.fromCharCode(160) + String.fromCharCode(160) + String.fromCharCode(160) + "|";
+			
+			
+			var out2 = $scope.getFlatCategoryListRecurrency(arr[index].children, tempDepth2);
 			
 			if (out2 != null && out.length > 0)
 			{
@@ -373,7 +398,7 @@ $scope.getFlatCategoryListRecurrency = function(arr)
 	}
 	
 	return out;
-}
+};
 
 $scope.getChildrenArrayRecurrency = function(id, arr)
 {
@@ -461,7 +486,12 @@ $scope.GetCategoryById = function($id)
 
 
 $scope.getFlatList = function() {
-	return $scope.getFlatCategoryListRecurrency($scope.listOfCategories);
+	return $scope.getFlatCategoryListRecurrency($scope.listOfCategories, "|");
+};
+
+$scope.getIndentOfLength = function(length)
+{
+	return GetIndentOfLength(length);
 }
 
 $scope.SetCategoryForModal = function($id)
@@ -931,19 +961,26 @@ $scope.GetFlatCategoriesList=function()
 	if ($scope.flatListOfCategories.length != 0)
 		return $scope.flatListOfCategories;
 	
-	$scope.flatListOfCategories = $scope.getFlatCategoryListRecurrency($scope.listOfCategories);
+	$scope.flatListOfCategories = $scope.getFlatCategoryListRecurrency($scope.listOfCategories, 0);
 	return $scope.flatListOfCategories;
 };
 
-$scope.getFlatCategoryListRecurrency = function(arr)
+$scope.getIndentOfLength = function(length)
+{
+	return GetIndentOfLength(length);
+};
+
+$scope.getFlatCategoryListRecurrency = function(arr, depth)
 {
 	var out = [];
 	for (var index in arr)
 	{
-		out.push(arr[index]);
+		var temp = arr[index];
+		temp.depth = depth;
+		out.push(temp);
 		if (arr[index].children != null && arr[index].children.length > 0)
 		{
-			var out2 = $scope.getFlatCategoryListRecurrency(arr[index].children);
+			var out2 = $scope.getFlatCategoryListRecurrency(arr[index].children, depth + 1);
 			
 			if (out2 != null && out.length > 0)
 			{
@@ -1281,6 +1318,66 @@ $scope.GetCurrentUserName();
 	{
 		EditArticle($routeParams.articleId, $scope.newArticle.title, $scope.newArticle.description, $scope.newArticle.content, $scope.newArticle.category_id.id, $scope.currentUserLogin, $scope.newArticle.publication_date.getTime(), $scope.newArticle.expiration_date.getTime(), $scope.getSelectedTagIds(), $scope.newArticle.rank.id, $scope.newArticle.image, $scope.newArticle.galery, new Date().getTime(), $scope, $http);
 	}
+	
+	
+$scope.getFlatList = function() {
+	return $scope.getFlatCategoryListRecurrency($scope.listOfCategories, "|");
+};
+
+
+$scope.getIndentOfLength = function(length)
+{
+	return GetIndentOfLength(length);
+};
+
+
+$scope.getFlatCategoryListRecurrency = function(arr, depth)
+{
+	var out = [];
+	for (var index in arr)
+	{
+		var temp = arr[index];
+		var tempDepth = depth;
+		
+		if (arr[index].id == arr[arr.length -1].id)
+		{
+			tempDepth = tempDepth.slice(0, -1) + String.fromCharCode(160);
+		}
+		
+		temp.depth = tempDepth;
+		
+		if (arr[index].children.length == 0)
+		{
+			temp.depth += "---";
+		}
+		else
+		{
+			temp.depth += "--|";
+		}
+		
+		//temp.depth = depth + "---";
+		out.push(arr[index]);
+		if (arr[index].children != null && arr[index].children.length > 0)
+		{
+			var tempDepth2 = tempDepth;
+			
+			tempDepth2 += String.fromCharCode(160) + String.fromCharCode(160) + String.fromCharCode(160) + "|";
+			
+			
+			var out2 = $scope.getFlatCategoryListRecurrency(arr[index].children, tempDepth2);
+			
+			if (out2 != null && out.length > 0)
+			{
+				for (var index2 in out2)
+				{
+					out.push(out2[index2]);
+				}
+			}
+		}
+	}
+	
+	return out;
+};
 	
 $scope.editorOptions = {
     language: 'pl'
@@ -1648,6 +1745,16 @@ function onFileSelected(event) {
   };
 
   reader.readAsDataURL(selectedFile);
+};
+
+function GetIndentOfLength(length)
+{
+	var out = "";
+	for (i = 0; i < length; i++)
+	{
+		out += String.fromCharCode(160) + String.fromCharCode(160) + String.fromCharCode(160) + String.fromCharCode(160);
+	}
+	return out + '-';
 };
 
 </script>
