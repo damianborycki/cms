@@ -74,5 +74,13 @@ public interface ArticleDAOI {
 
     Long countAll();
 
+    Long countByArticleRank(ArticleRank articleRank);
+
+    Long countByCategory(Category category);
+
+    Long countByTags(List<Tag> tags);
+
+    Long countByCategoryAndTag(Category category, Tag tag);
+
     boolean existsForCategory(Category category);
 }
