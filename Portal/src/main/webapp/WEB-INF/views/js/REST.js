@@ -223,6 +223,17 @@ function GetArticlesByTags(tags, limit, pageNo, sortOrder, sortBy, $scope, $http
 	$http.get(servicesContext + '/articlesByTag/' + tags + '?limit=' + limit + '&pageNo=' + pageNo + '&sortOrder=' + sortOrder + '&sortBy=' + sortBy).
 	  success(function(data, status, headers, config) {
 		$scope.listOfArticles = data;
+		GetArticlesCountByTags(tags, pageNo, $scope, $http);
+	  }).
+	  error(function(data, status, headers, config) {
+	}); 
+};
+
+function GetArticlesCountByTags(tags, pageNo, $scope, $http){
+	$http.get(servicesContext + '/articleCountByTags?tags=' + tags).
+	  success(function(data, status, headers, config) {
+		$scope.total = data;
+		$scope.articlesPage = pageNo;
 	  }).
 	  error(function(data, status, headers, config) {
 	}); 
@@ -232,6 +243,17 @@ function GetArticlesByCategory(categoryId, limit, pageNo, sortOrder, sortBy, $sc
 	$http.get(servicesContext + '/articlesByCategory/' + categoryId + '?limit=' + limit + '&pageNo=' + pageNo + '&sortOrder=' + sortOrder + '&sortBy=' + sortBy).
 	  success(function(data, status, headers, config) {
 		$scope.listOfArticles = data;
+		GetArticlesCountByCategory(categoryId, pageNo, $scope, $http);
+	  }).
+	  error(function(data, status, headers, config) {
+	}); 
+};
+
+function GetArticlesCountByCategory(category, pageNo, $scope, $http){
+	$http.get(servicesContext + '/articleCountByCategory?category=' + category).
+	  success(function(data, status, headers, config) {
+		$scope.total = data;
+		$scope.articlesPage = pageNo;
 	  }).
 	  error(function(data, status, headers, config) {
 	}); 
