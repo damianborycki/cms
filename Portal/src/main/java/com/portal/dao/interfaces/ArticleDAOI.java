@@ -3,7 +3,6 @@ package com.portal.dao.interfaces;
 
 import com.portal.entity.*;
 
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -74,13 +73,13 @@ public interface ArticleDAOI {
 
     Long countAll();
 
-    Long countByArticleRank(ArticleRank articleRank);
+    Long countByArticleRank(Long articleRank);
 
-    Long countByCategory(Category category);
+    Long countByCategory(Long category);
 
-    Long countByTags(List<Tag> tags);
+    Long countByTags(List<Long> tags);
 
-    Long countByCategoryAndTag(Category category, Tag tag);
+    Long countByCategoryAndTag(Long category, Long tag);
 
     boolean existsForCategory(Category category);
 }

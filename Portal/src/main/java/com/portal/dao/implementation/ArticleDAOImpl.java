@@ -230,37 +230,33 @@ public class ArticleDAOImpl implements ArticleDAOI {
     }
 
     @Override
-    public Long countByArticleRank(ArticleRank articleRank) {
+    public Long countByArticleRank(Long articleRank) {
         Long count = ((BigInteger) openSession().createSQLQuery("SELECT Count(*) FROM articles a WHERE a.rank = :articleRank")
-                .setParameter("articleRank", articleRank.getId()).uniqueResult()).longValue();
+                .setParameter("articleRank", articleRank).uniqueResult()).longValue();
         sessionFactory.getCurrentSession().close();
         return count;
     }
 
     @Override
-    public Long countByCategory(Category category) {
+    public Long countByCategory(Long category) {
         Long count = ((BigInteger) openSession().createSQLQuery("SELECT Count(*) FROM articles a WHERE a.category_id = :categoryid")
-                .setParameter("categoryid", category.getId()).uniqueResult()).longValue();
+                .setParameter("categoryid", category).uniqueResult()).longValue();
         sessionFactory.getCurrentSession().close();
         return count;
     }
 
     @Override
-    public Long countByTags(List<Tag> tags) {
-        List<Long> tagIds = new ArrayList<Long>();
-        for (Tag tag : tags) {
-            tagIds.add(tag.getId());
-        }
+    public Long countByTags(List<Long> tags) {
         Long count = ((BigInteger) openSession().createSQLQuery("SELECT Count(*) FROM articles a WHERE (SELECT tag_id FROM articles_tag WHERE articles_id=a.id) IN (:tags)")
-                .setParameter("tags", tagIds).uniqueResult()).longValue();
+                .setParameter("tags", tags).uniqueResult()).longValue();
         sessionFactory.getCurrentSession().close();
         return count;
     }
 
     @Override
-    public Long countByCategoryAndTag(Category category, Tag tag) {
+    public Long countByCategoryAndTag(Long category, Long tag) {
         Long count = ((BigInteger) openSession().createSQLQuery("SELECT Count(*) FROM articles a WHERE a.category_id=:category AND (SELECT tag_id FROM articles_tag WHERE articles_id=a.id) IN (:tag)")
-                .setParameter("category", category.getId()).setParameter("tag", tag.getId()).uniqueResult()).longValue();
+                .setParameter("category", category).setParameter("tag", tag).uniqueResult()).longValue();
         sessionFactory.getCurrentSession().close();
         return count;
     }

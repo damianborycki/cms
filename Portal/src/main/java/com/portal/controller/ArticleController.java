@@ -169,25 +169,25 @@ public class ArticleController {
     }
 
     @RequestMapping(value = "/articleCountByArticleRank", method = RequestMethod.GET)
-    public @ResponseBody Long getArticleCountByArticleRank(@RequestBody ArticleRank articleRank, HttpServletResponse response) {
+    public @ResponseBody Long getArticleCountByArticleRank(@RequestParam("articleRank") Long articleRank, HttpServletResponse response) {
         response.setStatus(HttpServletResponse.SC_OK);
         return articleDAO.countByArticleRank(articleRank);
     }
 
     @RequestMapping(value = "/articleCountByCategory", method = RequestMethod.GET)
-    public @ResponseBody Long getArticleCountByCategory(@RequestBody Category category, HttpServletResponse response) {
+    public @ResponseBody Long getArticleCountByCategory(@RequestParam("category") Long category, HttpServletResponse response) {
         response.setStatus(HttpServletResponse.SC_OK);
         return articleDAO.countByCategory(category);
     }
 
     @RequestMapping(value = "/articleCountByTags", method = RequestMethod.GET)
-    public @ResponseBody Long getArticleCountByTags(@RequestBody List<Tag> tags, HttpServletResponse response) {
+    public @ResponseBody Long getArticleCountByTags(@RequestParam("tags") List<Long> tags, HttpServletResponse response) {
         response.setStatus(HttpServletResponse.SC_OK);
         return articleDAO.countByTags(tags);
     }
 
     @RequestMapping(value = "/articleCountByCategoryAndTag", method = RequestMethod.GET)
-    public @ResponseBody Long getArticleCountByCategoryAndTag(@RequestBody Category category, @RequestBody Tag tag, HttpServletResponse response) {
+    public @ResponseBody Long getArticleCountByCategoryAndTag(@RequestParam("category") Long category, @RequestParam("tag") Long tag, HttpServletResponse response) {
         response.setStatus(HttpServletResponse.SC_OK);
         return articleDAO.countByCategoryAndTag(category, tag);
     }
