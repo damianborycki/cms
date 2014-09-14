@@ -55,14 +55,13 @@ public class ImageController {
     }
 
     @RequestMapping(value="/add_image",method = RequestMethod.POST)
-    public void addImage(@RequestParam("file") MultipartFile imageData,
+    public ModelAndView  addImage(@RequestParam("file") MultipartFile imageData,
                            @RequestParam("description") String description,
                            @RequestParam("author") String author,
                            @RequestParam("x1") long x1,
                            @RequestParam("y1") long y1,
                            @RequestParam("x2") long x2,
                            @RequestParam("y2") long y2,
-                           //@RequestParam("tags") Tag tags,
                            Model model) throws Exception 
     {
         Image image = new Image();
@@ -79,6 +78,8 @@ public class ImageController {
         setImageSize(image, imagePath);
 
         imageDAO.addImage(image);
+        
+        return new ModelAndView("redirect:/adminIndex.html#/image");
     }
     
     @RequestMapping(value="/image", method=RequestMethod.GET)
