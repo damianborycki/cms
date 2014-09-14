@@ -1228,8 +1228,19 @@ $scope.selectedTags = [];
 $scope.listOfTags;
 $scope.getTags();
 
+	$scope.getListOfTags = function()
+	{
+		GetTags($scope, $http);
+	};
+
+	$scope.query = "";
 $scope.loadTags = function(query) {
-    return tags.load($scope.listOfTags);
+	$scope.query = query;
+    var tempArr = $scope.listOfTags.filter( function(v) {
+		return v.name.indexOf($scope.query) > -1;
+	});
+	
+	return tags.load(tempArr);
   };
   
   $scope.getSelectedTagIds = function()
@@ -1378,6 +1389,51 @@ $scope.getFlatCategoryListRecurrency = function(arr, depth)
 	
 	return out;
 };
+
+
+
+	$scope.listOfTagsTypes = [];
+
+	$scope.getListOfTagsTypes  = function(len)
+	{
+		GetTagTypes($scope, $http);
+	};
+	
+	$scope.getListOfTagsTypes();
+
+$scope.CreateNewTag=function()
+{
+	$scope.tagForModal = {
+		id: -1,
+      name:  "",
+      description: "",
+      type: 1
+   };
+}
+
+$scope.AddNewTag=function()
+{
+	AddTag($scope.tagForModal.name, $scope.tagForModal.description, $scope.tagForModal.type, $scope,$http);
+}
+
+
+$scope.modalInfo = {'title' : '', 'buttonText' : '', 'op' : ''};
+	$scope.CreateNewCategory = function(parent)
+	{
+		$scope.categoryForModal = {'name': '', 'description': '', 'parent' : parent};
+		$scope.modalInfo.title = 'Dodawanie kategorii';
+		$scope.modalInfo.buttonText = 'Dodaj';
+		$scope.modalInfo.op = '0';
+	}
+
+	$scope.addOrUpdate = function(op, id) {
+		if (op == 0) {
+			AddCategory($scope, $http);
+		} else if (op == 1) {
+			EditCategory(id, $scope.categoryForModal.name ,$scope.categoryForModal.description, $scope.categoryForModal.parent ,$scope, $http);
+		}
+	}
+
 	
 $scope.editorOptions = {
     language: 'pl'

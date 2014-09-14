@@ -218,8 +218,14 @@ $scope.selectedTags = [];
 $scope.tags = SharedData.tags;
 $scope.getTags();
 
+	$scope.query = "";
 $scope.loadTags = function(query) {
-    return tags.load($scope.tags.data);
+	$scope.query = query;
+    var tempArr = $scope.tags.data.filter( function(v) {
+		return v.name.indexOf($scope.query) > -1;
+	});
+	
+	return tags.load(tempArr);
   };
   
   $scope.getTagString = function() {
@@ -1042,7 +1048,7 @@ $scope.article = null;
 
           <div class="col-md-6 pull-left" style="margin-top: 8%; margin-left: 0%;">
         <div class="input-group col-xs-6" style="padding-top: 0px;">
-      <tags-input ng-model="selectedTags" display-property="name" add-on-enter="false" placeholder="Dodaj tag">
+      <tags-input ng-model="selectedTags" display-property="name" add-on-enter="false" placeholder="Dodaj tag" add-on-blur="false">
         <auto-complete source="loadTags($query)" max-results-to-show="3"></auto-complete>
       </tags-input>
             <span class="input-group-btn" style="padding-top: 0px;">

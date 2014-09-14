@@ -54,9 +54,9 @@
 
 				<div style="width: 340px; padding: 5px">
 				Tagi:
-					 <tags-input ng-model="selectedTags" display-property="name" add-on-enter="false" placeholder="Dodaj tag">
+					 <tags-input ng-model="selectedTags" display-property="name" add-on-enter="false" placeholder="Dodaj tag" add-on-blur="false">
 						<auto-complete source="loadTags($query)" max-results-to-show="3"></auto-complete>
-					</tags-input>
+					</tags-input><button class="btn btn-success btnb" data-animation="am-fade-and-scale" data-template="html/modal/tagModalAdd.html" bs-modal="modal" ng-click="CreateNewTag()">Dodaj nowy tag</button>
 				</div>
 
                 <table>
@@ -78,6 +78,11 @@
                         </select>
                     </td>
 				</tr>
+					<tr>
+						<td>
+							<button class="btn btn-success btn" data-animation="am-fade-and-scale" data-template="html/modal/categoryModal.html" bs-modal="modal" ng-click="CreateNewCategory(null)">Dodaj kategorię</button>
+						</td>
+					</tr>
 
 				<tr>
                     <td>Ranga:</td>
