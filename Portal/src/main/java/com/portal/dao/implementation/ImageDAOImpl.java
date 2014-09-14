@@ -1,11 +1,13 @@
 package com.portal.dao.implementation;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
-import java.sql.Date;
+import java.util.Date;
+
 
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -20,6 +22,7 @@ import com.portal.dao.interfaces.UserDAOI;
 import com.portal.entity.User;
 import com.portal.entity.Image;
 import com.portal.entity.ImageMetadata;
+//import java.sql.Date;
 
 @Repository
 public class ImageDAOImpl implements ImageDAOI {
@@ -49,14 +52,21 @@ public class ImageDAOImpl implements ImageDAOI {
             return null;
     }
 
-    public List<Image> getAllUnapproved()
+    public List<Image> getAllUnapproved(Long addUserId, java.sql.Date startDate, java.sql.Date endDate)
     {
-        List<Image> imageList = new ArrayList<Image>();
+        List<Image> imageList;// = new ArrayList<Image>();
 
-        Query query = openSession().createQuery("from Image i where i.app_usr = :app_usr");
-        query.setParameter("app_usr",null);
+        Query query;
+        if( addUserId == null)
+        	query = openSession().createQuery("from Image where app_usr is null");
+        else
+        {
+        	query = openSession().createQuery("from Image i where i.app_usr is null and i.add_usr = :add_usr");
+        	query.setParameter("add_usr", addUserId);
+        }
+        
         imageList = query.list();
-        return imageList;
+        return unique(imageList);
     }
 
     public List<Image> getAllImages(String id)
@@ -121,16 +131,14 @@ public class ImageDAOImpl implements ImageDAOI {
     }
 
 
-    @Override
-    public List<Image> getAll() {
-
-        List<Image> images = openSession().createQuery("FROM Image i WHERE i.id <> 'default'").list();
-        List<Image> uniqueImages = new ArrayList<Image>();
-        Set<String> imageIds = new HashSet<String>();
-        
-        for(Image image : images)
-        {
-        	String id = image.getId();
+    private List<Image> unique(List<Image> images)
+    {
+    	Set<String> imageIds = new HashSet<String>();
+    	List<Image> uniqueImages = new ArrayList<Image>();
+    	
+    	for(Image image : images)
+    	{
+    		String id = image.getId();
         	boolean idFound = false;
         	for( String i : imageIds )
         	{
@@ -146,12 +154,19 @@ public class ImageDAOImpl implements ImageDAOI {
         		uniqueImages.add(image);
         		imageIds.add(id);
         	}
-        }
-        
-        return uniqueImages;
+    	}
+    	return uniqueImages;
     }
+    
+    @Override
+    public List<Image> getAll() {
 
-    public List<String> getImageIds(long userId, Date startDate, Date endDate)
+        List<Image> images = openSession().createQuery("FROM Image i WHERE i.id <> 'default'").list();
+        
+        return unique(images);
+    }
+    
+    public List<String> getImageIds(long userId, java.sql.Date startDate, java.sql.Date endDate)
     {
         Query query = openSession().createQuery("from Image i where add_usr = :add_usr and add_datetime between '" + startDate.toString() + "' and '" + endDate.toString() + "'");
         query.setParameter("add_usr",userId);
@@ -169,5 +184,27 @@ public class ImageDAOImpl implements ImageDAOI {
         idsList.addAll(setItems);
         return idsList;
 
+    }
+    
+    public void deleteImage(String id)
+    {
+    	Query query = openSession().createQuery("delete Image i where i.id = :id");
+    	query.setParameter("id", id);
+    	query.executeUpdate();
+    }
+    
+	public String acceptImage(Long app_usr, String id)
+    {
+    	Query query = openSession().createQuery("update Image i set i.app_usr = :app_usr, app_datetime = :app_datetime where i.id = :id");
+    	query.setParameter("id", id);
+    	query.setParameter("app_usr", app_usr);
+    	
+    	Calendar cal = Calendar.getInstance();
+    	cal.setTime(new java.util.Date());
+
+    	query.setParameter("app_datetime", new java.sql.Date(cal.get(Calendar.YEAR)-1900, cal.get(Calendar.MONTH), cal.get(Calendar.DATE)));
+    	query.executeUpdate();
+    	String queryString = query.getQueryString();
+    	return queryString;
     }
 }

@@ -9,6 +9,7 @@ import java.io.FileWriter;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
+import java.util.ArrayList;
 import java.sql.Date;
 
 import javax.imageio.ImageIO;
@@ -54,7 +55,7 @@ public class ImageController {
     }
 
     @RequestMapping(value="/add_image",method = RequestMethod.POST)
-    public ModelAndView addImage(@RequestParam("file") MultipartFile imageData,
+    public void addImage(@RequestParam("file") MultipartFile imageData,
                            @RequestParam("description") String description,
                            @RequestParam("author") String author,
                            @RequestParam("x1") long x1,
@@ -73,12 +74,11 @@ public class ImageController {
         image.setLink(imagePath);
         image.setAdd_usr(getLoggedUserId());
         image.setAuthor(author);
+        image.setDescription(description);
         image.setType("jpg");
         setImageSize(image, imagePath);
 
         imageDAO.addImage(image);
-
-        return new ModelAndView("redirect:http://localhost:8080/pages/adminIndex.html#/image");
     }
     
     @RequestMapping(value="/image", method=RequestMethod.GET)
@@ -105,9 +105,23 @@ public class ImageController {
 
     @RequestMapping(value="/unapproved_images", method=RequestMethod.GET)
     @ResponseBody
-    public List<Image> getUnapprovedImages()
+    public List<Image> getUnapprovedImages(
+    		@RequestParam(value="userLogin", required=false, defaultValue="") String userLogin,
+    		@RequestParam(value="startDate", required=false, defaultValue="0000-01-01") Date startDate,
+    		@RequestParam(value="endDate",   required=false, defaultValue="9999-12-31") Date endDate)
     {
-        return imageDAO.getAllUnapproved();
+    	if( userLogin.equals(""))
+    	{
+    		return imageDAO.getAllUnapproved(null, null, null);
+    	}
+    	else
+    	{
+    		User user = userDAO.getUser(userLogin);
+    		if( user == null )
+    			return new ArrayList<Image>();
+    		Long userId = user.getId();
+    		return imageDAO.getAllUnapproved(userId, null, null);
+    	}
     }
 
     private void saveTempImageFile( String path, MultipartFile imageData ) throws Exception
@@ -147,6 +161,7 @@ public class ImageController {
     private String getImagesDirectory()
     {
         return System.getProperty("catalina.base") + slash + "webapps" + slash + "portal" + slash + "WEB-INF" +slash + "images" + slash;
+    	//return System.getProperty("catalina.base") + slash + "webapps" + slash + "images" + slash + "scaled" + slash;
     }
 
     private String getNewImagePath(MultipartFile file, String id)
@@ -163,6 +178,19 @@ public class ImageController {
             throw new RuntimeException("no user logged in!");
         String loggedUserLogin = loggedUser.getLogin();
         return userDAO.getUser(loggedUserLogin).getId();
+    }
+    
+    private boolean isLoggedUserAdmin() throws RuntimeException
+    {
+    	User loggedUser = userDAO.getLoggedUser();
+    	if( loggedUser == null)
+    		return false;
+    	return loggedUser.getGroup().getId() == 1;
+    }
+    
+    private boolean shouldImageBeDisplayed(Image image) throws RuntimeException
+    {
+    	return image.getApp_usr() != null || isLoggedUserAdmin();
     }
 
     private void setImageSize(Image image, String imagePath) throws Exception
@@ -196,10 +224,10 @@ public class ImageController {
         {
             Image scaledImage = imageScaler.tryToScaleImage(imageDAO, imageId, width, height);
             if( scaledImage != null )
-                if( scaledImage.getApp_usr() != null )
+                if( shouldImageBeDisplayed(scaledImage) )
                     return scaledImage.getLink();
         }
-        if( image == null || image.getApp_usr() == null)
+        if( image == null || !shouldImageBeDisplayed(image))
             return getDefaultImageLink(width,height);
 
         return image.getLink();
@@ -229,5 +257,24 @@ public class ImageController {
     {
         User user = userDAO.getUser(login);
         return imageDAO.getImageIds(user.getId(), startDate, endDate);
+    }
+    
+    @RequestMapping(value="/deleteImage2", method=RequestMethod.DELETE)
+    public void deleteImage(@RequestParam("id") String imageId)
+    {
+    	imageDAO.deleteImage(imageId);
+    }
+    
+    @RequestMapping(value="/acceptImage", method=RequestMethod.POST)
+    @ResponseBody
+    public String acceptImage(@RequestParam("id") String imageId)
+    {
+    	if( isLoggedUserAdmin() )
+    	{
+    		String login = userDAO.getLoggedUser().getLogin();
+    		return imageDAO.acceptImage( userDAO.getUser(login).getId(), imageId);
+    		//return "OK";
+    	}
+    	return "FAIL - you have to be admin";
     }
 }

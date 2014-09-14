@@ -1,25 +1,167 @@
 
-    <div clas="row">
+<script language="javascript">
+  var images;
+  var currentImage=-1;
+  
+  function loadImage()
+  {
+    document.getElementById("obrazekDoModeracji").setAttribute( 'src', '/portal/service/image?id='+ images[currentImage].id + '&width=800&height=600' );
+    document.getElementById('imageAuthor').setAttribute('value', images[currentImage].author);
+    document.getElementById('imageDescription').innerHTML = images[currentImage].description;
+    document.getElementById('imageCount').innerHTML = 'obrazek ' + (currentImage+1) + ' z ' + images.length;
+  }
+  
+  function unloadImage()
+  {
+   	document.getElementById("obrazekDoModeracji").setAttribute( 'src', "http://placehold.it/800x600" );
+   	document.getElementById('imageAuthor').setAttribute('value', "");
+    document.getElementById('imageDescription').innerHTML = "";
+  }
+  
+  function getImages()
+  {
+  	var xmlHttp = null;
+
+    xmlHttp = new XMLHttpRequest();
+    var userLogin = document.getElementById('userLogin').value;
+    var httpReq = "/portal/service/unapproved_images?userLogin="+userLogin;
+
+    xmlHttp.open( "GET",httpReq, false );
+    xmlHttp.send( null );
+    images = JSON.parse(xmlHttp.responseText);
     
-        <div class="col-md-8">            
-            <img src="http://placehold.it/800x600" class="img-responsive">    
-        </div>  
+    if( images.length > 0 )
+    {
+    	currentImage = 0;
+    	loadImage();
+    }
+    else
+    {
+    	currentImage=-1;
+    	alert('Brak obrazków');
+    }
+  }
+  
+  function nextImage()
+  {
+  	if( images.length > currentImage+1 )
+  	{
+  		currentImage++;
+  		loadImage();
+  		/*img = document.getElementById("obrazekDoModeracji");
+    	img.setAttribute( 'src', '/portal/service/image?id='+ images[currentImage].id + '&width=800&height=600' );
+    	document.getElementById('imageAuthor').setAttribute('value', images[currentImage].author);
+    	document.getElementById('imageDescription').innerHTML = images[currentImage].description;*/
+  	}
+  	else
+  	{
+  		alert("Tu już ustatni obrazek");
+  	}
+  }
+  
+  function previousImage()
+  {
+  	if( currentImage > 0 )
+  	{
+  		currentImage--;
+  		loadImage();
+  	}
+  	else
+  	{
+  		alert("To jest pierwszy obrazek");
+  	}
+  }
+  
+  function deleteFromList()
+  {
+  	 images.splice( currentImage, 1 );
+	    
+	 while( currentImage >= images.length )
+	 {
+	 	currentImage--;
+	 }
+	    
+	 if( currentImage >= 0 )
+	 {
+	   	loadImage();
+	 }
+	 else
+	 {
+	   	unloadImage();
+	 }
+  }
+  
+  function deleteImage()
+  {
+  	if( currentImage >= 0 )
+  	{
+	  	var xmlHttp = null;
+	
+	    xmlHttp = new XMLHttpRequest();
+	    var httpReq = "/portal/service/deleteImage2?id="+images[currentImage].id;
+	    xmlHttp.open( "DELETE", httpReq, true );
+	    xmlHttp.send( null );
+
+		deleteFromList();
+	}
+	else
+	{
+		alert("Brak obrazka do usuniecia!");
+	}
+  }
+  
+  function acceptImage()
+  {
+  	if( currentImage >= 0 )
+  	{
+  		var xmlHttp = null;
+	
+		xmlHttp = new XMLHttpRequest();
+		var httpReq = "/portal/service/acceptImage?id="+images[currentImage].id;
+		xmlHttp.open( "POST", httpReq, true );
+		xmlHttp.send( null );
+	
+		deleteFromList();
+	}
+	else
+	{
+		alert("Brak obrazka do akceptacji!");
+	}
+  }
+</script>
+
+    <div class="row">
+    
+        <div class="col-md-8">
+        	<div class="row">          
+            	<img src="http://placehold.it/800x600" class="img-responsive" id="obrazekDoModeracji">
+            </div>
+            <div class="row">
+	            <div class="col-md-4">
+	                    <button class="btn btn-block btn-warning btnb" data-animation="am-fade-and-scale" onclick="previousImage();">Poprzedni</button>
+	        	</div>
+	        	<center><big><div class="col-md-4" id="imageCount"/><big><center>
+	        	<div class="col-md-4">
+	                    <button class="btn btn-block btn-warning btnb" data-animation="am-fade-and-scale" onclick="nextImage();">Następny</button>
+	        	</div>
+            </div>    
+        </div>
         
         <div class="col-md-4">       
             <div>
                 <div>
-                <input class="form-control" rows="1" placeholder="Użytkownik..."></textarea>
+                <input class="form-control" rows="1" placeholder="Użytkownik..." id="userLogin"></input>
                 </div>  
                
                 <div>
-                <input class="form-control" rows="1" placeholder="Data początkowa..."></textarea>
+                <input class="form-control" rows="1" placeholder="Data początkowa..."></input>
                 </div>   
                 <div>
-                <input class="form-control" rows="1" placeholder="Data końcowa..."></textarea>
+                <input class="form-control" rows="1" placeholder="Data końcowa..."></input>
                 </div>          
  
                 <div>		
-                <button class="btn btn-block btn-success btnb" data-animation="am-fade-and-scale">Wczytaj</button>
+                <button class="btn btn-block btn-success btnb" data-animation="am-fade-and-scale" onclick="getImages();">Wczytaj</button>
                 </div>     
                 <br>
             </div>
@@ -28,7 +170,7 @@
 				Autor:
 			</div>
 			<div>
-                <input class="form-control" rows="1"></textarea>
+                <input class="form-control" rows="1" id="imageAuthor"></input>
 			</div>  
             <br>
             
@@ -36,7 +178,7 @@
 				Opis:
 			</div>          
 			<div>
-				<textarea class="form-control" rows="6"></textarea>
+				<textarea class="form-control" rows="6" id="imageDescription"></textarea>
 			</div>
             <br>
             
@@ -44,21 +186,18 @@
 				Tagi:
 			</div>
 			<div>
-				<input class="form-control" rows="1"></textarea>
+				<input class="form-control" rows="1"></input>
 			</div> 
             <br>
             
             <div class="row">
-                <div class="col-md-4">
-                    <button class="btn btn-block btn-danger btnb" data-animation="am-fade-and-scale">Usuń</button>
-                </div>
-                <div class="col-md-4">
-                    <button class="btn btn-block btn-warning btnb" data-animation="am-fade-and-scale">Pomiń</button>
-                </div>        
-                <div class="col-md-4">
-                    <button class="btn btn-block btn-success btnb" data-animation="am-fade-and-scale">Akceptuj</button>
+                <div class="col-md-6">
+                    <button class="btn btn-block btn-danger btnb" data-animation="am-fade-and-scale" onclick="deleteImage();">Usuń</button>
+                </div>  
+                
+                <div class="col-md-6">
+                    <button class="btn btn-block btn-success btnb" data-animation="am-fade-and-scale" onclick="acceptImage();">Akceptuj i zapisz</button>
                 </div>                    
             </div>
-            
         </div>    
     </div>
