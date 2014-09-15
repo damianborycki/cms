@@ -354,13 +354,14 @@ $scope.getImage = function(id, width, height){
 	$scope.slickInit = function()
 	{
 		$scope.slickInitialized = true;
-	}
+		$scope.slickHandle.slickPlay();
+	};
 	
 	$scope.$on('onRepeatLast', function(scope, element, attrs){
-		if ($scope.slickInitialized)
-		{
+		//if ($scope.slickInitialized)
+		//{
 			$scope.slickHandle.slickPlay();
-		}
+		//}
 	});
 });
 
@@ -532,13 +533,14 @@ $scope.getTagString = function() {
 	$scope.slickInit = function()
 	{
 		$scope.slickInitialized = true;
+		$scope.slickHandle.slickPlay();
 	}
 	
 	$scope.$on('onRepeatLast', function(scope, element, attrs){
-		if ($scope.slickInitialized)
-		{
+		//if ($scope.slickInitialized)
+		//{
 			$scope.slickHandle.slickPlay();
-		}
+		//}
 	});
 	
 	$scope.categoriesByChild = [];

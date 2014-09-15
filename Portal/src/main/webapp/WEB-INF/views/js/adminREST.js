@@ -296,6 +296,7 @@ function AddArticle(title, description, content, category_id, user, expiration_d
 	$http.post(servicesContext + '/article', {title: title, description: description, content: content, categoryId: category_id, userId: 1, expirationDate: expiration_date, publicationDate: publication_date, tags: tags, rankId: rank, imageId: image}).
 	  success(function(data, status, headers, config) {
 		alert("Zapisano artykuł");
+		window.location.href = 'adminIndex.html#/articles';
 	  }).
 	  error(function(data, status, headers, config) {
 		alert("Błąd " + status);
