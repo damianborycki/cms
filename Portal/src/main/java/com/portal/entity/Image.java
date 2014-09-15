@@ -118,10 +118,6 @@ public class Image {
     @Column(name = "author", nullable = true, length = 100)
     private String author;
 
-    // TODO: uncomment after Tag is added
-    //@Column(name = "tags", nullable = false)
-    //private List<Tag> tags;
-
     @Column(name = "add_datetime", nullable = false)
     private Date add_datetime = new Date(System.currentTimeMillis());
 
@@ -146,7 +142,6 @@ public class Image {
     @Column(name = "link", nullable = false)
     private String link;
 
-    @ManyToOne(targetEntity = Gallery.class)
-    @JoinColumn(name = "gallery_id")
+    @Column(name = "gallery_id")
     private Long gallery_id;
 }

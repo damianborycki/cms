@@ -26,7 +26,7 @@
 				<slick ng-transclude settings="slickConfig" control="slickHandle" style="width: 490px;" on-directive-init="slickInit()">
 					<div ng-repeat="pic in gallery.images" on-last-repeat>
 						<p style="margin-left: auto; margin-right: auto; background-color: #FFF; border-radius: 16px; padding: 10px 10px 10px 10px; width: 470px">
-							<img ng-src="{{getImage(pic.image, 560, 300)}}" class="img-responsive">
+							<img ng-src="{{getImage(pic.id, 560, 300)}}" class="img-responsive">
 							
 						<p ng-hide="pic.description == null">Opis: {{pic.description}}</p>
 						<p ng-hide="pic.author == null">Autor: {{pic.author}}</p>
