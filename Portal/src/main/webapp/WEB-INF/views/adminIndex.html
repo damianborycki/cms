@@ -1449,9 +1449,6 @@ app.controller('ArticleRankController', function($scope, $http) {
 
 	$scope.getlistOfArticleRanks  = function()
 	{
-	if ($scope.listOfArticleRanks.length != 0)
-		return $scope.listOfArticleRanks;
-
         GetArticleRank($scope, $http);
     };
     $scope.getlistOfArticleRanks();
@@ -1511,13 +1508,14 @@ $scope.SetarticleRankForModal=function($id)
 
 $scope.UpdateArticleRank=function($id)
 {
-	EditArticleRank($id, $scope.articleRankForModal.name, $scope.articleRankForModal.description, $scope,$http);
+	EditArticleRank($id, $scope.articleRankForModal.name, $scope.articleRankForModal.description, $scope.articleRankForModal.weight, $scope,$http);
 }
 
 $scope.CreateNewArticleRank=function()
 {
 	$scope.articleRankForModal = {
 		id: -1,
+		weight: 1,
       name:  "",
       description: ""
    };
@@ -1525,7 +1523,7 @@ $scope.CreateNewArticleRank=function()
 
 $scope.AddNewArticleRank=function()
 {
-	AddArticleRank($scope.articleRankForModal.name, $scope.articleRankForModal.description, $scope,$http);
+	AddArticleRank($scope.articleRankForModal.name, $scope.articleRankForModal.description, $scope.articleRankForModal.weight, $scope,$http);
 }
 
   // toggle selection for a given fruit by name

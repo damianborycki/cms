@@ -17,6 +17,15 @@
 		</div>
 		<div class="row">
 			<div class="col-md-2">
+				Waga*:
+			</div>
+			
+			<div class="col-md-9">
+				<input type="number" ng-model="articleRankForModal.weight">
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-2">
 				Opis:
 			</div>
 			<div class="col-md-9">
@@ -27,7 +36,7 @@
 	  </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" ng-click="$hide()">Zamknij</button>
-        <button type="button" class="btn btn-success" ng-disabled="articleRankForModal.name == '' || articleRankForModal.name.length < 3" ng-click="UpdateArticleRank(articleRankForModal.id); $hide()">Zmień</button>
+        <button type="button" class="btn btn-success" ng-disabled="articleRankForModal.name == '' || articleRankForModal.name.length < 3 || articleRankForModal.weight == null || articleRankForModal.weight == '' || articleRankForModal.weight < 1" ng-click="UpdateArticleRank(articleRankForModal.id); $hide()">Zmień</button>
       </div>
     </div>
   </div>

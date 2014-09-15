@@ -115,8 +115,8 @@ $http({method: 'GET', url: servicesContext + '/articleRank'}).
 	  }); 
 	};
 	
-function AddArticleRank(name, description, $scope, $http){
-	$http.post(servicesContext + '/articleRank', {name: name, description: description}).
+function AddArticleRank(name, description, weight, $scope, $http){
+	$http.post(servicesContext + '/articleRank', {name: name, description: description, weight: weight}).
 	  success(function(data, status, headers, config) {
 		$scope.getlistOfArticleRanks();
 		alert("Dodano rangę artykułu");
@@ -126,8 +126,8 @@ function AddArticleRank(name, description, $scope, $http){
 	}); 
 };
 	
-function EditArticleRank(id, name, description, $scope, $http){
-$http.put(servicesContext + '/articleRank/' + id, {name: name, description: description}).
+function EditArticleRank(id, name, description, weight, $scope, $http){
+$http.put(servicesContext + '/articleRank/' + id, {name: name, description: description, weight: weight}).
 	  success(function(data, status, headers, config) {
 		$scope.getlistOfArticleRanks();
 		alert("Edytowano rangę artykułu");
