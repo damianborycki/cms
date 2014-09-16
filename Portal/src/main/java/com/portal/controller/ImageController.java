@@ -121,7 +121,7 @@ public class ImageController {
     		if( user == null )
     			return new ArrayList<Image>();
     		Long userId = user.getId();
-    		return imageDAO.getAllUnapproved(userId, null, null);
+    		return imageDAO.getAllUnapproved(userId, startDate, endDate);
     	}
     }
 
@@ -274,7 +274,6 @@ public class ImageController {
     	{
     		String login = userDAO.getLoggedUser().getLogin();
     		return imageDAO.acceptImage( userDAO.getUser(login).getId(), imageId);
-    		//return "OK";
     	}
     	return "FAIL - you have to be admin";
     }

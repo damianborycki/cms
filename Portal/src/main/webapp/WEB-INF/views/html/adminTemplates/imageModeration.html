@@ -16,6 +16,7 @@
    	document.getElementById("obrazekDoModeracji").setAttribute( 'src', "http://placehold.it/800x600" );
    	document.getElementById('imageAuthor').setAttribute('value', "");
     document.getElementById('imageDescription').innerHTML = "";
+    document.getElementById('imageCount').innerHTML = ''
   }
   
   function getImages()
@@ -24,7 +25,9 @@
 
     xmlHttp = new XMLHttpRequest();
     var userLogin = document.getElementById('userLogin').value;
-    var httpReq = "/portal/service/unapproved_images?userLogin="+userLogin;
+    var startDate = document.getElementById('startDate').value;
+    var endDate   = document.getElementById('endDate').value;
+    var httpReq = "/portal/service/unapproved_images?userLogin=" + userLogin + "&startDate=" + startDate + "&endDate=" + endDate;
 
     xmlHttp.open( "GET",httpReq, false );
     xmlHttp.send( null );
@@ -39,6 +42,7 @@
     {
     	currentImage=-1;
     	alert('Brak obrazków');
+    	unloadImage();
     }
   }
   
@@ -48,10 +52,6 @@
   	{
   		currentImage++;
   		loadImage();
-  		/*img = document.getElementById("obrazekDoModeracji");
-    	img.setAttribute( 'src', '/portal/service/image?id='+ images[currentImage].id + '&width=800&height=600' );
-    	document.getElementById('imageAuthor').setAttribute('value', images[currentImage].author);
-    	document.getElementById('imageDescription').innerHTML = images[currentImage].description;*/
   	}
   	else
   	{
@@ -154,10 +154,10 @@
                 </div>  
                
                 <div>
-                <input class="form-control" rows="1" placeholder="Data początkowa..."></input>
+                <input class="form-control" rows="1" placeholder="Data początkowa... (RRRR-MM-DD)" id="startDate"></input>
                 </div>   
                 <div>
-                <input class="form-control" rows="1" placeholder="Data końcowa..."></input>
+                <input class="form-control" rows="1" placeholder="Data końcowa... (RRRR-MM-DD)" id="endDate"></input>
                 </div>          
  
                 <div>		

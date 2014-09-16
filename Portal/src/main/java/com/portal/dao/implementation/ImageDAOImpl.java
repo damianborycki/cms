@@ -61,8 +61,10 @@ public class ImageDAOImpl implements ImageDAOI {
         	query = openSession().createQuery("from Image where app_usr is null");
         else
         {
-        	query = openSession().createQuery("from Image i where i.app_usr is null and i.add_usr = :add_usr");
+        	query = openSession().createQuery("from Image i where i.app_usr is null and i.add_usr = :add_usr and add_datetime between :startDate and :endDate");
         	query.setParameter("add_usr", addUserId);
+        	query.setParameter("startDate", startDate);
+        	query.setParameter("endDate", endDate);
         }
         
         imageList = query.list();
