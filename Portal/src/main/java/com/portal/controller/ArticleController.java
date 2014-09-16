@@ -1,10 +1,9 @@
 package com.portal.controller;
 
 import com.portal.dao.interfaces.ArticleDAOI;
-import com.portal.entity.Article;
-import com.portal.entity.ArticleRank;
-import com.portal.entity.Category;
-import com.portal.entity.Tag;
+import com.portal.dao.interfaces.TagDAOI;
+import com.portal.dao.interfaces.UserDAOI;
+import com.portal.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -22,27 +21,25 @@ public class ArticleController {
     @Autowired
     private ArticleDAOI articleDAO;
 
+    @Autowired
+    private UserDAOI userDAO;
+
+    @Autowired
+    private TagDAOI tagDAO;
+
     @RequestMapping(value = "/article", method=RequestMethod.POST)
-    public void addArticle(@RequestBody Article article, HttpServletResponse response) {
-//        articleDAO.create(article.getTitle(),
-//                article.getCategory_id(),
-//                article.getDescription(),
-//                article.getContent(),
-//                article.getUser(),
-//                article.getExpiration_date(),
-//                article.getPublication_date(),
-//                article.getGalery(),
-//                article.getImage(),
-//                article.getTag(),
-//                article.getArticle_owner(),
-//                article.getRank());
-        
+    public void addArticle(@RequestBody Article article, @RequestParam("tagIds") List<Long> tagIds, @RequestParam("userLogin") String userLogin, HttpServletResponse response) {
+        User user = userDAO.getUser(userLogin);
+        List<Tag> tags = tagDAO.getByIds(tagIds);
+        article.setUser(user);
+        article.setTag(tags);
         articleDAO.createNew(article);
         response.setStatus(HttpServletResponse.SC_CREATED);
     }
 
     @RequestMapping(value = "article/{id}", method = RequestMethod.PUT, consumes = "application/json")
-    public void put(@PathVariable("id") long pasedId, @RequestBody Article article, HttpServletResponse response) {
+    public void put(@PathVariable("id") long pasedId, @RequestBody Article article, @RequestParam("tagIds") List<Long> tagIds, HttpServletResponse response) {
+        List<Tag> tags = tagDAO.getByIds(tagIds);
         articleDAO.edit(pasedId,
                 article.getTitle(),
                 article.getCategory_id(),
@@ -53,7 +50,7 @@ public class ArticleController {
                 article.getPublication_date(),
                 article.getGalery(),
                 article.getImage(),
-                article.getTag(),
+                tags,
                 article.getArticle_owner(),
                 article.getRank());
         response.setStatus(HttpServletResponse.SC_OK);

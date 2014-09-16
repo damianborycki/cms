@@ -211,7 +211,10 @@ public class ArticleDAOImpl implements ArticleDAOI {
 		
 		art.setArticle_owner(article_owner);
 		art.setRank(rank);
-		this.openSession().merge(art);
+
+        Session session = this.openSession();
+        session.merge(art);
+        session.flush();
 
         sessionFactory.getCurrentSession().close();
 	}
