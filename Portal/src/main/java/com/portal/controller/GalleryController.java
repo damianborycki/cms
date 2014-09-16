@@ -64,7 +64,7 @@ public class GalleryController {
 
         galleryDAO.addGallery(gallery);
 
-        return new ModelAndView("redirect:http://localhost:8080/pages/adminIndex.html#/gallery");
+        return new ModelAndView("redirect:/adminIndex.html#/gallery");
     }
 
     @RequestMapping(value="/gallery", method=RequestMethod.GET)
