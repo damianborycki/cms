@@ -329,7 +329,7 @@ function AddNewGroup($scope, $http) {
 		alert("Dodano grupę");
 	  }).
 	  error(function(data, status, headers, config) {
-		alert("Błąd " + status);
+		alert("Wystąpił nieoczekiwany błąd (" + status + ")");
 	});
 }
 
@@ -337,14 +337,11 @@ function UpdateGroup($scope, $http, id) {
 		$http({method: 'PUT', url: servicesContext + '/group/' + id, 
 				data: {'name' : $scope.groupForModal.name, 'description' : $scope.groupForModal.description} }).
 	  success(function(data, status, headers, config) {
-	  	var ix = $scope.GetIndexOfGroupById(id);
-	  	$scope.groups(ix).id = data[id];
-	  	$scope.groups(ix).name = data[name];
-	  	$scope.groups(ix).description = data[description];
+
 		alert("Edytowano grupę");
 	  }).
 	  error(function(data, status, headers, config) {
-		alert("Błąd " + status);
+		alert("Wystąpił nieoczekiwany błąd (" + status + ")");
 	});
 }
 
@@ -357,8 +354,11 @@ function RemoveGroup($scope, $http, id) {
 				if (i > -1) {
 					$scope.groups.splice(i, 1);
 				}
-				alert("usunięto grupę");
-	  }); 
+				alert("Usunięto grupę");
+	  }).
+	  error(function(data, status, headers, config) {
+			alert("Nie udało się usunąć danej grupy. Prawdopodobnie należą do niej jacyś użytkownicy.");
+	});; 
 }
 
 function GetUsers($scope, $http, limit, pageNO){
@@ -450,7 +450,7 @@ function Register(login, pass, email, firstname, lastname, city, gender, $scope,
 		$scope.Registered = status == "201";
 		$scope.waitingForResponse = false;
 		
-		alert("Utworzono nowe konto użytkownika");		
+		alert("Utworzono nowe konto użytkownika. W najblizszym czasie powinieneń ostrzymać wiadomość e-mail umożliwiającą aktywacje konta.");		
   }).
   error(function(data, status, headers, config) {
 	$scope.waitingForResponse = false;
