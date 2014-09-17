@@ -1,0 +1,22 @@
+<div class="modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" style="width:850px">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" ng-click="$hide()">&times;</button>
+        <h4 class="modal-title">Wybór zdjęcia</h4>
+      </div>
+      <div class="modal-body">
+		<div class="row" style="max-height: 300px; overflow: auto;">
+			<table>
+				<tr ng-repeat="fiveImages in listOfImages" >
+					<td ng-repeat="image in fiveImages track by $index" class="col-md-1">  <button class="btn" ng_click="choseImage(image.id); $hide()"><img src="http://localhost:8080/portal/service/image?id={{image.id}}" width="100" height="80"/></div>
+				</tr>
+			</table>
+		</div>
+	  </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" ng-click="$hide()">Zamknij</button>
+	  </div>
+    </div>
+  </div>
+</div>

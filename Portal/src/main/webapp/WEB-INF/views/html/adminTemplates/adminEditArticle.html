@@ -52,17 +52,19 @@
                     </tr>
                 </table>
 
-				<div style="width: 340px; padding: 5px">
+				<div style="width: 450px; padding: 5px">
 				Tagi:
 					 <tags-input ng-model="selectedTags" display-property="name" add-on-enter="false" placeholder="Dodaj tag" add-on-blur="false">
 						<auto-complete source="loadTags($query)" max-results-to-show="3"></auto-complete>
-					</tags-input><button class="btn btn-success btnb" data-animation="am-fade-and-scale" data-template="html/modal/tagModalAdd.html" bs-modal="modal" ng-click="CreateNewTag()">Dodaj nowy tag</button>
+					</tags-input>
+					<button class="btn btn-success btnb" data-animation="am-fade-and-scale" data-template="html/modal/tagModalAdd.html" bs-modal="modal" ng-click="CreateNewTag()">Dodaj nowy tag</button>
 				</div>
-
+				
                 <table>
                     <tr>
                         <td>Obrazek:</td>
-                        <td><input ng-model="newArticle.image" placeholder="Id obrazka" style="width: 100%;"></td>
+                        <td><input ng-model="newArticle.image" placeholder="Id obrazka" style="width: 150px;"></td>
+						<td><button class="btn btn-success btnb" data-animation="am-fade-and-scale" data-template="html/modal/choseImage.html" bs-modal="modal" >Wybierz obraz</button></td>
                     </tr>
 				
 				<tr>
@@ -77,12 +79,10 @@
                             <option ng-selected="{{category.id == newArticle.category_id.id}}" ng-repeat="category in getFlatList()" value="{{category.id}}">{{category.depth}} {{category.name}}</option>
                         </select>
                     </td>
+					<td>
+						<button class="btn btn-success btn" data-animation="am-fade-and-scale" data-template="html/modal/categoryModal.html" bs-modal="modal" ng-click="CreateNewCategory(null)">Dodaj kategorię</button>
+					</td>
 				</tr>
-					<tr>
-						<td>
-							<button class="btn btn-success btn" data-animation="am-fade-and-scale" data-template="html/modal/categoryModal.html" bs-modal="modal" ng-click="CreateNewCategory(null)">Dodaj kategorię</button>
-						</td>
-					</tr>
 
 				<tr>
                     <td>Ranga:</td>

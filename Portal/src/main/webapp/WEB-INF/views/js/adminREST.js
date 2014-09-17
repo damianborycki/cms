@@ -293,7 +293,7 @@ function GetArticle(articleId, $scope, $http){
 };
 
 function AddArticle(title, description, content, category_id, user, expiration_date, publication_date, tags, rank, image, galery, date, $scope, $http){
-	$http.post(servicesContext + '/article', {title: title, description: description, content: content, categoryId: category_id, userId: 1, expirationDate: expiration_date, publicationDate: publication_date, tags: tags, rankId: rank, imageId: image}).
+	$http.post(servicesContext + '/article', {title: title, description: description, content: content, categoryId: category_id, userId: 1, userLogin: 'admin', expirationDate: expiration_date, publicationDate: publication_date, tags: tags, tagIds: tags, rankId: rank, imageId: image}).
 	  success(function(data, status, headers, config) {
 		alert("Zapisano artykuł");
 		window.location.href = 'adminIndex.html#/articles';
@@ -304,7 +304,7 @@ function AddArticle(title, description, content, category_id, user, expiration_d
 };
 
 function EditArticle(id, title, description, content, category_id, user, expiration_date, publication_date, tags, rank, image, galery, date, $scope, $http){
-	$http.put(servicesContext + '/article/' + id, {title: title, description: description, content: content, categoryId: category_id, userId: 1, expirationDate: expiration_date, publicationDate: publication_date, tags: tags, rankId: rank, imageId: image}).
+	$http.put(servicesContext + '/article/' + id, {title: title, description: description, content: content, categoryId: category_id, userId: 1, expirationDate: expiration_date, publicationDate: publication_date, tagIds: tags, rankId: rank, imageId: image}).
 	  success(function(data, status, headers, config) {
 		alert("Zapisano artykuł");
 	  }).

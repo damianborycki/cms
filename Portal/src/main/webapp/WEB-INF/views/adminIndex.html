@@ -1434,6 +1434,22 @@ $scope.modalInfo = {'title' : '', 'buttonText' : '', 'op' : ''};
 		}
 	}
 
+	$scope.choseImage = function(id)
+	{
+		$scope.newArticle.image = id;
+	}
+	
+	$scope.listOfImages = [];
+
+	$scope.getlistOfImages  = function()
+	{
+	if ($scope.listOfImages.length != 0)
+		return $scope.listOfImages;
+		
+		GetImages($scope, $http);
+	};
+	$scope.getlistOfImages();
+	
 	
 $scope.editorOptions = {
     language: 'pl'
