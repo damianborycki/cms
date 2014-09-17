@@ -64,6 +64,11 @@ public class GalleryController {
 
         galleryDAO.addGallery(gallery);
 
+        for (Image img : imagesList)
+        {
+            imageDAO.addGalleryId(gallery.getId(), img.getId());
+        }
+
         return new ModelAndView("redirect:/adminIndex.html#/gallery");
     }
 
