@@ -63,13 +63,13 @@
                 <table>
                     <tr>
                         <td>Obrazek:</td>
-                        <td><input ng-model="newArticle.image" placeholder="Id obrazka" style="width: 150px;"></td>
+                        <td><input ng-model="newArticle.image" ng-change="imageChange()" placeholder="Id obrazka" style="width: 150px;"></td>
 						<td><button class="btn btn-success btnb" data-animation="am-fade-and-scale" data-template="html/modal/choseImage.html" bs-modal="modal" >Wybierz obraz</button></td>
                     </tr>
 				
 				<tr>
                     <td>Galeria:</td>
-                    <td><input ng-model="newArticle.galery" placeholder="Id galerii" style="width: 100%;"></td>
+                    <td><input ng-model="newArticle.galery" ng-change="galeryChange()" placeholder="Id galerii" style="width: 100%;"></td>
 				</tr>
 
 				<tr>
@@ -113,9 +113,9 @@
 					<p class="art-data">{{milisecToDate(newArticle.publication_date)}}</p>
 					<div class="col-md-7">
 						<div style="margin-left: -10px; background-color: #FFF; border-radius: 16px; padding: 10px 10px 10px 10px; width: 470px; margin-top: 10px;">
-							<img ng-src="{{getImage(artykuly[0].image)}}" class="img-responsive">
-							<p>Opis opis</p>
-							<p>Autor: </p>
+							<img ng-src="{{getImage(newArticle.image)}}" class="img-responsive">
+							<p ng-hide="mainImageMetadata.description == null">Opis: {{mainImageMetadata.description}}</p>
+							<p ng-hide="mainImageMetadata.author == null">Autor: {{mainImageMetadata.author}}</p>
 						</div>
 					</div>
 					<div class="col-md-5">
@@ -125,14 +125,15 @@
 						<p class="art-tresc" ng-bind-html="newArticle.content | unsafe">
 						</p>
 					</p>
-					<div style="width: 550px; margin-left: auto; margin-right: auto; background-color: rgba(0,0,0,0.1); border-radius: 32px; padding: 20px 30px 10px 30px; margin-top: 20px; margin-bottom: 10px;" ng-hide="gallery == null">
-						<slick arrows="true" dots="true" infinite="true" autoplay="true" autoplaySpeed="300" speed="300" slides-to-show="1" touch-move="false" slides-to-scroll="1" style="width: 490px;">
-							<div ng-repeat="zajawka in getListOfArticles(3)">
-								<div style="margin-left: auto; margin-right: auto; background-color: #FFF; border-radius: 16px; padding: 10px 10px 10px 10px; width: 470px">
-									<img ng-src="{{getImage(zajawka.image)}}" class="img-responsive">
-									<p>Opis opis</p>
-									<p>Autor: </p>
-								</div>
+					<div style="width: 550px; margin-left: auto; margin-right: auto; background-color: rgba(0,0,0,0.1); border-radius: 32px; padding: 20px 30px 10px 30px; margin-top: 20px; margin-bottom: 10px;" ng-hide="gallery == null || gallery.images.length == 0">>
+						<slick ng-transclude settings="slickConfig" control="slickHandle" style="width: 490px;" on-directive-init="slickInit()">
+							<div ng-repeat="pic in gallery.images" on-last-repeat>
+								<p style="margin-left: auto; margin-right: auto; background-color: #FFF; border-radius: 16px; padding: 10px 10px 10px 10px; width: 470px">
+									<img ng-src="{{getImage(pic.id, 560, 300)}}" class="img-responsive">
+									
+								<p ng-hide="pic.description == null">Opis: {{pic.description}}</p>
+								<p ng-hide="pic.author == null">Autor: {{pic.author}}</p>
+								</p>
 							</div>
 						</slick>
 					</div>
