@@ -89,6 +89,11 @@ public class ImageScaler
                                                    recalculateCoords( originalHeight,  jcropHeight, y2-y1 ) );
         ImageIO.write( cropped, "jpg", new File(path) );
     }
+    
+    public void cropImage(String tempFilePath, String path) throws Exception
+    {
+        cropImage(tempFilePath, path, 0, 0, jcropWidth, jcropHeight);
+    }
 
     String imagesDirectory;
 }

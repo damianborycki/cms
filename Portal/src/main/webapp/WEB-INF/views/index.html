@@ -676,6 +676,10 @@ app.controller('StronaUzytkownikaController', function($scope, $http, $routePara
 	$scope.editPassFormError2 = false;
 	$scope.showEditPass = !$scope.showEditPass;
   };
+  
+  $scope.click7 = function(){
+	$scope.showChangeAvatar = !$scope.showChangeAvatar;
+  };
   $scope.eTest = function(){
 	if($scope.searchedUser.email2 != undefined)
 		if($scope.searchedUser.email2.trim() != '')

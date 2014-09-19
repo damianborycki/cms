@@ -71,6 +71,21 @@ public class UserDAOImpl implements UserDAOI {
 		
 	}
 	
+	public void setUserAvatar(String login, String imageId)
+	{
+		Session session = sessionFactory.openSession();
+		
+		try {
+			Query query = session.createQuery("update User u set u.avatar = :avatar where u.login = :login");
+			query.setParameter("login", login);
+			query.setParameter("avatar", imageId);
+			query.executeUpdate();
+		} finally {
+			if (session != null)
+				session.close();
+		}
+	}
+	
 	public boolean setUserGroup(String login, Long groupId) {
 		
 		Session session = sessionFactory.openSession();

@@ -1,4 +1,4 @@
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+﻿SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
 
@@ -206,7 +206,7 @@ CREATE TABLE IF NOT EXISTS `tag_type` (
 
 CREATE TABLE IF NOT EXISTS `users` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `avatar` bigint(20) DEFAULT NULL,
+  `avatar` varchar(255) DEFAULT NULL,
   `city` varchar(120) DEFAULT NULL,
   `last_login_date` datetime DEFAULT NULL,
   `registration_date` datetime NOT NULL,

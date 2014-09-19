@@ -93,7 +93,7 @@ public class User {
 	private Group group;
 	
     @Column(name = "avatar", nullable = true)
-    private Long avatar;
+    private String avatar;
 
     @Column(name = "info", nullable = true, length = 200)
     private String info;
@@ -191,11 +191,11 @@ public class User {
 		this.group = group;
 	}
 	
-	public Long getAvatar() {
+	public String getAvatar() {
         return avatar;
     }
 
-    public void setAvatar(Long avatar) {
+    public void setAvatar(String avatar) {
         this.avatar = avatar;
     }
 

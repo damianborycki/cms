@@ -38,4 +38,6 @@ public interface UserDAOI {
     public boolean existsForGroup(Group group);
     
     public boolean changPassword(ClassPassword passwords);
+    
+    public void setUserAvatar(String login, String imageId);
 }
