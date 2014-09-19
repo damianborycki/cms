@@ -39,12 +39,14 @@ public class ImageDAOImpl implements ImageDAOI {
 
     public Image getImage(String id, long width, long height) {
         List<Image> imageList = new ArrayList<Image>();
-        Query query = openSession().createQuery("from Image i where i.id = :id and i.width = :width and i.height = :height");
+        Session session = openSession();
+        Query query = session.createQuery("from Image i where i.id = :id and i.width = :width and i.height = :height");
         query.setParameter("id", id);
         query.setParameter("width",width);
         query.setParameter("height",height);
 
         imageList = query.list();
+        session.close();
 
         if (imageList.size() > 0)
             return imageList.get(0);
@@ -57,8 +59,9 @@ public class ImageDAOImpl implements ImageDAOI {
         List<Image> imageList;// = new ArrayList<Image>();
 
         Query query;
+        Session session = openSession();
         if( addUserId == null)
-        	query = openSession().createQuery("from Image where app_usr is null");
+        	query = session.createQuery("from Image where app_usr is null");
         else
         {
         	query = openSession().createQuery("from Image i where i.app_usr is null and i.add_usr = :add_usr and add_datetime between :startDate and :endDate");
@@ -68,6 +71,7 @@ public class ImageDAOImpl implements ImageDAOI {
         }
         
         imageList = query.list();
+        session.close();
         return unique(imageList);
     }
 
@@ -75,9 +79,11 @@ public class ImageDAOImpl implements ImageDAOI {
     {
         List<Image> imageList = new ArrayList<Image>();
 
-        Query query = openSession().createQuery("from Image i where i.id = :id");
+        Session session = openSession();
+        Query query = session.createQuery("from Image i where i.id = :id");
         query.setParameter("id",id);
         imageList = query.list();
+        session.close();
         return imageList;
     }
 
@@ -111,8 +117,6 @@ public class ImageDAOImpl implements ImageDAOI {
     public ImageMetadata getImageMetadata(String id)
     {
         Image image = getFirstImage(id);
-
-
 
         if(image == null)
             return null;
@@ -162,8 +166,9 @@ public class ImageDAOImpl implements ImageDAOI {
     
     @Override
     public List<Image> getAll() {
-
-        List<Image> images = openSession().createQuery("FROM Image i WHERE i.id <> 'default'").list();
+    	Session session = openSession();
+        List<Image> images = session.createQuery("FROM Image i WHERE i.id <> 'default'").list();
+        session.close();
         
         return unique(images);
     }
@@ -190,14 +195,17 @@ public class ImageDAOImpl implements ImageDAOI {
     
     public void deleteImage(String id)
     {
-    	Query query = openSession().createQuery("delete Image i where i.id = :id");
+    	Session session = openSession();
+    	Query query = session.createQuery("delete Image i where i.id = :id");
     	query.setParameter("id", id);
     	query.executeUpdate();
+    	session.close();
     }
     
 	public String acceptImage(Long app_usr, String id)
     {
-    	Query query = openSession().createQuery("update Image i set i.app_usr = :app_usr, app_datetime = :app_datetime where i.id = :id");
+		Session session = openSession();
+    	Query query = session.createQuery("update Image i set i.app_usr = :app_usr, app_datetime = :app_datetime where i.id = :id");
     	query.setParameter("id", id);
     	query.setParameter("app_usr", app_usr);
     	
@@ -206,17 +214,20 @@ public class ImageDAOImpl implements ImageDAOI {
 
     	query.setParameter("app_datetime", new java.sql.Date(cal.get(Calendar.YEAR)-1900, cal.get(Calendar.MONTH), cal.get(Calendar.DATE)));
     	query.executeUpdate();
+    	session.close();
     	String queryString = query.getQueryString();
     	return queryString;
     }
 
     public String addGalleryId(Long galleryId,  String id)
     {
-        Query query = openSession().createQuery("update Image i set i.gallery_id = :gallery_id where i.id = :id");
+    	Session session = openSession();
+        Query query = session.createQuery("update Image i set i.gallery_id = :gallery_id where i.id = :id");
         query.setParameter("id", id);
         query.setParameter("gallery_id", galleryId);
 
         query.executeUpdate();
+        session.close();
         String queryString = query.getQueryString();
         return queryString;
     }
