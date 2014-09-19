@@ -29,6 +29,9 @@
 <link href="css/ng-ckeditor.css" rel="stylesheet">
 <link href='http://fonts.googleapis.com/css?family=Lato&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
 
+<script src="js/plugins/slick/slick.min.js"></script>
+<script src="js/lib/angular/slick.min.js"></script>
+
 
 <script type="text/javascript" src="js/plugins/angular-tree-control/angular-tree-control.js"></script>
 <!-- link for CSS when using the tree as a Dom element -->
@@ -128,7 +131,7 @@ function parseDate(input)
 	return new Date(date[2], date[0]-1, date[1], time[0], time[1], time[2]);
 }
    
-var app = angular.module('studentInfoApp', ['ngSanitize', 'ngRoute', 'mgcrea.ngStrap', 'ngCkeditor', 'ngTagsInput', 'paging', 'treeControl']);
+var app = angular.module('studentInfoApp', ['ngSanitize', 'ngRoute', 'mgcrea.ngStrap', 'ngCkeditor', 'ngTagsInput', 'paging', 'treeControl', 'bardo.directives']);
 
 app.filter('unsafe', function($sce) {
     return function(val) {
@@ -1327,7 +1330,7 @@ $scope.GetCurrentUserName();
 	
 	$scope.editArticle = function()
 	{
-		EditArticle($routeParams.articleId, $scope.newArticle.title, $scope.newArticle.description, $scope.newArticle.content, $scope.newArticle.category_id.id, $scope.currentUserLogin, $scope.newArticle.publication_date.getTime(), $scope.newArticle.expiration_date.getTime(), $scope.getSelectedTagIds(), $scope.newArticle.rank.id, $scope.newArticle.image, $scope.newArticle.galery, new Date().getTime(), $scope, $http);
+		EditArticle($routeParams.articleId, $scope.newArticle.title, $scope.newArticle.description, $scope.newArticle.content, $scope.newArticle.category_id.id, $scope.newArticle.user.id, $scope.newArticle.publication_date.getTime(), $scope.newArticle.expiration_date.getTime(), $scope.getSelectedTagIds(), $scope.newArticle.rank.id, $scope.newArticle.image, $scope.newArticle.galery, new Date().getTime(), $scope, $http);
 	}
 	
 	
@@ -1434,6 +1437,48 @@ $scope.modalInfo = {'title' : '', 'buttonText' : '', 'op' : ''};
 		}
 	}
 
+	$scope.choseImage = function(id)
+	{
+		$scope.newArticle.image = id;
+		$scope.getMainImageMetadata($scope.newArticle.image);
+	}
+	
+	$scope.listOfImages = [];
+
+	$scope.getlistOfImages  = function()
+	{
+	if ($scope.listOfImages.length != 0)
+		return $scope.listOfImages;
+		
+		GetImages($scope, $http);
+	};
+	$scope.getlistOfImages();
+	
+	
+  $scope.mainImageMetadata = null;
+  $scope.getMainImageMetadata = function(id)
+  {
+		GetImageMetadata(id, $scope, $http);
+  }
+  
+  $scope.imageChange = function()
+  {
+	$scope.getMainImageMetadata($scope.newArticle.image);
+  }
+  
+  $scope.gallery = null;
+  
+  $scope.getGalery = function(id)
+  {
+  if (typeof id !== 'undefined' && id != '') {
+		GetGallery(id, $scope, $http);
+	}
+  };
+  
+  $scope.galeryChange = function()
+  {
+	$scope.getGalery($scope.newArticle.galery);
+  }
 	
 $scope.editorOptions = {
     language: 'pl'

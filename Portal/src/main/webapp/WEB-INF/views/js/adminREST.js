@@ -293,7 +293,7 @@ function GetArticle(articleId, $scope, $http){
 };
 
 function AddArticle(title, description, content, category_id, user, expiration_date, publication_date, tags, rank, image, galery, date, $scope, $http){
-	$http.post(servicesContext + '/article', {title: title, description: description, content: content, categoryId: category_id, userId: 1, expirationDate: expiration_date, publicationDate: publication_date, tags: tags, rankId: rank, imageId: image}).
+	$http.post(servicesContext + '/article', {title: title, description: description, content: content, userId: 1, publicationDate: publication_date, expirationDate: expiration_date, categoryId: category_id, rankId: rank, tags: null, imageId: image, userLogin: user, tagIds: tags}).
 	  success(function(data, status, headers, config) {
 		alert("Zapisano artykuł");
 		window.location.href = 'adminIndex.html#/articles';
@@ -304,7 +304,7 @@ function AddArticle(title, description, content, category_id, user, expiration_d
 };
 
 function EditArticle(id, title, description, content, category_id, user, expiration_date, publication_date, tags, rank, image, galery, date, $scope, $http){
-	$http.put(servicesContext + '/article/' + id, {title: title, description: description, content: content, categoryId: category_id, userId: 1, expirationDate: expiration_date, publicationDate: publication_date, tags: tags, rankId: rank, imageId: image}).
+	$http.put(servicesContext + '/article/' + id, {title: title, description: description, content: content, userId: user, publicationDate: publication_date, expirationDate: expiration_date, categoryId: category_id, rankId: rank, tags: null, imageId: image, tagIds: tags}).
 	  success(function(data, status, headers, config) {
 		alert("Zapisano artykuł");
 	  }).
@@ -459,4 +459,24 @@ function Register(login, pass, email, firstname, lastname, city, gender, $scope,
 	alert("Ups, coś poszło nie tak.");
 
   });
+};
+
+
+function GetImageMetadata(id, $scope, $http){
+	$http.get(servicesContext + '/metadata?id=' + id ).
+	  success(function(data, status, headers, config) {
+		$scope.mainImageMetadata = data;
+	  }).
+	  error(function(data, status, headers, config) {
+	}); 
+};
+
+function GetGallery(id, $scope, $http){
+	$http.get(servicesContext + '/gallery?id=' + id).
+	  success(function(data, status, headers, config) {
+		$scope.gallery = data;
+	  }).
+	  error(function(data, status, headers, config) {
+
+	});
 };

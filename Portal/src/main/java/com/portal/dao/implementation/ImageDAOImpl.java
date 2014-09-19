@@ -209,4 +209,15 @@ public class ImageDAOImpl implements ImageDAOI {
     	String queryString = query.getQueryString();
     	return queryString;
     }
+
+    public String addGalleryId(Long galleryId,  String id)
+    {
+        Query query = openSession().createQuery("update Image i set i.gallery_id = :gallery_id where i.id = :id");
+        query.setParameter("id", id);
+        query.setParameter("gallery_id", galleryId);
+
+        query.executeUpdate();
+        String queryString = query.getQueryString();
+        return queryString;
+    }
 }
