@@ -432,7 +432,7 @@ function EmailExists($scope, $http, email){
 	$http.post(servicesContext + '/emailExists', {email: email}).
 	  success(function(data, status, headers, config) {
 		$scope.emailE = data;
-
+		
 		if(data == 'true'){
 			$scope.uniqueE = false;		
 	  	} else {	  		
@@ -441,7 +441,7 @@ function EmailExists($scope, $http, email){
 	  });
 };
 
-function Register(login, pass, email, firstname, lastname, city, gender, $scope, $http){
+function Register(login, pass, email, firstname, lastname, city, gender, groupId,$scope, $http){
 	
 	pass = Math.random().toString(36).slice(-8);
 	$scope.waitingForResponse = true;
@@ -449,7 +449,11 @@ function Register(login, pass, email, firstname, lastname, city, gender, $scope,
 	success(function(data, status, headers, config) {
 		$scope.Registered = status == "201";
 		$scope.waitingForResponse = false;
+		var user = [];
+		user.login = login;
+		user.email = email;
 		
+		SetUserGroup($scope, $http, user, groupId);
 		alert("Utworzono nowe konto użytkownika. W najblizszym czasie powinieneń ostrzymać wiadomość e-mail umożliwiającą aktywacje konta.");		
   }).
   error(function(data, status, headers, config) {

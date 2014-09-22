@@ -40,7 +40,16 @@
               <span class="help-block" style="color:#CC330E; font-size: 13px;" ng-show="emailE == 'true' && user.email.length > 0">
                 <span style="background-color:#F13333;" class="badge pull-left ">!</span>&nbsp;Podany email jest już zajęty
               </span>
-              </div>                          
+              </div>
+              <div class="form-group">
+               <label for="inputEmail3" class="col-sm-2 col-md-offset-0 control-label">Grupa</label>
+               <div class="col-sm-5">
+              	<select ng-model="user.groupID" class="form-control" required>
+              	    <option disabled selected value="">-Wybierz grupę-</option>
+					<option ng-repeat="group in groups" value="{{group.id}}">{{group.name}}</option>
+			  	</select>
+			  	</div>
+			  </div>                          
             </form>
 
         </div>
