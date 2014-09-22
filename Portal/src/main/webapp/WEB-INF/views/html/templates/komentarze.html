@@ -9,7 +9,7 @@
             <h1 class="art-tytul">{{article.title}} </h1>
 			<p class="art-data">{{milisecToDate(article.publication_date)}}</p>
             <div class="col-md-4">
-				<img src="{{getImage(article.image, 300, 200)}}" class="img-responsive">
+				<img ng-src="{{getImage(article.image, 300, 200)}}" class="img-responsive">
             </div>
             <p class="art-tresc">
               {{article.description}}

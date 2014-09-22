@@ -10,7 +10,7 @@
             </div>
 		
 	  <div class="col-md-12" style="color: #000; ">
-              <div class="col-md-3" style="margin-top:27px; padding-left:0px;"><img src="{{getImage(searchedUser.avatar, 150, 150)}}" class="img-responsive" style="width:100%;"/> <br>
+              <div class="col-md-3" style="margin-top:27px; padding-left:0px;"><img ng-src="{{getImage(searchedUser.avatar, 150, 150)}}" class="img-responsive" style="width:100%;"/> <br>
 			   <a class="btn btn btn-primary" style="width:100%" ng-show="searchedUser.login == currentUserName.data" ng-click="click7()"> Zmień avatar</a>
 			   <span ng-show="showChangeAvatar">
 			   <form  method="POST" action="/portal/service/add_avatar" enctype="multipart/form-data">
