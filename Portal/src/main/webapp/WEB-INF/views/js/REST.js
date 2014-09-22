@@ -147,6 +147,7 @@ function GetUserComments(userId, page, limit, $scope, $http){
 	$http.get(servicesContext + '/userComments/' + userId + '?limit=' + limit + '&pageNo=' + page + '&sortOrder=DESC').
 	  success(function(data, status, headers, config) {
 		$scope.userComments = data.comments;
+		$scope.articleIds = data.articleIds;
 		$scope.total = data.size;
 		$scope.commentsPage = page;
 	  }).

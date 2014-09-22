@@ -239,8 +239,10 @@
                 <div class="col-md-9" style="border-left: 1px solid #eee;">
                   <p class="text-justify commentText " ng-class="{show: show && komentarz.content.length > 100}" style="margin-top:10px; font-size:13px; font-weight:normal;">{{komentarz.content}}</p>
 					<a ng-click="show = true" ng-hide="show || komentarz.content.length <= 100">Pokaż całość</a>
-					<a ng-click="show = false" ng-show="show && komentarz.content.length > 100">Ukryj</a>										
-					<!--<a class="btn btn-success btn-p btn-sm pull-right" href="#/article/{{komentarz.article.id}}">Pokaż artykuł</a>-->
+					<a ng-click="show = false" ng-show="show && komentarz.content.length > 100">Ukryj</a>
+					
+					<a class="btn btn-success btn-p btn-sm pull-right" href="#/article/{{articleIds[$index]}}">Pokaż artykuł</a>
+					
                 </div>				
 			</div>
 			<hr style="margin: 5px 5px 5px 5px;" ng-hide="$last">
