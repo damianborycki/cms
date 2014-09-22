@@ -35,13 +35,14 @@ public class Article {
     public Article(@JsonProperty("title") String title,
     			@JsonProperty("description") String descr,
     			@JsonProperty("content") String content,
-    			@JsonProperty("userId") long userId,
+    			@JsonProperty("user") String user,
     			@JsonProperty("publicationDate") Date pubDate,
     			@JsonProperty("expirationDate") Date expDate,
     			@JsonProperty("categoryId") long categoryId,
     			@JsonProperty("rankId") long rankId,
     			@JsonProperty("tags") List<Long> tagIds,
-    			@JsonProperty("imageId") String imageId
+    			@JsonProperty("imageId") String imageId,
+                @JsonProperty("galery") Long galery
     			)
 
 	{
@@ -50,7 +51,7 @@ public class Article {
 		this.description = descr;
 		this.content = content;
 		User u = new User();
-		u.setId(userId);
+		u.setLogin(user);
 		this.user = u;
 		this.publication_date = pubDate;
 		this.expiration_date = expDate;
@@ -71,6 +72,8 @@ public class Article {
 			t.setId(l);
 			tags.add(t);
 		}
+
+        this.galery = galery;
 
 		this.tag = tags;
 
@@ -104,7 +107,7 @@ public class Article {
     private String content;
 
     @NotNull
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "user")
     private User user;
 

@@ -293,24 +293,25 @@ function GetArticle(articleId, $scope, $http){
 };
 
 function AddArticle(title, description, content, category_id, user, expiration_date, publication_date, tags, rank, image, galery, date, $scope, $http){
-	$http.post(servicesContext + '/article', {title: title, description: description, content: content, userId: 1, publicationDate: publication_date, expirationDate: expiration_date, categoryId: category_id, rankId: rank, tags: null, imageId: image, userLogin: user, tagIds: tags}).
-	  success(function(data, status, headers, config) {
-		alert("Zapisano artykuł");
-		window.location.href = 'adminIndex.html#/articles';
-	  }).
-	  error(function(data, status, headers, config) {
-		alert("Błąd " + status);
-	}); 
+    $http.post(servicesContext + '/article', {title: title, description: description, content: content, categoryId: category_id, user: user, expirationDate: expiration_date, publicationDate: publication_date, tags: tags, rankId: rank, imageId: image, galery: galery}).
+        success(function(data, status, headers, config) {
+            alert("Zapisano artykuł");
+            window.location.href = 'adminIndex.html#/articles';
+        }).
+        error(function(data, status, headers, config) {
+            alert("Błąd " + status);
+        });
 };
 
 function EditArticle(id, title, description, content, category_id, user, expiration_date, publication_date, tags, rank, image, galery, date, $scope, $http){
-	$http.put(servicesContext + '/article/' + id, {title: title, description: description, content: content, userId: user, publicationDate: publication_date, expirationDate: expiration_date, categoryId: category_id, rankId: rank, tags: null, imageId: image, tagIds: tags}).
-	  success(function(data, status, headers, config) {
-		alert("Zapisano artykuł");
-	  }).
-	  error(function(data, status, headers, config) {
-		alert("Błąd " + status);
-	}); 
+    $http.put(servicesContext + '/article/' + id, {title: title, description: description, content: content, categoryId: category_id, user: user, expirationDate: expiration_date, publicationDate: publication_date, tags: tags, rankId: rank, imageId: image, galery: galery}).
+        success(function(data, status, headers, config) {
+            alert("Zapisano artykuł");
+            window.location.href = 'adminIndex.html#/articles';
+        }).
+        error(function(data, status, headers, config) {
+            alert("Błąd " + status);
+        });
 };
 
 

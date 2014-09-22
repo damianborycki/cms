@@ -91,4 +91,30 @@ public class TagDAOImpl implements TagDAOI {
         sessionFactory.getCurrentSession().close();
         return exists;
     }
+
+    @Override
+    public void createArticleTag(Long articleId, List<Tag> tags) {
+        Session session = openSession();
+
+        for (Tag tag : tags) {
+            session.createSQLQuery("INSERT INTO articles_tag (articles_id, tag_id) VALUES (:artid, :tagid)")
+                    .setParameter("artid", articleId)
+                    .setParameter("tagid", tag.getId())
+                    .executeUpdate();
+        }
+
+        sessionFactory.getCurrentSession().close();
+    }
+
+    @Override
+    public void deleteArticleTagByArticleId(Long articleId) {
+        Session session = openSession();
+
+        session.createSQLQuery("DELETE FROM articles_tag WHERE articles_id=:artid")
+                .setParameter("artid", articleId)
+                .executeUpdate();
+
+        sessionFactory.getCurrentSession().close();
+    }
+
 }

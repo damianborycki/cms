@@ -190,9 +190,9 @@ public class ArticleDAOImpl implements ArticleDAOI {
 
 	@Override
 	public void edit(long id, String title, Category category,
-			String description, String content, User user,
+			String description, String content,
 			Date expiration_date, Date publication_date, Long galery,
-			String image, List<Tag> tags, String article_owner, ArticleRank rank) {
+			String image, List<Tag> tags, ArticleRank rank) {
 		
 		Article art = this.getById(id);
 		
@@ -201,15 +201,13 @@ public class ArticleDAOImpl implements ArticleDAOI {
 		art.setDescription(description);
 		
 		art.setContent(content);
-		art.setUser(user);
 		art.setExpiration_date(expiration_date);
 		
 		art.setPublication_date(publication_date);
 		art.setGalery(galery);
 		art.setImage(image);
 		art.setTag(tags);
-		
-		art.setArticle_owner(article_owner);
+
 		art.setRank(rank);
 
         Session session = this.openSession();
@@ -273,6 +271,14 @@ public class ArticleDAOImpl implements ArticleDAOI {
         List list = criteria.list();
         sessionFactory.getCurrentSession().close();
         return !list.isEmpty();
+    }
+
+    @Override
+    public Long maxArticleId() {
+        Session session = openSession();
+        Long count = ((BigInteger) session.createSQLQuery("SELECT MAX(id) FROM articles").uniqueResult()).longValue();
+        sessionFactory.getCurrentSession().close();
+        return count;
     }
 
 }

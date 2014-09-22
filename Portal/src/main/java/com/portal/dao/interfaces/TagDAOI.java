@@ -20,5 +20,7 @@ public interface TagDAOI {
     public void edit(Long id, Tag template);
     public void delete(Long id);
     public boolean existsForType(TagType tagType);
+    public void createArticleTag(Long articleId, List<Tag> tags);
+    public void deleteArticleTagByArticleId(Long articleId);
 
 }

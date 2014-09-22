@@ -28,31 +28,47 @@ public class ArticleController {
     private TagDAOI tagDAO;
 
     @RequestMapping(value = "/article", method=RequestMethod.POST)
-    public void addArticle(@RequestBody Article article, @RequestParam("tagIds") List<Long> tagIds, @RequestParam("userLogin") String userLogin, HttpServletResponse response) {
-        User user = userDAO.getUser(userLogin);
-        List<Tag> tags = tagDAO.getByIds(tagIds);
+    public void addArticle(@RequestBody Article article, HttpServletResponse response) {
+//        articleDAO.create(article.getTitle(),
+//                article.getCategory_id(),
+//                article.getDescription(),
+//                article.getContent(),
+//                article.getUser(),
+//                article.getExpiration_date(),
+//                article.getPublication_date(),
+//                article.getGalery(),
+//                article.getImage(),
+//                article.getTag(),
+//                article.getArticle_owner(),
+//                article.getRank());
+
+        User user = userDAO.getUser(article.getUser().getLogin());
         article.setUser(user);
-        article.setTag(tags);
+        article.setArticle_owner(user.getLogin());
+
         articleDAO.createNew(article);
+        long maxArticle = articleDAO.maxArticleId();
+        tagDAO.createArticleTag(maxArticle, article.getTag());
         response.setStatus(HttpServletResponse.SC_CREATED);
     }
 
     @RequestMapping(value = "article/{id}", method = RequestMethod.PUT, consumes = "application/json")
-    public void put(@PathVariable("id") long pasedId, @RequestBody Article article, @RequestParam("tagIds") List<Long> tagIds, HttpServletResponse response) {
-        List<Tag> tags = tagDAO.getByIds(tagIds);
+    public void put(@PathVariable("id") long pasedId, @RequestBody Article article, HttpServletResponse response) {
         articleDAO.edit(pasedId,
                 article.getTitle(),
                 article.getCategory_id(),
                 article.getDescription(),
                 article.getContent(),
-                article.getUser(),
                 article.getExpiration_date(),
                 article.getPublication_date(),
                 article.getGalery(),
                 article.getImage(),
-                tags,
-                article.getArticle_owner(),
+                article.getTag(),
                 article.getRank());
+
+        tagDAO.deleteArticleTagByArticleId(pasedId);
+        tagDAO.createArticleTag(pasedId, article.getTag());
+
         response.setStatus(HttpServletResponse.SC_OK);
     }
 
