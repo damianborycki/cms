@@ -450,7 +450,7 @@ function Register(login, pass, email, firstname, lastname, city, gender, $scope,
 		$scope.Registered = status == "201";
 		$scope.waitingForResponse = false;
 		
-		alert("Utworzono nowe konto użytkownika. W najblizszym czasie powinieneń ostrzymać wiadomość e-mail umożliwiającą aktywacje konta.");		
+		alert("Rejestracja przeprowadzona pomyślnie. W najblizszym czasie powinieneś ostrzymać wiadomość e-mail umożliwiającą aktywację konta.");		
   }).
   error(function(data, status, headers, config) {
 	$scope.waitingForResponse = false;
