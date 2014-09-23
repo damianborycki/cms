@@ -50,7 +50,10 @@
           	
             <textarea class="span6 form-control" rows="6" placeholder="Napisz komentarz..." required="" maxlength="250"
 			style="margin: 0px; max-height: 130px; resize:vertical;" ng-model="commentContent"></textarea>
-            <button class="btn btn-success btn-p btn-sm" style="margin-top:10px;" ng-disabled="commentContent.trim().length == 0" ng-click="addComment()">KOMENTUJ</button>
+
+			{{commentAdditionInfo}}
+
+            <button class="btn btn-success btn-p btn-sm pull-right" style="margin-top:10px;" ng-disabled="commentContent.trim().length < 5" ng-click="addComment()">Komentuj</button>
 			
           </div>
 		  <div class="column" style="margin: 5px 5px 5px 5px; margin-left:10%; width:80%;">

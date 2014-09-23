@@ -369,7 +369,7 @@ $scope.getImage = function(id, width, height){
 
 
 
-app.controller('ArticleController', function($scope, $http, SharedData, $routeParams) {
+app.controller('ArticleController', function($scope, $http, SharedData, $routeParams, $timeout) {
  
  $('html,body').scrollTop(0);
  
@@ -500,18 +500,16 @@ $scope.getTagString = function() {
   
   $scope.replyComment = {};
   $scope.commentContent = "";
-
-  $scope.commentAdditionInfo = null;
   
   $scope.addComment = function(parentId)
   {
-	CommentArticle($scope.currentUserName.data, $scope.articleId, $scope.commentContent, null, $scope, $http);
+	CommentArticle($scope.currentUserName.data, $scope.articleId, $scope.commentContent, null, $scope, $http, $timeout);
 	$scope.commentContent = "";
   }
   
   $scope.addReplyComment = function(parentId)
   {
-	CommentArticle($scope.currentUserName.data, $scope.articleId, $scope.replyComment[parentId], parentId, $scope, $http);
+	CommentArticle($scope.currentUserName.data, $scope.articleId, $scope.replyComment[parentId], parentId, $scope, $http, $timeout);
 	$scope.replyComment[parentId] = "";
 	$scope.clickComment(parentId);
   }
@@ -682,6 +680,7 @@ app.controller('StronaUzytkownikaController', function($scope, $http, $routePara
   $scope.click7 = function(){
 	$scope.showChangeAvatar = !$scope.showChangeAvatar;
   };
+  
   $scope.eTest = function(){
 	if($scope.searchedUser.email2 != undefined)
 		if($scope.searchedUser.email2.trim() != '')
@@ -945,6 +944,7 @@ app.controller('CommentsController', function($scope, $http, $routeParams, Share
 $scope.articleId = $routeParams.articleId;
 $scope.article = null;
 
+$scope.commentAdditionInfo = null;
 
 	$scope.getArticle = function(articleId)
 	{
@@ -1030,13 +1030,13 @@ $scope.article = null;
   
   $scope.addComment = function(parentId)
   {
-	CommentArticle($scope.currentUserName.data, $scope.articleId, $scope.commentContent, null, $scope, $http);
+	CommentArticle($scope.currentUserName.data, $scope.articleId, $scope.commentContent, null, $scope, $http, $timeout);
 	$scope.commentContent = "";
   }
   
   $scope.addReplyComment = function(parentId)
   {
-	CommentArticle($scope.currentUserName.data, $scope.articleId, $scope.replyComment[parentId], parentId, $scope, $http, $timeout);
+	CommentArticle($scope.currentUserName.data, $scope.articleId, $scope.replyComment[parentId], parentId, $scope, $http);
 	$scope.replyComment[parentId] = "";
 	$scope.clickComment(parentId);
   }
@@ -1187,6 +1187,7 @@ $scope.article = null;
       <div class="foot" style="padding-bottom: 15px">
       <a href='#ostroniePage'> O stronie </a> | <a href='#kontaktPage'> Kontakt </a> | <a href='#regulaminPage'> Regulamin </a>
       </div>
+      <div style="height: 100px"></div>
 </div>
 
 </body>

@@ -192,29 +192,31 @@ function GetGallery(id, $scope, $http){
 };
 
 function CommentArticle(login, articleId, content, parent, $scope, $http, $timeout){
+
 	$scope.waitingForResponse = true;
 	$http.post(servicesContext + '/comment', {login: login, articleId: articleId, content: content, parent: parent}).
 	  success(function(data, status, headers, config) {
-
-	  	if(status == "201") {
-	  		$scope.commentAdditionInfo = 'Komentarz zostanie opublikowany po pomyślnej weryfikacji przez redakcję';
-	  	} else {
-	  		$scope.commentAdditionInfo = 'Wystąpił nieoczekiwany błąd';
-	  	}
-
-	  	setTimeout(function() {
-	  		$scope.commentAdditionInfo = null;
-	  	}, 3000);
-
 		$scope.waitingForResponse = false;
+
+
+		if(status == "201") {
+			$scope.commentAdditionInfo = 'Komentarz zostanie opublikowany po pomyślnej weryfikacji przez redakcję';
+		} else {
+			$scope.commentAdditionInfo = 'Wystąpił nieoczekiwany błąd';
+		}
+
+		$timeout(function() {
+	  		$scope.commentAdditionInfo = null;
+	  	}, 5000);
+
 	  }).
 	  error(function(data, status, headers, config) {
 
 	  	$scope.commentAdditionInfo = 'Wystąpił nieoczekiwany błąd';
 
-	  	setTimeout(function() {
+	  	$timeout(function() {
 	  		$scope.commentAdditionInfo = null;
-	  	}, 3000);
+	  	}, 5000);
 
 		$scope.waitingForResponse = false;
 	}); 
