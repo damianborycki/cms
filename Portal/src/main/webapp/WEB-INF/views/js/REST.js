@@ -147,6 +147,7 @@ function GetUserComments(userId, page, limit, $scope, $http){
 	$http.get(servicesContext + '/userComments/' + userId + '?limit=' + limit + '&pageNo=' + page + '&sortOrder=DESC').
 	  success(function(data, status, headers, config) {
 		$scope.userComments = data.comments;
+		$scope.articleIds = data.articleIds;
 		$scope.total = data.size;
 		$scope.commentsPage = page;
 	  }).
@@ -190,13 +191,31 @@ function GetGallery(id, $scope, $http){
 	});
 };
 
-function CommentArticle(login, articleId, content, parent, $scope, $http){
+function CommentArticle(login, articleId, content, parent, $scope, $http, $timeout){
 	$scope.waitingForResponse = true;
 	$http.post(servicesContext + '/comment', {login: login, articleId: articleId, content: content, parent: parent}).
 	  success(function(data, status, headers, config) {
+
+	  	if(status == "201") {
+	  		$scope.commentAdditionInfo = 'Komentarz zostanie opublikowany po pomyślnej weryfikacji przez redakcję';
+	  	} else {
+	  		$scope.commentAdditionInfo = 'Wystąpił nieoczekiwany błąd';
+	  	}
+
+	  	setTimeout(function() {
+	  		$scope.commentAdditionInfo = null;
+	  	}, 3000);
+
 		$scope.waitingForResponse = false;
 	  }).
 	  error(function(data, status, headers, config) {
+
+	  	$scope.commentAdditionInfo = 'Wystąpił nieoczekiwany błąd';
+
+	  	setTimeout(function() {
+	  		$scope.commentAdditionInfo = null;
+	  	}, 3000);
+
 		$scope.waitingForResponse = false;
 	}); 
 };

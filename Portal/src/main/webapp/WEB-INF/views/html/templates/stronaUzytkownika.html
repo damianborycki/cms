@@ -10,8 +10,14 @@
             </div>
 		
 	  <div class="col-md-12" style="color: #000; ">
-              <div class="col-md-3" style="margin-top:27px; padding-left:0px;"><img src="{{getImage(searchedUser.avatar, 150, 150)}}" class="img-responsive" style="width:100%;"/> <br>
-			   <a class="btn btn btn-primary" style="width:100%" ng-show="searchedUser.login == currentUserName.data"> Zmień avatar</a>
+              <div class="col-md-3" style="margin-top:27px; padding-left:0px;"><img ng-src="{{getImage(searchedUser.avatar, 150, 150)}}" class="img-responsive" style="width:100%;"/> <br>
+			   <a class="btn btn btn-primary" style="width:100%" ng-show="searchedUser.login == currentUserName.data" ng-click="click7()"> Zmień avatar</a>
+			   <span ng-show="showChangeAvatar">
+			   <form  method="POST" action="/portal/service/add_avatar" enctype="multipart/form-data">
+			   	<input class="form-control btn-success btnb" type="file" style="margin-top:5px;" name="file" id="file""/>
+			   	<button class="btn btn btn-success" type="submit" style="width:100%; margin-top:5px;"> Zapisz</button>
+			   	</form>
+			   </span>
 			   <a class="btn btn btn-danger" style="width:100%; margin-top:10px;" ng-show="searchedUser.login == currentUserName.data" ng-click="click6()"> Zmień hasło</a>
 			   <span ng-show="showEditPass">
 			     <form name="editPassForm" style="display:inline;" class="editPassForm">
@@ -233,8 +239,10 @@
                 <div class="col-md-9" style="border-left: 1px solid #eee;">
                   <p class="text-justify commentText " ng-class="{show: show && komentarz.content.length > 100}" style="margin-top:10px; font-size:13px; font-weight:normal;">{{komentarz.content}}</p>
 					<a ng-click="show = true" ng-hide="show || komentarz.content.length <= 100">Pokaż całość</a>
-					<a ng-click="show = false" ng-show="show && komentarz.content.length > 100">Ukryj</a>										
-					<!--<a class="btn btn-success btn-p btn-sm pull-right" href="#/article/{{komentarz.article.id}}">Pokaż artykuł</a>-->
+					<a ng-click="show = false" ng-show="show && komentarz.content.length > 100">Ukryj</a>
+					
+					<a class="btn btn-success btn-p btn-sm pull-right" href="#/article/{{articleIds[$index]}}">Pokaż artykuł</a>
+					
                 </div>				
 			</div>
 			<hr style="margin: 5px 5px 5px 5px;" ng-hide="$last">

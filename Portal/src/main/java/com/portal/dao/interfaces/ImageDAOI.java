@@ -16,5 +16,6 @@ public interface ImageDAOI {
     public List<Image> getAll();
     public List<String> getImageIds(long userId, java.sql.Date startDate, java.sql.Date endDate);
     public void deleteImage(String id);
-    public String acceptImage(Long app_usr, String id); 
+    public String acceptImage(Long app_usr, String id);
+    public String addGalleryId(Long galleryId,  String id);
 }

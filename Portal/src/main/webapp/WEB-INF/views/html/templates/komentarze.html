@@ -9,7 +9,7 @@
             <h1 class="art-tytul">{{article.title}} </h1>
 			<p class="art-data">{{milisecToDate(article.publication_date)}}</p>
             <div class="col-md-4">
-				<img src="{{getImage(article.image, 300, 200)}}" class="img-responsive">
+				<img ng-src="{{getImage(article.image, 300, 200)}}" class="img-responsive">
             </div>
             <p class="art-tresc">
               {{article.description}}
@@ -23,7 +23,12 @@
           <div class="column" style="margin: 16px 5px 5px 5px;" ng-hide="currentUserName.data == ''">
             <textarea class="span6" rows="9" placeholder="Napisz komentarz..." required="" 
 			style="margin: 0px; height: 180px; width: 100%; resize:vertical;"></textarea>
-            <a class="btn1 btn-lg btn-primary">KOMENTUJ</a>
+            <!--<span class="help-block" style="color:#CC330E; font-size: 12px;" data-ng-show="commentAdditionInfo != null">-->
+                  {{commentAdditionInfo}} siema
+                <!--</span>-->
+
+
+            <a class="btn1 btn-lg btn-primary pull-right">KOMENTUJ</a>
 			 <p class="comment2">Komentarze ({{total}})</p>
           </div>
 		  <div class="column">

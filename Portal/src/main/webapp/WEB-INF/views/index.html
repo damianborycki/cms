@@ -500,6 +500,8 @@ $scope.getTagString = function() {
   
   $scope.replyComment = {};
   $scope.commentContent = "";
+
+  $scope.commentAdditionInfo = null;
   
   $scope.addComment = function(parentId)
   {
@@ -675,6 +677,10 @@ app.controller('StronaUzytkownikaController', function($scope, $http, $routePara
 	$scope.searchedUser.pass2 = '';
 	$scope.editPassFormError2 = false;
 	$scope.showEditPass = !$scope.showEditPass;
+  };
+  
+  $scope.click7 = function(){
+	$scope.showChangeAvatar = !$scope.showChangeAvatar;
   };
   $scope.eTest = function(){
 	if($scope.searchedUser.email2 != undefined)
@@ -930,7 +936,7 @@ $scope.user =
 
 
 
-app.controller('CommentsController', function($scope, $http, $routeParams, SharedData) {
+app.controller('CommentsController', function($scope, $http, $routeParams, SharedData, $timeout) {
    
    $scope.article = null;
    
@@ -1030,7 +1036,7 @@ $scope.article = null;
   
   $scope.addReplyComment = function(parentId)
   {
-	CommentArticle($scope.currentUserName.data, $scope.articleId, $scope.replyComment[parentId], parentId, $scope, $http);
+	CommentArticle($scope.currentUserName.data, $scope.articleId, $scope.replyComment[parentId], parentId, $scope, $http, $timeout);
 	$scope.replyComment[parentId] = "";
 	$scope.clickComment(parentId);
   }
@@ -1178,10 +1184,9 @@ $scope.article = null;
       </div>
       </div>
       </div>
-      <div class="foot">
+      <div class="foot" style="padding-bottom: 15px">
       <a href='#ostroniePage'> O stronie </a> | <a href='#kontaktPage'> Kontakt </a> | <a href='#regulaminPage'> Regulamin </a>
       </div>
-      <div style="height: 100px"></div>
 </div>
 
 </body>

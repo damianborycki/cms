@@ -54,8 +54,21 @@ public class UserDAOImpl implements UserDAOI {
 		}
 		
 	}
-	
-	public void setLastLoginDate(String login) {
+
+    @Override
+    public User getById(Long id) {
+        Session session = sessionFactory.openSession();
+
+        User user = (User) session.createQuery("FROM User u WHERE u.id=:uid")
+                .setParameter("uid", id)
+                .uniqueResult();
+
+        sessionFactory.getCurrentSession().close();
+
+        return user;
+    }
+
+    public void setLastLoginDate(String login) {
 		
 		Session session = sessionFactory.openSession();
 		
@@ -69,6 +82,21 @@ public class UserDAOImpl implements UserDAOI {
 				session.close();
 		}
 		
+	}
+	
+	public void setUserAvatar(String login, String imageId)
+	{
+		Session session = sessionFactory.openSession();
+		
+		try {
+			Query query = session.createQuery("update User u set u.avatar = :avatar where u.login = :login");
+			query.setParameter("login", login);
+			query.setParameter("avatar", imageId);
+			query.executeUpdate();
+		} finally {
+			if (session != null)
+				session.close();
+		}
 	}
 	
 	public boolean setUserGroup(String login, Long groupId) {

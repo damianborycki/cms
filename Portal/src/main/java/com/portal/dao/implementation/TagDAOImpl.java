@@ -10,7 +10,6 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -36,18 +35,29 @@ public class TagDAOImpl implements TagDAOI {
     @Override
     public List<Tag> findAll() {
         List<Tag> list = openSession().createQuery("from Tag").list();
+        sessionFactory.getCurrentSession().close();
         return list;
     }
 
     @Override
     public Tag get(Long id) {
         Tag tag = (Tag)openSession().load(Tag.class, id);
+        sessionFactory.getCurrentSession().close();
         return tag;
+    }
+
+    @Override
+    public List<Tag> getByIds(List<Long> ids) {
+        Session session = openSession();
+        List<Tag> tags = session.createQuery("FROM Tag WHERE id IN (:ids)").setParameter("ids", ids).list();
+        session.close();
+        return tags;
     }
 
     @Override
     public void create(Tag tag) {
         this.openSession().save(tag);
+        sessionFactory.getCurrentSession().close();
     }
 
     @Override
@@ -60,6 +70,7 @@ public class TagDAOImpl implements TagDAOI {
 
         session.update(tag);
         session.flush();
+        sessionFactory.getCurrentSession().close();
     }
 
     @Override
@@ -68,6 +79,7 @@ public class TagDAOImpl implements TagDAOI {
         Tag tag = (Tag) session.get(Tag.class, id);
         session.delete(tag);
         session.flush();
+        sessionFactory.getCurrentSession().close();
     }
 
     @Override
@@ -75,7 +87,34 @@ public class TagDAOImpl implements TagDAOI {
         Session session = openSession();
         Criteria criteria = session.createCriteria(Tag.class);
         criteria.add(Restrictions.eq("type", tagType));
-
-        return !criteria.list().isEmpty();
+        boolean exists = !criteria.list().isEmpty();
+        sessionFactory.getCurrentSession().close();
+        return exists;
     }
+
+    @Override
+    public void createArticleTag(Long articleId, List<Tag> tags) {
+        Session session = openSession();
+
+        for (Tag tag : tags) {
+            session.createSQLQuery("INSERT INTO articles_tag (articles_id, tag_id) VALUES (:artid, :tagid)")
+                    .setParameter("artid", articleId)
+                    .setParameter("tagid", tag.getId())
+                    .executeUpdate();
+        }
+
+        sessionFactory.getCurrentSession().close();
+    }
+
+    @Override
+    public void deleteArticleTagByArticleId(Long articleId) {
+        Session session = openSession();
+
+        session.createSQLQuery("DELETE FROM articles_tag WHERE articles_id=:artid")
+                .setParameter("artid", articleId)
+                .executeUpdate();
+
+        sessionFactory.getCurrentSession().close();
+    }
+
 }

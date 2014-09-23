@@ -82,6 +82,30 @@ public class ImageController {
         return new ModelAndView("redirect:/adminIndex.html#/image");
     }
     
+    @RequestMapping(value="/add_avatar",method = RequestMethod.POST)
+    public ModelAndView  addAvatar(@RequestParam("file") MultipartFile imageData,
+                           		   Model model) throws Exception 
+    {
+        Image image = new Image();
+        String imagePath = getNewImagePath (imageData, image.getId());
+        String loggedUserLogin = userDAO.getLoggedUser().getLogin();
+
+        saveImage(imageData, imagePath);
+
+        image.setId(image.getId() + imageData.getOriginalFilename());
+        image.setLink(imagePath);
+        image.setAdd_usr(getLoggedUserId());
+        image.setAuthor("");
+        image.setDescription("avatar of user " + loggedUserLogin);
+        image.setType("jpg");
+        setImageSize(image, imagePath);
+
+        imageDAO.addImage(image);
+        userDAO.setUserAvatar(loggedUserLogin, image.getId());
+        
+        return new ModelAndView("redirect:/#/userPage/" + loggedUserLogin);
+    }
+    
     @RequestMapping(value="/image", method=RequestMethod.GET)
     public void getImage(HttpServletResponse response,
                          @RequestParam("id") String imageId,
@@ -121,7 +145,7 @@ public class ImageController {
     		if( user == null )
     			return new ArrayList<Image>();
     		Long userId = user.getId();
-    		return imageDAO.getAllUnapproved(userId, null, null);
+    		return imageDAO.getAllUnapproved(userId, startDate, endDate);
     	}
     }
 
@@ -156,6 +180,14 @@ public class ImageController {
         String tempFilePath = path + ".temp";
         saveTempImageFile( tempFilePath, imageData );
         imageScaler.cropImage( tempFilePath, path, x1, y1, x2, y2 );
+        deleteTempFile( tempFilePath );
+    }
+    
+    private void saveImage(MultipartFile imageData, String path) throws Exception
+    {
+        String tempFilePath = path + ".temp";
+        saveTempImageFile( tempFilePath, imageData );
+        imageScaler.cropImage( tempFilePath, path );
         deleteTempFile( tempFilePath );
     }
 
@@ -274,7 +306,6 @@ public class ImageController {
     	{
     		String login = userDAO.getLoggedUser().getLogin();
     		return imageDAO.acceptImage( userDAO.getUser(login).getId(), imageId);
-    		//return "OK";
     	}
     	return "FAIL - you have to be admin";
     }

@@ -60,13 +60,11 @@ public interface ArticleDAOI {
               Category category_id,
               String description,
               String content,
-              User user,
               Date expiration_date,
               Date publication_date,
               Long galery,
               String image,
               List<Tag> tags,
-              String article_owner,
               ArticleRank rank);
     
     void createNew(Article a);
@@ -82,4 +80,6 @@ public interface ArticleDAOI {
     Long countByCategoryAndTag(Long category, Long tag);
 
     boolean existsForCategory(Category category);
+
+    Long maxArticleId();
 }

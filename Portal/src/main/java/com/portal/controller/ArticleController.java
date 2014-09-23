@@ -1,10 +1,9 @@
 package com.portal.controller;
 
 import com.portal.dao.interfaces.ArticleDAOI;
-import com.portal.entity.Article;
-import com.portal.entity.ArticleRank;
-import com.portal.entity.Category;
-import com.portal.entity.Tag;
+import com.portal.dao.interfaces.TagDAOI;
+import com.portal.dao.interfaces.UserDAOI;
+import com.portal.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +21,12 @@ public class ArticleController {
     @Autowired
     private ArticleDAOI articleDAO;
 
+    @Autowired
+    private UserDAOI userDAO;
+
+    @Autowired
+    private TagDAOI tagDAO;
+
     @RequestMapping(value = "/article", method=RequestMethod.POST)
     public void addArticle(@RequestBody Article article, HttpServletResponse response) {
 //        articleDAO.create(article.getTitle(),
@@ -36,8 +41,14 @@ public class ArticleController {
 //                article.getTag(),
 //                article.getArticle_owner(),
 //                article.getRank());
-        
+
+        User user = userDAO.getUser(article.getUser().getLogin());
+        article.setUser(user);
+        article.setArticle_owner(user.getLogin());
+
         articleDAO.createNew(article);
+        long maxArticle = articleDAO.maxArticleId();
+        tagDAO.createArticleTag(maxArticle, article.getTag());
         response.setStatus(HttpServletResponse.SC_CREATED);
     }
 
@@ -48,14 +59,16 @@ public class ArticleController {
                 article.getCategory_id(),
                 article.getDescription(),
                 article.getContent(),
-                article.getUser(),
                 article.getExpiration_date(),
                 article.getPublication_date(),
                 article.getGalery(),
                 article.getImage(),
                 article.getTag(),
-                article.getArticle_owner(),
                 article.getRank());
+
+        tagDAO.deleteArticleTagByArticleId(pasedId);
+        tagDAO.createArticleTag(pasedId, article.getTag());
+
         response.setStatus(HttpServletResponse.SC_OK);
     }
 

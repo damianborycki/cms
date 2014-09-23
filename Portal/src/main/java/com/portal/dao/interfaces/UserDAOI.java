@@ -9,7 +9,9 @@ import java.util.List;
 
 public interface UserDAOI {
 
-    public User getUser(String login);    
+    public User getUser(String login);
+
+    public User getById(Long id);
 
     public User addUser(User user, boolean withActivation);
 
@@ -38,4 +40,6 @@ public interface UserDAOI {
     public boolean existsForGroup(Group group);
     
     public boolean changPassword(ClassPassword passwords);
+    
+    public void setUserAvatar(String login, String imageId);
 }
