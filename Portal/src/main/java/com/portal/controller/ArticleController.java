@@ -200,8 +200,8 @@ public class ArticleController {
     }
 
     @RequestMapping(value = "/articleCountByCategoryAndTag", method = RequestMethod.GET)
-    public @ResponseBody Long getArticleCountByCategoryAndTag(@RequestParam("category") Long category, @RequestParam("tag") Long tag, HttpServletResponse response) {
+    public @ResponseBody Long getArticleCountByCategoryAndTag(@RequestParam("category") Long category, @RequestParam("tags") List<Long> tags, HttpServletResponse response) {
         response.setStatus(HttpServletResponse.SC_OK);
-        return articleDAO.countByCategoryAndTag(category, tag);
+        return articleDAO.countByCategoryAndTag(category, tags);
     }
 }

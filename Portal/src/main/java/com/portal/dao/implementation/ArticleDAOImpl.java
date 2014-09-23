@@ -248,16 +248,16 @@ public class ArticleDAOImpl implements ArticleDAOI {
 
     @Override
     public Long countByTags(List<Long> tags) {
-        Long count = ((BigInteger) openSession().createSQLQuery("SELECT Count(*) FROM articles a WHERE (SELECT tag_id FROM articles_tag WHERE articles_id=a.id) IN (:tags)")
+        Long count = ((BigInteger) openSession().createSQLQuery("SELECT Count(DISTINCT articles_id) FROM articles_tag WHERE tag_id IN (:tags)")
                 .setParameter("tags", tags).uniqueResult()).longValue();
         sessionFactory.getCurrentSession().close();
         return count;
     }
 
     @Override
-    public Long countByCategoryAndTag(Long category, Long tag) {
-        Long count = ((BigInteger) openSession().createSQLQuery("SELECT Count(*) FROM articles a WHERE a.category_id=:category AND (SELECT tag_id FROM articles_tag WHERE articles_id=a.id) IN (:tag)")
-                .setParameter("category", category).setParameter("tag", tag).uniqueResult()).longValue();
+    public Long countByCategoryAndTag(Long category, List<Long> tags) {
+        Long count = ((BigInteger) openSession().createSQLQuery("SELECT Count(DISTINCT id) FROM articles WHERE category_id=:category AND id IN (SELECT articles_id FROM articles_tag WHERE tag_id IN (:tags))")
+                .setParameter("category", category).setParameter("tags", tags).uniqueResult()).longValue();
         sessionFactory.getCurrentSession().close();
         return count;
     }
