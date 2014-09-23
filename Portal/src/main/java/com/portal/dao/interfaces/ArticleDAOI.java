@@ -77,7 +77,7 @@ public interface ArticleDAOI {
 
     Long countByTags(List<Long> tags);
 
-    Long countByCategoryAndTag(Long category, Long tag);
+    Long countByCategoryAndTag(Long category, List<Long> tags);
 
     boolean existsForCategory(Category category);
 
