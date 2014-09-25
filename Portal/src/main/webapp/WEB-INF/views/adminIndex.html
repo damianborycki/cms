@@ -1330,7 +1330,7 @@ $scope.GetCurrentUserName();
 	
 	$scope.editArticle = function()
 	{
-		EditArticle($routeParams.articleId, $scope.newArticle.title, $scope.newArticle.description, $scope.newArticle.content, $scope.newArticle.category_id.id, $scope.currentUserLogin, $scope.newArticle.publication_date.getTime(), $scope.newArticle.
+		EditArticle($routeParams.articleId, $scope.newArticle.title, $scope.newArticle.description, $scope.newArticle.content, $scope.newArticle.category_id.id, $scope.newArticle.user.id, $scope.newArticle.publication_date.getTime(), $scope.newArticle.expiration_date.getTime(), $scope.getSelectedTagIds(), $scope.newArticle.rank.id, $scope.newArticle.image, $scope.newArticle.galery, new Date().getTime(), $scope, $http);
 	}
 	
 	
@@ -1438,12 +1438,12 @@ $scope.modalInfo = {'title' : '', 'buttonText' : '', 'op' : ''};
 	}
 	
 	$scope.choseImage = function(id)
--	{
--		$scope.newArticle.image = id;
--		$scope.getMainImageMetadata($scope.newArticle.image);
--	}
--	
--	$scope.listOfImages = [];
+	{
+		$scope.newArticle.image = id;
+		$scope.getMainImageMetadata($scope.newArticle.image);
+	}
+	
+	$scope.listOfImages = [];
 
 	$scope.getRankNameById = function(id) {
 		for(var i=0; i < $scope.listOfArticleRanks.length; i++) {
@@ -1483,12 +1483,12 @@ $scope.modalInfo = {'title' : '', 'buttonText' : '', 'op' : ''};
   if (typeof id !== 'undefined' && id != '') {
 		GetGallery(id, $scope, $http);
  	}
--  };
--  
--  $scope.galeryChange = function()
--  {
--	$scope.getGalery($scope.newArticle.galery);
--  }
+  };
+  
+  $scope.galeryChange = function()
+  {
+	$scope.getGalery($scope.newArticle.galery);
+  }
 
 	
 $scope.editorOptions = {
