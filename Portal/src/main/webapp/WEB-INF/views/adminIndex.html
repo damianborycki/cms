@@ -11,6 +11,8 @@
 <script src="js/lib/angularstrap/angular-strap.min.js"></script>
 <script src="js/lib/angularstrap/angular-strap.tpl.min.js"></script>
 <!-- <script src="jQuerry/jquery-1.11.0.min.js"></script> -->
+<script src="js/plugins/slick/slick.min.js"></script>
+<script src="js/lib/angular/slick.min.js"></script>
     <script src="js/lib/angular/paging.js"></script>
 <script src="js/lib/jQuerry/jquery.Jcrop.js"></script>
 <script src="js/lib/bootstrap/bootstrap.js"></script>
@@ -129,7 +131,7 @@ function parseDate(input)
 	return new Date(date[2], date[0]-1, date[1], time[0], time[1], time[2]);
 }
    
-var app = angular.module('studentInfoApp', ['ngSanitize', 'ngRoute', 'mgcrea.ngStrap', 'ngCkeditor', 'ngTagsInput', 'paging', 'treeControl']);
+var app = angular.module('studentInfoApp', ['ngSanitize', 'ngRoute', 'mgcrea.ngStrap', 'ngCkeditor', 'ngTagsInput', 'paging', 'treeControl', 'bardo.directives']);
 
 app.filter('unsafe', function($sce) {
     return function(val) {
@@ -1328,7 +1330,7 @@ $scope.GetCurrentUserName();
 	
 	$scope.editArticle = function()
 	{
-		EditArticle($routeParams.articleId, $scope.newArticle.title, $scope.newArticle.description, $scope.newArticle.content, $scope.newArticle.category_id.id, $scope.currentUserLogin, $scope.newArticle.publication_date.getTime(), $scope.newArticle.expiration_date.getTime(), $scope.getSelectedTagIds(), $scope.newArticle.rank.id, $scope.newArticle.image, $scope.newArticle.galery, new Date().getTime(), $scope, $http);
+		EditArticle($routeParams.articleId, $scope.newArticle.title, $scope.newArticle.description, $scope.newArticle.content, $scope.newArticle.category_id.id, $scope.currentUserLogin, $scope.newArticle.publication_date.getTime(), $scope.newArticle.
 	}
 	
 	
@@ -1434,6 +1436,14 @@ $scope.modalInfo = {'title' : '', 'buttonText' : '', 'op' : ''};
 			EditCategory(id, $scope.categoryForModal.name ,$scope.categoryForModal.description, $scope.categoryForModal.parent ,$scope, $http);
 		}
 	}
+	
+	$scope.choseImage = function(id)
+-	{
+-		$scope.newArticle.image = id;
+-		$scope.getMainImageMetadata($scope.newArticle.image);
+-	}
+-	
+-	$scope.listOfImages = [];
 
 	$scope.getRankNameById = function(id) {
 		for(var i=0; i < $scope.listOfArticleRanks.length; i++) {
@@ -1444,6 +1454,41 @@ $scope.modalInfo = {'title' : '', 'buttonText' : '', 'op' : ''};
 
 		return '';
 	}
+	
+	$scope.getlistOfImages  = function()
+	{
+	if ($scope.listOfImages.length != 0)
+		return $scope.listOfImages;
+		
+		GetImages($scope, $http);
+	};
+	$scope.getlistOfImages();
+	
+	
+  $scope.mainImageMetadata = null;
+  $scope.getMainImageMetadata = function(id)
+  {
+		GetImageMetadata(id, $scope, $http);
+  }
+  
+  $scope.imageChange = function()
+  {
+	$scope.getMainImageMetadata($scope.newArticle.image);
+  }
+  
+  $scope.gallery = null;
+  
+  $scope.getGalery = function(id)
+  {
+  if (typeof id !== 'undefined' && id != '') {
+		GetGallery(id, $scope, $http);
+ 	}
+-  };
+-  
+-  $scope.galeryChange = function()
+-  {
+-	$scope.getGalery($scope.newArticle.galery);
+-  }
 
 	
 $scope.editorOptions = {
@@ -1677,7 +1722,8 @@ app.controller('UsersController', function($scope, $http) {
 	$scope.userForModal = null;
 	$scope.user = [];
 	$scope.UpdateStatus = 0;
-
+	
+	$scope.user.groupID = "";
 	$scope.page = 1;
 	$scope.usersPage = 1;
 	$scope.usersLimit = 15;
