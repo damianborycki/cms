@@ -29,7 +29,7 @@
 			</div>
 			<div class="col-md-9">
 				<select ng-model="tagForModal.type">
-				<option ng-repeat="tagType in listOfTagsTypes" value="{{tagType.id}}">{{tagType.name}}</option>
+				<option ng-selected="$first" ng-repeat="tagType in listOfTagsTypes" value="{{tagType.id}}">{{tagType.name}}</option>
 				</select>
 			</div>
 		</div>
@@ -37,7 +37,7 @@
 	  </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" ng-click="$hide()">Zamknij</button>
-        <button type="button" class="btn btn-success" ng-disabled="tagForModal.name == '' || tagForModal.name.length < 3" ng-click="AddNewTag(); $hide()">Dodaj</button>
+        <button type="button" class="btn btn-success" ng-disabled="tagForModal.name == '' || tagForModal.name.length < 3 || tagForModal.type == null" ng-click="AddNewTag(); $hide()">Dodaj</button>
       </div>
     </div>
   </div>
