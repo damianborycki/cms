@@ -480,6 +480,11 @@ $scope.getTagString = function() {
    
 	$scope.articleComments = null;
 
+  $scope.getFirstComments = function(number) {
+    if($scope.articleComments != null && $scope.articleComments != undefined)
+      return $scope.articleComments.slice(0, 5);
+  }
+
 	$scope.commentsPage = 0;
 	$scope.commentsLimit = 20;
 	$scope.total = 10;
@@ -636,6 +641,10 @@ app.controller('StronaUzytkownikaController', function($scope, $http, $routePara
   $scope.showEditEmail = true;
   $scope.showEditDesc = true;
   $scope.changePassSuccess = false;
+
+  $scope.commentsLimit = 5;
+  $scope.commentsPage = 1;
+  $scope.total = 0;
 	
   $scope.click = function(){
     $scope.showEditDesc = !$scope.showEditDesc;
@@ -767,22 +776,23 @@ app.controller('StronaUzytkownikaController', function($scope, $http, $routePara
 
   $scope.userComments = null;
 
+    $scope.commentsLimit = 10;
   $scope.commentsPage = 0;
-  $scope.commentsLimit = 20;
   $scope.total = 0;
+
+    $scope.ChangePage = function(page)
+  {
+    $scope.page = page;
+    $scope.commentsPage = page;
+    $scope.getUserComments($scope.userName);
+  }
 
   $scope.getUserComments = function(userId)
   {
-	GetUserComments(userId, $scope.commentsPage, $scope.commentsLimit, $scope, $http);
+	 GetUserComments(userId, $scope.commentsPage, $scope.commentsLimit, $scope, $http);
   }
 
   $scope.getUserComments($scope.userName);
-
-  $scope.ChangePage = function(page)
-  {
-	$scope.commentsPage = page;
-	$scope.getUserComments(1);
-  }
 	  
   $scope.listOfArticles = [];
 	 
@@ -986,7 +996,7 @@ $scope.commentAdditionInfo = null;
 	$scope.articleComments = null;
 
 	$scope.commentsPage = 0;
-	$scope.commentsLimit = 20;
+	$scope.commentsLimit = 10;
 	$scope.total = 0;
 	$scope.order = 'DESC';
 

@@ -14,7 +14,7 @@
 			   <a class="btn btn btn-primary" style="width:100%" ng-show="searchedUser.login == currentUserName.data" ng-click="click7()"> Zmień avatar</a>
 			   <span ng-show="showChangeAvatar">
 			   <form  method="POST" action="/portal/service/add_avatar" enctype="multipart/form-data">
-			   	<input class="form-control btn-success btnb" type="file" style="margin-top:5px;" name="file" id="file""/>
+			   	<input class="form-control btn-success btnb" type="file" style="margin-top:5px;" name="file" id="file"/>
 			   	<button class="btn btn btn-success" type="submit" style="width:100%; margin-top:5px;"> Zapisz</button>
 			   	</form>
 			   </span>
@@ -247,7 +247,7 @@
 			</div>
 			<hr style="margin: 5px 5px 5px 5px;" ng-hide="$last">
 		</li>
-	</ul>		
+	</ul>
 				<div paging page="commentsPage" page-size="commentsLimit" total="total" show-prev-next="true" adjacent="1" paging-action="ChangePage(page)"></div>	
 </div>
 </div>

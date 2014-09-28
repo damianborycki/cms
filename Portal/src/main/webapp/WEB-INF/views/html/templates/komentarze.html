@@ -94,6 +94,8 @@
 			<hr style="margin: 5px 5px 5px 5px;" ng-hide="$last">
 		</li>
 		</ul>
-				<div paging page="commentsPage" page-size="commentsLimit" total="total" show-prev-next="true" adjacent="1" paging-action="ChangePage(page)"></div>	
+
+		<div class="col-md-5 pull-right" style="height: 100%;" paging page="commentsPage" page-size="commentsLimit" total="total" show-prev-next="true" adjacent="1" paging-action="ChangePage(page)" ng-init="page=0"></div>
+
 		</div>
 		</div>
