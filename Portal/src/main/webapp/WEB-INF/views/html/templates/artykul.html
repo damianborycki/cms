@@ -64,7 +64,7 @@
               <div class="row ">
                 <div class="col-md-3" style="border-right: 1px solid #eee;">
 				<a href="#userPage/{{komentarz.user.login}}">
-                  <img ng-src="{{getUserAvatar(komentarz.user.id)}}" class="img-responsive">
+                  <img ng-src="{{getImage(komentarz.user.avatar, 100, 100)}}" class="img-responsive">
                   <h5> {{komentarz.user.login}}</h5>
 				  </a>
 				  <p style="font-size:0.6em;"> {{komentarz.date}}</p> 
@@ -90,7 +90,7 @@
 							  <div class="row" >
 								<div class="col-md-3" style="border-right: 1px solid #eee;">
 								<a href="#userPage/{{odpowiedzi.user.login}}">
-								  <img ng-src="{{getUserAvatar(odpowiedzi.user.id)}}" class="img-responsive">
+								  <img ng-src="{{getImage(odpowiedzi.user.avatar, 100, 100)}}" class="img-responsive">
 								  <h5> {{odpowiedzi.user.login}}</h5>
 								</a>
 								  <p style="font-size:0.6em;"> {{odpowiedzi.date}}</p> 
