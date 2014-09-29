@@ -28,7 +28,6 @@ public class GalleryController {
     @RequestMapping(value="/gallery", method=RequestMethod.POST)
     public ModelAndView addImage(@RequestParam("images") String images,
                            @RequestParam("description") String description,
-                           @RequestParam("tags") String tags,
                            @RequestParam("add_usr") Long add_usr,
                            Model model)
     {
@@ -44,23 +43,9 @@ public class GalleryController {
             imagesList.add(imageDAO.getImage(img[0], new Long(img[1]), new Long(img[2])));
         }
 
-        List<Tag> tagsList = new ArrayList<>();
-        String[] tagArray = tags.split(" |,");
-
-        for (String tag : tagArray)
-        {
-            Tag t = new Tag();
-            t.setName(tag);
-            TagType tagType = new TagType();
-            tagType.setName("gallery");
-            t.setType(tagType);
-            tagsList.add(t);
-        }
-
         gallery.setImages(imagesList);
         gallery.setDescription(description);
         gallery.setAdd_usr(add_usr);
-        gallery.setTags(tagsList);
 
         galleryDAO.addGallery(gallery);
 
