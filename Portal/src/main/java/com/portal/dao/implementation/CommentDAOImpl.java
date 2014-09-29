@@ -502,7 +502,7 @@ public class CommentDAOImpl implements CommentDAOI {
 		List<Comment> coms = criteria.list();
 
 		Criteria criteria2 = session.createCriteria(Comment.class);
-		criteria2.add(Restrictions.isNull("parent"));
+		//criteria2.add(Restrictions.isNull("parent"));
 		criteria2.add(Restrictions.eq("state.id", status));
 
 		List<Comment> coms2 = criteria2.list();
