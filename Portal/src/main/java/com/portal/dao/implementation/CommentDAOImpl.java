@@ -439,7 +439,7 @@ public class CommentDAOImpl implements CommentDAOI {
 			for (Comment r : com) {
 
 				Comment reply = new Comment();
-
+				
 				User userR = new User();
 				userR.setId(r.getUser().getId());
 				userR.setLogin(r.getUser().getLogin());
@@ -464,8 +464,8 @@ public class CommentDAOImpl implements CommentDAOI {
 				reply.setArticle(articleR);
 				reply.setParent(parentR);
 				reply.setState(stateR);
-
-				parentComment.addReply(reply);
+				if(reply.getState().getId() == 2L)
+					parentComment.addReply(reply);
 			}
 
 			pComments.add(parentComment);
