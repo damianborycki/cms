@@ -200,6 +200,13 @@ function CommentArticle(login, articleId, content, parent, $scope, $http, $timeo
 
 
 		if(status == "201") {
+			$scope.commentAdded = true;
+			//goToByScroll("commentInfo");
+			
+			$('html,body').animate({
+				scrollTop: $(".span6").offset().top
+			});
+			 $('#commentInfo').fadeIn().delay(3000).fadeOut(3000);
 			$scope.commentAdditionInfo = 'Komentarz zostanie opublikowany po pomyślnej weryfikacji przez redakcję';
 		} else {
 			$scope.commentAdditionInfo = 'Wystąpił nieoczekiwany błąd';

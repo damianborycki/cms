@@ -51,7 +51,9 @@
             <textarea class="span6 form-control" rows="6" placeholder="Napisz komentarz..." required="" maxlength="250"
 			style="margin: 0px; max-height: 130px; resize:vertical;" ng-model="commentContent"></textarea>
 
-			{{commentAdditionInfo}}
+			<span id="bInfo">
+				<span id="commentInfo" ng-show="commentAdded" style="color:#5cb85c;">Komentarz zostanie opublikowany po pomyślnej weryfikacji przez redakcję</span>
+			</span>
 
             <button class="btn btn-success btn-p btn-sm pull-right" style="margin-top:10px;" ng-disabled="commentContent.trim().length < 5" ng-click="addComment()">Komentuj</button>
 			
