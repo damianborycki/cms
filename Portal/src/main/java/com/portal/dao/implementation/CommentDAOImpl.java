@@ -182,34 +182,34 @@ public class CommentDAOImpl implements CommentDAOI {
 		if(u.getGroup().getId() > 3) return false;
 
 		if (parent != null) {
-			
-			try {
-				Comment p = (Comment) session.load(Comment.class, parent);
-				if (p.getParent() != null) return false;
-				comment.setParent(p);
-	
-				Query incrResponses = session.createQuery("update Comment c set c.responsesNumber = :resp where c.id = :id");
-				incrResponses.setParameter("resp", p.getResponsesNumber() + 1);
-				incrResponses.setParameter("id", parent);
-				incrResponses.executeUpdate();
-	
-				comment.setResponsesNumber(p.getResponsesNumber() + 1);
-	
-				List<Comment> children = children(p);
-	
-				for (Comment child : children) {
-					Query incrResponses2 = session.createQuery("update Comment c set c.responsesNumber = :resp where c.id = :id");
-					incrResponses2.setParameter("resp", child.getResponsesNumber() + 1);
-					incrResponses2.setParameter("id", child.getId());
-					incrResponses2.executeUpdate();
-				}
-			} catch (Exception e) {
-				if (session != null)
-					session.close();
-				
-				return false;
-			}
-		} else {
+
+            try {
+                Comment p = (Comment) session.load(Comment.class, parent);
+                if (p.getParent() != null) return false;
+                comment.setParent(p);
+
+                Query incrResponses = session.createQuery("update Comment c set c.responsesNumber = :resp where c.id = :id");
+                incrResponses.setParameter("resp", p.getResponsesNumber() + 1);
+                incrResponses.setParameter("id", parent);
+                incrResponses.executeUpdate();
+
+                comment.setResponsesNumber(p.getResponsesNumber() + 1);
+
+                List<Comment> children = children(p);
+
+                for (Comment child : children) {
+                    Query incrResponses2 = session.createQuery("update Comment c set c.responsesNumber = :resp where c.id = :id");
+                    incrResponses2.setParameter("resp", child.getResponsesNumber() + 1);
+                    incrResponses2.setParameter("id", child.getId());
+                    incrResponses2.executeUpdate();
+                }
+            } catch (Exception e) {
+                if (session != null)
+                    session.close();
+
+                return false;
+            }
+        }
 		
 			try {
 	
@@ -229,7 +229,7 @@ public class CommentDAOImpl implements CommentDAOI {
 				
 				return false;
 			}
-		}
+
 		
 		if (session != null)
 			session.close();

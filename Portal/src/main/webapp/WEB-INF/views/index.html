@@ -1044,7 +1044,7 @@ $scope.commentAdditionInfo = null;
   
   $scope.addReplyComment = function(parentId)
   {
-	CommentArticle($scope.currentUserName.data, $scope.articleId, $scope.replyComment[parentId], parentId, $scope, $http);
+	CommentArticle($scope.currentUserName.data, $scope.articleId, $scope.replyComment[parentId], parentId, $scope, $http, $timeout);
 	$scope.replyComment[parentId] = "";
 	$scope.clickComment(parentId);
   }
